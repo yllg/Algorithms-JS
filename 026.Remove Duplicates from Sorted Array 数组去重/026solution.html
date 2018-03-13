@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>数组去重</title>
+</head>
+
+<body>
+    <script>
+
+        // 答案代码
+        //解法1：使用splice
+        var removeDuplicates = function (nums) {
+            var ans = 0;
+            for (var i = nums.length-1; i>=0; i--) {
+                //第一次ans自加跳过；然后从后往前两个两个的比较
+                if (i === nums.length - 1)
+                    ans++;
+                else if (nums[i] === nums[i + 1])
+                    nums.splice(i, 1);
+                else
+                    ans++;
+            }
+            return ans;
+        };
+
+        //测试1
+        var nums = [1,1,2];
+        var result = removeDuplicates(nums);
+        console.log(result);
+
+        //解法2：ES6的set  
+        //很简洁，但是创建了新的数组，原数组没有变化，所以并不满足需求
+        //这里写出来看看
+        var removeDuplicates2 = function(arr){
+            var result = [...new Set(arr)];
+            return result.length;
+        } 
+        //测试
+        var nums2 = [1,1,2];
+        var result1 = removeDuplicates2(nums2);
+        console.log(result1);
+
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>两数之和</title>
+</head>
+<body>
+    <script>
+        // Source : https://leetcode.com/problems/two-sum/
+        // Author : 悬笔e绝
+        // Date   : 2018-03-13
+
+        /**
+        * @param {number[]} nums
+        * @param {number} target
+        * @return {number[]}
+        */
+
+        var twoSum = function(nums, target) {
+            var a = [];
+            for (var i = 0; i < nums.length; i++) {
+                var tmp = target - nums[i];
+                if (a[tmp] !== undefined) return [a[tmp], i];
+                a[nums[i]] = i;
+            }
+        };
+
+        //测试
+        var nums = [2, 11, 7, 15], target = 9;
+        var result = twoSum(nums,target);
+        console.log(result); //[0,2]
+
+        //思路
+        //用数组a来表示数字的索引
+        //比如上面的例子中一直循环到i=2时，a[2]=0, a[11]=1, a[7]=2 ,
+        //此时tmp=2，a[2]是存在的，所以返回[0,2]
+
+    </script>
+</body>
+</html>
