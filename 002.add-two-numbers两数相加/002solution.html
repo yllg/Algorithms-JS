@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>两数之和</title>
+</head>
+
+<body>
+    <script>
+        // Source : https://leetcode.com/problems/add-two-numbers/
+        // Author : 悬笔e绝
+        // Date   : 2018-03-14
+
+        //Definition for singly-linked list.
+        function ListNode(val) {
+            this.val = val;
+            this.next = null;
+        }
+
+        /**
+         * @param {ListNode} l1
+         * @param {ListNode} l2
+         * @return {ListNode}
+         */
+
+        var addTwoNumbers = function (l1, l2) {
+            var add = 0,
+                ans, head;
+
+            while (l1 || l2) {
+                var a = l1 ? l1.val : 0,
+                    b = l2 ? l2.val : 0;
+
+                var sum = a + b + add;
+                add = ~~(sum / 10);
+
+                var node = new ListNode(sum % 10);
+
+                if (!ans)
+                    ans = head = node;
+                else {
+                    head.next = node;
+                    head = node;
+                }
+
+                if (l1)
+                    l1 = l1.next;
+                if (l2)
+                    l2 = l2.next;
+            }
+
+            if (add) {
+                var node = new ListNode(add);
+                head.next = node;
+                head = node;
+            }
+
+            return ans;
+        };
+
+        //没弄懂？？？？
+
+        // var a1 = ListNode(2);
+        // var a2 = ListNode(4);
+        // var a3 = ListNode(3);
+        // var l1 = {a1,a2,a3};
+
+        // var b1 = ListNode(5);
+        // var b2 = ListNode(6);
+        // var b3 = ListNode(4);
+        // var l2 = {b1,b2,b3};
+
+        // var result = addTwoNumbers(l1,l2);
+        // console.log(result);
+
+    </script>
+</body>
+
+</html>
