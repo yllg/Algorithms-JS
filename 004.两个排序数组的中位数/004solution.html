@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // Source : https://leetcode.com/problems/median-of-two-sorted-arrays/
+        // Author : 悬笔e绝
+        // Date   : 2018-03-15
+
+        /**
+         * @param {number[]} nums1
+         * @param {number[]} nums2
+         * @return {number}
+         */
+
+        // the test data is weak, so..
+
+        var findMedianSortedArrays = function (nums1, nums2) {
+            var s = nums1.concat(nums2);
+            s.sort(function (a, b) {
+                return a - b;
+            });
+
+            var len = s.length;
+            if (len & 1) return s[~~(len / 2)];
+            else return (s[len / 2 - 1] + s[len / 2]) / 2;
+        };
+
+        //测试
+        nums1 = [1, 3]
+        nums2 = [2]
+        nums3 = [1, 2]
+        nums4 = [3, 4]
+
+        var result1 = findMedianSortedArrays(nums1,nums2);
+        var result2 = findMedianSortedArrays(nums3,nums4);
+        console.log(result1);
+        console.log(result2);
+
+        //思路：
+        //首先将两个数组合并，并sort a-b进行升序排列
+        // & 1: 只有计数转成二进制与1进行按位与，才是1，用来判断是否是奇数
+        // 利用~~进行类型转换，转换成数字类型，奇数/2是浮点小数，然后向下转成整数哦
+
+    </script>
+</body>
+
+</html>
