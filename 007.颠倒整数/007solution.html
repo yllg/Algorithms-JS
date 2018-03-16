@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // Source : https://leetcode.com/problems/reverse-integer/
+        // Author : 悬笔e绝
+        // Date   : 2018-03-16
+
+        /**
+         * @param {number} x
+         * @return {number}
+         */
+
+        // int32 的范围: -2^31 ~ 2^31-1
+       
+        var reverse = function (x) {
+            // 1<<30左移30位，即2的30次方，再*2,就是31次方
+            var minn = -(1 << 30) * 2;
+            //同理2的30次方，再*2即2的31次方
+            var maxn = (1 << 30) * 2 - 1;
+            var ans;
+            //数字转成字符串，再拆成一个个字母
+            var arr = x.toString().split('');
+            //负数时，去掉第一个负号
+            if (x < 0)
+                arr.shift(); 
+            //字符数组倒序，然后拼接，转成数字可以去掉字符串开头的0
+            ans = Number(arr.reverse().join(''));
+            //负数最后记得*-1
+            if (x < 0)
+                ans *= -1;
+            // console.log(minn, maxn)
+            //超出方位，溢出时，返回0
+            if (ans < minn || ans > maxn)
+                return 0;
+            else
+                return ans;
+        };
+
+        console.log(reverse(120));
+        console.log(reverse(-123));
+
+    </script>
+</body>
+
+</html>
