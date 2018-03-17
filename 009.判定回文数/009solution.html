@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // Source : https://leetcode.com/problems/palindrome-number/
+        // Author : 悬笔e绝
+        // Date   : 2018-03-17
+
+        /**
+         * @param {number} x
+         * @return {boolean}
+         */
+
+        var isPalindrome = function (x) {
+            //字符串拆成数组，数组倒序，再组成字符串
+            return x.toString() == x.toString().split('').reverse().join('');
+        };
+
+        //测试
+        var a = 123;
+        var b = 121;
+        var result1 = isPalindrome(a);
+        var result2 = isPalindrome(b);
+        console.log(result1);
+        console.log(result2);
+
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // Source : https://leetcode.com/problems/string-to-integer-atoi/
+        // Author : 悬笔一绝
+        // Date   : 2018-03-17
+
+        /**
+         * @param {string} str
+         * @return {number}
+         */
+        var myAtoi = function (str) {
+            //去掉头尾的空格
+            str = str.trim();
+            //匹配带符号或者不带符号的数字
+            var pattern = /^(\-|\+)?[0-9]+/;
+            var tmp = pattern.exec(str);
+
+            if (tmp) {
+                //取匹配结果的第一个，转成数字类型
+                var num = Number(tmp[0]);
+                if (num < -2147483648)
+                    return -2147483648;
+                if (num > 2147483647)
+                    return 2147483647;
+                return num;
+            }
+            return 0;
+        };
+        
+        //测试
+        var a = "  -0069dfdk-df "
+        var result = myAtoi(a);
+        console.log(result);
+
+    </script>
+</body>
+
+</html>
