@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // Source : https://leetcode.com/problems/regular-expression-matching/
+        // Author : 悬笔e绝
+        // Date   : 2018-03-18
+
+        /**
+         * @param {string} s
+         * @param {string} p
+         * @return {boolean}
+         */
+
+        var isMatch = function (s, p) {
+            var p = '^' + p + '$';
+            var pattern = new RegExp(p, 'g');
+            return pattern.test(s);
+        };
+
+        console.log(isMatch("aa","a"));   //false
+        console.log(isMatch("aa","aa"));  //true
+        console.log(isMatch("aaa","aa")); //false
+        console.log(isMatch("aa", "a*")); //true
+        console.log(isMatch("aa", ".*")); //true
+        console.log(isMatch("ab", ".*")); //true
+        console.log(isMatch("aab", "c*a*b")); //true
+
+    </script>
+</body>
+
+</html>
