@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // Source : https://leetcode.com/problems/longest-common-prefix/
+        // Author : 悬笔e绝
+        // Date   : 2018-03-19
+
+        /**
+         * @param {string[]} strs
+         * @return {string}
+         */
+        var longestCommonPrefix = function (strs) {
+            if (!strs.length) return '';
+            
+            //查找到字符串数组中，长度最短的字符串的长度值
+            var len = strs.reduce(function (pre, item) {
+                //取最小值
+                return Math.min(pre, item.length);
+            }, Number.MAX_VALUE);
+
+            var ans = '';
+            for (var i = 0; i < len; i++) {
+                //strs[0]第一个字符串为基准；把它当做数组再取第[i]位的字符，来一一比较
+                var a = strs[0][i];
+                //判断每个字符串的第i位是否都和上面按个相同
+                //有一个不符合就返回false不再继续判断；
+                var f = strs.every(function (item) {
+                    return item[i] === a;
+                });
+                //不满足就直接跳出
+                if (!f) break;
+                //都有这个字符，就把它加到ans中
+                ans += a;
+            }
+            return ans;
+        };
+
+        //测试
+        var strs = ['abcn','abcd','abca','abcjk'];
+        console.log(longestCommonPrefix(strs));
+        //巧妙运用reduce和every方法哦~
+
+    </script>
+</body>
+
+</html>
