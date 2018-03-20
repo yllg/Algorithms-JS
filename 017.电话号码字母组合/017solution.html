@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>电话号码字母组合</title>
+</head>
+
+<body>
+    <script>
+        // Source : https://leetcode.com/problems/letter-combinations-of-a-phone-number/
+        // Author : 悬笔e绝
+        // Date   : 2018-03-20
+
+        /**
+         * @param {string} digits
+         * @return {string[]}
+         */
+        var ans, tmp;
+
+        var letterCombinations = function (digits) {
+            if (!digits.length)
+                return [];
+            //按键手机的数字1-9，但是从2开始才是字母哦
+            tmp = ['', '', 'abc', 'def', 'ghi', 'jkl', 'mno', 'pqrs', 'tuv', 'wxyz'],
+                ans = [];
+            
+            //初始传入空数组，索引为0
+            dfs('', 0, digits);
+            return ans;
+        };
+        
+
+        //深度优先的算法
+        function dfs(str, idx, digits) {
+            //深度遍历完return，必须有个return退出递归
+            if (idx === digits.length) {
+                ans.push(str);
+                return;
+            }
+            //从左到右取数字
+            var num = Number(digits[idx]);
+            if (num <= 1)
+                dfs(str, idx + 1, digits);
+            else {
+                //比如2中的a，然后对3的def进行循环；然后2中的b，再对3的def进行循环以此类推
+                for (var i = 0, len = tmp[num].length; i < len; i++)
+                    dfs(str + tmp[num][i], idx + 1, digits);
+            }
+        }
+        
+        //测试
+        console.log(letterCombinations("23"));
+        //注意：深度优先算法
+        //
+    </script>
+</body>
+
+</html>
