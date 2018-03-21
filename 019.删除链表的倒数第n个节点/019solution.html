@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // Source : https://leetcode.com/problems/remove-nth-node-from-end-of-list/
+        // Author : 悬笔e绝
+        // Date   : 2018-03-21
+
+        /**
+         * @param {ListNode} head
+         * @param {number} n
+         * @return {ListNode}
+         */
+        var removeNthFromEnd = function (head, n) {
+            var arr = [];
+            //把所有的值取出来new一个节点，存到arr中；注意：每一个的next都是null
+            while (head) {
+                arr.push(new ListNode(head.val));
+                head = head.next;
+            }
+            //删掉倒数第N个节点
+            //第一个参数为负数时，表示从数组结尾处往前计算；第二个是要删除的项目个数
+            arr.splice(-n, 1);
+            //把剩下的节点next串起来
+            for (var i = 0, len = arr.length; i < len - 1; i++)
+                arr[i].next = arr[i + 1];
+            //返回头节点
+            return arr.length === 0 ? null : arr[0];
+        };
+
+
+        // 定义一个链表结构
+        function ListNode(val) {
+            this.val = val;
+            this.next = null;
+        }
+        //N4是尾节点，N1是头节点
+        var N4 = new ListNode(4);
+        var N3 = new ListNode(3);
+        N3.next = N4;
+        var N2 = new ListNode(2);
+        N2.next = N3;
+        var N1 = new ListNode(1);
+        N1.next = N2;
+        
+        console.log(removeNthFromEnd(N1,3));
+         
+    </script>
+</body>
+
+</html>

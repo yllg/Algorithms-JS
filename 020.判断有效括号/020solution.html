@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // Source : https://leetcode.com/problems/valid-parentheses/
+        // Author : 悬笔e绝
+        // Date   : 2018-03-21
+
+        /**
+         * @param {string} s
+         * @return {boolean}
+         */
+
+        // 使用堆栈
+        var isValid = function (s) {
+            var sta = [],
+                target = {};
+            //匹配表
+            target['('] = ')';
+            target['['] = ']';
+            target['{'] = '}';
+
+            for (var i = 0, len = s.length; i < len; i++) {
+                //第一次进来或者匹配成功sta空了
+                if (!sta.length) sta.push(s[i]);
+                else {
+                    //下一个字符是否和 栈顶字符的匹配字符 相同
+                    if (s[i] === target[sta[sta.length - 1]])
+                        //匹配的话，让字符出栈；否则压栈
+                        sta.pop();
+                    else
+                        sta.push(s[i]);
+                }
+            }
+            //如果栈空了说明全都匹配了，返回true哦
+            return !sta.length;
+        };
+
+        //测试
+        console.log(isValid("()"));
+        console.log(isValid("(]"));
+        console.log(isValid("()[]{}"));
+        console.log(isValid("([)]"));
+
+    </script>
+</body>
+
+</html>
