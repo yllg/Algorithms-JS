@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // Source : https://leetcode.com/problems/merge-k-sorted-lists/
+        // Author : 悬笔e绝
+        // Date   : 2018-03-22
+
+        /**
+         * @param {ListNode[]} lists
+         * @return {ListNode}
+         */
+        var mergeKLists = function (lists) {
+            var ans = [];
+
+            //类似21题，取出每个列表的头节点，然后把该条链表的节点取出来放到ans中
+            lists.forEach(function (item) {
+                while (item) {
+                    ans.push(new ListNode(item.val));
+                    item = item.next;
+                }
+            });
+            //升序排列
+            ans.sort(function (a, b) {
+                return a.val - b.val;
+            });
+
+            if (!ans.length)
+                return null;
+            //排序之后的节点，next串起来
+            for (var i = 0, len = ans.length - 1; i < len; i++)
+                ans[i].next = ans[i + 1];
+            //返回新链表的头节点
+            return ans[0];
+        };
+
+        // Definition for singly-linked list.
+        function ListNode(val) {
+            this.val = val;
+            this.next = null;
+        }
+
+        //测试，和21题类似，这次传入列表头节点的数组
+        // 1->2->4, 1->3->4
+        var N3 = new ListNode(4);
+        var N2 = new ListNode(2);
+        N2.next = N3;
+        var N1 = new ListNode(1);
+        N1.next = N2;
+
+        var N6 = new ListNode(4);
+        var N5 = new ListNode(3);
+        N5.next = N6;
+        var N4 = new ListNode(1);
+        N4.next = N5;
+
+        var lists = [N1,N4];
+        console.log(mergeKLists(lists));
+    </script>
+</body>
+
+</html>
