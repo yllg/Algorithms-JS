@@ -12,13 +12,7 @@
     <script>
         // Source : https://leetcode.com/problems/add-two-numbers/
         // Author : 悬笔e绝
-        // Date   : 2018-03-14
-
-        //Definition for singly-linked list.
-        function ListNode(val) {
-            this.val = val;
-            this.next = null;
-        }
+        // Date   : 2018-03-14       
 
         /**
          * @param {ListNode} l1
@@ -29,29 +23,33 @@
         var addTwoNumbers = function (l1, l2) {
             var add = 0,
                 ans, head;
-
+            //可能两个链表的长度不一样
             while (l1 || l2) {
+                //某一个到头了就取0
                 var a = l1 ? l1.val : 0,
                     b = l2 ? l2.val : 0;
-
+                //头结点是各位相加； add表示进位
                 var sum = a + b + add;
+                //~~向下取整，拿到进位值
                 add = ~~(sum / 10);
-
+                // 取模
                 var node = new ListNode(sum % 10);
 
                 if (!ans)
                     ans = head = node;
                 else {
+                    //！！其实就是往ans的next加，ans和head指向一块地址
                     head.next = node;
+                    //把head重置
                     head = node;
                 }
-
+                //链表继续下一个节点
                 if (l1)
                     l1 = l1.next;
                 if (l2)
                     l2 = l2.next;
             }
-
+            //有进位，需要再加上一个节点
             if (add) {
                 var node = new ListNode(add);
                 head.next = node;
@@ -61,21 +59,27 @@
             return ans;
         };
 
-        //没弄懂？？？？
+        //Definition for singly-linked list.
+        function ListNode(val) {
+            this.val = val;
+            this.next = null;
+        }
 
-        // var a1 = ListNode(2);
-        // var a2 = ListNode(4);
-        // var a3 = ListNode(3);
-        // var l1 = {a1,a2,a3};
+        //测试
+        var a3 = new ListNode(3);
+        var a2 = new ListNode(4);
+        a2.next = a3;
+        var a1 = new ListNode(2);
+        a1.next = a2;
 
-        // var b1 = ListNode(5);
-        // var b2 = ListNode(6);
-        // var b3 = ListNode(4);
-        // var l2 = {b1,b2,b3};
+        var b3 = new ListNode(4);
+        var b2 = new ListNode(6);
+        b2.next = b3;
+        var b1 = new ListNode(5);
+        b1.next = b2;
 
-        // var result = addTwoNumbers(l1,l2);
-        // console.log(result);
-
+        var result = addTwoNumbers(a1, b1);
+        console.log(result);
     </script>
 </body>
 
