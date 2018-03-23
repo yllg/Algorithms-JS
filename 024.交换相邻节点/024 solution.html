@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // Source : https://leetcode.com/problems/swap-nodes-in-pairs/
+        // Author : 悬笔e绝
+        // Date   : 2018-03-23
+       
+        /**
+         * @param {ListNode} head
+         * @return {ListNode}
+         */
+        var swapPairs = function (head) {
+            if (!head)
+                return null;
+            var arr = [];
+            //把链表的每个节点放到arr中，且next都置null
+            while (head) {
+                var next = head.next;
+                head.next = null;
+                arr.push(head);
+                head = next;
+            }
+
+            var len = arr.length;
+            //数组每两个一组交换顺序
+            for (var i = 0; i < len; i += 2) {
+                var a = arr[i];
+                var b = arr[i + 1];
+                //数组长度为奇数的情况
+                if (!b)
+                    continue;
+                //互换
+                arr[i] = b;
+                arr[i + 1] = a;
+            }
+            //把两两互换之后的节点串起来~
+            for (var i = 0; i < len - 1; i++)
+                arr[i].next = arr[i + 1];
+            //返回头节点
+            return arr[0];
+        };
+
+        // Definition for singly-linked list.
+        function ListNode(val) {
+            this.val = val;
+            this.next = null;
+        }
+
+        //测试 1->2->3->4->5
+        var N5 = new ListNode(5);
+        var N4 = new ListNode(4);
+        N4.next = N5;
+        var N3 = new ListNode(3);
+        N3.next = N4;
+        var N2 = new ListNode(2);
+        N2.next = N3;
+        var N1 = new ListNode(1);
+        N1.next = N2;
+
+        console.log(swapPairs(N1));
+
+    </script>
+</body>
+
+</html>
