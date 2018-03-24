@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // Source : https://leetcode.com/problems/implement-strstr/
+        // Author : 悬笔e绝
+        // Date   : 2018-03-24
+
+        /**
+         * @param {string} haystack
+         * @param {string} needle
+         * @return {number}
+         */
+
+        //使用search函数就好了。。
+        var strStr = function (haystack, needle) {
+            return haystack.search(needle);
+        };
+
+        //测试
+        var haystack1 = "hello", needle1 = "ll";
+        var haystack2 = "aaaaa", needle2 = "bba";
+        console.log(strStr(haystack1,needle1));
+        console.log(strStr(haystack2,needle2));
+    </script>
+</body>
+
+</html>

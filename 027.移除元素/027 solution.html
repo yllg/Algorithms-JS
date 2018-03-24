@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // Source : https://leetcode.com/problems/remove-element/
+        // Author : 悬笔e绝
+        // Date   : 2018-03-24
+
+        /**
+         * @param {number[]} nums
+         * @param {number} val
+         * @return {number}
+         */
+
+        var removeElement = function (nums, val) {
+            var ans = 0;
+            for (var i = nums.length; i--;)
+                //不等，结果长度加1；相等就删除该元素
+                if (nums[i] !== val)
+                    ans++;
+                else nums.splice(i, 1);
+
+            return ans;
+        };
+
+        //测试
+        var nums = [3,2,2,3];
+        console.log(removeElement(nums,3));
+
+    </script>
+</body>
+
+</html>
