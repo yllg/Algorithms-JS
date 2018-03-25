@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // Source : https://leetcode.com/problems/divide-two-integers/
+        // Author : 悬笔e绝
+        // Date   : 2018-03-25
+
+        /**
+         * @param {number} dividend
+         * @param {number} divisor
+         * @return {number}
+         */
+        var divide = function (dividend, divisor) {
+            //1左移31位到了符号位，表示负数，所以是最小负数 -2147483648
+            var MAX_NEGATIVE_INT = (1 << 31);
+            // ~表示按位取反，得到最大正数 2147483647
+            var MAX_POSITIVE_INT = ~(1 << 31);
+            //向下取整
+            var ans = Math.floor(dividend / divisor);
+
+            if (ans < MAX_NEGATIVE_INT)
+                ans = MAX_NEGATIVE_INT;
+
+            if (ans > MAX_POSITIVE_INT)
+                ans = MAX_POSITIVE_INT;
+
+            return ans;
+        };
+
+        //测试
+        console.log(divide(3,2));
+        console.log(divide(10,3));
+
+    </script>
+</body>
+
+</html>
