@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // Source : https://leetcode.com/problems/search-for-a-range/
+        // Author : 悬笔e绝
+        // Date   : 2018-03-28
+
+        /**
+         * @param {number[]} nums
+         * @param {number} target
+         * @return {number[]}
+         */
+
+        var searchRange = function (nums, target) {
+            var idx = [];
+            //forEach方法，把匹配的元素的索引存起来
+            nums.forEach(function (item, index, array) {
+                if (item === target)
+                    idx.push(index);
+            });
+            //如果没有
+            if (!idx.length)
+                return [-1, -1];
+            //范围的最大值，去idx数组的最后一个
+            return [idx[0], idx[idx.length - 1]];
+        };
+
+        //测试
+        var nums = [5, 7, 7, 8, 8, 10];
+        console.log(searchRange(nums,8));
+    </script>
+</body>
+
+</html>
