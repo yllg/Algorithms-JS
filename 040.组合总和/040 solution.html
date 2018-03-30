@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // Source : https://leetcode.com/problems/combination-sum-ii/
+        // Author : 悬笔e绝
+        // Date   : 2018-03-30
+
+
+        /**
+         * @param {number[]} candidates
+         * @param {number} target
+         * @return {number[][]}
+         */
+        var combinationSum2 = function (candidates, target) {
+            //升序整理下
+            candidates.sort(function (a, b) {
+                return a - b;
+            });
+            
+            var len = candidates.length;
+            var res = [];
+            var ans = [];
+            //递归函数来处理
+            dfs(0, 0);
+            
+            function dfs(index, sum) {
+                if (sum > target)
+                    return;
+
+                if (sum === target) {
+                    ans.push(res.concat());
+                    return;
+                }
+                
+                //i从index开始，保证每个数字只使用1次
+                for (var i = index; i < len; i++) {
+                    // 删除重复的组合
+                    if (i > index && candidates[i] === candidates[i - 1])
+                        continue;
+                    res.push(candidates[i]);
+                    dfs(i + 1, sum + candidates[i]);
+                    res.pop();
+                }
+            }
+
+            return ans;
+        };
+
+        //测试
+        var nums = [10, 1, 2, 7, 6, 1, 5];
+        console.log(combinationSum2(nums,8));
+
+    </script>
+</body>
+
+</html>
