@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // Source : https://leetcode.com/problems/permutations/
+        // Author : 悬笔e绝
+        // Date   : 2018-04-01
+
+        /**
+         * @param {number[]} nums
+         * @return {number[][]}
+         */
+        var ans, res, hash, len;
+
+        var permute = function (nums) {
+            len = nums.length,
+                ans = [],
+                res = [],
+                hash = [];
+
+            dfs(0, nums);
+            return ans;
+        };
+        
+        //深度优先遍历，递归
+        function dfs(num, nums) {
+            //深度遍历到底了，把res的数组取出来放到ans结果数组中
+            if (num === len) {
+                var tmp = res.map(function (item) {
+                    return item;
+                });
+                ans.push(tmp);
+                return;
+            }
+
+            for (var i = 0; i < len; i++) {
+                //重复数字，跳出本次循环
+                if (hash[i]) continue;
+                //否则继续深度遍历 去递归加到res中完成一种解
+                hash[i] = true;
+                res.push(nums[i]);
+                dfs(num + 1, nums);
+                //深度优先递归结束一轮，把标识改下并弹出栈顶的元素，继续
+                hash[i] = false;
+                res.pop();
+            }
+        }
+
+        //测试
+        var nums = [1,2,3];
+        console.log(permute(nums));
+
+    </script>
+</body>
+
+</html>

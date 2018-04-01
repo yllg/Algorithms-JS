@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // Source : https://leetcode.com/problems/permutations/
+        // Author : 悬笔e绝
+        // Date   : 2018-04-01
+
+        /**
+         * @param {number[]} nums
+         * @return {number[][]}
+         */
+        var ans, res, hash, len;
+        var hashAns;
+
+        var permuteUnique = function (nums) {
+            len = nums.length,
+                ans = [],
+                res = [],
+                hash = [],
+                hashAns = [];
+            dfs(0, nums);
+            return ans;
+        };
+        
+        //在46题的基础上修改下，只是再最后进行了判断去重
+        function dfs(num, nums) {
+            if (num === len) {
+                var tmp = res.map(function (item) {
+                    return item;
+                });
+                //在这里加了个判断，去掉重复的
+                if (hashAns[tmp.toString()]) return;
+
+                hashAns[tmp.toString()] = true;
+                ans.push(tmp);
+                return;
+            }
+
+            for (var i = 0; i < len; i++) {
+                if (hash[i]) continue;
+                hash[i] = true;
+                res.push(nums[i]);
+                dfs(num + 1, nums);
+                hash[i] = false;
+                res.pop();
+            }
+        }
+
+        //测试
+        var nums = [1,1,2];
+        console.log(permuteUnique(nums));
+    </script>
+</body>
+
+</html>
