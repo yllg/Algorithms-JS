@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // Source : https://leetcode.com/problems/anagrams/
+        // Author : 悬笔e绝
+        // Date   : 2018-04-02
+
+        /**
+         * @param {string[]} strs
+         * @return {string[][]}
+         */
+        var groupAnagrams = function (strs) {
+            var ans = [];
+            var hash = {};
+
+            strs.forEach(function (item) {
+                //拆开按照字母顺序排好
+                var str = item.split('').sort().join('');
+                if (hash[str] === undefined) {
+                    //str代表一个字谜，长度是他的索引
+                    hash[str] = ans.length;
+                    //加入一个新的字谜数组
+                    ans.push([item]);
+                } else {
+                    //累加到某一个字谜数组中，hash[str]是它的索引
+                    ans[hash[str]].push(item);
+                }
+            });
+
+            return ans;
+        };
+
+        //测试
+        var strs = ["eat", "tea", "tan", "ate", "nat", "bat"];
+        console.log(groupAnagrams(strs));
+    </script>
+</body>
+
+</html>

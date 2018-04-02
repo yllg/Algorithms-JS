@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // Source : https://leetcode.com/problems/rotate-image/
+        // Author : 悬笔e绝
+        // Date   : 2018-04-02
+
+        /**
+         * @param {number[][]} matrix
+         * @return {void} Do not return anything, modify matrix in-place instead.
+         */
+        var rotate = function (matrix) {
+            var len = matrix.length,
+                tmp = [];
+            //copy一个数组tmp作为中间量，双重循环
+            for (var i = 0; i < len; i++) {
+                tmp[i] = [];
+                for (var j = 0; j < len; j++)
+                    tmp[i][j] = matrix[i][j];
+            }
+            //双重循环，中间矩阵竖着从下往上放到原数组中
+            for (var i = 0; i < len; i++)
+                for (var j = 0; j < len; j++)
+                    matrix[i][j] = tmp[len - j - 1][i];
+        };
+
+        //测试
+        var matrix1 = [
+            [1, 2, 3],
+            [4, 5, 6],
+            [7, 8, 9]
+        ];
+        var matrix2 = [
+            [5, 1, 9, 11],
+            [2, 4, 8, 10],
+            [13, 3, 6, 7],
+            [15, 14, 12, 16]
+        ];
+        //在原有的矩阵中翻转
+        rotate(matrix1);
+        rotate(matrix2);
+        console.log(matrix1);
+        console.log(matrix2);
+    </script>
+</body>
+
+</html>
