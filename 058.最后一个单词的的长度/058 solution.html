@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // Source : https://leetcode.com/problems/length-of-last-word/
+        // Author : 悬笔e绝
+        // Date   : 2018-04-04
+
+        /**
+         * @param {string} s
+         * @return {number}
+         */
+        var lengthOfLastWord = function (s) {
+            //去掉头尾空格
+            s = s.trim();
+            //去掉中间的空格符
+            var _str = s.replace(/\s/g, '');
+            if (!_str.length) return 0;
+
+            //从后往前循环
+            for (var i = s.length; i--;) {
+                //找到最后一个空格
+                if (s[i] === ' ')
+                    return s.length - i - 1;
+                //没有空格，整个就是一个单词
+                if (i === 0)
+                    return s.length - i;
+            }
+        };
+        
+        //测试
+        var s1 = "Hello World";
+        var s2 = "Hello World m";
+        var s3 = "Hello World  ";
+        var s4 = "  n  ";
+        console.log(lengthOfLastWord(s1));
+        console.log(lengthOfLastWord(s2));
+        console.log(lengthOfLastWord(s3));
+        console.log(lengthOfLastWord(s4));
+
+    </script>
+</body>
+
+</html>
