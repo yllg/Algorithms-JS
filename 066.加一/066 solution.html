@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // Source : https://leetcode.com/problems/plus-one/
+        // Author : 悬笔e绝
+        // Date   : 2018-04-05
+
+        /**
+         * @param {number[]} digits
+         * @return {number[]}
+         */
+
+        var plusOne = function (digits) {
+            var ans = [],
+                add = 0, //默认进位是0，不进位
+                len = digits.length;
+            //取最后一位，自加1
+            digits[len - 1]++;
+            //从末尾开始判断进位，并把余数存到一个新的ans数组中
+            for (var i = len - 1; i >= 0; i--) {
+                //每次加上 上一次的进位数
+                var sum = digits[i] + add;
+                //去余数，存到ans数组中
+                ans[i] = sum % 10;
+                //计算商取整当做进位
+                add = ~~(sum / 10);
+            }
+            //如果最高位还有进位数1，unshift在数组最前面加一个1
+            if (add)
+                ans.unshift(add);
+
+            return ans;
+        };
+
+        //测试
+        //把数组当做一个整数46029，然后加一变成46030
+        var digits = [4,6,0,2,9];
+        console.log(plusOne(digits));
+    </script>
+</body>
+
+</html>
