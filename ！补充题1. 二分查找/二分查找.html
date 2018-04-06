@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        function BinarySearch(arr, target) {
+            var low = 0; //设定下标
+            var high = arr.length - 1; //设定上标 
+            while (high >= low) {
+                var mid = Math.floor((low + high) / 2); //二分查找的关键 
+                if (arr[mid] > target) {
+                    high = mid;
+                } else if (arr[mid] < target) {
+                    low = mid;
+                } else {
+                    return mid
+                }
+            }
+            return -1;
+        }
+
+        //测试  查找
+        var arr = [2,3,5,7,11,13,17,19,23,29,31, 37, 41,43,47];
+        console.log(BinarySearch(arr,31));
+
+    </script>
+</body>
+
+</html>
