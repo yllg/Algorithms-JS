@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        function GetBytes(str) {
+            var len = str.length;
+            //默认是字符串的长度
+            var bytes = len;
+            for (var i = 0; i < len; i++) {
+                //charCodeAt返回字符串中字符的Unicode编码，大于255是中文字符哦
+                //发现一个中文字符，额外加1
+                if (str.charCodeAt(i) > 255) bytes++;
+            }
+            return bytes;
+        }
+        console.log(GetBytes("你好,as"));
+    </script>
+</body>
+
+</html>

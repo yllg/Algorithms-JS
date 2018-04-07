@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        function getMaxDiff(arr) {
+            //假设第一个元素最小
+            var minN = arr[0];
+            var maxDiff = 0;
+            for (var i = 0; i < arr.length; i++) {
+                var currentN = arr[i];
+                //找到最小的数
+                minN = Math.min(minN, currentN);
+                //当前的最大差值
+                var currentDiff = currentN - minN;
+                //取最大值
+                maxDiff = Math.max(maxDiff, currentDiff);
+            }
+            return maxDiff;
+        }
+
+        //测试
+        var arr = [10,5,11,7,8,9];
+        console.log(getMaxDiff(arr));
+    </script>
+</body>
+
+</html>

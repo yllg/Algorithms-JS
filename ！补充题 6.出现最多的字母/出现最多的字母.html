@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        function findMaxDuplicateChar(str) {
+            if (str.length == 1) {
+                return str;
+            }
+            //定义一个哈希表
+            let charObj = {};
+            for (let i = 0; i < str.length; i++) {
+                //str.charAt(i) 返回指定位置的字符，类似把字符串拆成数组取元素值一样
+                //没有这个字母，就标记1；有重复就加1
+                if (!charObj[str.charAt(i)]) {
+                    charObj[str.charAt(i)] = 1;
+                } else {
+                    charObj[str.charAt(i)] += 1;
+                }
+            }
+            //遍历上面的结果集，找到最大的字符，以及它出现的次数
+            let maxChar = '',
+                maxValue = 1;
+            for (var k in charObj) {
+                if (charObj[k] >= maxValue) {
+                    maxChar = k;
+                    maxValue = charObj[k];
+                }
+            }
+            return "最多字符" + maxChar + "; 出现次数" + maxValue;
+        }
+
+        //测试
+        var str = "afjghdfraaaasdenas";
+        console.log(findMaxDuplicateChar(str));
+    </script>
+</body>
+
+</html>
