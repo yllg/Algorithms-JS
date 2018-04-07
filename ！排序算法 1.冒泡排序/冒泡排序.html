@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        //冒泡排序
+        //1.依次比较相邻的两个数，如果第一个比第二个小，不变。如果第一个比第二个大，调换顺序。一轮下来，最后一个是最大的数
+        //2.对除了最后一个之外的数重复第一步，直到只剩一个数
+        function bubbleSort(myArray) {
+            var len = myArray.length;
+            var i;
+            var j;
+            var stop;
+
+            for (i = 0; i < len - 1; i++) {
+                //stop 内层循环不用考虑最后面已经排好的元素了
+                for (j = 0, stop = len - 1 - i; j < stop; j++) {
+                    if (myArray[j] > myArray[j + 1]) {
+                        swap(myArray, j, j + 1);
+                    }
+                }
+            }
+            return myArray;
+        }
+        //交换数组两个元素
+        function swap(myArray, p1, p2) {
+            var temp = myArray[p1];
+            myArray[p1] = myArray[p2];
+            myArray[p2] = temp;
+        }
+
+        //测试一下
+        var dataStore = [1, 8, 3, 2, 9, 5, 4, 7];
+        console.log(bubbleSort(dataStore));
+    </script>
+</body>
+
+</html>

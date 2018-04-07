@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        //斐波那契 递归算法
+        function getFunction1(n) {
+            if (n < 1) {
+                return 0;
+            }
+            if (n == 1) {
+                return 1;
+            }
+            if (n == 2) {
+                return 2;
+            }
+            return getFunction1(n - 1) + getFunction1(n - 2);
+        }
+
+
+        //动态规划算法
+        function getFunction2(n) {
+            if (n < 1) {
+                return 0;
+            }
+            if (n == 1) {
+                return 1;
+            }
+            if (n == 2) {
+                return 2;
+            }
+
+            var a = 1;
+            var b = 2;
+            var temp = 0;
+
+            for (var i = 3; i <= n ; i++) {
+                temp = a + b;
+                a = b;
+                b = temp;
+            }
+            return temp;
+        }
+
+        //测试
+        console.log(getFunction1(10));
+        console.log(getFunction2(10));
+    </script>
+
+</body>
+
+</html>
