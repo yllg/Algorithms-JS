@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+
+        //比parse再stringfy好，但是仍然考虑的不全面；实际项目中直接用lodash就好
+        function deepClone(o1, o2) { 
+            for (let k in o2) {
+                //如果属性还是对象的话，递归继续深克隆； 普通变量的话直接复制即可
+                if (typeof o2[k] === 'object') {
+                    o1[k] = {};
+                    deepClone(o1[k], o2[k]);
+                } else {
+                    o1[k] = o2[k];
+                }
+            }
+        }
+
+        // 测试
+        let obj = {
+            a: 1,
+            b: [1, 2, 3],
+            c: {m:1, n:2}
+        };
+        let cloneObj = Object.create(null);
+        deepClone(cloneObj, obj);
+
+        console.log(cloneObj.a == obj.a); //true
+        console.log(cloneObj.b == obj.b); //false
+        console.log(cloneObj.b[0] == obj.b[0]); //true
+        console.log(cloneObj.c == obj.c); //false
+        console.log(cloneObj.c.m == obj.c.m); //true
+
+    </script>
+</body>
+
+</html>

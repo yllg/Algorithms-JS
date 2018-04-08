@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // Source : https://leetcode.com/problems/climbing-stairs/
+        // Author : 悬笔e绝
+        // Date   : 2018-04-08
+
+        /**
+         * @param {number} n
+         * @return {number}
+         */
+
+        //有种思路：菲波那切数列； 动态规划（性能上更好）；
+        //这里使用斐波那契数列解法；另一种解法在附加题中有；
+        var climbStairs = function (n) {
+            var a = [];
+            //1级就一种，2级有两种
+            a[1] = 1, a[2] = 2;
+            for (var i = 3; i <= n; i++)
+                a[i] = a[i - 1] + a[i - 2];
+            return a[n];
+        };
+
+        //测试
+        console.log(climbStairs(2));
+        console.log(climbStairs(3));
+        console.log(climbStairs(10));
+
+    </script>
+</body>
+
+</html>
