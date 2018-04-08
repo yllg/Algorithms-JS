@@ -10,23 +10,25 @@
 
 <body>
     <script>
-        //斐波那契 递归算法
+        //斐波那契 普通递归算法
         function getFunction1(n) {
-            if (n < 1) {
-                return 0;
-            }
-            if (n == 1) {
-                return 1;
-            }
-            if (n == 2) {
-                return 2;
+            if (n <= 2) {
+                return n;
             }
             return getFunction1(n - 1) + getFunction1(n - 2);
         }
 
+        //斐波那契 尾递归算法
+        function getFunction2(n,num1,num2) {
+            if (n == 0) {
+                return num1;
+            }else{
+                return getFunction2(n-1,num2,num1+num2);
+            }
+        }
 
         //动态规划算法
-        function getFunction2(n) {
+        function getFunction3(n) {
             if (n < 1) {
                 return 0;
             }
@@ -41,7 +43,7 @@
             var b = 2;
             var temp = 0;
 
-            for (var i = 3; i <= n ; i++) {
+            for (var i = 3; i <= n; i++) {
                 temp = a + b;
                 a = b;
                 b = temp;
@@ -50,8 +52,9 @@
         }
 
         //测试
-        console.log(getFunction1(10));
-        console.log(getFunction2(10));
+        console.log(getFunction1(20));
+        console.log(getFunction2(20,1,1));
+        console.log(getFunction3(20));
     </script>
 
 </body>
