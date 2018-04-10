@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // Source : https://leetcode.com/problems/search-in-rotated-sorted-array-ii/
+        // Author : 悬笔e绝
+        // Date   : 2018-04-10
+
+        /**
+         * @param {number[]} nums
+         * @param {number} target
+         * @return {boolean}
+         */
+        
+        //判断目标是否在指定数组中，使用some函数判断是否存在某个元素，返回布尔值，任意有一个true满足就是true
+        //every()函数，返回布尔值，必须每一个都true满足，最后才返回true
+        //filter()函数，返回新的数组，过滤的作用
+        var search = function (nums, target) {
+            return nums.some(function (item, index, array) {
+                return item === target;
+            });
+        };
+
+        //测试
+        var nums = [4,5,6,7,0,1,2];
+        console.log(search(nums,1));
+        console.log(search(nums,8));
+    </script>
+</body>
+
+</html>
