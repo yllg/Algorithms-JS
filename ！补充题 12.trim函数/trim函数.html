@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+    // 原型方式调用，即obj.trim()
+    String.prototype.trim = function(){
+        return this.replace(/(^\s*)|(\s*$)/g,'');
+    }
+
+    // 工具方式调用，即trim(obj)
+    function trim(str){
+        return str.replace(/(^\s*)|(\s*$)/g,'');
+    }
+
+    //测试
+    var str1 = "  hh     "
+    console.log(str1.trim());
+    var str2 = "  nn     "
+    console.log(trim(str2));
+    </script>
+</body>
+</html>
