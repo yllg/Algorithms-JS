@@ -26,7 +26,7 @@
             }
 
             if (!ans.length)
-                return null;
+                return [];
             // 和前一个的值相等就删除本个节点，实现每个元素只出现一次
             for (var i = ans.length; i--;) {
                 if (i && ans[i].val === ans[i - 1].val)
