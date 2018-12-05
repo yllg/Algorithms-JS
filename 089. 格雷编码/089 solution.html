@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>089. 格雷编码</title>
+</head>
+
+<body>
+    <script>
+        // Source : https://leetcode.com/problems/gray-code/
+        // Author : 悬笔e绝
+        // Date   : 2018-12-05
+
+        var grayCode = function (n) {
+            var ans = [];
+            // 1<<n 左移n位 表示2的n次方
+            for (var i = 0; i < (1 << n); i++)
+                // >> 右移, ^ 按位异或
+                ans[i] = i ^ (i >> 1);
+            return ans;
+        };
+    </script>
+</body>
+
+</html>
