@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>090. 子集 II</title>
+</head>
+
+<body>
+    <script>
+        // Source : https://leetcode.com/problems/subsets-ii/
+        // Author : 悬笔e绝
+        // Date   : 2018-12-06
+
+        /**
+         * @param {number[]} nums
+         * @return {number[][]}
+         */
+        var ans, res, len;
+        var hashAns;
+
+        function dfs(index, nums) {
+            var tmp = res.map(function (item) {
+                return item;
+            });
+
+            if (!hashAns[tmp.toString()]) {
+                hashAns[tmp.toString()] = true;
+                ans.push(tmp);
+            }
+
+            for (var i = index; i < len; i++) {
+                res.push(nums[i]);
+                dfs(i + 1, nums);
+                res.pop();
+            }
+        }
+
+        var subsetsWithDup = function (nums) {
+            nums.sort(function (a, b) {
+                return a - b;
+            });
+
+            ans = [],
+            res = [],
+            len = nums.length,
+            hashAns = [];
+            // 递归，从第一个元素开始
+            dfs(0, nums);
+
+            return ans;
+        };
+        
+        // 测试
+        var test = [1,2,2];
+        console.log(subsetsWithDup(test));
+
+    </script>
+</body>
+
+</html>
