@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>092.反转链表II</title>
+</head>
+
+<body>
+    <script>
+        // Source : https://leetcode.com/problems/reverse-linked-list-ii/
+        // Author : 悬笔e绝
+        // Date   : 2018-12-10
+
+        /**
+         * @param {ListNode} head
+         * @param {number} m
+         * @param {number} n
+         * @return {ListNode}
+         */
+        var reverseBetween = function (head, m, n) {
+            var tmp = [];
+            // 创建一个新的链表，next都为null
+            while (head) {
+                tmp.push(new ListNode(head.val));
+                head = head.next;
+            }
+            // 反转元素
+            m -= 1;
+            n -= 1;
+            for (var i = m, mid = (n + m) >> 1; i <= mid; i++) {
+                var a = i;
+                var b = m + n - a;
+                var c = tmp[a];
+                tmp[a] = tmp[b];
+                tmp[b] = c;
+            }
+            // 把链表连接起来
+            for (var i = 0, len = tmp.length; i < len - 1; i++)
+                tmp[i].next = tmp[i + 1];
+            return tmp[0];
+        };
+
+        // 定义一个链表结构
+        function ListNode(val) {
+            this.val = val;
+            this.next = null;
+        }
+        // 1->2->3->4->5
+        var N5 = new ListNode(5);
+        var N4 = new ListNode(4);
+        N4.next = N5;
+        var N3 = new ListNode(3);
+        N3.next = N4;
+        var N2 = new ListNode(2);
+        N2.next = N3;
+        var N1 = new ListNode(1);
+        N1.next = N2;
+
+        // 测试 输出 1->2->3->4->5
+        console.log(reverseBetween(N1,2,4));
+    </script>
+</body>
+
+</html>
