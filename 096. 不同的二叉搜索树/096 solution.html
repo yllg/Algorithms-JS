@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>096. 不同的二叉搜索树</title>
+</head>
+
+<body>
+    <script>
+        // Source : https://leetcode.com/problems/unique-binary-search-trees/
+        // Author : 悬笔e绝
+        // Date   : 2018-12-13
+
+        /**
+         * @param {number} n
+         * @return {number}
+         */
+        var numTrees = function (n) {
+            var ans = [];
+            ans[0] = 1, ans[1] = 1;
+            for (var i = 2; i <= n; i++) {
+                ans[i] = 0;
+                // j as the root
+                for (var j = 1; j <= i; j++)
+                    ans[i] += ans[j - 1] * ans[i - j];
+            }
+            return ans[n];
+        };
+
+        // 测试
+        console.log(numTrees(3));
+    </script>
+</body>
+
+</html>
