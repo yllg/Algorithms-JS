@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+<script>
+// Source : https://leetcode.com/problems/validate-binary-search-tree/
+// Author : 悬笔e绝
+// Date   : 2019-03-11
+
+
+//Definition for a binary tree node.
+function TreeNode(val) {
+    this.val = val;
+    this.left = this.right = null;
+}
+ 
+/**
+ * @param {TreeNode} root
+ * @return {boolean}
+ */
+ var isValidBST = function(root) {
+  var inorderTraversal = function(root) {
+    if (!root) return [];
+    var stack = [], ans = [];
+    stack.push(root);
+    while (stack.length) {
+      var elem = stack[stack.length - 1];
+      if (elem.left === 1) {
+        elem.left = 0;
+        ans.push(elem.val);
+      } else if (elem.left) {
+        stack.push(elem.left);
+        elem.left = 1;
+      } else if (elem.left === null) {
+        elem.left = 1;
+      } else if (elem.right) {
+        stack.push(elem.right);
+        elem.right = null;
+      } else {
+        stack.pop();
+      }
+    }
+    return ans;
+  };
+
+  var ans = inorderTraversal(root);
+  for (var i = 1, len = ans.length; i < len; i++) {
+    if (ans[i] > ans[i - 1])
+      continue;
+    return false;
+  }
+  return true;
+};
+
+// 测试
+var tree_node_1 = new TreeNode(2);
+tree_node_1.left = 1;
+tree_node_1.right = 3;
+
+var tree_node_2_1 = new TreeNode(4);
+tree_node_2_1.left = 3;
+tree_node_2_1.right = 6;
+var tree_node_2 = new TreeNode(5);
+tree_node_2.left = 1;
+tree_node_2.right = tree_node_2_1;
+
+console.log(isValidBST(tree_node_1));
+console.log(isValidBST(tree_node_2));
+
+</script>
+</body>
+</html>
