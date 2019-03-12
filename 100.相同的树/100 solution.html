@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+<script>
+// Source : https://leetcode.com/problems/same-tree/
+// Author : 悬笔e绝
+// Date   : 2019-03-12
+
+
+// Definition for a binary tree node.
+function TreeNode(val) {
+    this.val = val;
+    this.left = this.right = null;
+}
+
+/**
+ * @param {TreeNode} p
+ * @param {TreeNode} q
+ * @return {boolean}
+ */
+
+var f;
+
+var isSameTree = function(p, q) {
+  f = true;
+  dfs(p, q);
+  return f;
+};
+
+function dfs(a, b) {
+  if (!f)
+    return;
+  if (check(a, b)) {
+    f = false;
+    return;
+  }
+  if (a && b && a.left !== undefined && b.left !== undefined)
+    dfs(a.left, b.left);
+  if (a && b && a.right !== undefined && b.right !== undefined)
+    dfs(a.right, b.right);
+}
+
+// if a is different from b, return true
+function check(a, b) {
+  if (a === null && b === null) return false;
+  if (a === null && b !== null) return true;
+  if (a !== null && b === null) return true;
+  if (a.val === b.val) 
+    return false;
+  return true;
+}
+
+// 测试
+var tree_node_1 = new TreeNode(1);
+tree_node_1.left = 2;
+var tree_node_2 = new TreeNode(1);
+tree_node_2.right = 2;
+console.log(isSameTree(tree_node_1, tree_node_2));
+
+var tree_node_3 = new TreeNode(1);
+tree_node_3.left = 2;
+tree_node_3.rigtht = 1;
+var tree_node_4 = new TreeNode(1);
+tree_node_4.left = 1;
+tree_node_4.right = 2;
+console.log(isSameTree(tree_node_3, tree_node_4));
+
+var tree_node_5 = new TreeNode(1);
+tree_node_5.left = 1;
+tree_node_5.right = 2;
+console.log(isSameTree(tree_node_5, tree_node_5));
+
+</script>
+</body>
+</html>
