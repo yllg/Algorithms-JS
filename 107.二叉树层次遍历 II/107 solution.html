@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+<script>
+// Source : https://leetcode.com/problems/binary-tree-level-order-traversal-ii/
+// Author : 悬笔e绝
+// Date   : 2019-04-06
+
+// Definition for a binary tree node.
+function TreeNode(val) {
+    this.val = val;
+    this.left = this.right = null;
+}
+/**
+ * @param {TreeNode} root
+ * @return {number[][]}
+ */
+ var levelOrderBottom = function(root) {
+  if (!root) return [];
+  var ans = [], tmp = [root];
+  while (tmp.length) {
+  	var res = [], _tmp = [];
+  	tmp.forEach(function(item) {
+  		res.push(item.val);
+  		if (item.left)
+  			_tmp.push(item.left);
+  		if (item.right)
+  			_tmp.push(item.right);
+  	});
+  	ans.push(res);
+  	tmp = _tmp;
+  }
+  return ans.reverse();
+};
+
+// 测试
+var tree_node_1_1 = new TreeNode(9);
+var tree_node_1_2 = new TreeNode(20);
+tree_node_1_2.left = new TreeNode(15);
+tree_node_1_2.right = new TreeNode(7);
+var tree_node_1 = new TreeNode(3);
+tree_node_1.left = tree_node_1_1;
+tree_node_1.right = tree_node_1_2;
+console.log(levelOrderBottom(tree_node_1));
+// [
+//   [15,7],
+//   [9,20],
+//   [3]
+// ]
+
+</script>
+</body>
+</html>
