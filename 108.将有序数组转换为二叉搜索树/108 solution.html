@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+<script>
+// Source : https://leetcode.com/problems/convert-sorted-array-to-binary-search-tree/
+// Author : 悬笔e绝
+// Date   : 2019-04-14
+
+//  Definition for a binary tree node.
+ function TreeNode(val) {
+     this.val = val;
+     this.left = this.right = null;
+ }
+/**
+ * @param {number[]} nums
+ * @return {TreeNode}
+ */
+ var sortedArrayToBST = function(nums) {
+  return dfs(0, nums.length - 1);
+
+  function dfs(start, end) {
+    if (start > end)
+      return null;
+    // 右移1位 相当于除以2；左移n位 表示2的n次方
+    var mid = (start + end) >> 1;
+    var node = new TreeNode(nums[mid]);
+    node.left = dfs(start, mid - 1);
+    node.right = dfs(mid + 1, end);
+    return node;
+  }
+};
+
+// 测试
+var nums = [-10,-3,0,5,9];
+console.log(sortedArrayToBST(nums));
+
+</script>
+</body>
+</html>
