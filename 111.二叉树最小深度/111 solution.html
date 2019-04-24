@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+<script>
+// Source : https://leetcode.com/problems/minimum-depth-of-binary-tree/
+// Author : 悬笔e绝
+// Date   : 2019-04-24
+
+//  Definition for a binary tree node.
+ function TreeNode(val) {
+     this.val = val;
+     this.left = this.right = null;
+ }
+/**
+ * @param {TreeNode} root
+ * @return {number}
+ */
+
+var ans;
+
+function dfs(root, depth) {
+  if (!root)
+    return;
+  if (ans && depth >= ans)
+    return;
+  if (!root.left && !root.right) {
+    ans = depth;
+    return;
+  }
+  if (root.left) 
+    dfs(root.left, depth + 1);
+  if (root.right)
+    dfs(root.right, depth + 1);
+}
+
+var minDepth = function(root) {
+  ans = 0;
+  dfs(root, 1);
+  return ans;
+};
+
+// 测试
+var tree_node_1_1 = new TreeNode(9);
+var tree_node_1_2 = new TreeNode(20);
+tree_node_1_2.left = new TreeNode(15);
+tree_node_1_2.right = new TreeNode(7);
+var tree_node_1 = new TreeNode(3);
+tree_node_1.left = tree_node_1_1;
+tree_node_1.right = tree_node_1_2;
+console.log(minDepth(tree_node_1)); // 2
+
+</script>
+</body>
+</html>
