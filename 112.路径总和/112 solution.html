@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+<script>
+// Source : https://leetcode.com/problems/path-sum/
+// Author : 悬笔e绝
+// Date   : 2019-04-28
+
+//  Definition for a binary tree node.
+ function TreeNode(val) {
+     this.val = val;
+     this.left = this.right = null;
+ }
+/**
+ * @param {TreeNode} root
+ * @param {number} sum
+ * @return {boolean}
+ */
+
+
+ var hasPathSum = function(root, sum) {
+  if (!root)
+    return false;
+  if (!root.left && !root.right) {
+    if (root.val === sum)
+      return true;
+    return false;
+  }
+  if (root.left)
+    var a = hasPathSum(root.left, sum - root.val);
+  if (root.right)
+    var b = hasPathSum(root.right, sum - root.val);
+  return Boolean(a || b);
+};
+
+// 测试
+var tree_node_3_2 = new TreeNode(4);
+tree_node_3_2.right = new TreeNode(1);
+var tree_node_3_1 = new TreeNode(11);
+tree_node_3_1.left = new TreeNode(7);
+tree_node_3_1.right = new TreeNode(2);
+var tree_node_2_1 = new TreeNode(4);
+tree_node_2_1.left = tree_node_3_1;
+var tree_node_2_2 = new TreeNode(8);
+tree_node_2_2.left = new TreeNode(13);
+tree_node_2_2.right = tree_node_3_2;
+var tree_node_1 = new TreeNode(5);
+tree_node_1.left = tree_node_2_1;
+tree_node_1.right = tree_node_2_2;
+console.log(hasPathSum(tree_node_1, 22)); // true
+
+</script>
+</body>
+</html>
