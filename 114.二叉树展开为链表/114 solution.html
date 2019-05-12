@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+<script>
+// Source : https://leetcode.com/problems/flatten-binary-tree-to-linked-list/
+// Author : 悬笔e绝
+// Date   : 2019-05-12
+
+//  Definition for a binary tree node.
+ function TreeNode(val) {
+     this.val = val;
+     this.left = this.right = null;
+ }
+/**
+ * @param {TreeNode} root
+ * @return {void} Do not return anything, modify root in-place instead.
+ */
+
+ var arr = [];
+ var flatten = function(root) {
+  if (!root)
+    return;
+  dfs(root, arr);
+  for (var i = 0, len = arr.length; i < len - 1; i++)
+    arr[i].right = arr[i + 1];
+  return arr;
+};
+
+function dfs(node) {
+  var left = node.left;
+  var right = node.right;
+  node.left = node.right = null;
+  arr.push(node);
+  left && dfs(left);
+  right && dfs(right);
+}
+
+// 测试
+var tree_node_2_1 = new TreeNode(2);
+tree_node_2_1.left = new TreeNode(3);
+tree_node_2_1.right = new TreeNode(4);
+var tree_node_2_2 = new TreeNode(5);
+tree_node_2_2.right = new TreeNode(6);
+var tree_node_1 = new TreeNode(1);
+tree_node_1.left = tree_node_2_1;
+tree_node_1.right = tree_node_2_2;
+console.log(flatten(tree_node_1, 22));
+
+</script>
+</body>
+</html>
