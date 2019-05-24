@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+<script>
+// Source : https://leetcode.com/problems/triangle/
+// Author : 悬笔e绝
+// Date   : 2019-05-24
+
+/**
+ * @param {number[][]} triangle
+ * @return {number}
+ */
+
+ var minimumTotal = function(triangle) {
+  var n = triangle.length;
+  var tmp = [];
+  for(var i = 0; i <= n; i++)
+    tmp[i] = [];
+  for(var j = 0; j <= n; j++)
+    tmp[n][j] = 0;
+
+  for(var i = n - 1; i >= 0; i--) 
+    for(var j = 0; j < triangle[i].length; j++) {
+      tmp[i][j] = Math.min(tmp[i + 1][j], tmp[i + 1][j + 1]) + triangle[i][j];
+    }
+
+  return tmp[0][0];
+};
+
+// 测试
+let test_triangle = [
+     [2],
+    [3,4],
+   [6,5,7],
+  [4,1,8,3]
+];
+
+console.log(minimumTotal(test_triangle));
+
+</script>
+</body>
+</html>
