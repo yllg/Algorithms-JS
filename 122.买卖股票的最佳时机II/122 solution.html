@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+<script>
+// Source : https://leetcode.com/problems/best-time-to-buy-and-sell-stock-ii/
+// Author : 悬笔e绝
+// Date   : 2019-06-03
+
+/**
+ * @param {number[]} prices
+ * @return {number}
+ */
+ var maxProfit = function(prices) {
+  if (!prices.length)
+    return 0;
+  var buy = [], sell = [];
+  prices.forEach(function(item, index) {
+    if (!index) {
+      buy[index] = -item;
+      sell[index] = 0;
+    } else {
+      buy[index] = Math.max(buy[index - 1], sell[index - 1] - item);
+      sell[index] = Math.max(sell[index - 1], buy[index - 1] + item);
+    }
+  });
+  var len = prices.length;
+  return sell[len - 1];
+};
+
+// 测试
+var prices1 = [7,1,5,3,6,4];
+console.log(maxProfit(prices1));
+var prices2 = [1,2,3,4,5];
+console.log(maxProfit(prices2));
+var prices3 = [7,6,4,3,1];
+console.log(maxProfit(prices3));
+</script>
+</body>
+</html>
