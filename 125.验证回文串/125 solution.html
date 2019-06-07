@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+<script>
+// Source : https://leetcode.com/problems/valid-palindrome/
+// Author : 悬笔e绝
+// Date   : 2019-06-07
+
+/**
+ * @param {string} s
+ * @return {boolean}
+ */
+ 
+var isPalindrome = function(s) {
+  // 非单次字符 替换成空
+  s = s.replace(/[\W]/g, '');
+  // 转成小写
+  s = s.toLowerCase();
+  // 拆开倒置再拼接
+  var _s = s.split('').reverse().join('');
+  return s === _s;
+};
+
+// 拼接
+var s1 =  "A man, a plan, a canal: Panama";
+console.log(isPalindrome(s1));
+var s2 =  "race a car";
+console.log(isPalindrome(s2));
+</script>
+</body>
+</html>
