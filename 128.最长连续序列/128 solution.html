@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+<script>
+// Source : https://leetcode.com/problems/longest-consecutive-sequence/
+// Author : 悬笔e绝
+// Date   : 2019-06-10
+
+/**
+ * @param {number[]} nums
+ * @return {number}
+ */
+ var longestConsecutive = function(nums) {
+  var hash = [];
+  // 遍历之后hash是从小到大排序的稀疏数组
+  nums.forEach(function(item) {
+    hash[item] = true;
+  });
+  var ans = 0;
+  nums.forEach(function(item, idx) {
+    // this item is the largest in the sequence
+    if (!hash[item + 1]) {
+      var tmp = 0, index = item;
+      while (hash[index]) {
+        tmp++;
+        index--;
+      }
+      ans = Math.max(ans, tmp);
+    }
+  });
+  return ans;
+};
+
+//测试
+var nums = [100, 4, 200, 1, 3, 2];
+console.log(longestConsecutive(nums));
+var nums1 = [];
+console.log(longestConsecutive(nums1));
+
+</script>
+</body>
+</html>
