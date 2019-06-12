@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+<script>
+// Source : https://leetcode.com/problems/sum-root-to-leaf-numbers/
+// Author : 悬笔e绝
+// Date   : 2019-06-12
+
+// Definition for a binary tree node.
+function TreeNode(val) {
+    this.val = val;
+    this.left = this.right = null;
+}
+/**
+ * @param {TreeNode} root
+ * @return {number}
+ */
+
+var ans;
+// 递归
+function dfs(root, sum) {
+  if (!root.left && !root.right) {
+    ans += sum * 10 + root.val;
+    return;
+  }
+  if (root.left)
+    dfs(root.left, sum * 10 + root.val);
+  if (root.right)
+    dfs(root.right, sum * 10 + root.val);
+}
+
+var sumNumbers = function(root) {
+  if (root === null)
+    return 0;
+  ans = 0;
+  dfs(root, 0);
+  return ans;
+};
+
+// 测试
+var tree_node_1 = new TreeNode(1);
+tree_node_1.left = new TreeNode(2);
+tree_node_1.right = new TreeNode(3);
+console.log(sumNumbers(tree_node_1));
+
+var tree_node_2_1 = new TreeNode(9);
+tree_node_2_1.left = new TreeNode(5);
+tree_node_2_1.right = new TreeNode(1);
+var tree_node_2_2 = new TreeNode(0);
+var tree_node_2 = new TreeNode(4);
+tree_node_2.left = tree_node_2_1;
+tree_node_2.right = tree_node_2_2;
+console.log(sumNumbers(tree_node_2));
+
+</script>
+</body>
+</html>
