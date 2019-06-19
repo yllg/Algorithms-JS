@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+<script>
+// Source : https://leetcode.com/problems/single-number/
+// Author : 悬笔e绝
+// Date   : 2019-06-19
+
+/**
+ * @param {number[]} nums
+ * @return {number}
+ */
+ 
+var singleNumber = function(nums) {
+  var ans = 0;
+  for(var i = 0, len = nums.length; i < len; i++)
+    // 使用异或
+    ans ^= nums[i];
+  return ans;    
+};
+
+// 测试
+var nums1 = [2,2,1];
+console.log(singleNumber(nums1));
+var nums2 = [4,1,2,1,2];
+// 数字不重复的时候，ans不断叠加，4到5到7；
+// 出现重复的数字，ans减少，7到6到4
+console.log(singleNumber(nums2));
+</script>
+</body>
+</html>
