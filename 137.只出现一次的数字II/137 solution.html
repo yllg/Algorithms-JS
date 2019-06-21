@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+<script>
+// Source : https://leetcode.com/problems/single-number-ii/
+// Author : 悬笔e绝
+// Date   : 2019-06-21
+
+/**
+ * @param {number[]} nums
+ * @return {number}
+ */
+
+ var singleNumber = function(nums) {
+  var tmp = [];
+  for(var i = 0, len = nums.length; i < len; i++) 
+    if (!tmp[nums[i]])
+      tmp[nums[i]] = 1;
+    else
+      tmp[nums[i]]++;
+  for(var i = 0; i < len; i++)
+    if (tmp[nums[i]] === 1)
+      return nums[i];
+};
+
+// 测试
+var nums1 = [2,2,3,2];
+console.log(singleNumber(nums1));
+var nums2 = [0,1,0,1,0,1,99];
+console.log(singleNumber(nums2));
+</script>
+</body>
+</html>
