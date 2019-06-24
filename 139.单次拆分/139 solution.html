@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+<script>
+// Source : https://leetcode.com/problems/word-break/
+// Author : 悬笔e绝
+// Date   : 2019-06-24
+
+/**
+ * @param {string} s
+ * @param {set<string>} wordDict
+ *   Note: wordDict is a Set object, see:
+ *   https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Set
+ * @return {boolean}
+ */
+ var wordBreak = function(s, wordDict) {
+  var len = s.length;
+  // f[i] 为 true 表示 s[0]-s[i] 这段能被 Set 中的字符串 cut
+  // 所以最后判断 f[len] 即可
+  var f = []; 
+  var arr = [];
+  var obj = {};
+  obj.pos = 0;
+  obj.str = '';
+  arr.push(obj);
+
+  while (arr.length) {
+    var obj = arr.shift();
+    var pos = obj.pos;
+    var str = obj.str;
+    if (checkHas(wordDict, str) && !f[pos]) {
+      f[pos] = true;
+      if (pos < len) {
+        var _obj = {};
+        _obj.pos = pos + 1;
+        _obj.str = s[pos];
+        arr.push(_obj);
+      }
+    }
+    if (pos < len) {
+      var _obj = {};
+      _obj.pos = pos + 1;
+      _obj.str = str + s[pos];
+      arr.push(_obj);
+    }
+  }
+  return !!f[len];
+};
+
+function checkHas(arr, str) {
+    for( var i=0; i<arr.length; i++ ){
+        if (arr[i] === str) {
+            return true;
+        }
+    };
+    return false;
+}
+
+// 测试
+var s1= "leetcode";
+// var wordDict1 = new Set(["leet", "code"]);
+var wordDict1 = ["leet", "code"];
+console.log(wordBreak(s1, wordDict1));
+
+var s2= "catsandog";
+var wordDict2 = ["cats", "dog", "sand", "and", "cat"];
+console.log(wordBreak(s2, wordDict2));
+
+</script>
+</body>
+</html>
