@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+<script>
+// Source : https://leetcode.com/problems/binary-tree-preorder-traversal/
+// Author : 悬笔e绝
+// Date   : 2019-07-15
+
+// Definition for a binary tree node.
+function TreeNode(val) {
+    this.val = val;
+    this.left = this.right = null;
+}
+/**
+ * @param {TreeNode} root
+ * @return {number[]}
+ */
+function dfs(root, ans) {
+  if (!root) return;
+  ans.push(root.val);
+
+  dfs(root.left, ans);
+  dfs(root.right, ans);
+}
+
+var preorderTraversal = function(root) {
+  var ans = [];
+  dfs(root, ans);
+  return ans;
+};
+
+// 测试
+var tree_node_1_2 = new TreeNode(2);
+tree_node_1_2.left = new TreeNode(3);
+var tree_node_1 = new TreeNode(1);
+tree_node_1.right = tree_node_1_2;
+console.log(preorderTraversal(tree_node_1));
+</script>
+</body>
+</html>
