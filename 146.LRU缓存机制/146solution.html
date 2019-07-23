@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // Source : https://leetcode.com/problems/lru-cache/
+        // Author : 悬笔e绝
+        // Date   : 2019-07-23
+
+        /**
+         * @constructor
+         */
+        var LRUCache = function (capacity) {
+            this.capacity = capacity;
+            this.obj = {};
+            this.arr = [];
+        };
+
+        /**
+         * @param {number} key
+         * @returns {number}
+         */
+        LRUCache.prototype.get = function (key) {
+            var val = this.obj[key];
+            if (val > 0) {
+                var index = this.arr.indexOf(key);
+                this.arr.splice(index, 1);
+                this.arr.unshift(key);
+                return val;
+            } else
+                return -1;
+        };
+
+        /**
+         * @param {number} key
+         * @param {number} value
+         * @returns {void}
+         */
+        LRUCache.prototype.put = function (key, value) {
+            if (this.obj[key]) {
+                this.obj[key] = value;
+                var index = this.arr.indexOf(key);
+                this.arr.splice(index, 1);
+                this.arr.unshift(key);
+                return;
+            }
+            if (this.capacity === this.arr.length) {
+                var k = this.arr.pop();
+                this.obj[k] = undefined;
+            }
+            this.obj[key] = value;
+            this.arr.unshift(key);
+        };
+
+    </script>
+</body>
+
+</html>
