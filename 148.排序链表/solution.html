@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+<script>
+// Source : https://leetcode.com/problems/sort-list/
+// Author : 悬笔e绝
+// Date   : 2019-7-29
+
+//  Definition for singly-linked list.
+ function ListNode(val) {
+     this.val = val;
+     this.next = null;
+ }
+/**
+ * @param {ListNode} head
+ * @return {ListNode}
+ */
+var sortList = function(head) {
+  if (head === null) 
+    return null;
+  var tmp = [];
+  while (head) {
+    var node = new ListNode(head.val);
+    tmp.push(node);
+    head = head.next;
+  }
+  // 利用数组排序，最后串起来
+  tmp.sort(function(a, b) {
+    return a.val - b.val;
+  });
+  for (var i = 0, len = tmp.length; i < len - 1; i++)
+    tmp[i].next = tmp[i + 1];
+  return tmp[0];
+};
+</script>
+</body>
+</html>
