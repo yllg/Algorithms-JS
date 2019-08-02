@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+<script>
+// Source : https://leetcode.com/problems/maximum-product-subarray/
+// Author : 悬笔e绝
+// Date   : 2019-08-02
+
+/**
+ * @param {number[]} nums
+ * @return {number}
+ */
+ var maxProduct = function(nums) {
+  var ans = -Infinity
+    , res = 1
+    , tmp = 1;
+  nums.forEach(function(item) {
+    var _res = res * item
+      , _tmp = tmp * item;
+    ans = Math.max(ans, _res, _tmp);
+    res = Math.max(_res, _tmp, 1);
+    tmp = Math.min(_res, _tmp, 1);
+  });
+  return ans;
+};
+
+//测试
+var nums = [2,3,-2,4];
+console.log(maxProduct(nums));
+</script>
+</body>
+</html>
