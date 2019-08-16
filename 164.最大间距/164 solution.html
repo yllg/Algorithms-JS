@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+<script>
+// Source : https://leetcode.com/problems/maximum-gap/
+// Author : 悬笔e绝
+// Date   : 2019-08-16
+
+/**
+ * @param {number[]} nums
+ * @return {number}
+ */
+var maximumGap = function(nums) {
+  if (nums.length < 2)
+    return 0;
+  nums.sort(function(a, b) {
+    return a - b;
+  });
+  var ans = -1;
+  nums.reduce(function(pre, cur, index, array) {
+    ans = Math.max(ans, cur - pre);
+    return cur;
+  });
+  return ans;
+};
+
+//测试
+var nums = [3,6,9,1];
+console.log(maximumGap(nums));
+
+</script>
+</body>
+</html>
