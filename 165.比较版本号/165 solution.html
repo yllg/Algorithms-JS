@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    // Source : https://leetcode.com/problems/compare-version-numbers/
+    // Author : 悬笔e绝
+    // Date   : 2019-08-19
+
+    /**
+     * @param {string} version1
+     * @param {string} version2
+     * @return {number}
+     */
+    var compareVersion = function (version1, version2) {
+      var a = version1.split('.');
+      var b = version2.split('.');
+
+      var len1 = a.length;
+      var len2 = b.length;
+      for (var i = 0, len = Math.max(len1, len2); i < len; i++) {
+        var item1 = i < len1 ? +a[i] : 0;
+        var item2 = i < len2 ? +b[i] : 0;
+
+        if (item1 > item2)
+          return 1;
+
+        if (item1 < item2)
+          return -1;
+      }
+      return 0; 
+    };
+  </script>
+</body>
+
+</html>
