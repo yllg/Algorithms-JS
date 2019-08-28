@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+<script>
+// Source : https://leetcode.com/problems/excel-sheet-column-title/
+// Author : 悬笔e绝
+// Date   : 2019-08-28
+
+/**
+ * @param {number} n
+ * @return {string}
+ */
+var convertToTitle = function(n) {
+  var ans = '';
+  while (n) {
+    if (n % 26 === 0) {
+      ans += String.fromCharCode(26 + 64);
+      n = (n / 26) - 1;
+    }
+    else {
+      ans += String.fromCharCode(n % 26 + 64);
+      n = ~~(n / 26);
+    }
+  }
+
+  return ans.split('').reverse().join('');
+};
+
+</script>
+</body>
+</html>
