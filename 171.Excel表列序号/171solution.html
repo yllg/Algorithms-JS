@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+<script>
+// Source : https://leetcode.com/problems/excel-sheet-column-number/
+// Author : 悬笔e绝
+// Date   : 2019-09-10
+
+/**
+ * @param {string} s
+ * @return {number}
+ */
+var titleToNumber = function(s) {
+  var a = s.split('').reverse();
+  s = a.join('');
+  var ans = a.reduce(function(pre, item, index) {
+    return pre + Math.pow(26, index) * (s.charCodeAt(index) - 64);
+  }, 0);
+  return ans;
+};
+
+// 测试
+var s1 = "A";
+console.log(titleToNumber(s1));
+var s2 = "AB";
+console.log(titleToNumber(s2));
+var s3 = "ZY";
+console.log(titleToNumber(s3));
+</script>
+</body>
+</html>
