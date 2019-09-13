@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+<script>
+// Source : https://leetcode.com/problems/factorial-trailing-zeroes/
+// Author : 悬笔e绝
+// Date   : 2019-09-13
+
+/**
+ * @param {number} n
+ * @return {number}
+ */
+var trailingZeroes = function(n) {
+  var ans = 0;
+  while (n) {
+    // ~~ 向下取整，拿到进位值
+  	ans += ~~(n / 5);
+  	n /= 5;
+  	n = ~~n;
+  }
+  return ans;
+};
+
+//测试
+console.log(trailingZeroes(3));
+console.log(trailingZeroes(5));
+</script>
+</body>
+</html>
