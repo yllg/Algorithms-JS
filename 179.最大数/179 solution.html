@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+<script>
+// Source : https://leetcode.com/problems/largest-number/
+// Author : 悬笔e绝
+// Date   : 2019-09-15
+
+/**
+ * @param {number[]} nums
+ * @return {string}
+ */
+var largestNumber = function(nums) {
+  // 按照最大的数 排序
+  nums.sort(function(a, b) {
+    return (b + '' + a) - (a + '' + b);
+  });
+
+  var ans = nums.join('');
+  // 数字开头不能是0
+  for (var i = 0; i < ans.length - 1; i++) {
+    if (ans[i] !== '0')
+      break;
+  }
+  return ans.substring(i);
+};
+
+// 测试
+var nums1 = [10, 2];
+console.log(largestNumber(nums1));
+var nums2 = [3,30,34,5,9];
+console.log(largestNumber(nums2));
+
+</script>
+</body>
+</html>
