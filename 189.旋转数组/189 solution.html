@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+<script>
+// Source : https://leetcode.com/problems/rotate-array/
+// Author : 悬笔e绝
+// Date   : 2019-9-24
+
+/**
+ * @param {number[]} nums
+ * @param {number} k
+ * @return {void} Do not return anything, modify nums in-place instead.
+ */
+
+var rotate = function(nums, k) {
+  // 取余数
+  k %= nums.length;
+  var tmp = [];
+  if (k)
+    // 复制出最后的k个元素
+    tmp = nums.slice(-k);
+  // 删除最后k个元素
+  nums.splice(-k, k);
+  // 把tmp插入到nums前面并返回
+  Array.prototype.unshift.apply(nums, tmp); 
+  return nums;
+};
+
+// 测试
+var nums =  [1,2,3,4,5,6,7];
+console.log(rotate(nums, 3));
+
+</script>
+</body>
+</html>
