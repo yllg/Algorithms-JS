@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+<script>
+// Source : https://leetcode.com/problems/reverse-bits/
+// Author : 悬笔e绝
+// Date   : 2019-09-26
+
+/**
+ * @param {number} n - a positive integer
+ * @return {number} - a positive integer
+ */
+
+var sum = [];
+sum[0] = 1;
+for(var i = 1; i <= 32; i++)
+  sum[i] = 2 * sum[i - 1];
+
+var reverseBits = function(n) {
+  var tmp = n.toString(2);
+  for(var i = tmp.length; i <= 31; i++) 
+    tmp = '0' + tmp;
+  var ans = 0;
+  for(var i = 0, len = tmp.length; i < len; i++) {
+    if (tmp[i] === '1')
+      ans += sum[i];
+  }
+  return ans;
+};
+
+</script>
+</body>
+</html>
