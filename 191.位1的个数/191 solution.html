@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+<script>
+// Source : https://leetcode.com/problems/number-of-1-bits/
+// Author : 悬笔e绝
+// Date   : 2019-10-01
+
+/**
+ * @param {number} n - a positive integer
+ * @return {number}
+ */
+
+var hammingWeight = function(n) {
+  var ans = 0;
+  while(n) {
+    if (n & 1) ans ++;
+    n /= 2;
+  }
+  return ans;
+};
+</script>
+</body>
+</html>
