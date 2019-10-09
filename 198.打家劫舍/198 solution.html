@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+<script>
+// Source : https://leetcode.com/problems/house-robber/
+// Author : 悬笔e绝
+// Date   : 2019-10-09
+
+/**
+ * @param {number[]} nums
+ * @return {number}
+ */
+var rob = function(nums) {
+  var len = nums.length;
+  if (!len) return 0;
+
+  var dp = [];
+  dp[0] = [];
+  // 两种情况，是否从第一间开始偷，然后间隔一个一直下去相加
+  dp[0][0] = 0, // not steal 1st room
+  dp[0][1] = nums[0]; // steal 1st room
+
+  for (var i = 1; i < len; i++) {
+    dp[i] = [];
+
+    dp[i][0] = Math.max(dp[i - 1][0], dp[i - 1][1]);
+    dp[i][1] = dp[i - 1][0] + nums[i];
+  }
+
+  return Math.max(dp[len - 1][0], dp[len - 1][1]);
+};
+
+// 测试
+var nums1 = [1,2,3,1];
+console.log(rob(nums1));
+
+var nums2 = [2,7,9,3,1];
+console.log(rob(nums2));
+
+</script>
+</body>
+</html>
