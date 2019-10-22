@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+<script>
+// Source : https://leetcode.com/problems/bitwise-and-of-numbers-range/
+// Author : 悬笔e绝
+// Date   : 2019-10-22
+
+/**
+ * @param {number} m
+ * @param {number} n
+ * @return {number}
+ */
+
+function getBitNum(a, pos) {
+  a++;
+  var res = Math.pow(2, pos)
+    , loop = ~~(a / res)
+    , num = loop * (res / 2) + Math.max(a % res - res / 2, 0);
+  return num;
+}
+
+var rangeBitwiseAnd = function(m, n) {
+  var ans = 0
+    , tmp = n
+    , digits = 0;
+  while (tmp) {
+    digits++;
+    tmp >>= 1;
+  }
+  for (var i = 0; i < digits; i++) {
+    var num = getBitNum(n, i + 1) - getBitNum(m - 1, i + 1);
+    if (num === n - m + 1)
+      ans += Math.pow(2, i);
+  }
+  return ans;
+};
+
+//测试
+console.log(rangeBitwiseAnd(5,7));
+console.log(rangeBitwiseAnd(0,1));
+
+</script>
+</body>
+</html>
