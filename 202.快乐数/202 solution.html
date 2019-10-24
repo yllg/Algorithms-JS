@@ -1,0 +1,46 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+<script>
+// Source : https://leetcode.com/problems/happy-number/
+// Author : 悬笔e绝
+// Date   : 2019-10-25
+
+/**
+ * @param {number} n
+ * @return {boolean}
+ */
+
+function add(n) {
+  var ans = 0;
+  while(n) {
+    ans += (n % 10) * (n % 10);
+    n /= 10;
+    n = parseInt(n.toString());
+  }
+  return ans;
+}
+
+var isHappy = function(n) {
+  hash = [];
+  while(n) {
+    if (n === 1) return true;
+    if (hash[n]) return false;
+    hash[n] = true;
+    n = add(n);
+  }  
+};
+
+// 测试
+console.log(isHappy(19))
+
+</script>
+</body>
+</html>
