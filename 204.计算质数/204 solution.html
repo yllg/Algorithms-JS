@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+<script>
+// Source : https://leetcode.com/problems/count-primes/
+// Author : 悬笔e绝
+// Date   : 2019-10-29
+
+/**
+ * @param {number} n
+ * @return {number}
+ */
+
+var countPrimes = function(n) {
+  // if modified to 'var hash = []'
+  // it will be Memory Limit Exceeded
+  // I don't know why
+  // I think both are the same
+  var hash = new Array(n)
+    , a = Math.sqrt(n);
+
+  for (var i = 2; i <= a; i++) {
+    if (!hash[i])
+      for (var j = i * i; j < n; j += i)
+        hash[j] = true;
+  }
+
+  var ans = 0;
+  for (var i = 2; i < n; i++)
+    if (!hash[i])
+      ans ++;
+
+  return ans;
+};
+
+// 测试
+console.log(countPrimes(10));
+</script>
+</body>
+</html>
