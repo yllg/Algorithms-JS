@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+<script>
+// Source : https://leetcode.com/problems/minimum-size-subarray-sum/
+// Author : 悬笔e绝
+// Date   : 2019-11-11
+
+/**
+ * @param {number} s
+ * @param {number[]} nums
+ * @return {number}
+ */
+
+var minSubArrayLen = function(s, nums) {
+  var ans = Number.MAX_VALUE;
+  var n = nums.length;
+  // start pos
+  for (var i = 0; i < n; i++) {
+  	var sum = 0;
+  	for (var j = i; j < n; j++) {
+  		sum += nums[j];
+  		if (sum < s) continue;
+  		if (j - i + 1 >= ans) break;
+  		ans = j - i + 1;
+  		break;
+  	}
+  }
+  return ans === Number.MAX_VALUE ? 0 : ans;
+};
+
+// 测试
+var s = 7, nums = [2,3,1,2,4,3]
+console.log(minSubArrayLen(s, nums));
+
+</script>
+</body>
+</html>
