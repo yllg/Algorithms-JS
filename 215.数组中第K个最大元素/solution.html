@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+<script>
+// Source : https://leetcode.com/problems/kth-largest-element-in-an-array/
+// Author : 悬笔e绝
+// Date   : 2019-11-27
+
+/**
+ * @param {number[]} nums
+ * @param {number} k
+ * @return {number}
+ */
+
+var findKthLargest = function(nums, k) {
+  nums.sort(function(a, b) {
+    return b - a;
+  });
+  
+  return nums[k - 1];
+};
+
+</script>
+</body>
+</html>
