@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+<script>
+// Source : https://leetcode.com/problems/rectangle-area/
+// Author : 悬笔e绝
+// Date   : 2019-12-19
+
+/**
+ * @param {number} A
+ * @param {number} B
+ * @param {number} C
+ * @param {number} D
+ * @param {number} E
+ * @param {number} F
+ * @param {number} G
+ * @param {number} H
+ * @return {number}
+ */
+var computeArea = function(A, B, C, D, E, F, G, H) {
+  var width, height;
+  if (C <= E || G <= A || D <= F || H <= B)
+    width = height = 0;
+  else {
+    if (E > A) {
+      width = G < C ? G - E : C - E;
+    } else {
+      width = C < G ? C - A : G - A;
+    }
+    if (F > B) {
+      height = H < D ? H - F : D - F;
+    } else {
+      height = D < H ? D - B: H - B;
+    }
+  }
+  return (C - A) * (D - B) + (G - E) * (H - F) - width * height;
+};
+</script>
+</body>
+</html>
