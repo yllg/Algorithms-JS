@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+<script>
+// Source : https://leetcode.com/problems/basic-calculator/
+// Author : 悬笔e绝
+// Date   : 2019-12-22
+
+/**
+ * @param {string} s
+ * @return {number}
+ */
+var calculate = function(s) {
+  var ans = 0;
+  var num = 0;  // single number
+  var sign = 1;
+  var numStack = [];
+  var symStack = [];
+
+  for (var i = 0, len = s.length; i < len; i++) {
+    var item = s[i];
+    if ('0123456789'.indexOf(item) !== -1) {
+      num = num * 10 + (+item);
+    } else {
+      ans += sign * num;
+      num = 0;
+      if (item === '+')
+        sign = 1;
+      else if (item === '-')
+        sign = -1;
+      else if (item === '(') {
+        numStack.push(ans);
+        symStack.push(sign);
+        ans = 0;
+        sign = 1;
+      } else if (item === ')') {
+        ans = symStack.pop() * ans + numStack.pop();
+      }
+    }
+  }
+  ans += sign * num;
+  return ans;
+};
+
+</script>
+</body>
+</html>
