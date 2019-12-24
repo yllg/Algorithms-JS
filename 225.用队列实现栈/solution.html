@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+<script>
+// Source : https://leetcode.com/problems/implement-MyStack-using-queues/
+// Author : 悬笔e绝
+// Date   : 2019-12-24
+
+/**
+ * @constructor
+ */
+var MyStack = function() {
+  this.a = [];
+};
+
+/**
+ * @param {number} x
+ * @returns {void}
+ */
+MyStack.prototype.push = function(x) {
+  this.a.push(x);
+};
+
+/**
+ * @returns {void}
+ */
+MyStack.prototype.pop = function() {
+  this.a.pop();
+};
+
+/**
+ * @returns {number}
+ */
+MyStack.prototype.top = function() {
+  return this.a[this.a.length - 1];
+};
+
+/**
+ * @returns {boolean}
+ */
+MyStack.prototype.empty = function() {
+  return !this.a.length ? true : false;
+};
+</script>
+</body>
+</html>
