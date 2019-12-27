@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+<script>
+// Source : https://leetcode.com/problems/invert-binary-tree/
+// Author : 悬笔e绝
+// Date   : 2019-12-26
+
+/**
+ * Definition for a binary tree node.
+ * function TreeNode(val) {
+ *     this.val = val;
+ *     this.left = this.right = null;
+ * }
+ */
+/**
+ * @param {TreeNode} root
+ * @return {TreeNode}
+ */
+
+// 递归
+var invertTree = function(root) {
+  if (!root)
+    return root;
+
+  var left = root.left;
+
+  var right = root.right;
+
+  left && invertTree(left);
+
+  right && invertTree(right);
+
+  root.left = right;
+  root.right = left;
+
+  return root;
+};
+</script>
+</body>
+</html>
