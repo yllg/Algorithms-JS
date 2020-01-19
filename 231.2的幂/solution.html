@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+<script>
+// Source : https://leetcode.com/problems/power-of-two/
+// Author : 悬笔e绝
+// Date   : 2019-01-19
+
+/**
+ * @param {number} n
+ * @return {boolean}
+ */
+ 
+var isPowerOfTwo = function(n) {
+  //基于2取底数，~~取整
+  var tmp = ~~(Math.log(n) / Math.log(2));
+  // 1左移tmp位，就是2的tmp次方
+  return n === (1 << tmp);
+};
+
+</script>
+</body>
+</html>
