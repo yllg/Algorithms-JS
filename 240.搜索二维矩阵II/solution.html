@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+<script>
+// Source : https://leetcode.com/problems/search-a-2d-matrix-ii/
+// Author : 悬笔e绝
+// Date   : 2020-02-12
+
+/**
+ * @param {number[][]} matrix
+ * @param {number} target
+ * @return {boolean}
+ */
+var searchMatrix = function(matrix, target) {
+  for (var i = 0; i < matrix.length; i++)
+    for (var j = 0; j < matrix[i].length; j++)
+      if (matrix[i][j] === target) return true;
+  return false;
+};
+</script>
+</body>
+</html>
