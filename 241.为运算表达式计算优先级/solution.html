@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+<script>
+// Source : https://leetcode.com/problems/different-ways-to-add-parentheses/
+// Author : 悬笔e绝
+// Date   : 2020-02-14
+
+/**
+ * @param {string} input
+ * @return {number[]}
+ */
+var diffWaysToCompute = function(input) {
+  // save the possible values from the string input
+  var ans = [];
+  for (var i = 0, len = input.length; i < len; i++) {
+    var item = input[i];
+    if (~'+-*'.indexOf(item)) {
+      var left = diffWaysToCompute(input.substring(0, i));
+      var right = diffWaysToCompute(input.substring(i + 1));
+      left.forEach(function(a) {
+        right.forEach(function(b) {
+          ans.push(eval('(' + a + ')' + item + '(' + b + ')'));
+        });
+      });
+    }
+  }
+  !ans.length && ans.push(+input);
+  return ans;
+};
+</script>
+</body>
+</html>
