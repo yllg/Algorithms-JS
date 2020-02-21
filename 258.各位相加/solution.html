@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+<script>
+// Source : https://leetcode.com/problems/add-digits/
+// Author : 悬笔e绝
+// Date   : 2020-02-21
+
+/**
+ * @param {number} num
+ * @return {number}
+ */
+var addDigits = function(num) {
+  while(num.toString().length !== 1) {
+    var sum = 0;
+    while (num) {
+      sum += num % 10;
+      num = ~~(num / 10);
+    }
+    num = sum;
+  }
+  return num;
+};
+
+</script>
+</body>
+</html>
