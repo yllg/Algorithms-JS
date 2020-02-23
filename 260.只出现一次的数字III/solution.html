@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+<script>
+// Source : https://leetcode.com/problems/single-number-iii/
+// Author : 悬笔e绝
+// Date   : 2020-02-23
+
+/**
+ * @param {number[]} nums
+ * @return {number[]}
+ */
+var singleNumber = function(nums) {
+  var ans = []
+    , hash = [];
+  nums.forEach(function(item) {
+    if (!hash[item])
+      hash[item] = 1;
+    else 
+      hash[item]++;
+  });
+
+  nums.forEach(function(item) {
+    if (hash[item] === 1)
+      ans.push(item);
+  });
+  return ans;
+};
+</script>
+</body>
+</html>
