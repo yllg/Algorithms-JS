@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+<script>
+// Source : https://leetcode.com/problems/ugly-number/
+// Author : 悬笔e绝
+// Date   : 2019-02-25
+
+/**
+ * @param {number} num
+ * @return {boolean}
+ */
+var isUgly = function(num) {
+  if (num === 0)
+    return false;
+  
+  var a = [2, 3, 5];
+  for (var i = 0; i < 3; i++) {
+    while (num % a[i] === 0)
+      num /= a[i];
+  }
+  return num === 1 ? true : false;
+};
+</script>
+</body>
+</html>
