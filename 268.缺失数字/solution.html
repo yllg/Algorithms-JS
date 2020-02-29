@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+<script>
+// Source : https://leetcode.com/problems/missing-number/
+// Author : 悬笔e绝
+// Date   : 2020-02-29
+
+/**
+ * @param {number[]} nums
+ * @return {number}
+ */
+var missingNumber = function(nums) {
+  var hash = [];
+  nums.forEach(function(item) {
+    hash[item] = true;
+  })
+  for (var i = 0; ; i++) 
+    if (!hash[i]) 
+      return i;
+};
+</script>
+</body>
+</html>
