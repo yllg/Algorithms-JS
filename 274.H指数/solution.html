@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+<script>
+// Source : https://leetcode.com/problems/h-index/
+// Author : 悬笔e绝
+// Date   : 2020-03-01
+
+var hIndex = function(citations) {
+  var len = citations.length;
+  for (var i = len; ; i--) {
+    var cnt = 0
+      , cnt_equal = 0;
+    citations.forEach(function(item) {
+      if (item > i) cnt++;
+      if (item === i) cnt_equal++;
+    });
+
+    if (cnt > i) continue;
+    if (cnt + cnt_equal < i) continue;
+    return i;
+  }
+};
+</script>
+</body>
+</html>
