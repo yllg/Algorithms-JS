@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+<script>
+// Source : https://leetcode.com/problems/perfect-squares/
+// Author : 悬笔e绝
+// Date   : 2020-03-05
+
+/**
+ * @param {number} n
+ * @return {number}
+ */
+var numSquares = function(n) {
+  var dp = [];
+  for (var i = 1; i <= n; i++)
+    dp[i] = Infinity;
+
+  dp[0] = 0;
+  for (var i = 0; i <= n; i++) 
+    for (var j = 1; ; j++) {
+      if (i + j * j > n) break;
+      dp[i + j * j] = Math.min(dp[i + j * j], dp[i] + 1);
+    }
+  return dp[n];
+};
+</script>
+</body>
+</html>
