@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+<script>
+// Source : https://leetcode.com/problems/find-the-duplicate-number/
+// Author : 悬笔e绝
+// Date   : 2020-03-07
+
+/**
+ * @param {number[]} nums
+ * @return {number}
+ */
+
+var findDuplicate = function(nums) {
+  var hash = {};
+  for (var i = 0, len = nums.length; i < len; i++) {
+    var item = nums[i];
+    if (!hash[item])
+      hash[item] = true;
+    else 
+      return item;
+  }
+};
+</script>
+</body>
+</html>
