@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+<script>
+// Source : https://leetcode.com/problems/maximum-product-of-word-lengths/
+// Author : 悬笔e绝
+// Date   : 2020-04-03
+
+// use Bit Manipulation 
+
+/**
+ * @param {string[]} words
+ * @return {number}
+ */
+var maxProduct = function(words) {
+  var tmp = [];
+
+  words.forEach(function(item) {
+    var obj = {};
+    obj.item = item;
+    var num = 0;
+    for (var i = 0, len = item.length; i < len; i++) 
+      num |= 1 << (item.charCodeAt(i) - 97);
+    
+    obj.num = num;
+    tmp.push(obj);
+  });
+  
+  var ans = 0;
+  for (var i = 0, len = tmp.length; i < len; i++)
+    for (var j = i + 1; j < len; j++) {
+      var item1 = tmp[i];
+      var item2 = tmp[j];
+      if (item1.num & item2.num)
+        continue;
+      ans = Math.max(ans, item1.item.length * item2.item.length);
+    }
+
+  return ans;
+};
+
+// test
+var words = ["abcw","baz","foo","bar","xtfn","abcdef"];
+console.log(maxProduct(words));
+
+</script>
+</body>
+</html>
