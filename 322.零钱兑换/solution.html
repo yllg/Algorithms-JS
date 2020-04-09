@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+<script>
+// Source : https://leetcode.com/problems/coin-change/
+// Author : 悬笔e绝
+// Date   : 2020-04-09
+
+/**
+ * @param {number[]} coins
+ * @param {number} amount
+ * @return {number}
+ */
+var coinChange = function(coins, amount) {
+  var ans = [];
+  ans[0] = 0;
+
+  for (var i = 0, len = coins.length; i < len; i++) {
+    var item = coins[i];
+    for (var j = 0; j + item <= amount; j++) {
+      if (ans[j] === undefined)
+        continue;
+      if (ans[j + item] === undefined)
+        ans[j + item] = ans[j] + 1;
+      else 
+        ans[j + item] = Math.min(ans[j + item], ans[j] + 1);
+    }
+
+  }
+
+  return ans[amount] === undefined ? -1 : ans[amount];
+};
+</script>
+</body>
+</html>
