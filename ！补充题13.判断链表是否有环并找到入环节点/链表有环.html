@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      //题目: 给出一个链表，如果有环，找到入环节点，否则输出null
+      //思路: 
+      // 1.判断有环: 
+      // 快慢指针，声明两个指针 P1 和 P2,从头部触发，P1走两步，P2走一步，如果有环，一定会相遇
+      // 2.获取环的长度length
+      // 从环内节点开始计数，再回到此节点即可得到环的长度；
+      // 3.找到入环节点
+      // P1 P2回到 head 节点，让 P1 先走 length 步，相遇时即为环的入点；
+
+      // 定义链表
+      function ListNode(val) {
+        this.val = val;
+        this.next = null;
+      }
+
+      function EntryNodeOfLoop(pHead) {
+          if (!pHead || !pHead.next) {
+              return null;
+          }
+          let P1 = pHead.next;
+          let P2 = pHead.next.next;
+          // 1.判断是否有环
+          while(P1 != P2) {
+            if (P2 === null || P2.next === null){
+                return null;
+            }
+            P1 = P1.next;
+            P2 = P2.next.next;
+          }
+          // 2.获取环的长度
+          // P1 p2肯定在环内的某个节点相交
+          let temp = P1;
+          let length = 1;
+          P1 = P1.next;
+          while(temp != P1) {
+            P1 = P1.next;
+            length++;
+          }
+          // 3.找到公共节点
+          P1 = P2 = pHead;
+          // P2移动length步
+          while(length-- > 0) {
+            P2 = P2.next;
+          }
+          while (P1 != P2) {
+            P1 = P1.next;
+            P2 = P2.next;
+          }
+          return P1;
+      }
+
+      // 有环链表
+      var a4 = new ListNode(4);
+      var a3 = new ListNode(3);
+      a3.next = a4;
+      var a2 = new ListNode(2);
+      a2.next = a3;
+      var a1 = new ListNode(1);
+      a1.next = a2;
+      // a4指向a2
+      a4.next = a2;
+
+      console.log(EntryNodeOfLoop(a1));
+
+      // 无环链表
+      var b4 = new ListNode(4);
+      b4.next = null;
+      var b3 = new ListNode(3);
+      b3.next = b4;
+      var b2 = new ListNode(2);
+      b2.next = b3;
+      var b1 = new ListNode(1);
+      b1.next = b2;
+
+      console.log(EntryNodeOfLoop(b1));
+    </script>
+  </body>
+</html>
