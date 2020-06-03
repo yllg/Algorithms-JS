@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        function isPalindrome (x) {
+            if (x < 0 || x > Math.pow(2, 32) - 1) {
+                return false;
+            }
+            if (x < 10) {
+                return true;
+            }
+            var num = x;
+            // 找出最高位数，转成个位数
+            var recNum = x%10;
+            x = parseInt(x/10);
+            // 将recNum*10, 再获取最高位加到recNum
+            while(x != 0) {
+                recNum = recNum * 10;
+                recNum = recNum + x%10;
+                x = parseInt(x/10);
+            }
+            return recNum === num;
+        }
+        // test
+        var a1 = 121;
+        console.log(isPalindrome(a1));
+        var a2 = -121;
+        console.log(isPalindrome(a2));
+        var a3 = 10;
+        console.log(isPalindrome(a3));
+    </script>
+</body>
+</html>
