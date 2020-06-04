@@ -1,49 +1,57 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <title>Document</title>
-</head>
+  </head>
 
-<body>
+  <body>
     <script>
-        // Source : https://leetcode.com/problems/maximum-subarray/
-        // Author : 悬笔e绝
-        // Date   : 2018-04-03
+      // Source : https://leetcode.com/problems/maximum-subarray/
+      // Author : 悬笔e绝
+      // Date   : 2018-04-03
 
-        /**
-         * @param {number[]} nums
-         * @return {number}
-         */
-        
-        var maxSubArray = function (nums) {
-            //初始化最大值为JS中最小的值
-            var maxn = -Number.MAX_VALUE;
-            var sum = 0;
-            //遍历
-            nums.forEach(function (item, index, array) {
-                //连续的值相加
-                sum += item;
-                //更新最大值
-                if (sum > maxn)
-                    maxn = sum;
-                //只要连续的和小于0了，就置0从头加
-                if (sum < 0)
-                    sum = 0;
-            });
+      /**
+       * @param {number[]} nums
+       * @return {number}
+       */
 
-            return maxn;
-        };
+      // 解法1：贪心算法
+      var maxSubArray1 = function (nums) {
+        //初始化最大值为JS中最小的值
+        var maxn = -Number.MAX_VALUE;
+        var sum = 0;
+        //遍历
+        nums.forEach(function (item, index, array) {
+          //连续的值相加
+          sum += item;
+          //更新最大值
+          if (sum > maxn) maxn = sum;
+          //只要连续的和小于0了，就置0从头加
+          if (sum < 0) sum = 0;
+        });
 
-        //测试；注意是连续的子序列
-        var nums = [-2,1,-3,4,-1,2,1,-5,4];
-        //[4,-1,2,1] 为6
-        console.log(maxSubArray(nums));
+        return maxn;
+      };
 
+      // 解法2： 动态规划
+      var maxSubArray2 = function (nums) {
+        let pre = 0,
+          maxAns = nums[0];
+        nums.forEach((x) => {
+          pre = Math.max(pre + x, x);
+          maxAns = Math.max(maxAns, pre);
+        });
+        return maxAns;
+      };
+
+      //测试；注意是连续的子序列
+      var nums = [-2, 1, -3, 4, -1, 2, 1, -5, 4];
+      //[4,-1,2,1] 为6
+      console.log(maxSubArray1(nums));
+      console.log(maxSubArray2(nums));
     </script>
-</body>
-
+  </body>
 </html>

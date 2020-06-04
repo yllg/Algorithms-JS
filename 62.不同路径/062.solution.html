@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 解法一：排列组合
+      function factorial(n) {
+        var result = 1,
+          i = 2;
+        while (i <= n) {
+          result *= i;
+          i++;
+        }
+        return result;
+      }
+
+      var uniquePaths_1 = function (m, n) {
+        var ans = factorial(m + n - 2) / factorial(m - 1) / factorial(n - 1);
+        return ans;
+      };
+      // 解法二： 动态规划
+      var uniquePaths_2 = function (m, n) {
+        var ans = [];
+        for (let i = 0; i < m; i++) {
+          ans[i] = [];
+        }
+        for (let i = 0; i < m; i++) {
+          for (let j = 0; j < n; j++) {
+            if (i===0 || j===0) {
+                ans[i][j] = 1;
+            } else {
+                ans[i][j] = ans[i-1][j] + ans[i][j-1];
+            }
+          }
+        }
+        return ans[m-1][n-1];
+      };
+
+      // test
+      console.log(uniquePaths_1(3, 2));
+      console.log(uniquePaths_2(3, 2));
+    </script>
+  </body>
+</html>
