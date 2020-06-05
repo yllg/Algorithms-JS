@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+        // 判断字符串s和t是否同构； s的字符可以被替换为t，
+        // 相同字符被相同的另一个字符替换，同时保留字符的顺序
+        // s='egg', t='add' 输出 true
+        // s='foo', t='bar' 输出 false
+
+        //解答：
+        // 映射的知识，两个字符串为两个集合，判断当前映射是否为单射。
+        // 两个map，一个记录 s 对 t 的对应关系，另一个记录 t 对 s
+        // 如果字符没在s中出现，加到map，出现过就拿出来跟t对比，不一致表示非同构
+
+        var isIsomorphic = (s, t) => {
+            var mapS = {};
+            var mapT = {};
+            for (var i in s) {
+                var valueS = s[i];
+                var valueT = t[i];
+
+                if(!mapS[valueS]){
+                    mapS[valueS] = valueT;
+                } else if (mapS[valueS] != valueT) {
+                    return false;
+                }
+                
+                if(!mapT[valueT]){
+                    mapT[valueT] = valueS;
+                } else if (mapT[valueT] != valueS) {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        // test
+        console.log(isIsomorphic('egg','add'));
+        console.log(isIsomorphic('foo','bar'));
+    </script>
+  </body>
+</html>
