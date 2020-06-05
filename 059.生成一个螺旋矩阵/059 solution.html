@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      function generateMatrix(n) {
+        // 初始化 n*n 的数组
+        var ans = [],
+          c = 1,
+          j = 0;
+        for (let i = 0; i < n; i++) {
+          ans[i] = [];
+        }
+        while (c <= n * n) {
+          // 按照顺序来处理
+          for (let i = j; i < n - j; i++) {
+            ans[j][i] = c++;
+          }
+          for (let i = j + 1; i < n - j; i++) {
+            ans[i][n - j - 1] = c++;
+          }
+          for (let i = n - j - 2; i >= j; i--) {
+            ans[n - j - 1][i] = c++;
+          }
+          for (let i = n - j - 2; i > j; i--) {
+            ans[i][j] = c++;
+          }
+          j++;
+        }
+        return ans;
+      }
+
+      // test
+      console.log(generateMatrix(2));
+    </script>
+  </body>
+</html>

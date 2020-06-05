@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      var ans = [],
+        i = 0,
+        j = 0,
+        di = 0,
+        dj = 1;
+      function spiralOrder(matrix) {
+        if (!matrix.length) return;
+        var rowNum = matrix.length;
+        var columnNum = matrix[0].length;
+        for (let n = 0; n < rowNum * columnNum; n++) {
+          ans.push(matrix[i][j]);
+          matrix[i][j] = true;
+          var nextNum;
+          if (i + di < 0 || j + dj < 0) {
+            nextNum = true;
+          } else {
+            nextNum = matrix[(i + di) % rowNum][(j + dj) % columnNum];
+          }
+          if (nextNum === true) {
+            var temp = di;
+            di = dj;
+            dj = -temp;
+          }
+          i += di;
+          j += dj;
+        }
+        return ans;
+      }
+
+      // test
+      //   var matrix = [
+      //     [1, 2],
+      //     [3, 4],
+      //     [5, 6],
+      //   ];
+      var matrix = [
+        [1, 2, 3, 4],
+        [5, 6, 7, 8],
+        [9, 10, 11, 12],
+      ];
+      console.log(spiralOrder(matrix));
+    </script>
+  </body>
+</html>
