@@ -1,38 +1,70 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <title>Document</title>
-</head>
+  </head>
 
-<body>
+  <body>
     <script>
-        // Source : https://leetcode.com/problems/search-in-rotated-sorted-array/
-        // Author : 悬笔e绝
-        // Date   : 2018-03-27
+      // Source : https://leetcode.com/problems/search-in-rotated-sorted-array/
+      // Author : 悬笔e绝
+      // Date   : 2018-03-27
 
-        /**
-         * @param {number[]} nums
-         * @param {number} target
-         * @return {number}
-         */
+      /**
+       * @param {number[]} nums
+       * @param {number} target
+       * @return {number}
+       */
 
-        //不用管什么鬼“旋转排序数组”，for循环直接搞定
-        var search = function (nums, target) {
-            for (var i = 0, len = nums.length; i < len; i++)
-                if (nums[i] === target)
-                    return i;
-            return -1;
-        };
+      // 思路1：直接for循环遍历，时间复杂度O(n) 不满足要求
+      var search = function (nums, target) {
+        for (var i = 0, len = nums.length; i < len; i++)
+          if (nums[i] === target) return i;
+        return -1;
+      };
 
-        //测试
-        var nums = [4,5,6,7,0,1,2];
-        console.log(search(nums,1));
+      // 思路2：O(log n)就是要用二分查找
+      var search2 = function (nums, target) {
+        var len = nums.length;
+        if (len === 0) return -1;
+        if (len === 1) {
+          return nums[0] === target ? 0 : -1;
+        }
+        var l = 0,
+          r = len - 1;
+        while (l <= r) {
+          var mid = Math.floor((l + r) / 2);
+          if (target === nums[mid]) {
+            return mid;
+          }
+          if (nums[0] <= nums[mid]) {
+            //左边是有序的
+            if (nums[0] <= target && target < nums[mid]) {
+              r = mid - 1;
+            } else {
+              l = mid + 1;
+            }
+          } else {
+            //右边是有序的
+            if (nums[mid] < target && target <= nums[len - 1]) {
+              l = mid + 1;
+            } else {
+              r = mid - 1;
+            }
+          }
+        }
+        return -1;
+      };
 
+      //测试
+    //   var nums = [4, 5, 6, 7, 0, 1, 2];
+    //   var nums = [1, 3];
+      var nums = [3, 1];
+      console.log(search(nums, 1));
+      console.log(search2(nums, 1));
     </script>
-</body>
-
+  </body>
 </html>
