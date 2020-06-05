@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 动态规划，ans[i][j] 表示长度 i 的单词换成长度为 j 的最短路径
+      var minDistance = function (word1, word2) {
+        var m = word1.length;
+        var n = word2.length;
+        var ans = [];
+        for (let i = 0; i <= m; i++) {
+          ans[i] = [];
+        }
+        // 初始化，某个单词长度为0，只要删除另一个单词就好
+        for (let i = 0; i <= m; i++) {
+          ans[i][0] = i;
+        }
+        for (let j = 0; j <= n; j++) {
+          ans[0][j] = j;
+        }
+        for (let i = 1; i <= m; i++) {
+          for (let j = 1; j <= n; j++) {
+            if (word1[i - 1] == word2[j - 1]) {
+              ans[i][j] = ans[i - 1][j - 1];
+            } else {
+              ans[i][j] =
+                1 +
+                Math.min(
+                  ans[i - 1][j - 1],
+                  Math.min(ans[i][j - 1], ans[i - 1][j])
+                );
+            }
+          }
+        }
+        return ans[m][n];
+      };
+
+      //test
+      var word1 = "horse";
+      var word2 = "ros";
+      console.log(minDistance(word1, word2));
+      console.log(minDistance('', ''));
+    </script>
+  </body>
+</html>
