@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 题目：学校拍毕业照，要求学生非递减的高度排列，请返回满足要求的最少移动人数
+      // 输入 heights = [1,1,4,2,1,3];
+      // 输出 3
+      // 提示： 1 <= height.length <= 100;1 <= height[i] <= 100
+
+      // 思路1：先排序，再遍历一遍对比，遇到不同的count++
+      // sort排序是快排，时间复杂度是 O(nlogn)
+      var heightChecker1 = function (heights) {
+        let old = [...heights];
+        let newArr = heights.sort((a,b)=> a-b)
+        let count = 0;
+        for (let i=0; i<newArr.length; i++) {
+            if (old[i] !== newArr[i]) {
+                count++;
+            }
+        }
+        return count;
+      };
+
+      // 思路2：不关系排序后的结果，只想知道该位置与最小的值是否一致，而且题目明确了数值的范围 1 到 100
+      // 这是固定范围的输入，比如[1, 1, 4, 2, 1, 3]，3个1，2个2，1个3和1个4，3个1肯定在前面,以此类推
+      // 所以我们仅仅只要计数就好
+
+      // 时间复杂度O(n)，比较过程外层循环固定为100，里层循环执行n次，O(100+n),即 O(n)
+      var heightChecker2 = function (heights) {
+        let arr = new Array(101);
+        // 初始化数组
+        for(let i=0; i<arr.length; i++){
+            arr[i]=0;
+        }
+        // 遍历
+        for(let i=0; i<heights.length; i++) {
+            arr[heights[i]]++;
+        }
+        let count = 0;
+        for (let i=0,j=0; i<arr.length; i++){
+            // 取出来的就是非递减的
+            while(arr[i]-- > 0) {
+                if(heights[j++] != i) {
+                    count++;
+                }
+            }
+        }
+        return count;
+      };
+
+      // test
+      var heights1 = [1, 1, 4, 2, 1, 3];
+      var heights2 = [1, 1, 4, 2, 1, 3];
+      console.log(heightChecker1(heights1));
+      console.log(heightChecker2(heights2));
+    </script>
+  </body>
+</html>
