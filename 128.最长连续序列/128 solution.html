@@ -24,12 +24,12 @@
   });
   var ans = 0;
   nums.forEach(function(item, idx) {
-    // this item is the largest in the sequence
-    if (!hash[item + 1]) {
-      var tmp = 0, index = item;
-      while (hash[index]) {
+    // item是一段连续序列的最小值时进入
+    if (!hash[item - 1]) {
+      var tmp = 1, index = item;
+      while (hash[index + 1]) {
         tmp++;
-        index--;
+        index++;
       }
       ans = Math.max(ans, tmp);
     }
