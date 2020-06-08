@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 并查集
+      var parent = [];
+      for (let i=0; i <26; i++) {
+        parent[i] = i;
+      }
+
+      function find(x) {
+        return x == parent[x] ? parent[x] : find(parent[x]);
+      }
+
+      var equationsPossible  = function(equations) {
+        let isPossible = true;
+        equations.forEach((eq, index) => {
+            if (eq[1] == '=') {
+                r1 = find(eq[0].charCodeAt() - 'a'.charCodeAt());
+                r2 = find(eq[3].charCodeAt() - 'a'.charCodeAt());
+                if (r1 != r2) {
+                    parent[r2] = r1;
+                }
+            }
+        });
+
+        equations.forEach((eq, index) => {
+            if (eq[1] == '!') {
+                r1 = find(eq[0].charCodeAt() - 'a'.charCodeAt());
+                r2 = find(eq[3].charCodeAt() - 'a'.charCodeAt());
+                if (r1 == r2) {
+                    isPossible = false;
+                }
+            }
+        });
+        return isPossible;
+      }
+
+      // test
+      var equations1 = ["a==b","b==c","a==c"];
+      console.log(equationsPossible(equations1));
+      var equations2 = ["a==b","b!=c","c==a"];
+      console.log(equationsPossible(equations2));
+      var equations3 = ["a!=b","b!=c","c!=a"];
+      console.log(equationsPossible(equations3));
+    </script>
+  </body>
+</html>
