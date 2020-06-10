@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+        // 题目：
+        // 给定一个排序数组，原地 删除出现的重复元素，返回删除后数组的新长度
+        // 不要使用额外的数组空间，原地 修改，使用 O(1) 额外空间
+
+        // 示例
+        // 输入 nums = [1,1,2],
+        // 输出2， 且原数组 nums 的前两个元素改为 1，2
+        // 不需要考虑数组中超出新长度后面的元素
+
+        // 用一个 count 来记录有多少不重复的元素，重复就跳过，不重复才放入数组
+        var removeDuplicates = (nums) => {
+            if (nums.length === 0 || nums.length === 1) {
+                return nums.length;
+            }
+            let count = 0;
+            for (let i=1; i< nums.length; i++) {
+                if (nums[count] !== nums[i]) {
+                    count++;
+                    nums[count] = nums[i];
+                }
+            }
+            // 注意要加 1
+            return ++count;
+        }
+
+        // test 
+        var nums1 = [1,1,2];
+        var nums2 = [0,0,1,1,1,2,2,3,3,4];
+        console.log(removeDuplicates(nums1));
+        console.log(removeDuplicates(nums2));
+    </script>
+  </body>
+</html>
