@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 题目：整数数组表示非负整数，在该数的基础上加一
+      // 最高位存放在数组的首位，每个元素只存储单个数字，假设除了整数0之外，其他整数不会以零开头
+      // 示例1：
+      // 输入 [1,2,3]
+      // 输出 [1,2,4]
+
+      // 解法1：常规法
+      // (1)最后面个位数开始，+1后，如果后进位，存储进位值，val = 0，没进位直接存储；
+      // (2)处理十位数，如果有进位，+1，在判断它是否有仅为
+      // (3)重复上面动作到数组结束
+
+      var plusOne1 = (digits) => {
+        let carry = 0;
+        for (let i = digits.length - 1; i >= 0; i--) {
+            // 当前值 = 当前值 + 进位；
+            digits[i] = digits[i] + carry;
+            // 最后一位数字，个位数，加1
+            if (i === digits.length - 1) {
+                digits[i] = digits[i] + 1;
+            }
+            // 如果加过之后等于10，因为加1所以不会超过10，进位1
+            if (digits[i] === 10) {
+                digits[i] = 0;
+                carry = 1;
+            } else {
+                carry = 0;
+            }
+        }
+        // 最后如果有进位
+        if (carry === 1) {
+            digits.unshift(carry);
+        }
+        return digits;
+      };
+
+      // 解法2：借助 ES10的 BigInt
+      var plusOne2 = (digits) => {
+        let num = BigInt(digits.join(''));
+        // BigInt 进行数学计算时，需要在数字后面加个n
+        let string = String(num + 1n);
+        let arr = string.split('');
+        return arr.map((str) => Number(str));
+      }
+
+      // test
+      var digits = [1,9,9];
+      console.log(plusOne1(digits));
+      console.log(plusOne2(digits));
+    </script>
+  </body>
+</html>
