@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 题目： 给定两个数组，编写一个函数返回他们的交集
+      // 实例1
+      // 输入 nums1 = [1,2,2,1], nums2 = [2,2]
+      // 输出 [2]
+
+      // 方法1：常规法
+      // 判断二者的长度，短的为arr，长的为store
+      // arr[i] 在store中能查到，就是交集
+      // 判断结果数组中是否有该数字，没有才加到结果数组中
+      // 时间复杂度为 O(m * n)
+
+      var interaction1 = (nums1, nums2) => {
+        var result = [];
+        var store;
+        var arr;
+        if (nums1.length < nums2.length) {
+          arr = nums1;
+          store = nums2;
+        } else {
+          arr = nums2;
+          store = nums1;
+        }
+        for (let i = 0; i < arr.length; i++) {
+          //store中有，结果中没有
+          if (store.indexOf(arr[i]) !== -1 && result.indexOf(arr[i]) === -1) {
+            result.push(arr[i]);
+          }
+        }
+        return result;
+      };
+
+      // 方法2：使用 Set 去重
+      // Set可以提供的平均时间复杂度为 O(1)
+      // 最终 线性复杂度内解决，O(m+n)
+      var interaction2 = (nums1, nums2) => {
+        let arr = [];
+        if (nums1.length < nums2.length) {
+          for (let i = 0; i < nums1.length; i++) {
+            if (nums2.indexOf(nums1[i]) !== -1) {
+              arr.push(nums1[i]);
+            }
+          }
+        } else {
+          for (let i = 0; i < nums2.length; i++) {
+            if (nums1.indexOf(nums2[i]) !== -1) {
+              arr.push(nums2[i]);
+            }
+          }
+        }
+        return [...new Set(arr)]
+      };
+
+      // test
+      let nums1 = [1, 2, 2, 1];
+      let nums2 = [2, 2];
+      let nums3 = [4, 9, 5];
+      let nums4 = [9, 4, 9, 8, 4];
+      console.log(interaction1(nums1, nums2));
+      console.log(interaction1(nums3, nums4));
+      console.log(interaction2(nums1, nums2));
+      console.log(interaction2(nums3, nums4));
+    </script>
+  </body>
+</html>
