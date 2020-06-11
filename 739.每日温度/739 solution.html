@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 单调栈，类似题目--42.接雨水, 84.柱状图最大矩形
+
+      // 解法1：暴力法 两重循环 O(n^2)
+      const dailyTemperatures1 = (T) => {
+        const res = new Array(T.length).fill(0);
+        for (let i = 0; i < T.length; i++) {
+          for (let j = i + 1; j < T.length; j++) {
+            if (T[j] > T[i]) {
+              res[i] = j - i;
+              break;
+            }
+          }
+        }
+        return res;
+      };
+
+      // 解法2： 单调递减栈, 反向遍历
+      const dailyTemperatures2 = (T) => {
+        const res = new Array(T.length).fill(0);
+        const stack = [];
+        for (let i = T.length - 1; i >= 0; i--) {
+          while (stack.length && T[i] >= T[stack[stack.length - 1]]) {
+            stack.pop();
+          }
+          if (stack.length && T[i] < T[stack[stack.length - 1]]) {
+            res[i] = stack[stack.length - 1] - i;
+          }
+          stack.push(i);
+        }
+        return res;
+      };
+
+      // 解法3： 单调递减栈，正向遍历
+      // 维护一个存储下标的单调栈，从栈底到栈顶的下标对应的温度列表中的温度依次递减。
+      // 如果一个下标在单调栈里，则表示尚未找到下一次温度更高的下标。
+      const dailyTemperatures3 = (T) => {
+        const res = new Array(T.length).fill(0);
+        const stack = [];
+        for (let i = 0; i < T.length; i++) {
+          while (stack.length && T[i] > T[stack[stack.length - 1]]) {
+            let prevIndex = stack.pop();
+            res[prevIndex] = i - prevIndex;
+          }
+          stack.push(i);
+        }
+        return res;
+      };
+
+      // test
+      var T = [73, 74, 75, 71, 69, 72, 76, 73];
+      console.log(dailyTemperatures1(T));
+      console.log(dailyTemperatures2(T));
+      console.log(dailyTemperatures3(T));
+    </script>
+  </body>
+</html>
