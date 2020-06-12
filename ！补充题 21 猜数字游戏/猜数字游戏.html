@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+        // 题目：
+        // 和朋友玩猜数字游戏，给提示，数字和位置都才对的叫 bulls 公牛，数字对了但是位置不对叫做 cows 奶牛
+        // 给出一个返回提示词的函数， A表示公牛，B表示奶牛
+        // 示例1
+        // secret = "1907", guess = "7810"
+        // 输出 “1A3B”, 一个公牛是8，3个奶牛是0，1，7
+
+        // 思路
+        // 先判断有几个公牛，数字和位置都一样；
+        // 将公牛位置的数字移除
+        // 剩下的判断 母牛
+
+        var getHint = (secret, guess) =>{
+            var bull = 0;
+            var cow = 0;
+            // 存储非公牛的元素
+            var skeep = [];
+            var gkeep = [];
+            for (var i in guess) {
+                if (secret[i] === guess[i]){
+                    bull++;
+                } else {
+                    skeep.push(secret[i]);
+                    gkeep.push(guess[i]);
+                }
+            }
+            // 现在只有gkeep的元素出现再skeep中，就是一个奶牛
+            for (let j in gkeep) {
+                let findIndex = skeep.indexOf(gkeep[j]);
+                if (findIndex !== -1) {
+                    cow++;
+                    skeep[findIndex] = null;
+                }
+            }
+            return bull + "A" + cow + "B";
+        }
+
+        // test
+        var secret = "1123";
+        var guess = "0111";
+        console.log(getHint(secret,guess))
+        // 输出 “1A1B” 
+    </script>
+  </body>
+</html>
