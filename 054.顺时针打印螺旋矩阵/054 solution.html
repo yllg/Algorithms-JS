@@ -7,34 +7,49 @@
   </head>
   <body>
     <script>
-      var ans = [],
-        i = 0,
-        j = 0,
-        di = 0,
-        dj = 1;
-      function spiralOrder(matrix) {
-        if (!matrix.length) return;
-        var rowNum = matrix.length;
-        var columnNum = matrix[0].length;
-        for (let n = 0; n < rowNum * columnNum; n++) {
-          ans.push(matrix[i][j]);
-          matrix[i][j] = true;
-          var nextNum;
-          if (i + di < 0 || j + dj < 0) {
-            nextNum = true;
-          } else {
-            nextNum = matrix[(i + di) % rowNum][(j + dj) % columnNum];
+      var spiralOrder = function (matrix) {
+        var res = [];
+        var i = 0;
+        var j = 0;
+        var n = matrix.length - 1;
+        if (n < 0) return [];
+        var m = matrix[0].length - 1;
+        var turn = m == 0 ? "d" : "r";
+        var boundl = 0;
+        var boundr = m;
+        var boundu = 0;
+        var boundd = n;
+
+        for (var a = 0; a < (m + 1) * (n + 1); a++) {
+          res.push(matrix[i][j]);
+          if (turn == "r") {
+            j++;
+            if (j == boundr) {
+              boundu++;
+              turn = "d";
+            }
+          } else if (turn == "d") {
+            i++;
+            if (i == boundd) {
+              boundr--;
+              turn = "l";
+            }
+          } else if (turn == "l") {
+            j--;
+            if (j == boundl) {
+              boundd--;
+              turn = "u";
+            }
+          } else if (turn == "u") {
+            i--;
+            if (i == boundu) {
+              boundl++;
+              turn = "r";
+            }
           }
-          if (nextNum === true) {
-            var temp = di;
-            di = dj;
-            dj = -temp;
-          }
-          i += di;
-          j += dj;
         }
-        return ans;
-      }
+        return res;
+      };
 
       // test
       //   var matrix = [
