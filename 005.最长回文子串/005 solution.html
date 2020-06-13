@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      var longestPalindrome = function (s) {
+        if (!s || s.length === 0) return "";
+        let res = s[0];
+        const dp = [];
+
+        // 倒着遍历简化操作， 因为 dp[i][..]依赖于dp[i + 1][..]
+        for (let i = s.length - 1; i >= 0; i--) {
+          dp[i] = [];
+          for (let j = i; j < s.length; j++) {
+            if (j - i === 0) dp[i][j] = true; //一个元素
+            else if (j - i === 1 && s[i] === s[j]) dp[i][j] = true; //两个连着且相等的元素
+            else if (s[i] === s[j] && dp[i + 1][j - 1]) {
+              dp[i][j] = true;
+            }
+            if (dp[i][j] && j - i + 1 > res.length) {
+              res = s.slice(i, j + 1);
+            }
+          }
+        }
+        return res;
+      };
+
+      // test
+      var s = "babad";
+      console.log(longestPalindrome(s));
+    </script>
+  </body>
+</html>

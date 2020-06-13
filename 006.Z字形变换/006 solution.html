@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      var convert = function (s, numRows) {
+        if (numRows == 1) return s;
+
+        const len = Math.min(s.length, numRows);
+        const rows = [];
+        for (let i = 0; i < len; i++) rows[i] = "";
+        let loc = 0;
+        let down = false;
+
+        for (const c of s) {
+          rows[loc] += c;
+          if (loc == 0 || loc == numRows - 1) down = !down;
+          loc += down ? 1 : -1;
+        }
+
+        let ans = "";
+        for (const row of rows) {
+          ans += row;
+        }
+        return ans;
+      };
+
+      // test
+      var s = "LEETCODEISHIRING", numRows = 4;
+      console.log(convert(s, numRows));
+    </script>
+  </body>
+</html>
