@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      //我们可以将其拆分成 A[i]+i 和 A[j]−j 两部分，
+      //这样对于统计景点 j 答案的时候，由于 A[j]−j 是固定不变的，
+      //因此最大化 A[i]+i+A[j]−j 的值其实就等价于求 [0,j−1] 中 A[i]+i 的最大值，
+      //景点 j 的答案即为 mx+A[j]−j 。而 mx 的值我们只要从前往后枚举 j 的时候同时维护即可，
+      //这样每次枚举景点 j 的时候，寻找使得得分最大的 i 就能从 O(n) 降至 O(1) 的时间复杂度，总时间复杂度就能从 O(n^2) 降至 O(n)。
+
+      const maxScoreSightseeingPair = (A) => {
+        const dp = new Array(A.length);
+        let res = 0;
+        dp[0] = 0;
+        for (let i = 1; i < A.length; i++) {
+          dp[i] = Math.max(dp[i - 1], A[i - 1] + i - 1);
+          res = Math.max(res, dp[i] + A[i] - i);
+        }
+        return res;
+      };
+      // test
+      var A = [8, 1, 5, 2, 6];
+      console.log(maxScoreSightseeingPair(A));
+    </script>
+  </body>
+</html>
