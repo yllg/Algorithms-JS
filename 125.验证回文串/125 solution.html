@@ -17,7 +17,7 @@
  * @return {boolean}
  */
  
-var isPalindrome = function(s) {
+var isPalindrome1 = function(s) {
   // 非单次字符 替换成空
   s = s.replace(/[\W]/g, '');
   // 转成小写
@@ -27,11 +27,28 @@ var isPalindrome = function(s) {
   return s === _s;
 };
 
+// 双指针
+var isPalindrome2 = (s) => {
+  s = s.replace(/\W/g, '').toLowerCase();
+  var left = 0;
+  var right = s.length - 1;
+  while(left < right) {
+    if (s[left] !== s[right]) {
+      return false;
+    }
+    left ++;
+    right --;
+  }
+  return true;
+}
+
 // 拼接
 var s1 =  "A man, a plan, a canal: Panama";
-console.log(isPalindrome(s1));
+console.log(isPalindrome1(s1));
+console.log(isPalindrome2(s1));
 var s2 =  "race a car";
-console.log(isPalindrome(s2));
+console.log(isPalindrome1(s2));
+console.log(isPalindrome2(s2));
 </script>
 </body>
 </html>
