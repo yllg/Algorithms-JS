@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 1.一行代码实现快排，
+      // 空间复杂度比正常的高啊，slice会返回线数组
+      //以a[0]为基准，再使用filter函数过滤，再左右两边递归，最后合并即可
+      function quickSort1(a) {
+        return a.length <= 1
+          ? a
+          : quickSort1(a.slice(1).filter((item) => item <= a[0])).concat(
+              a[0],
+              quickSort1(a.slice(1).filter((item) => item > a[0]))
+            );
+      }
+
+      // 2.常规的快排
+      var quickSort2 = function (myArray) {
+        // 当被分的数组只剩一个时，退出递归
+        if (myArray.length <= 1) {
+          return myArray;
+        }
+
+        //这里选择中间的值为基准值，当然也可以选择别的为基准值，比如选择第一个数
+        // 中间基准值的index
+        var pivotIndex = Math.floor(myArray.length / 2);
+        // 基准值
+        var pivot = myArray.splice(pivotIndex, 1)[0];
+        // 开辟了新的内存空间，最好是原地交换，不用新的空间
+        var left = [];
+        var right = [];
+        // 小的放左边，大的放右边
+        for (var i = 0; i < myArray.length; i++) {
+          if (myArray[i] < pivot) {
+            left.push(myArray[i]);
+          } else {
+            right.push(myArray[i]);
+          }
+        }
+        // 递归
+        // 把数组合并在一起
+        return quickSort1(left).concat([pivot], quickSort1(right));
+      };
+
+      var arr = [5, 3, 7, 2, 3, 9, 0, 6, 1, 3, 2];
+      console.log(quickSort1(arr));
+      console.log(quickSort2(arr));
+    </script>
+  </body>
+</html>
