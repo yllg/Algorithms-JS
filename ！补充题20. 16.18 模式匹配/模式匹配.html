@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 你有两个字符串，即pattern和value。 pattern字符串由字母"a"和"b"组成，用于描述字符串中的模式。
+      // 例如，字符串"catcatgocatgo"匹配模式"aabab"（其中"cat"是"a"，"go"是"b"），该字符串也匹配像"a"、"ab"和"b"这样的模式。
+      // 但需注意"a"和"b"不能同时表示相同的字符串。
+      // 编写一个方法判断value字符串是否匹配pattern字符串。
+
+      // 用正则解答
+      // 下面 \1 和 \2 表示对前面分组的反向引用
+      // aabb -> (\w*)\1(\w*)\2
+      // abba -> (\w*)(\w*)\2\1
+
+      function patternMatching(pattern, value) {
+        if (pattern === "") {
+          return value === "";
+        }
+        let group = 1;
+        let a = "";
+        let b = "";
+        let reg = "";
+        for (const char of pattern.split("")) {
+          if (char === "a") {
+            if (a) {
+              reg += a;
+            } else {
+              reg += "(\\w*)";
+              a = "\\" + group++;
+            }
+          } else if (char === "b") {
+            if (b) {
+              reg += b;
+            } else {
+              reg += "(\\w*)";
+              b = "\\" + group++;
+            }
+          }
+        }
+        const match = new RegExp("^" + reg + "$").exec(value);
+        return Boolean(match) && match[1] !== match[2];
+      }
+
+      // test
+      var pattern1 = "abba", value1 = "dogcatcatdog";
+      console.log(patternMatching(pattern1, value1));
+    </script>
+  </body>
+</html>
