@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 两个有序数组 nums1和nums2, 讲nums2合并到nums1中，使得nums1成为一个有序数组
+      // 初始化nums1和nums2的元素数量分别是 m和n，可以假设nums1有足够的空间存放nums2的元素
+      // 示例
+      var nums1 = [1, 2, 3, 0, 0, 0],
+        m = 3;
+      var nums2 = [2, 5, 6],
+        n = 3;
+      // 输出 【1，2，2，3，5，6】
+
+      // 思路
+      // 1.合并两个有序数组，就是归并排序的一步；
+      // 2.归并排序会开辟一个长度为nums1 + nums2的空间，用两个指针遍历两个数组，把小的放到新数组
+      // 3.这里nums1就是我们新开辟的新数组，我们沿用规定排序的思路，用三个指针
+
+      // 技巧：
+      // 从后遍历，先比较较大的数，把大的数据放到数组nums1的后面
+      // 如果从小的比起，需要把nums1中所有的数往后挪一位，时间复杂度高
+
+      const merge = (nums1, m, nums2, n) => {
+        let index1 = m - 1;
+        let index2 = n - 1;
+        let tail = m + n - 1;
+        while (index2 >= 0) {
+            if(nums1[index1] > nums2[index2]){
+                nums1[tail] = nums1[index1];
+                index1 --;
+                tail--;
+            }else {
+                nums1[tail] = nums2[index2];
+                index2 --;
+                tail--;
+            }
+        }
+        return nums1;
+      };
+
+      // test
+      console.log(merge(nums1, m, nums2, n));
+    </script>
+  </body>
+</html>
