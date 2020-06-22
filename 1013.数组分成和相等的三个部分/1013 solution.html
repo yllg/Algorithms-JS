@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      var canThreePartsEqualSum = function (A) {
+        let sum = A.reduce((acc, cur) => acc + cur); //sum数组之和
+        let temp = 0; //temp累加
+        let cnt = 0; //cnt计数
+        for (let i = 0; i < A.length; i++) {
+          temp += A[i];
+          if (temp == sum / 3) {
+            cnt++;
+            temp = 0;
+          }
+          if (cnt==3) return true;
+        }
+        return false;
+      };
+    </script>
+  </body>
+</html>
