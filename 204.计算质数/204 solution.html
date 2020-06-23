@@ -1,46 +1,61 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <title>Document</title>
-</head>
-<body>
-<script>
-// Source : https://leetcode.com/problems/count-primes/
-// Author : 悬笔e绝
-// Date   : 2019-10-29
+  </head>
+  <body>
+    <script>
+      // Source : https://leetcode.com/problems/count-primes/
+      // Author : 悬笔e绝
+      // Date   : 2019-10-29
 
-/**
- * @param {number} n
- * @return {number}
- */
+      /**
+       * @param {number} n
+       * @return {number}
+       */
 
-var countPrimes = function(n) {
-  // if modified to 'var hash = []'
-  // it will be Memory Limit Exceeded
-  // I don't know why
-  // I think both are the same
-  var hash = new Array(n)
-    , a = Math.sqrt(n);
+      var countPrimes1 = function (n) {
+        // if modified to 'var hash = []'
+        // it will be Memory Limit Exceeded
+        // I don't know why
+        // I think both are the same
+        var hash = new Array(n),
+          a = Math.sqrt(n);
 
-  for (var i = 2; i <= a; i++) {
-    if (!hash[i])
-      for (var j = i * i; j < n; j += i)
-        hash[j] = true;
-  }
+        for (var i = 2; i <= a; i++) {
+          if (!hash[i]) for (var j = i * i; j < n; j += i) hash[j] = true;
+        }
 
-  var ans = 0;
-  for (var i = 2; i < n; i++)
-    if (!hash[i])
-      ans ++;
+        var ans = 0;
+        for (var i = 2; i < n; i++) if (!hash[i]) ans++;
 
-  return ans;
-};
+        return ans;
+      };
 
-// 测试
-console.log(countPrimes(10));
-</script>
-</body>
+      // 方法2，优化
+      // 只要跑几圈判断 2 ~ (n-1) 中每一个数是不是质数
+      // 质数p 定义是 p%2, p%3, p%4, ... p%(p-1) 都不等于0
+      // 实际上不需要 除到 p-1，只要除到 “p的平方根”就可以，而且可以跳过2的倍数
+      var countPrimes2 = function (n) {
+        let count = 0;
+        let signs = new Array(n).fill(0);
+        for (let i = 2; i < n; i++) {
+          if (!signs[i - 1]) {
+            count++;
+            for (let j = i * i; j <= n; j += i) {
+              signs[j - 1] = true;
+            }
+          }
+        }
+        return count;
+      };
+
+      // 测试
+      console.log(countPrimes1(10));
+      console.log(countPrimes2(10));
+    </script>
+  </body>
 </html>
