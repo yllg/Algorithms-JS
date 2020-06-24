@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 快乐数定义：每一次将该数替换为它每个位置上的数字的平方和；重复这个过程直到这个数字变为1
+      // 可以变为1就是快乐数，如果出现重复循环始终不能变为1就不是快乐数；
+      // 示例
+      // 输入19，输出 true
+      // 解释
+      //   1^2 + 9^2 = 82
+      //   8^2 + 2^2 = 68
+      //   6^2 + 8^2 = 100
+      //   1^2 + 0^2 + 0^2 = 1
+
+      //解：使用一个map存储计算过的数，如果已经出现过，表示进入了死循环，返回false
+      // 持续计算 直到出现1或者出现死循环
+
+      var isHappy = (n) => {
+          var store = {};
+          while(!store[n] && n!==1) {
+            store[n] = n;
+            n.toString().split('').forEach((v,i) => {
+                if (i==0) n=0;
+                n += v*v; 
+            });
+            n = parseInt(n);
+          }
+          return n==1;
+      }
+
+      // test
+      var n1 = 19;
+      var n2 = 4;
+      console.log(isHappy(n1));
+      console.log(isHappy(n2));
+    </script>
+  </body>
+</html>
