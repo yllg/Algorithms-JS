@@ -18,7 +18,8 @@
          * @param {string} s
          * @return {number}
          */
-        var lengthOfLongestSubstring = function (s) {
+        // 解法1，常规法
+        var lengthOfLongestSubstring1 = function (s) {
             var hash = {};
             var start = 0;
             var ans = 0;
@@ -47,11 +48,27 @@
             }
             return ans;
         };
+
+        // 解法2 互动窗口
+        var lengthOfLongestSubstring2 = function (s) {
+            let map = new Map();
+            let i = -1
+            let res = 0
+            let n = s.length
+            for (let j = 0; j < n; j++) {
+                if (map.has(s[j])) {
+                    i = Math.max(i, map.get(s[j]))
+                }
+                res = Math.max(res, j - i)
+                map.set(s[j], j)
+            }
+            return res
+        };
         
         var s = "pwwkew";
-        var result = lengthOfLongestSubstring(s);
         //本例子中，首先是pw，然后wke，最后kew，最终最长子序列的长度就是3
-        console.log(result);
+        console.log(lengthOfLongestSubstring1(s));
+        console.log(lengthOfLongestSubstring2(s));
 
     </script>
 </body>
