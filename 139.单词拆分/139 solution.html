@@ -19,7 +19,7 @@
  *   https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Set
  * @return {boolean}
  */
- var wordBreak = function(s, wordDict) {
+ var wordBreak1 = function(s, wordDict) {
   var len = s.length;
   // f[i] 为 true 表示 s[0]-s[i] 这段能被 Set 中的字符串 cut
   // 所以最后判断 f[len] 即可
@@ -62,15 +62,39 @@ function checkHas(arr, str) {
     return false;
 }
 
+
+// 方法二.动态规划
+// dp[i]未true 等同于 它的前缀子串 [0, j-1] 的 dp[j] 为真，并且 子串 [j,i] 是一个单词表里存在的单词
+var wordBreak2 = function (s, wordDict) {
+    const wordSet = new Set(wordDict);
+    const len = s.length;
+    const dp = new Array(len + 1).fill(false);
+    dp[0] = true;
+    for (let i = 1; i <= len; i++) {
+        for (let j = i; j >= 0; j--) {
+            const word = s.slice(j, i);
+            if (wordSet.has(word) && dp[j] == true) {
+                dp[i] = true;
+                break;
+            }
+        }
+    }
+    return dp[s.length];
+};
+
+
+
 // 测试
 var s1= "leetcode";
 // var wordDict1 = new Set(["leet", "code"]);
 var wordDict1 = ["leet", "code"];
-console.log(wordBreak(s1, wordDict1));
+console.log(wordBreak1(s1, wordDict1));
+console.log(wordBreak2(s1, wordDict1));
 
 var s2= "catsandog";
 var wordDict2 = ["cats", "dog", "sand", "and", "cat"];
-console.log(wordBreak(s2, wordDict2));
+console.log(wordBreak1(s2, wordDict2));
+console.log(wordBreak2(s2, wordDict2));
 
 </script>
 </body>
