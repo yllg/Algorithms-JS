@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 哈希表
+      const removeDuplicateNodes = (head) => {
+        if (head == null) return head;
+        const map = {};
+        map[head.val] = true;
+        let node = head.next;
+        let prev = head;
+        while (node) {
+          if (map[node.val]) {
+            prev.next = node.next;
+          } else {
+            map[node.val] = true;
+            prev = prev.next;
+          }
+          node = node.next;
+        }
+        return head;
+      };
+    </script>
+  </body>
+</html>
