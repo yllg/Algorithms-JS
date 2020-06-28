@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      function generateMatrix(n) {
+        // 初始化 n*n 的数组
+        var ans = [],
+          c = 1,
+          j = 0;
+        for (let i = 0; i < n; i++) {
+          ans[i] = [];
+        }
+        while (c <= ((1 + n) * n) / 2) {
+          // 三条边不断递归循环
+          for (let i = j; i < n - j; i++) {
+            if (ans[j][i] == undefined) {
+              ans[j][i] = c++;
+            }
+          }
+          for (let i = j + 1; i < n - j; i++) {
+            if (ans[i][n - (j + 1) - i] == undefined) {
+              ans[i][n - (j + 1) - i] = c++;
+            }
+          }
+          for (let i = n - j - 2; i > j; i--) {
+            if (ans[i][j] == undefined) {
+              ans[i][j] = c++;
+            }
+          }
+          j++;
+        }
+        return ans;
+      }
+
+      // test
+      // console.log(generateMatrix(2));
+      // console.log(generateMatrix(3));
+      // console.log(generateMatrix(4));
+      // console.log(generateMatrix(5));
+      console.log(generateMatrix(6));
+      console.log(generateMatrix(7));
+      console.log(generateMatrix(8));
+    </script>
+  </body>
+</html>
