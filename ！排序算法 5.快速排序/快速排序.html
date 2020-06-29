@@ -20,7 +20,7 @@
             );
       }
 
-      // 2.常规的快排
+      // 2.常规的快排，使用了额外的空间
       var quickSort2 = function (myArray) {
         // 当被分的数组只剩一个时，退出递归
         if (myArray.length <= 1) {
@@ -48,9 +48,64 @@
         return quickSort1(left).concat([pivot], quickSort1(right));
       };
 
-      var arr = [5, 3, 7, 2, 3, 9, 0, 6, 1, 3, 2];
-      console.log(quickSort1(arr));
-      console.log(quickSort2(arr));
+      // 3.快排，使用随机数为基准，双指针原地交换不使用额外空间
+      let quickSort3 = (arr) => {
+        quick(arr, 0, arr.length - 1);
+        return arr;
+      };
+
+      let quick = (arr, left, right) => {
+        let index;
+        if (left < right) {
+          // 划分数组
+          index = partition(arr, left, right);
+          if (left < index - 1) {
+            quick(arr, left, index - 1);
+          }
+          if (index < right) {
+            quick(arr, index, right);
+          }
+        }
+      };
+
+      let partition = (arr, left, right) => {
+        // 取随机数为基准
+        var datum = arr[Math.floor(Math.random() * (right - left + 1)) + left],
+          i = left,
+          j = right;
+        // 开始调整
+        while (i <= j) {
+          // 左指针右移，遇到比基准大的停止
+          while (arr[i] < datum) {
+            i++;
+          }
+          // 右指针左移，遇到比基准小的元素停止，
+          while (arr[j] > datum) {
+            j--;
+          }
+          // 交换左右指针所指向的元素
+          if (i <= j) {
+            swap(arr, i, j);
+            i += 1;
+            j -= 1;
+          }
+        }
+        return i;
+      };
+
+      // 交换
+      let swap = (arr, i, j) => {
+        let temp = arr[i];
+        arr[i] = arr[j];
+        arr[j] = temp;
+      };
+
+      var arr1 = [5, 3, 7, 2, 3, 9, 0, 6, 1, 3, 2];
+      var arr2 = [5, 3, 7, 2, 3, 9, 0, 6, 1, 3, 2];
+      var arr3 = [5, 3, 7, 2, 3, 9, 0, 6, 1, 3, 2];
+      console.log(quickSort1(arr1));
+      console.log(quickSort2(arr2));
+      console.log(quickSort3(arr3));
     </script>
   </body>
 </html>
