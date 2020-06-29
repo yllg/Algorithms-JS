@@ -1,31 +1,268 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <title>Document</title>
-</head>
-<body>
-<script>
-// Source : https://leetcode.com/problems/kth-largest-element-in-an-array/
-// Author : 悬笔e绝
-// Date   : 2019-11-27
+  </head>
+  <body>
+    <script>
+      // Source : https://leetcode.com/problems/kth-largest-element-in-an-array/
+      // Author : 悬笔e绝
+      // Date   : 2019-11-27
 
-/**
- * @param {number[]} nums
- * @param {number} k
- * @return {number}
- */
+      /**
+       * @param {number[]} nums
+       * @param {number} k
+       * @return {number}
+       */
 
-var findKthLargest = function(nums, k) {
-  nums.sort(function(a, b) {
-    return b - a;
-  });
-  
-  return nums[k - 1];
-};
+      // 解法一： 快速排序 时间复杂度O(nlogn) 空间复杂度O(logn)
+      var findKthLargest1 = function (nums, k) {
+        nums.sort(function (a, b) {
+          return b - a;
+        });
+        return nums[k - 1];
+      };
 
-</script>
-</body>
+      // 解法2：构造前 K 个最大元素的小顶堆，取堆顶
+      // 时间复杂度：遍历数组需要 O(n) 的时间复杂度，一次堆化需要 O(logk) 时间复杂度，所以时间复杂度为 O(nlogk)
+      // 空间复杂度：O(k)
+      let findKthLargest2 = function (nums, k) {
+        // 从 nums 中取出前 k 个数，构建一个小顶堆
+        let heap = [,],
+          i = 0;
+        while (i < k) {
+          heap.push(nums[i++]);
+        }
+        buildHeap(heap, k);
+        // 从 k 位开始遍历数组
+        for (let i = k; i < nums.length; i++) {
+          if (heap[1] < nums[i]) {
+            // 替换并堆化
+            heap[1] = nums[i];
+            heapify(heap, k, 1);
+          }
+        }
+        // 返回堆顶元素
+        return heap[1];
+      };
+
+      // 原地建堆，从后往前，自上而下式建小顶堆
+      let buildHeap = (arr, k) => {
+        if (k === 1) return;
+        // 从最后一个非叶子节点开始，自上而下式堆化
+        for (let i = Math.floor(k / 2); i >= 1; i--) {
+          heapify(arr, k, i);
+        }
+      };
+
+      // 堆化
+      let heapify = (arr, k, i) => {
+        // 自上而下式堆化
+        while (true) {
+          let minIndex = i;
+          if (2 * i <= k && arr[2 * i] < arr[i]) {
+            minIndex = 2 * i;
+          }
+          if (2 * i + 1 <= k && arr[2 * i + 1] < arr[minIndex]) {
+            minIndex = 2 * i + 1;
+          }
+          if (minIndex !== i) {
+            swap(arr, i, minIndex);
+            i = minIndex;
+          } else {
+            break;
+          }
+        }
+      };
+
+      // 交换
+      var swap = (arr, i, j) => {
+        let temp = arr[i];
+        arr[i] = arr[j];
+        arr[j] = temp;
+      };
+
+      // 解法三：快速选择quickselect算法
+      // 在快速排序基础上，每执行一次的时候，比较基准值位置是否在 n-k 位置上，
+      // 如果小于 n-k ，则第 k 个最大值在基准值的右边，我们只需递归基准值右边的子序列即可；
+      // 如果大于 n-k ，则第 k 个最大值在基准值的做边，我们只需递归***基准值左边的子序列即可；
+      // 如果等于 n-k ，则第 k 个最大值就是基准值
+      // 时间复杂度：平均时间复杂度O(n)，最坏情况时间复杂度为O(n^2)
+      // 空间复杂度：O(1)
+      let findKthLargest3 = function (nums, k) {
+        return quickSelect(nums, nums.length - k);
+      };
+
+      let quickSelect = (arr, k) => {
+        return quick(arr, 0, arr.length - 1, k);
+      };
+
+      let quick = (arr, left, right, k) => {
+        let index;
+        if (left < right) {
+          // 划分数组
+          index = partition(arr, left, right);
+          // Top k
+          if (k === index) {
+            return arr[index];
+          } else if (k < index) {
+            // Top k 在左边
+            return quick(arr, left, index - 1, k);
+          } else {
+            // Top k 在右边
+            return quick(arr, index + 1, right, k);
+          }
+        }
+        return arr[left];
+      };
+
+      var partition = (arr, left, right) => {
+        // 取随机数为基准
+        var datum = arr[Math.floor(Math.random() * (right - left + 1)) + left],
+          i = left,
+          j = right;
+        // 开始调整
+        while (i < j) {
+          // 左指针右移
+          while (arr[i] < datum) {
+            i++;
+          }
+          // 右指针左移
+          while (arr[j] > datum) {
+            j--;
+          }
+          // 交换
+          if (i < j) swap(arr, i, j);
+          // 当数组中存在重复数据时，即都为datum，但位置不同
+          // 继续递增i，防止死循环
+          if (arr[i] === arr[j] && i !== j) {
+            i++;
+          }
+        }
+        return i;
+      };
+      // 交换
+      var swap = (arr, i, j) => {
+        let temp = arr[i];
+        arr[i] = arr[j];
+        arr[j] = temp;
+      };
+
+      // 解法4：中位数的中位数BFPRT算法
+      // 代码见下面链接，这里写下思路
+      // https://leetcode-cn.com/problems/kth-largest-element-in-an-array/solution/javascriptsi-chong-fang-shi-jie-topkwen-ti-by-user/
+      // 在快速选择的基础上，优化了基准元pivot的选择
+      // 每次选择五分中位数的中位数作为基准元（也称为主元pivot），这样做的目的就是使得划分比较合理，从而避免了最坏情况的发生。
+      // 步骤如下：
+      // 1.选取主元
+      //   （1）将 n 个元素按顺序分为 n/5 个组，每组 5 个元素，若有剩余，舍去
+      //   （2）对于这 n/5 个组中的每一组使用插入排序找到它们各自的中位数
+      //   （3）对于上一步中找到的所有中位数，再调用 BFPRT 算法求出它们的中位数，作为主元；
+      // 2.以主元为分界点，把小于主元的放在左边，大于主元的放在右边；
+      // 3.判断主元的位置与 k 的大小，有选择的对左边或右边递归
+      let findKthLargest4 = function (nums, k) {
+        return nums[bfprt(nums, 0, nums.length - 1, nums.length - k)];
+      };
+
+      let bfprt = (arr, left, right, k) => {
+        let index;
+        if (left < right) {
+          // 划分数组
+          index = partition(arr, left, right);
+          // Top k
+          if (k === index) {
+            return index;
+          } else if (k < index) {
+            // Top k 在左边
+            return bfprt(arr, left, index - 1, k);
+          } else {
+            // Top k 在右边
+            return bfprt(arr, index + 1, right, k);
+          }
+        }
+        return left;
+      };
+
+      var partition = (arr, left, right) => {
+        // 基准
+        var datum = arr[findMid(arr, left, right)],
+          i = left,
+          j = right;
+        // 开始调整
+        while (i < j) {
+          // 左指针右移
+          while (arr[i] < datum) {
+            i++;
+          }
+          // 右指针左移
+          while (arr[j] > datum) {
+            j--;
+          }
+          // 交换
+          if (i < j) swap(arr, i, j);
+          // 当数组中存在重复数据时，即都为datum，但位置不同
+          // 继续递增i，防止死循环
+          if (arr[i] === arr[j] && i !== j) {
+            i++;
+          }
+        }
+        return i;
+      };
+
+      /**
+       * 数组 arr[left, right] 每五个元素作为一组，并计算每组的中位数，
+       * 最后返回这些中位数的中位数下标（即主元下标）。
+       *
+       * @attention 末尾返回语句最后一个参数多加一个 1 的作用其实就是向上取整的意思，
+       * 这样可以始终保持 k 大于 0。
+       */
+      let findMid = (arr, left, right) => {
+        if (right - left < 5) return insertSort(arr, left, right);
+        let n = left - 1;
+        // 每五个作为一组，求出中位数，并把这些中位数全部依次移动到数组左边
+        for (let i = left; i + 4 <= right; i += 5) {
+          let index = insertSort(arr, i, i + 4);
+          swap(arr[++n], arr[index]);
+        }
+        // 利用 bfprt 得到这些中位数的中位数下标（即主元下标）
+        return findMid(arr, left, n);
+      };
+
+      /**
+       * 对数组 arr[left, right] 进行插入排序，并返回 [left, right]
+       * 的中位数。
+       */
+      let insertSort = (arr, left, right) => {
+        let temp, j;
+        for (let i = left + 1; i <= right; i++) {
+          temp = arr[i];
+          j = i - 1;
+          while (j >= left && arr[j] > temp) {
+            arr[j + 1] = arr[j];
+            j--;
+          }
+          arr[j + 1] = temp;
+        }
+        return ((right - left) >> 1) + left;
+      };
+
+      // 交换
+      var swap = (arr, i, j) => {
+        let temp = arr[i];
+        arr[i] = arr[j];
+        arr[j] = temp;
+      };
+
+      //test
+      var nums = [3, 2, 3, 1, 2, 4, 5, 5, 6],
+        k = 4;
+      console.log(findKthLargest1(nums, k));
+      console.log(findKthLargest2(nums, k));
+      console.log(findKthLargest3(nums, k));
+      console.log(findKthLargest4(nums, k));
+    </script>
+  </body>
 </html>
