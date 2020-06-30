@@ -18,34 +18,36 @@
  var Queue = function() {
   this.a = [];
 };
-
-/**
- * @param {number} x
- * @returns {void}
- */
 Queue.prototype.push = function(x) {
   this.a.push(x);
 };
-
-/**
- * @returns {void}
- */
 Queue.prototype.pop = function() {
   this.a.shift();
 };
-
-/**
- * @returns {number}
- */
 Queue.prototype.peek = function() {
   return this.a[0];
 };
-
-/**
- * @returns {boolean}
- */
 Queue.prototype.empty = function() {
   return this.a.length ? false : true;
+};
+
+// 解法2：双栈实现队列，添加和删除
+var CQueue = function() {
+    this.stack1 = []
+    this.stack2 = []
+};
+CQueue.prototype.appendTail = function(value) {
+    this.stack1.push(value)
+};
+CQueue.prototype.deleteHead = function() {
+    if(this.stack2.length) {
+        return this.stack2.pop()
+    }
+    if(!this.stack1.length) return -1
+    while(this.stack1.length) {
+        this.stack2.push(this.stack1.pop())
+    }
+    return this.stack2.pop()
 };
 
 </script>
