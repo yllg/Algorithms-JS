@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 1.动态规划
+      // 时间复杂度： O(N×M)
+      // 空间复杂度： O(N×M)
+      // 空间复杂度还可以再优化，利用滚动数组可以优化到 O(min(N,M))。
+      const findLength = (A, B) => {
+        const m = A.length;
+        const n = B.length;
+        const dp = new Array(m + 1);
+        for (let i = 0; i <= m; i++) {
+          dp[i] = new Array(n + 1).fill(0);
+        } // 初始化二维数组dp，每一项都是0
+        let res = 0;
+        for (let i = 1; i <= m; i++) {
+          for (let j = 1; j <= n; j++) {
+            if (A[i - 1] == B[j - 1]) {
+              dp[i][j] = dp[i - 1][j - 1] + 1;
+            }
+            res = Math.max(dp[i][j], res);
+          }
+        }
+        return res;
+      };
+      // 2.滑动窗口
+      // 第一类为 A 不变，B 的首元素与 A 中的某个元素对齐；第二类为 B 不变，A 的首元素与 B 中的某个元素对齐。
+      // 时间复杂度： O((N + M) * min(N, M))
+      // 空间复杂度 O(1)
+
+      // 3.二分法+哈希
+      // 之后补充
+    </script>
+  </body>
+</html>
