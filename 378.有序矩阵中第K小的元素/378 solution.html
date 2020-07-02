@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：直接排序，二维数组另存为一维数组
+      // 时间复杂度： O(n^2logn) 对n^2个数进行排序
+      // 空间复杂度：O(n^2),一维数组需要存储这 n^2 个数
+
+      // 方法二: 归并排序
+      // 一般归并排序是两个数组归并，而本题每一行均为一个有序数组，
+      // 总共是 n 个数组归并，所以需要用小根堆维护，以优化时间复杂度
+      // 时间复杂度：O(klogn)，归并 k 次，每次堆中插入和弹出的操作时间复杂度均为 logn。
+      // 空间复杂度：O(n)，堆的大小始终为 n。
+      // k 在最坏情况下是 n^2，因此该解法最坏时间复杂度为 O(n^2logn)
+
+      // 方法三:二分查找
+      // 对y有序的二维数组进行二分查找
+      //  时间复杂度：O(nlog(r−l))，二分查找进行次数为 O(log(r−l))，每次操作时间复杂度为 O(n)。
+      // 空间复杂度：O(1)。
+
+      // 矩阵中小于等于 中位数的个数
+      const countInMatrix = (matrix, midVal) => {
+        const n = matrix.length; // 这题是方阵 n行n列
+        let count = 0;
+        let row = 0; // 第一行
+        let col = n - 1; // 最后一列
+        while (row < n && col >= 0) {
+          if (midVal >= matrix[row][col]) {
+            // 大于等于当前行的最右
+            count += col + 1; // 不大于它的数增加col + 1个
+            row++; // 比较下一行
+          } else {
+            // 干不过当前行的最右元素
+            col--; // 留在当前行，比较左边一个
+          }
+        }
+        return count;
+      };
+
+      const kthSmallest = (matrix, k) => {
+        const n = matrix.length;
+        let low = matrix[0][0];
+        let high = matrix[n - 1][n - 1];
+        while (low <= high) {
+          let midVal = low + ((high - low) >>> 1); // 获取中间值
+          let count = countInMatrix(matrix, midVal); // 矩阵中小于等于它的个数
+          if (count < k) {
+            low = midVal + 1;
+          } else {
+            high = midVal - 1;
+          }
+        }
+        return low;
+      };
+
+      // test
+      var matrix = [
+        [ 1,  5,  9],
+        [10, 11, 13],
+        [12, 13, 15]
+      ],
+      k = 8;
+      console.log(kthSmallest(matrix, k));
+    </script>
+  </body>
+</html>
