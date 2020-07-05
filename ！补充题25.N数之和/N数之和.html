@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 解题思路：从array中取出n个数全排列，在取的同时判断是否符合条件，
+      // 尾递归优化，每次递归完成，将当前的运算结果 作为参数传入下层函数
+      // 时间和空间复杂度 都是 O(n)
+      function getAllCombin(array, n, sum, temp) {
+        if (temp.length === n) {
+          if (temp.reduce((t, c) => t + c) === sum) {
+            return temp;
+          }
+          return false;
+        }
+        for (let i = 0; i < array.length; i++) {
+          const current = array.shift();
+          temp.push(current);
+          const result = getAllCombin(array, n, sum, temp);
+          if (result) {
+            return result;
+          }
+          temp.pop();
+          array.push(current);
+        }
+      }
+      const arr = [1, 5, 6, 2, 4, 3, 2];
+      console.log(getAllCombin(arr, 5, 20, []));
+    </script>
+  </body>
+</html>
