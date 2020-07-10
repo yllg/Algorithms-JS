@@ -1,41 +1,56 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
-</head>
-<body>
-<script>
-// Source : https://leetcode.com/problems/best-time-to-buy-and-sell-stock-with-cooldown/
-// Author : 悬笔e绝
-// Date   : 2020-03-25
+  </head>
+  <body>
+    <script>
+      // Source : https://leetcode.com/problems/best-time-to-buy-and-sell-stock-with-cooldown/
+      // Author : 悬笔e绝
+      // Date   : 2020-03-25
 
-/**
- * @param {number[]} prices
- * @return {number}
- */
-var maxProfit = function(prices) {
-  var len = prices.length;
-  if (len === 0)
-    return 0;
-  var sell = []
-    , buy = []
-    , rest = [];
-  for (var i = 0; i < len; i++) {
-    var item = prices[i];
-    if (!i) {
-      sell[i] = 0;
-      buy[i] = -item;
-      rest[i] = 0;
-    } else {
-      sell[i] = Math.max(sell[i - 1], buy[i - 1] + item);
-      buy[i] = Math.max(buy[i - 1], rest[i - 1] - item);
-      rest[i] = Math.max(rest[i - 1], sell[i - 1]);
-    }
-  }
-  return Math.max(sell[len - 1], buy[len - 1], rest[len - 1]);
-};
-</script>
-</body>
+      /**
+       * @param {number[]} prices
+       * @return {number}
+       */
+      // 常规法
+      var maxProfit = function (prices) {
+        var len = prices.length;
+        if (len === 0) return 0;
+        var sell = [],
+          buy = [],
+          rest = [];
+        for (var i = 0; i < len; i++) {
+          var item = prices[i];
+          if (!i) {
+            sell[i] = 0;
+            buy[i] = -item;
+            rest[i] = 0;
+          } else {
+            sell[i] = Math.max(sell[i - 1], buy[i - 1] + item);
+            buy[i] = Math.max(buy[i - 1], rest[i - 1] - item);
+            rest[i] = Math.max(rest[i - 1], sell[i - 1]);
+          }
+        }
+        return Math.max(sell[len - 1], buy[len - 1], rest[len - 1]);
+      };
+
+      // 状态机
+      const maxProfit = (prices) => {
+        let rest = 0;
+        let sold = 0;
+        let hold = -Infinity; // 还没买入
+        for (let price of prices) {
+          let preSold = sold;
+          let preHold = hold;
+          hold = Math.max(preHold, rest - price);
+          sold = preHold + price;
+          rest = Math.max(rest, preSold);
+        }
+        return Math.max(rest, sold);
+      };
+    </script>
+  </body>
 </html>
