@@ -16,8 +16,10 @@
  * @param {number[]} nums
  * @return {number}
  */
+// 一个出现一次，其他出现3次；
 
- var singleNumber = function(nums) {
+// 方法一：常规法
+ var singleNumber1 = function(nums) {
   var tmp = [];
   for(var i = 0, len = nums.length; i < len; i++) 
     if (!tmp[nums[i]])
@@ -29,11 +31,26 @@
       return nums[i];
 };
 
+// 方法二：位运算，不使用额外的空间
+// 时间复杂度 O(n)
+// 空间复杂度 O(1)
+var singleNumber2 = function(nums) {
+    // 位运算
+    let seen_once = seen_twice = 0;
+    nums.forEach(item => {
+        seen_once = ~seen_twice & (seen_once ^ item);
+        seen_twice = ~seen_once & (seen_twice ^ item);
+    });
+    return seen_once;
+};
+
 // 测试
 var nums1 = [2,2,3,2];
-console.log(singleNumber(nums1));
+console.log(singleNumber1(nums1)); // 3
+console.log(singleNumber2(nums1)); // 3
 var nums2 = [0,1,0,1,0,1,99];
-console.log(singleNumber(nums2));
+console.log(singleNumber1(nums2)); // 99
+console.log(singleNumber2(nums2)); // 99
 </script>
 </body>
 </html>

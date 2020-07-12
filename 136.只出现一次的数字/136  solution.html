@@ -17,6 +17,10 @@
  * @return {number}
  */
  
+// 一个出现一次，其他都出现两次
+// 位运算，不使用额外的空间
+// 时间复杂度 O(n)
+// 空间复杂度 O(1)
 var singleNumber = function(nums) {
   var ans = 0;
   for(var i = 0, len = nums.length; i < len; i++)
@@ -27,11 +31,11 @@ var singleNumber = function(nums) {
 
 // 测试
 var nums1 = [2,2,1];
-console.log(singleNumber(nums1));
+console.log(singleNumber(nums1)); //1
 var nums2 = [4,1,2,1,2];
 // 数字不重复的时候，ans不断叠加，4到5到7；
 // 出现重复的数字，ans减少，7到6到4
-console.log(singleNumber(nums2));
+console.log(singleNumber(nums2)); //4
 </script>
 </body>
 </html>
