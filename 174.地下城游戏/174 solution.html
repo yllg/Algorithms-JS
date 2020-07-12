@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 动态规划DP
+      var calculateMinimumHP = function (dungeon) {
+        const m = dungeon.length,
+          n = dungeon[0].length;
+        const dp = new Array(m + 1);
+        for (let i = 0; i < m + 1; i++) {
+          dp[i] = Array(n + 1).fill(Number.MAX_VALUE);
+        }
+        dp[m][n - 1] = dp[m - 1][n] = 1;
+        for (let i = m - 1; i >= 0; i--) {
+          for (let j = n - 1; j >= 0; j--) {
+            const minNum = Math.min(
+              dp[i + 1][j] - dungeon[i][j],
+              dp[i][j + 1] - dungeon[i][j]
+            );
+            dp[i][j] = Math.max(minNum, 1);
+          }
+        }
+        return dp[0][0];
+      };
+
+      // test
+      var dungeon = [[-2,-3,3],[-5,-10,1],[10,30,-5]];
+      console.log(calculateMinimumHP(dungeon));
+    </script>
+  </body>
+</html>
