@@ -17,7 +17,6 @@
       // arr[i] 在store中能查到，就是交集
       // 判断结果数组中是否有该数字，没有才加到结果数组中
       // 时间复杂度为 O(m * n)
-
       var interaction1 = (nums1, nums2) => {
         var result = [];
         var store;
@@ -30,9 +29,11 @@
           store = nums1;
         }
         for (let i = 0; i < arr.length; i++) {
-          //store中有，结果中没有
-          if (store.indexOf(arr[i]) !== -1 && result.indexOf(arr[i]) === -1) {
+          //store中有,做个标记清空
+          let index = store.indexOf(arr[i]);
+          if (index !== -1) {
             result.push(arr[i]);
+            store[index] = undefined;
           }
         }
         return result;
@@ -41,6 +42,7 @@
       // 方法2：使用 Set 去重
       // Set可以提供的平均时间复杂度为 O(1)
       // 最终 线性复杂度内解决，O(m+n)
+      // 不满足题目要求，多个相同的交集不用去重的
       var interaction2 = (nums1, nums2) => {
         let arr = [];
         if (nums1.length < nums2.length) {
