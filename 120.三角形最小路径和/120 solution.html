@@ -1,48 +1,67 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <title>Document</title>
-</head>
-<body>
-<script>
-// Source : https://leetcode.com/problems/triangle/
-// Author : 悬笔e绝
-// Date   : 2019-05-24
+  </head>
+  <body>
+    <script>
+      // Source : https://leetcode.com/problems/triangle/
+      // Author : 悬笔e绝
+      // Date   : 2019-05-24
 
-/**
- * @param {number[][]} triangle
- * @return {number}
- */
+      /**
+       * @param {number[][]} triangle
+       * @return {number}
+       */
 
- var minimumTotal = function(triangle) {
-  var n = triangle.length;
-  var tmp = [];
-  for(var i = 0; i <= n; i++)
-    tmp[i] = [];
-  for(var j = 0; j <= n; j++)
-    tmp[n][j] = 0;
+      // 解法1： 动态规划,自底向上
+      // 时间复杂度O(n^2) 空间复杂度O(n^2)
+      var minimumTotal1 = function (triangle) {
+        var dp = triangle;
+        for (var i = dp.length - 2; i >= 0; i--)
+          for (var j = 0; j < dp[i].length; j++) {
+            dp[i][j] = Math.min(dp[i + 1][j], dp[i + 1][j + 1]) + dp[i][j];
+          }
+        return dp[0][0];
+      };
+      // 原数组上修改，不需要额外开辟一个dp数组
+      var minimumTotal2 = function (triangle) {
+        for (var i = triangle.length - 2; i >= 0; i--)
+          for (var j = 0; j < triangle[i].length; j++) {
+            triangle[i][j] =
+              Math.min(triangle[i + 1][j], triangle[i + 1][j + 1]) +
+              triangle[i][j];
+          }
+        return triangle[0][0];
+      };
 
-  for(var i = n - 1; i >= 0; i--) 
-    for(var j = 0; j < triangle[i].length; j++) {
-      tmp[i][j] = Math.min(tmp[i + 1][j], tmp[i + 1][j + 1]) + triangle[i][j];
-    }
+      // 解法2： 动态规划，自底向上，降维
+      // 时间复杂度O(n^2) 空间复杂度O(n)
+      // 自底向上递归时，其实每次只会用到上一层数据，因此不需二维数组存储所有可能情况来一一比较
+      var minimumTotal3 = function (triangle) {
+        var dp = new Array(triangle.length + 1).fill(0);
+        for (var i = triangle.length - 1; i >= 0; i--) {
+          for (var j = 0; j < triangle[i].length; j++) {
+            dp[j] = Math.min(dp[j], dp[j + 1]) + triangle[i][j];
+          }
+        }
+        return dp[0];
+      };
 
-  return tmp[0][0];
-};
+      // 解法3： 递归，递归+备忘录
+      // 会超时，略
 
-// 测试
-let test_triangle = [
-     [2],
-    [3,4],
-   [6,5,7],
-  [4,1,8,3]
-];
+      // 测试
+      let test_triangle1 = [[2], [3, 4], [6, 5, 7], [4, 1, 8, 3]];
+      let test_triangle2 = [[2], [3, 4], [6, 5, 7], [4, 1, 8, 3]];
+      let test_triangle3 = [[2], [3, 4], [6, 5, 7], [4, 1, 8, 3]];
 
-console.log(minimumTotal(test_triangle));
-
-</script>
-</body>
+      console.log(minimumTotal1(test_triangle1));
+      console.log(minimumTotal2(test_triangle2));
+      console.log(minimumTotal3(test_triangle3));
+    </script>
+  </body>
 </html>
