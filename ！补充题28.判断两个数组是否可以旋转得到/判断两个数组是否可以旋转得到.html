@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 假设两个数组的元素都是 number
+      // 可以简单使用 toString来判断两个数组内容是否相同
+      var isRotateArray = (arr1, arr2) => {
+        if (arr1.length !== arr2.length) {
+          return false;
+        }
+        if (arr1.toString() === arr2.toString()) {
+          return true;
+        }
+        for (let i = 1; i < arr1.length; i++) {
+          var tmp = [...arr1.slice(i), ...arr1.slice(0, i)];
+          if (tmp.toString() === arr2.toString()) {
+            return true;
+          }
+        }
+        return false;
+      };
+
+      // test
+      var arr1 = [1,2,3,4,5];
+      var arr2 = [3,4,5,1,2];
+      var arr3 = [3,4,5,1,1];
+      console.log(isRotateArray(arr1, arr2)); // true
+      console.log(isRotateArray(arr1, arr3)); // false
+    </script>
+  </body>
+</html>
