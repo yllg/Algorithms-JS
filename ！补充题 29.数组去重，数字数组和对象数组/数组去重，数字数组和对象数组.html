@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 数组去重，数字或者对象数组去重
+      // 对象id标识唯一性
+      var arr1 = [1, 3, 3, 2, 0, 1];
+      var arr2 = [
+        {
+          id: 0,
+          a: 1,
+          b: 2,
+        },
+        {
+          id: 0,
+          a: 1,
+          b: 3,
+        },
+        {
+          id: 1,
+          a: 1,
+          b: 2,
+        },
+      ];
+      let unique1 = (arr) => {
+        return [...new Set(arr)];
+      };
+      console.log(unique1(arr1));
+
+      let unique2 = (arr) => {
+        var hash = [];
+        var result = [];
+        arr.forEach((item, i) => {
+          if (!hash[item.id]) {
+            result.push(item);
+            hash[item.id] = 1;
+          }
+        });
+        return result;
+      };
+      console.log(unique2(arr2));
+    </script>
+  </body>
+</html>
