@@ -10,12 +10,13 @@
       // 大数相加，两个很大的数字字符串相加
       // 解法1：普通解法
       let plusFunc = (str1, str2) => {
-        let len;
+        let len,diff;
         if (str1.length > str2.length) {
-          let diff = str1.length - str2.length;
+          diff = str1.length - str2.length;
           str2 = new Array(diff).fill(0).join("") + str2;
           len = str1.length;
         } else {
+          diff = str2.length - str1.length;
           str1 = new Array(diff).fill(0).join("") + str1;
           len = str2.length;
         }
@@ -35,8 +36,8 @@
         }
         return arr.join("");
       };
-      let str1 = "999999999999999999999999999999999999999999999999999999999999999999923";
-      let str2 = "77";
+      let str1 = "99";
+      let str2 = "111111111111111111111111111111111111101";
       console.log(plusFunc(str1, str2));
 
       // 解法2： ES10的 BigInt
