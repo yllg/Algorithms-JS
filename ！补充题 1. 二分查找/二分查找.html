@@ -22,21 +22,21 @@
         }
       }
 
-      // 方法2 非递归
+      // 方法2 非递归， 二分法
       function BinarySearch2(arr, target) {
-        var low = 0; //设定下标
-        var high = arr.length - 1; //设定上标
+        let low = 0; //设定下标
+        let high = arr.length - 1; //设定上标
+        let ans = arr.length; // 没有找到,返回按照顺序插入的位置
         while (high >= low) {
           var mid = Math.floor((low + high) / 2); //二分查找的关键
-          if (arr[mid] > target) {
-            high = mid;
-          } else if (arr[mid] < target) {
-            low = mid;
+          if (arr[mid] >= target) {
+            ans = mid;
+            high = mid - 1;
           } else {
-            return mid;
+            low = mid + 1;
           }
         }
-        return -1;
+        return ans;
       }
 
       //测试  查找
