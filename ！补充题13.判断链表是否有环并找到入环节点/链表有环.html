@@ -16,12 +16,6 @@
       // 3.找到入环节点
       // P1 P2回到 head 节点，让 P1 先走 length 步，相遇时即为环的入点；
 
-      // 定义链表
-      function ListNode(val) {
-        this.val = val;
-        this.next = null;
-      }
-
       function EntryNodeOfLoop(pHead) {
           if (!pHead || !pHead.next) {
               return null;
@@ -58,6 +52,22 @@
           return P1;
       }
 
+      // test
+      // 定义链表
+      function ListNode(val) {
+        this.val = val;
+        this.next = null;
+      }
+      // 无环链表
+      var b4 = new ListNode(4);
+      b4.next = null;
+      var b3 = new ListNode(3);
+      b3.next = b4;
+      var b2 = new ListNode(2);
+      b2.next = b3;
+      var b1 = new ListNode(1);
+      b1.next = b2;
+      console.log(EntryNodeOfLoop(b1));
       // 有环链表
       var a4 = new ListNode(4);
       var a3 = new ListNode(3);
@@ -68,20 +78,8 @@
       a1.next = a2;
       // a4指向a2
       a4.next = a2;
-
       console.log(EntryNodeOfLoop(a1));
 
-      // 无环链表
-      var b4 = new ListNode(4);
-      b4.next = null;
-      var b3 = new ListNode(3);
-      b3.next = b4;
-      var b2 = new ListNode(2);
-      b2.next = b3;
-      var b1 = new ListNode(1);
-      b1.next = b2;
-
-      console.log(EntryNodeOfLoop(b1));
     </script>
   </body>
 </html>
