@@ -16,7 +16,8 @@
  * @param {string} s
  * @return {boolean}
  */
- 
+
+// 方法1：数组API，使用额外空间
 var isPalindrome1 = function(s) {
   // 非单次字符 替换成空
   s = s.replace(/[\W]/g, '');
@@ -27,7 +28,7 @@ var isPalindrome1 = function(s) {
   return s === _s;
 };
 
-// 双指针
+// 方法2：双指针，空间复杂度 O(1)
 var isPalindrome2 = (s) => {
   s = s.replace(/\W/g, '').toLowerCase();
   var left = 0;
