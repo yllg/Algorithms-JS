@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 解法1：DP 常规法
+      // 时间和空间复杂度 O(mn)
+      // 定义状态：
+      // dp[i][j] = boolean 表示，s1的前[0, i)个字符，s2的前[0, j)个字符，能够凑成s3的[0, i+j)
+      // 往问题规模变小了想，假设s1/s2少一个字符，照样能拼接成s3，那么再加一个也是可以拼接成s3
+      // 状态转移方程：
+      // dp[i][j] = (dp[i-1][j] && s1[i-1] === s3[i+j-1]) || (dp[i][j-1] && s2[j-1] === s3[i+j-1])
+      // 解释：(dp[i-1][j] && s1[i-1] === s3[i+j-1])，
+      // dp[i-1][j] 意思是说s1少一个，而且s3的结尾是s1凑成的, 可以满足的
+      // dp[i][j-1] s2少一个，而且s3的结尾是s2凑成的，可以满足的
+      var isInterleave1 = function (s1, s2, s3) {
+        let n = s1.length;
+        let m = s2.length;
+        if (m + n != s3.length) {
+          return false;
+        }
+        let dp = Array.from(Array(n + 1), () => Array(m + 1).fill(false));
+        dp[0][0] = true;
+        for (let i = 0; i <= n; i++) {
+          for (let j = 0; j <= m; j++) {
+            let p = i + j - 1;
+            if (i > 0) {
+              dp[i][j] |= dp[i - 1][j] && s1[i - 1] === s3[p];
+            }
+            if (j > 0) {
+              dp[i][j] |= dp[i][j - 1] && s2[j - 1] === s3[p];
+            }
+          }
+        }
+        return dp[n][m] ? true : false;
+      };
+
+      // 解法2：DP 降维优化
+      // 时间复杂度 O(mn), 空间复杂度 O(m)
+      // 使用滚动数组优化空间复杂度。
+      // 因为这里数组 f 的第 i 行只和第 i - 1 行相关，可以用滚动数组优化这个动态规划，这样空间复杂度可以变成 O(m)
+      var isInterleave2 = function (s1, s2, s3) {
+        let n = s1.length;
+        let m = s2.length;
+        if (m + n != s3.length) {
+          return false;
+        }
+        let dp = new Array(m).fill(false);
+        dp[0] = true;
+        for (let i = 0; i <= n; i++) {
+          for (let j = 0; j <= m; j++) {
+            let p = i + j - 1;
+            if (i > 0) {
+              dp[j] &= s1[i - 1] === s3[p];
+            }
+            if (j > 0) {
+              dp[j] |= dp[j - 1] && s2[j - 1] === s3[p];
+            }
+          }
+        }
+        return dp[m] ? true : false;
+      };
+
+      // test
+      let s1 = "aabcc",
+        s2 = "dbbca",
+        s3 = "aadbbcbcac";
+      console.log(isInterleave1(s1, s2, s3));
+      console.log(isInterleave2(s1, s2, s3));
+      let s4 = "aabcc",
+        s5 = "dbbca",
+        s6 = "aadbbbaccc";
+      console.log(isInterleave1(s4, s5, s6));
+      console.log(isInterleave2(s4, s5, s6));
+    </script>
+  </body>
+</html>
