@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 一.数字数组
+      // 解法1：对数组本身进行操作
+      // 空间 O(1) 时间 O(n)
+      var findDuplicates1 = function (nums) {
+        const res = [];
+        for (const num of nums) {
+          const absNum = Math.abs(num);
+          if (nums[absNum - 1] < 0) {
+            res.push(absNum);
+          } else {
+            nums[absNum - 1] = -1 * nums[absNum - 1];
+          }
+        }
+        // 如果每个元素可以出现多次，最后可以使用set去重
+        return res;
+      };
+      // test
+      var nums1 = [4, 3, 2, , 7, 8, 2, 3, 1];
+      console.log(findDuplicates1(nums1));
+      // 解法2：
+      // 常规法，另外使用一个hash去重
+
+      // 二.字符串数组
+      // 解法1：对数组本身进行操作
+      // 空间 O(1) 时间 O(n)
+      var findDuplicates2 = function (strings) {
+        const res = [];
+        for (let str of strings) {
+          str = str.slice(0, 1) === "-" ? str.slice(1) : str;
+          let num = str.charCodeAt() - 96;
+          if (strings[num - 1].slice(0, 1) === "-") {
+            res.push(str);
+          } else {
+            strings[num - 1] = "-" + strings[num - 1];
+          }
+        }
+        return [...new Set(res)];
+      };
+      var strings = ["a", "b", "c", "a", "a", "c", "c"];
+      console.log(findDuplicates2(strings));
+      // 解法2：
+      // 常规法，另外使用一个hash去重
+    </script>
+  </body>
+</html>
