@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 打印下面三层对象的层序遍历name值
+      // 即打印的结果为 root, child_0, child_1, child_0_0, child_1_0
+      var data = {
+        name: "root",
+        children: [
+          {
+            name: "child_0",
+            children: [
+              {
+                name: "child_0_0",
+                children: [
+                  {
+                    name: "child_0_0_0",
+                    children: [],
+                  },
+                ],
+              },
+            ],
+          },
+          {
+            name: "child_1",
+            children: [
+              {
+                name: "child_1_0",
+                children: [
+                  {
+                    name: "child_1_0_0",
+                    children: [],
+                  },
+                ],
+              },
+            ],
+          },
+          {
+            name: "child_2",
+            children: [],
+          },
+        ],
+      };
+
+      // 递归
+      function levelOrder1(data) {
+        let array = [];
+        array.push(data);
+        while (array.length) {
+          const item = array.shift();
+          const { name, children } = item;
+          if (children && children.length) {
+            children.forEach((item) => array.push(item));
+          }
+          console.log(name);
+        }
+      }
+      console.log(levelOrder1(data));
+    </script>
+  </body>
+</html>
