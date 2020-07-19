@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法1：回溯法 超时
+      var maxCoins = function (nums) {
+        let res = Number.MIN_VALUE;
+        backtrack(nums, 0);
+        return res;
+        // 回溯法，状态树很大
+        function backtrack(nums, score) {
+          if (nums.length == 0) {
+            res = Math.max(res, score);
+            return;
+          }
+          for (let i = 0, n = nums.length; i < n; i++) {
+            let point =
+              (i - 1 < 0 ? 1 : nums[i - 1]) *
+              nums[i] *
+              (i + 1 >= n ? 1 : nums[i + 1]);
+            let tempNums = [].concat(nums);
+            // 做选择 在 nums 中删除元素 nums[i]
+            nums.splice(i, 1);
+            // 递归回溯
+            backtrack(nums, score + point);
+            // 撤销选择
+            nums = [...tempNums];
+          }
+        }
+      };
+
+      // 方法2：动态规划
+      var maxCoins = function (nums) {
+        let n = nums.length;
+        // 添加两侧的虚拟气球
+        let points = [1, ...nums, 1];
+        let dp = Array.from(Array(n + 2), () => Array(n + 2).fill(0));
+        // 最后一行开始遍历,从下往上
+        for (let i = n; i >= 0; i--) {
+          // 从左往右
+          for (let j = i + 1; j < n + 2; j++) {
+            for (let k = i + 1; k < j; k++) {
+              dp[i][j] = Math.max(
+                dp[i][j],
+                points[j] * points[k] * points[i] + dp[i][k] + dp[k][j]
+              );
+            }
+          }
+        }
+        return dp[0][n + 1];
+      };
+    </script>
+  </body>
+</html>
