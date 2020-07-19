@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // multiFunc('22', '2')  // 输出 '44'
+      function multiFunc(a, b) {
+        if (!a || !b) return;
+        if (typeof(a) === 'number' || typeof(b) === 'number') {
+            a += '';
+            b += '';
+        }
+        var l1 = a.length - 1;
+        var l2 = b.length - 1;
+        var mutiResult = "";
+        var zero = "";
+        for (var i = l1; i >= 0; i--) {
+          var carry = 0;
+          var x = a[i];
+          var result = "";
+          for (var j = l2; j >= 0; j--) {
+            var y = b[j];
+            var temp = 0;
+            temp = x * y + carry;
+            carry = 0;
+            carry = Math.floor(temp / 10);
+            result = (temp % 10) + result;
+          }
+          if (carry) {
+            result = carry + result;
+          }
+          if (!mutiResult) {
+            mutiResult = result;
+            continue;
+          }
+          zero = zero + "0";
+          result = result + zero;
+          mutiResult = Number(result) + Number(mutiResult);
+        }
+        return mutiResult;
+      }
+      // test
+      console.log(multiFunc('23', '2'));
+      console.log(multiFunc('25', '4'));
+      console.log(multiFunc(25, 4));
+    </script>
+  </body>
+</html>
