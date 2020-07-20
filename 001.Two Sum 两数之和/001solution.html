@@ -18,6 +18,9 @@
         * @return {number[]}
         */
 
+        // 一遍hash表，
+        // 时间复杂度O(n),遍历一遍
+        // 空间复杂度O(n),最多存储n个元素
         var twoSum = function(nums, target) {
             var a = [];
             for (var i = 0; i < nums.length; i++) {
