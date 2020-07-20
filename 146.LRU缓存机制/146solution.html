@@ -1,65 +1,92 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <title>Document</title>
-</head>
+  </head>
 
-<body>
+  <body>
     <script>
-        // Source : https://leetcode.com/problems/lru-cache/
-        // Author : 悬笔e绝
-        // Date   : 2019-07-23
+      // Source : https://leetcode.com/problems/lru-cache/
+      // Author : 悬笔e绝
+      // Date   : 2019-07-23
 
-        /**
-         * @constructor
-         */
-        var LRUCache = function (capacity) {
-            this.capacity = capacity;
-            this.obj = {};
-            this.arr = [];
-        };
+      // 用数组实现
+      /**
+       * @constructor
+       */
+      var LRUCache = function (capacity) {
+        this.capacity = capacity;
+        // 存储数据值
+        this.obj = {};
+        // 存储访问的顺序，数组越靠前的元素越近访问过，数组最后一位最久没访问要被替换
+        this.arr = [];
+      };
 
-        /**
-         * @param {number} key
-         * @returns {number}
-         */
-        LRUCache.prototype.get = function (key) {
-            var val = this.obj[key];
-            if (val > 0) {
-                var index = this.arr.indexOf(key);
-                this.arr.splice(index, 1);
-                this.arr.unshift(key);
-                return val;
-            } else
-                return -1;
-        };
+      /**
+       * @param {number} key
+       * @returns {number}
+       */
+      LRUCache.prototype.get = function (key) {
+        var val = this.obj[key];
+        if (val > 0) {
+          var index = this.arr.indexOf(key);
+          this.arr.splice(index, 1);
+          this.arr.unshift(key);
+          return val;
+        } else {
+          return -1;
+        }
+      };
 
-        /**
-         * @param {number} key
-         * @param {number} value
-         * @returns {void}
-         */
-        LRUCache.prototype.put = function (key, value) {
-            if (this.obj[key]) {
-                this.obj[key] = value;
-                var index = this.arr.indexOf(key);
-                this.arr.splice(index, 1);
-                this.arr.unshift(key);
-                return;
-            }
-            if (this.capacity === this.arr.length) {
-                var k = this.arr.pop();
-                this.obj[k] = undefined;
-            }
-            this.obj[key] = value;
-            this.arr.unshift(key);
-        };
+      /**
+       * @param {number} key
+       * @param {number} value
+       * @returns {void}
+       */
+      LRUCache.prototype.put = function (key, value) {
+        if (this.obj[key]) {
+          this.obj[key] = value;
+          var index = this.arr.indexOf(key);
+          this.arr.splice(index, 1);
+          this.arr.unshift(key);
+          return;
+        }
+        if (this.capacity === this.arr.length) {
+          var k = this.arr.pop();
+          this.obj[k] = undefined;
+        }
+        this.obj[key] = value;
+        this.arr.unshift(key);
+      };
 
+      var cache = new LRUCache(2 /* 缓存容量 */);
+      cache.put(1, 1);
+      cache.put(2, 2);
+      console.log(cache.get(1)); // 返回  1
+      cache.put(3, 3); // 该操作会使得关键字 2 作废
+      console.log(cache.get(2)); // 返回 -1 (未找到)
+      cache.put(4, 4); // 该操作会使得关键字 1 作废
+      console.log(cache.get(1)); // 返回 -1 (未找到)
+      console.log(cache.get(3)); // 返回  3
+      console.log(cache.get(4)); // 返回  4
+
+      console.log("########################");
+
+      var cache2 = new LRUCache(3 /* 缓存容量 */);
+      cache2.put(2, 2);
+      cache2.put(1, 1);
+      console.log(cache2.get(2)); // 2
+      console.log(cache2.get(2)); // 2
+      console.log(cache2.get(1)); // 1
+      cache2.put(3, 3);
+      cache2.put(4, 4); // 最近访问的是1，会使 2被淘汰
+      console.log(cache2.get(1)); // 1
+      console.log(cache2.get(2)); // -1
+      console.log(cache2.get(3)); // 3
+      console.log(cache2.get(4)); // 4
     </script>
-</body>
-
+  </body>
 </html>
