@@ -33,7 +33,7 @@
       };
 
       // 解法2：三指针
-      // 有序无序都可以
+      // 输入的数组必须是有序才行
       // 思路
       // 1.合并两个有序数组，就是归并排序的一步；
       // 2.归并排序会开辟一个长度为nums1 + nums2的空间，用两个指针遍历两个数组，把小的放到新数组
@@ -66,12 +66,17 @@
       console.log(nums1);
       var nums3 = [1, 2, 3, 0, 0, 0];
       var nums4 = [2, 5, 6];
-      merge(nums3, 3, nums4, 3);
+      merge2(nums3, 3, nums4, 3);
       console.log(nums3);
-      var nums5 = [1, 23, 2, 0, 0, 0];
-      var nums6 = [5, 3, 1];
-      merge(nums5, 3, nums6, 3);
+      var nums5 = [1, 2, 23, 0, 0, 0];
+      var nums6 = [1, 3, 5];
+      merge2(nums5, 3, nums6, 3);
       console.log(nums5);
+      var nums7 = [1, 23, 2, 0, 0, 0];
+      var nums8 = [5, 3, 1];
+      // 输入乱序，第二种方法不适用
+      merge2(nums7, 3, nums8, 3);
+      console.log(nums7);
     </script>
   </body>
 </html>
