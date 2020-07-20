@@ -1,43 +1,77 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <title>088. 合并两个有序数组</title>
-</head>
+  </head>
 
-<body>
+  <body>
     <script>
-        // Source : https://leetcode.com/problems/merge-sorted-array/
-        // Author : 悬笔e绝
-        // Date   : 2018-12-04
+      // Source : https://leetcode.com/problems/merge-sorted-array/
+      // Author : 悬笔e绝
+      // Date   : 2018-12-04
 
-        /**
-         * @param {number[]} nums1
-         * @param {number} m
-         * @param {number[]} nums2
-         * @param {number} n
-         * @return {void} Do not return anything, modify nums1 in-place instead.
-         */
+      /**
+       * @param {number[]} nums1
+       * @param {number} m
+       * @param {number[]} nums2
+       * @param {number} n
+       * @return {void} Do not return anything, modify nums1 in-place instead.
+       */
 
-        var merge = function (nums1, m, nums2, n) {
-            nums1.length = m,
-            nums2.length = n;
-            // 效果 nums1.push(nums2)
-            Array.prototype.push.apply(nums1, nums2);
-            nums1.sort(function (a, b) {
-                return a - b;
-            });
-        };
+      //解法1：利用数组的sort 本质是快排
+      // 有序和无需都可以
+      var merge = function (nums1, m, nums2, n) {
+        (nums1.length = m), (nums2.length = n);
+        // 效果 nums1.push(nums2)
+        Array.prototype.push.apply(nums1, nums2);
+        nums1.sort(function (a, b) {
+          return a - b;
+        });
+      };
 
-        // 测试
-        var nums1 = [1,2,3,0,0,0];
-        var nums2 = [2,5,6];
-        merge(nums1,3,nums2,3);
-        console.log(nums1);
+      // 解法2：三指针
+      // 有序无序都可以
+      // 思路
+      // 1.合并两个有序数组，就是归并排序的一步；
+      // 2.归并排序会开辟一个长度为nums1 + nums2的空间，用两个指针遍历两个数组，把小的放到新数组
+      // 3.这里nums1就是我们新开辟的新数组，我们沿用规定排序的思路，用三个指针
+      // 技巧：
+      // 从后遍历，先比较较大的数，把大的数据放到数组nums1的后面
+      // 如果从小的比起，需要把nums1中所有的数往后挪一位，时间复杂度高
+      const merge2 = (nums1, m, nums2, n) => {
+        let index1 = m - 1;
+        let index2 = n - 1;
+        let tail = m + n - 1;
+        while (index2 >= 0) {
+          if (nums1[index1] > nums2[index2]) {
+            nums1[tail] = nums1[index1];
+            index1--;
+            tail--;
+          } else {
+            nums1[tail] = nums2[index2];
+            index2--;
+            tail--;
+          }
+        }
+        return nums1;
+      };
+
+      // 测试
+      var nums1 = [1, 2, 3, 0, 0, 0];
+      var nums2 = [2, 5, 6];
+      merge(nums1, 3, nums2, 3);
+      console.log(nums1);
+      var nums3 = [1, 2, 3, 0, 0, 0];
+      var nums4 = [2, 5, 6];
+      merge(nums3, 3, nums4, 3);
+      console.log(nums3);
+      var nums5 = [1, 23, 2, 0, 0, 0];
+      var nums6 = [5, 3, 1];
+      merge(nums5, 3, nums6, 3);
+      console.log(nums5);
     </script>
-</body>
-
+  </body>
 </html>
