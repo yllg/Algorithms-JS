@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 解法1： 普通递归
+      const generateTrees1 = (n) => {
+        if (n == 0) return [];
+        const getAllBSTs = (low, high) => {
+          if (low > high) return [null];
+          if (low == high) return [new TreeNode(low)];
+          const res = [];
+          for (let i = low; i <= high; i++) {
+            const leftBSTs = getAllBSTs(low, i - 1);
+            const rightBSTs = getAllBSTs(i + 1, high);
+            for (const leftBST of leftBSTs) {
+              for (const rightBST of rightBSTs) {
+                const root = new TreeNode(i);
+                root.left = leftBST;
+                root.right = rightBST;
+                res.push(root);
+              }
+            }
+          }
+          return res;
+        };
+        return getAllBSTs(1, n);
+      };
+
+      // 解法2：递归 + 记忆化
+      const generateTrees2 = (n) => {
+        if (n == 0) return [];
+        const memo = new Array(n + 1);
+        for (let i = 0; i < memo.length; i++) {
+          memo[i] = new Array(n + 1);
+        }
+        const getAllBSTs = (low, high) => {
+          if (low > high) return [null];
+          if (memo[low][high]) return memo[low][high];
+          if (low == high) return [new TreeNode(low)];
+          const res = [];
+          for (let i = low; i <= high; i++) {
+            const leftBSTs = getAllBSTs(low, i - 1);
+            const rightBSTs = getAllBSTs(i + 1, high);
+            for (const leftBST of leftBSTs) {
+              for (const rightBST of rightBSTs) {
+                const root = new TreeNode(i);
+                root.left = leftBST;
+                root.right = rightBST;
+                res.push(root);
+              }
+            }
+          }
+          return (memo[low][high] = res);
+        };
+        return getAllBSTs(1, n);
+      };
+
+      // test
+      function TreeNode(val) {
+        this.val = val;
+        this.left = this.right = null;
+      }
+      console.log(generateTrees1(3));
+      console.log(generateTrees2(3));
+    </script>
+  </body>
+</html>
