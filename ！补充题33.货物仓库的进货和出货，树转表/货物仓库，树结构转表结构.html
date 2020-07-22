@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 仓库管理
+      // 可不断转入和转出货物，货物最多两层，数字代表转入/转出的数量，转出不能爆仓
+      // key 代表类目/子类目名称，value为number时，代表这个类目的数量，
+      // 为object时，代表下一层类目集合，最多嵌套两层
+      let goods = {
+        productA: {
+          a: 1,
+          b: 2,
+          c: {
+            c1: 1,
+            c2: 3,
+            c3: {
+              c4: 4,
+              c5: {
+                c6: 2,
+              },
+            },
+          },
+        },
+        productB: {
+          e: 6,
+        },
+      };
+      // 爆仓情况，转入{ productA:{a:3, c:1} } 转出 {productA: {a:4}},就会发生子类目a的爆仓，此时返回报错
+      // 加分项目：1.考虑子类目深度(不止两层) 2.有单元测试
+
+      // node中不支持class，换成function的类
+      function Depository() {
+        this.tableData = new Map();
+        // 转入货物, 树结构转成 map 表结构 ，方便存储和查询
+        this.transferIn = (goods) => {
+          this.tree2table(goods, "");
+        };
+        this.tree2table = (tree, parent) => {
+          for (let v in tree) {
+            if (typeof tree[v] === "object") {
+              let parentStr = parent ? parent + "-" + v : v;
+              this.tree2table(tree[v], parentStr);
+            } else {
+              let name = parent ? parent + "-" + v : v;
+              this.tableData.set(name, tree[v]);
+            }
+          }
+        };
+        // 转出货物 爆仓容错处理
+        this.transferOut = (goods) => {
+          this.transferOutFunc(goods, "");
+        };
+        this.transferOutFunc = (tree, parent) => {
+          for (let v in tree) {
+            if (typeof tree[v] === "object") {
+              let parentStr = parent ? parent + "-" + v : v;
+              this.transferOutFunc(tree[v], parentStr);
+            } else {
+              let name = parent ? parent + "-" + v : v;
+              let outNum = tree[v];
+              if (this.tableData.has(name)) {
+                let num = this.tableData.get(name);
+                if (num > outNum) {
+                  this.tableData.set(name, num - outNum);
+                } else if (num === outNum) {
+                  this.tableData.delete(name);
+                } else {
+                  console.warn("爆仓，库存不够");
+                }
+              } else {
+                console.warn("仓库没有该类货物");
+              }
+            }
+          }
+        };
+      }
+
+      // 单元测试
+      // 使用node自带的断言库 assert
+      // 全局安装 mocha 测试框架
+      // 执行单测，命令行输入：mocha 第二题.js
+      var assert = require("assert");
+
+      describe("测试 转入货物", function () {
+        it("测试 转入货物 goods", function () {
+          let depository = new Depository();
+          depository.transferIn(goods);
+          let mapData = new Map();
+          mapData.set("productA-a", 1);
+          mapData.set("productA-b", 2);
+          mapData.set("productA-c-c1", 1);
+          mapData.set("productA-c-c2", 3);
+          mapData.set("productA-c-c3-c4", 4);
+          mapData.set("productA-c-c3-c5-c6", 2);
+          mapData.set("productB-e", 6);
+          assert.deepStrictEqual(depository.tableData, mapData);
+        });
+      });
+
+      describe("测试 转入再转出货物", function () {
+        it("测试 转入和转出", function () {
+          let depository = new Depository();
+          depository.transferIn(goods);
+          let outGoods = {
+            productA: {
+              a: 4,
+              b: 1,
+              c: {
+                c2: 3,
+                c3: {
+                  c5: {
+                    c6: 1,
+                  },
+                },
+              },
+              c1: 2,
+            },
+          };
+          depository.transferOut(outGoods);
+          let mapData = new Map();
+          mapData.set("productA-a", 1);
+          mapData.set("productA-b", 1);
+          mapData.set("productA-c-c1", 1);
+          mapData.set("productA-c-c3-c4", 4);
+          mapData.set("productA-c-c3-c5-c6", 1);
+          mapData.set("productB-e", 6);
+          assert.deepStrictEqual(depository.tableData, mapData);
+        });
+      });
+
+      // ES6 class形式
+      class Depository {
+        constructor(options) {
+          this.tableData = new Map();
+        }
+        // 转入货物, 树结构转成 Map 表结构 ，方便存储和查询
+        transferIn(goods) {
+          this.tree2table(goods, "");
+          console.log(this.tableData);
+        }
+        tree2table = (tree, parent) => {
+          for (let v in tree) {
+            if (typeof tree[v] === "object") {
+              let parentStr = parent ? parent + "-" + v : v;
+              this.tree2table(tree[v], parentStr);
+            } else {
+              let name = parent ? parent + "-" + v : v;
+              this.tableData.set(name, tree[v]);
+            }
+          }
+        };
+        // 转出货物 map表查询，爆仓容错处理
+        transferOut(goods) {
+          this.transferOutFunc(goods, "");
+          console.log(this.tableData);
+        }
+        transferOutFunc(tree, parent) {
+          for (let v in tree) {
+            if (typeof tree[v] === "object") {
+              let parentStr = parent ? parent + "-" + v : v;
+              this.transferOutFunc(tree[v], parentStr);
+            } else {
+              let name = parent ? parent + "-" + v : v;
+              let outNum = tree[v];
+              if (this.tableData.has(name)) {
+                let num = this.tableData.get(name);
+                if (num > outNum) {
+                  this.tableData.set(name, num - outNum);
+                } else if (num === outNum) {
+                  this.tableData.delete(name);
+                } else {
+                  console.warn("爆仓，库存不够");
+                }
+              } else {
+                console.warn("仓库没有该类货物");
+              }
+            }
+          }
+        }
+      }
+    </script>
+  </body>
+</html>
