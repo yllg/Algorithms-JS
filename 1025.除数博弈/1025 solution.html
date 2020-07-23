@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法1：动态规划
+      var divisorGame1 = function (N) {
+        if (N == 1) {
+          return false;
+        }
+        if (N == 2) {
+          return true;
+        }
+        const dp = new Array(N + 1);
+        dp[1] = false;
+        dp[2] = true;
+        for (let i = 3; i <= N; i++) {
+          dp[i] = false;
+          for (let j = 1; j < i; j++) {
+            // 如果i-j是false，而i本身是true，直接返回true
+            if (i % j === 0 && !dp[i - j]) {
+              dp[i] = true;
+              break;
+            }
+          }
+        }
+        return dp[N];
+      };
+
+      // 方法2：找规律
+      var divisorGame2 = (N) => {
+        return N % 2 == 0;
+      }
+
+      // test
+      console.log(divisorGame1(2));
+      console.log(divisorGame2(2));
+      console.log(divisorGame1(3));
+      console.log(divisorGame2(3));
+    </script>
+  </body>
+</html>
