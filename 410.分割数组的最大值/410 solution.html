@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 解法1：动态规划
+      // 时间复杂度 O(n^2 X m) ,
+      // n 是数组的长度，m 是分成的非空的连续子数组的个数。总状态数为 O(n×m)，状态转移时间复杂度 O(n)，所以总时间复杂度为 O(n^2×m)。
+      // 空间复杂度：O(n×m)，为动态规划数组的开销。
+      var splitArray = function (nums, m) {
+        let n = nums.length;
+        let dp = new Array(n + 1).fill(0).map((x) => {
+          return new Array(m + 1).fill(0);
+        });
+        let prefixSum = [0];
+        nums.reduce((prex, next) => {
+          prefixSum.push(prex + next);
+          return prex + next;
+        }, 0);
+
+        for (let i = 1; i <= n; i++) {
+          dp[i][1] = prefixSum[i];
+        }
+
+        for (let j = 2; j <= m; j++) {
+          for (let i = 2; i <= n; i++) {
+            let temp = [];
+            for (let k = 1; k < i; k++) {
+              temp.push(Math.max(dp[k][j - 1], prefixSum[i] - prefixSum[k]));
+            }
+            dp[i][j] = Math.min(...temp);
+          }
+        }
+
+        return dp[n][m];
+      };
+
+      // 解法2：二分查找 + 贪心
+      // 时间复杂度：O(n×log(sum−maxn))
+      // 其中 sum 表示数组nums中所有元素的和，maxn表示数组所有元素的最大值。
+      // 每次二分查找时，需要对数组进行一次遍历，时间复杂度为 O(n)，因此总时间复杂度是 O(n×log(sum−maxn))。
+      // 空间复杂度：O(1)
+      var splitArray = function (nums, m) {
+        let left = 0,
+          right = 0;
+        let len = nums.length;
+        for (let i = 0; i < len; i++) {
+          right += nums[i];
+          if (left < nums[i]) {
+            left = nums[i];
+          }
+        }
+        function check(mid, m) {
+          let sum = 0;
+          let cnt = 1;
+          for (let i = 0; i < len; i++) {
+            if (sum + nums[i] > mid) {
+              cnt++;
+              sum = nums[i];
+            } else {
+              sum += nums[i];
+            }
+          }
+          return cnt <= m;
+        }
+        while (left < right) {
+          let mid = Math.floor((left + right) / 2);
+          if (check(mid, m)) {
+            right = mid;
+          } else {
+            left = mid + 1;
+          }
+        }
+        return left;
+      };
+    </script>
+  </body>
+</html>
