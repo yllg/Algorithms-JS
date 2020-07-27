@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 解法1：双指针
+      // 时间复杂度 O(n+m) 空间复杂度 O(1)
+      var isSubsequence = function (s, t) {
+        let i = 0,
+          j = 0,
+          n = s.length,
+          m = t.length;
+        if (s.length == 0) return true;
+        while (i < n && j < m) {
+          if (s[i] == t[j]) {
+            i++;
+          }
+          j++;
+        }
+        return i == n;
+      };
+      // 解法2：递归
+      const isSubsequence = (subStr, str) => {
+        if (subStr.length == 0) return true;
+        let i = 0;
+        while (i < str.length) {
+          if (subStr[0] == str[i]) {
+            const rest_sub = subStr.substring(1); // 剩余subStr
+            const rest_str = str.substring(i + 1); // 剩余str
+            return isSubsequence(rest_sub, rest_str); // 递归判断
+          }
+          i++;
+        }
+        return false;
+      };
+
+      // TODO:解法3：动态规划
+    </script>
+  </body>
+</html>
