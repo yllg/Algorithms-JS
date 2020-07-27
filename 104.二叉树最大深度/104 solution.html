@@ -1,54 +1,75 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <title>Document</title>
-</head>
-<body>
-<script>
-// Source : https://leetcode.com/problems/maximum-depth-of-binary-tree/
-// Author : 悬笔e绝
-// Date   : 2019-03-28
+  </head>
+  <body>
+    <script>
+      // Source : https://leetcode.com/problems/maximum-depth-of-binary-tree/
+      // Author : 悬笔e绝
+      // Date   : 2019-03-28
 
-// Definition for a binary tree node.
-function TreeNode(val) {
-    this.val = val;
-    this.left = this.right = null;
-}
-/**
- * @param {TreeNode} root
- * @return {number}
- */
-var maxn;
+      // Definition for a binary tree node.
+      function TreeNode(val) {
+        this.val = val;
+        this.left = this.right = null;
+      }
+      /**
+       * @param {TreeNode} root
+       * @return {number}
+       */
 
-function dfs(root, depth) {
-  if (!root) {
-    maxn = Math.max(maxn, depth);
-    return;
-  }
-  dfs(root.left, depth + 1);
-  dfs(root.right, depth + 1);
-}
+      // 方法1：dfs 深度优先搜索
+      var maxn;
 
-var maxDepth = function(root) {
-  maxn = -1;
-  dfs(root, 0);
-  return maxn;
-};
+      function dfs(root, depth) {
+        if (!root) {
+          maxn = Math.max(maxn, depth);
+          return;
+        }
+        dfs(root.left, depth + 1);
+        dfs(root.right, depth + 1);
+      }
 
-// 测试
-var tree_node_1_1 = new TreeNode(9);
-var tree_node_1_2 = new TreeNode(20);
-tree_node_1_2.left = new TreeNode(15);
-tree_node_1_2.right = new TreeNode(7);
-var tree_node_1 = new TreeNode(3);
-tree_node_1.left = tree_node_1_1;
-tree_node_1.right = tree_node_1_2;
-console.log(maxDepth(tree_node_1));
-// 3
+      var maxDepth = function (root) {
+        maxn = -1;
+        dfs(root, 0);
+        return maxn;
+      };
 
-</script>
-</body>
+      // 方法2： 广度优先搜索
+      var maxDepth2 = function (root, level = 0) {
+        if (root === null) return 0;
+        let queue = [root];
+
+        while (queue.length > 0) {
+          let len = queue.length;
+
+          while (len--) {
+            //把当前level的queue队列清空，同时把节点左右子节点push
+            let first = queue.shift(); // 左出
+            if (first.left) queue.push(first.left); // 左子节点入队列
+            if (first.right) queue.push(first.right); //右子节点入队列
+          }
+          level++;
+        }
+        return level;
+      };
+
+      // 测试
+      var tree_node_1_1 = new TreeNode(9);
+      var tree_node_1_2 = new TreeNode(20);
+      tree_node_1_2.left = new TreeNode(15);
+      tree_node_1_2.right = new TreeNode(7);
+      var tree_node_1 = new TreeNode(3);
+      tree_node_1.left = tree_node_1_1;
+      tree_node_1.right = tree_node_1_2;
+      console.log(maxDepth(tree_node_1));
+      console.log(maxDepth2(tree_node_1));
+      // 3
+    </script>
+  </body>
 </html>
