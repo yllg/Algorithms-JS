@@ -23,6 +23,8 @@
        */
 
       // 方法1：dfs 深度优先搜索
+      // 时间复杂度 O(n)
+      // 空间复杂度 O(height),取决于树的高度
       var maxn;
 
       function dfs(root, depth) {
@@ -41,6 +43,8 @@
       };
 
       // 方法2： 广度优先搜索
+      // 时间复杂度 O(n)
+      // 空间复杂度 O(n)
       var maxDepth2 = function (root, level = 0) {
         if (root === null) return 0;
         let queue = [root];
