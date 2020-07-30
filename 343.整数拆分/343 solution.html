@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 解法1：普通递归 超出时间限制
+      const integerBreak = (n) => {
+        let res = 0;
+        for (let i = 1; i <= n - 1; i++) {
+          res = Math.max(res, i * (n - i), i * integerBreak(n - i));
+        }
+        return res;
+      };
+
+      // 解法2：记忆化递归
+      const integerBreak = (n) => {
+        const memo = new Array(n + 1);
+        const dfs = (n) => {
+          if (memo[n]) return memo[n];
+          let res = 0;
+          for (let i = 1; i <= n - 1; i++) {
+            res = Math.max(res, i * (n - i), i * dfs(n - i));
+          }
+          return (memo[n] = res);
+        };
+        return dfs(n);
+      };
+
+      // 解法3：动态规划
+      // 时间复杂度 O(n^2) 空间复杂度 O(n)
+      const integerBreak = (n) => {
+        const dp = new Array(n + 1);
+        dp[1] = 1;
+        dp[2] = 1;
+        for (let i = 3; i <= n; i++) {
+          dp[i] = 0;
+          // 对于数字 i，它可以分为两份：j 和 i-j，j 的范围是 1 到 i-j
+          for (let j = 1; j <= i - j; j++) {
+            // 对于 i-j 这部分可以拆或不拆，不拆就是 i-j，拆就是 dp[i-j]
+            dp[i] = Math.max(dp[i], j * (i - j), j * dp[i - j]);
+          }
+        }
+        return dp[n];
+      };
+
+      // 解法4：优化的动态规划
+      // 时间复杂度 O(n) 空间复杂度 O(n)
+      // 2： 1 * 1
+      // 3： 2 * 1
+      // 4： 2 * 2
+      // 5： 2 * 3
+      // 6： 3 * 3
+      // 7： 2 * 2 * 3
+      // 8： 2 * 3 * 3
+      // ...
+      // 实际上从第7位开始，很容看出来动态转移方程是 (n - 3) * 3
+      var integerBreak = function (n) {
+        const dp = [];
+        dp[2] = 1;
+        dp[3] = 2;
+        dp[4] = 4;
+        dp[5] = 6;
+        dp[6] = 9;
+        for (let i = 7; i <= n; i++) {
+          dp[i] = dp[i - 3] * 3;
+        }
+        return dp[n];
+      };
+
+      // 解法5：数学
+      // 时间复杂度 O(1) 空间复杂度 O(1)
+      function integerBreak(n) {
+        if (n < 4) return n - 1;
+        const power = Math.floor(n / 3);
+        const remainder = n % 3;
+        switch (remainder) {
+          case 0:
+            return 3 ** power;
+          case 1:
+            return 3 ** (power - 1) * 4;
+          default:
+            return 3 ** power * 2;
+        }
+      }
+    </script>
+  </body>
+</html>
