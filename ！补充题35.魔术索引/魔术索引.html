@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法1：一次遍历，时间复杂度O(n)
+      const findMagicIndex = (nums) => {
+        for (let i = 0; i < nums.length; i++) {
+          if (nums[i] == i) return i;
+        }
+        return -1;
+      };
+
+      // 方法2：用不了二分查找，在他基础上完善
+      // 如果没有重复元素是可以用二分查找 O(logn)，这里不行
+      // 在它基础上进行分治
+      // 先找 mid 左侧，优先返回找到的魔术索引，没找到再看 mid 是不是魔术索引，是就返回它，不是才找右侧
+      // 时间复杂度最坏 O(n)
+      const findMagicIndex = (nums) => {
+        const find = (lo, hi) => {
+          if (lo > hi) return -1;
+          const mid = (lo + hi) >>> 1;
+          const magicIndex = find(lo, mid - 1);
+          if (magicIndex > -1) {
+            return magicIndex;
+          } else if (nums[mid] == mid) {
+            return mid;
+          } else {
+            return find(mid + 1, hi);
+          }
+        };
+        return find(0, nums.length - 1);
+      };
+    </script>
+  </body>
+</html>
