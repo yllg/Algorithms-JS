@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 输入一个数字，找到对应的字母;
+      // 如输入1 返回a; 输入26返回z; 输入27返回aa;输入28返回ab; 输入53返回aaa;
+      function num2letter(num) {
+        if (num < 1) {
+          console.warn("输入有误");
+          return;
+        }
+        let temNum = num + 96;
+        let str = "";
+        if (temNum >= 97 && temNum <= 122) {
+          str = String.fromCharCode(temNum);
+        } else {
+          let divideNum = parseInt(num / 26);
+          let remain = num % 26;
+          for (let index = 0; index < divideNum; index++) {
+            str += "a";
+          }
+          str += String.fromCharCode(remain + 96);
+        }
+        return str;
+      }
+      console.log(num2letter(0)); 
+      console.log(num2letter(1)); // 'a'
+      console.log(num2letter(26)); // 'z'
+      console.log(num2letter(27)); // 'aa'
+      console.log(num2letter(28)); // 'ab'
+      console.log(num2letter(53)); // 'aaa'
+    </script>
+  </body>
+</html>
