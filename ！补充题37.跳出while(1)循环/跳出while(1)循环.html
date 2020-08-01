@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 几种方法
+      // 1.直接return
+      // 2.抛出异常跳出
+      try {
+        while (1) {
+          console.log(Math.random());
+          throw new Error("跳出循环");
+        }
+      } catch (error) {
+        console.log("跳出循环");
+      }
+
+      // 3.放到for循环中 continue 模拟 goto语法
+      out: for (let i = 0; i < 1; i++) {
+        while (1) {
+          console.log(Math.random());
+          continue out;
+        }
+      }
+      console.log('下面的代码');
+    </script>
+  </body>
+</html>
