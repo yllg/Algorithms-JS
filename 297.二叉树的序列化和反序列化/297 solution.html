@@ -19,6 +19,7 @@
        * @param {TreeNode} root
        * @return {string}
        */
+      //序列化
       // 深度优先遍历的 前序遍历
       const serialize = (root) => {
         if (root == null) return "X,"; // 遇到null节点
@@ -27,6 +28,7 @@
         return root.val + "," + leftSerialized + rightSerialized; // 根|左|右
       };
 
+      // 反序列化
       const buildTree = (list) => {
         // dfs函数
         const nodeVal = list.shift(); // 当前考察的节点
