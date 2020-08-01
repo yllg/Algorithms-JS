@@ -20,7 +20,8 @@
        * @param {number[]} nums
        * @return {number[][]}
        */
-      var threeSum = function (nums) {
+      // 优化：第二个参数是目标值，可动态设置
+      var threeSum = function (nums, target) {
         let ans = [];
         const len = nums.length;
         if (nums == null || len < 3) return ans;
@@ -32,18 +33,23 @@
           let R = len - 1;
           while (L < R) {
             const sum = nums[i] + nums[L] + nums[R];
-            if (sum == 0) {
+            if (sum == target) {
               ans.push([nums[i], nums[L], nums[R]]);
               while (L < R && nums[L] == nums[L + 1]) L++; // 去重
               while (L < R && nums[R] == nums[R - 1]) R--; // 去重
               L++;
               R--;
-            } else if (sum < 0) L++;
-            else if (sum > 0) R--;
+            } else if (sum < target) L++;
+            else if (sum > target) R--;
           }
         }
         return ans;
       };
+      // test
+      let nums = [-1, 0, 1, 2, -1, -4];
+      console.log(threeSum(nums, 0));
+      console.log(threeSum(nums, 1));
+      console.log(threeSum(nums, 2));
     </script>
   </body>
 </html>
