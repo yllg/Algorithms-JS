@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+    <style>
+      .outer,
+      .left,
+      .middle,
+      .right {
+        height: 100px;
+        margin-bottom: 5px;
+      }
+      .left {
+        background: tomato;
+      }
+      .middle {
+        background: lightgreen;
+      }
+      .right {
+        background: gold;
+      }
+      /* 左右分别设置绝对定位 中间设置外边距 */
+      .outer1 {
+        position: relative;
+      }
+      .outer1 .left {
+        position: absolute;
+        width: 100px;
+      }
+      .outer1 .middle {
+        margin: 0 200px 0 100px;
+      }
+      .outer1 .right {
+        position: absolute;
+        width: 200px;
+        top: 0;
+        right: 0;
+      }
+      /* flex 布局 */
+      .outer2 {
+        display: flex;
+      }
+      .outer2 .left {
+        flex: 0 0 100px;
+      }
+      .outer2 .middle {
+        flex: auto;
+      }
+      .outer2 .right {
+        flex: 0 0 200px;
+      }
+      /* 浮动布局 但是 html 中 middle要放到最后 */
+      .outer3 .left {
+        float: left;
+        width: 100px;
+      }
+      .outer3 .right {
+        float: right;
+        width: 200px;
+      }
+      .outer3 .middle {
+        margin: 0 200px 0 100px;
+      }
+    </style>
+  </head>
+  <!-- 三栏布局 左右固定 中间自适应 -->
+  <body>
+    <div class="outer outer1">
+      <div class="left">1-left</div>
+      <div class="middle">1-middle</div>
+      <div class="right">1-right</div>
+    </div>
+    <div class="outer outer2">
+      <div class="left">2-left</div>
+      <div class="middle">2-middle</div>
+      <div class="right">2-right</div>
+    </div>
+    <div class="outer outer3">
+      <div class="left">3-left</div>
+      <div class="right">3-right</div>
+      <div class="middle">3-middle</div>
+    </div>
+  </body>
+</html>
