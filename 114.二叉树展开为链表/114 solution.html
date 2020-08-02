@@ -1,57 +1,81 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <title>Document</title>
-</head>
-<body>
-<script>
-// Source : https://leetcode.com/problems/flatten-binary-tree-to-linked-list/
-// Author : 悬笔e绝
-// Date   : 2019-05-12
+  </head>
+  <body>
+    <script>
+      // Source : https://leetcode.com/problems/flatten-binary-tree-to-linked-list/
+      // Author : 悬笔e绝
+      // Date   : 2019-05-12
 
-//  Definition for a binary tree node.
- function TreeNode(val) {
-     this.val = val;
-     this.left = this.right = null;
- }
-/**
- * @param {TreeNode} root
- * @return {void} Do not return anything, modify root in-place instead.
- */
+      //  Definition for a binary tree node.
+      function TreeNode(val) {
+        this.val = val;
+        this.left = this.right = null;
+      }
+      /**
+       * @param {TreeNode} root
+       * @return {void} Do not return anything, modify root in-place instead.
+       */
 
- var arr = [];
- var flatten = function(root) {
-  if (!root)
-    return;
-  dfs(root, arr);
-  for (var i = 0, len = arr.length; i < len - 1; i++)
-    arr[i].right = arr[i + 1];
-  return arr;
-};
+      // 解法1：递归实现前序遍历
+      // 时间复杂度 O(n), 空间复杂度 O(n)
+      var flatten1 = function (root) {
+        var arr = [];
+        if (!root) return;
+        dfs(root, arr);
+        for (var i = 0, len = arr.length; i < len - 1; i++)
+          arr[i].right = arr[i + 1];
+        return arr;
+      };
+      function dfs(node, arr) {
+        var left = node.left;
+        var right = node.right;
+        node.left = node.right = null;
+        arr.push(node);
+        left && dfs(left, arr);
+        right && dfs(right, arr);
+      }
 
-function dfs(node) {
-  var left = node.left;
-  var right = node.right;
-  node.left = node.right = null;
-  arr.push(node);
-  left && dfs(left);
-  right && dfs(right);
-}
+      // 解法2：寻找前驱节点
+      // 如果一个节点的左子节点为空，则该节点不需要进行展开操作。
+      // 如果一个节点的左子节点不为空，则该节点的左子树中的最后一个节点被访问之后，该节点的右子节点被访问。
+      // 该节点的左子树中最后一个被访问的节点是左子树中的最右边的节点，也是该节点的前驱节点。
+      // 因此，问题转化成寻找当前节点的前驱节点。
+      // 时间复杂度 O(n), 空间复杂度 O(1)
+      var flatten2 = function (root) {
+        let curr = root;
+        while (curr != null) {
+            if (curr.left != null) {
+                let next = curr.left;
+                let predecessor = next;
+                while (predecessor.right != null) {
+                    predecessor = predecessor.right;
+                }
+                predecessor.right = curr.right;
+                curr.left = null;
+                curr.right = next;
+            }
+            curr = curr.right;
+        }
+        return root;
+      };
 
-// 测试
-var tree_node_2_1 = new TreeNode(2);
-tree_node_2_1.left = new TreeNode(3);
-tree_node_2_1.right = new TreeNode(4);
-var tree_node_2_2 = new TreeNode(5);
-tree_node_2_2.right = new TreeNode(6);
-var tree_node_1 = new TreeNode(1);
-tree_node_1.left = tree_node_2_1;
-tree_node_1.right = tree_node_2_2;
-console.log(flatten(tree_node_1, 22));
-
-</script>
-</body>
+      // 测试
+      var tree_node_2_1 = new TreeNode(2);
+      tree_node_2_1.left = new TreeNode(3);
+      tree_node_2_1.right = new TreeNode(4);
+      var tree_node_2_2 = new TreeNode(5);
+      tree_node_2_2.right = new TreeNode(6);
+      var tree_node_1 = new TreeNode(1);
+      tree_node_1.left = tree_node_2_1;
+      tree_node_1.right = tree_node_2_2;
+      // console.log(flatten1(tree_node_1));
+      console.log(flatten2(tree_node_1));
+    </script>
+  </body>
 </html>
