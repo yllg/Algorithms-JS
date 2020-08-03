@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      function randomPuke(args) {
+        let Pukepai = new Array(52).fill('');
+        let typeArr = ["黑", "红", "梅", "方"];
+        let index = 0;
+        //将52张牌放入数组中
+        for (let s of typeArr) {
+          for (let i = 1; i < 14; i++) {
+            Pukepai[index++] = s + i;
+          }
+        }
+        //洗牌，将产生随机数的索引与遍历索引的数字做交换，进行洗牌
+        for (let i = 0; i < 52; i++) {
+          let ranindex = Math.floor(Math.random() * 52);
+          let str = Pukepai[i];
+          Pukepai[i] = Pukepai[ranindex];
+          Pukepai[ranindex] = str;
+        }
+        //将扑克牌分给4人，每人为数组中的一行
+        let result = Array.from(Array(4), () => Array(13).fill(''));
+        for (let i = 0; i < 52; i++) {
+            let row = parseInt(i/13);
+            let col = i % 13;
+          result[row][col] = Pukepai[i];
+        }
+        //分别输出每个人的牌，用******隔开
+        for (let row of result) {
+          console.log("***********");
+          for (let col of row) {
+            console.log(col);
+          }
+        }
+      }
+      // test
+      randomPuke();
+    </script>
+  </body>
+</html>
