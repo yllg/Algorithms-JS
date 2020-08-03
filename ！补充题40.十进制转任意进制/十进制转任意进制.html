@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法1：使用 toString 函数
+      function baseConverter1(decNumber, base) {
+        return decNumber.toString(base);
+      }
+
+      // 方法2：自己实现
+      class Stack {
+        constructor() {
+          this.count = 0;
+          this.items = {};
+        }
+        push(element) {
+          this.items[this.count] = element;
+          this.count++;
+        }
+        pop() {
+          if (this.isEmpty()) {
+            return undefined;
+          }
+          this.count--;
+          const result = this.items[this.count];
+          delete this.items[this.count];
+          return result;
+        }
+        isEmpty() {
+          return this.count === 0;
+        }
+      }
+      // decNumber 为传入的要转换的十进制数字
+      // base: 要转成的进制类型
+      function baseConverter2(decNumber, base) {
+        // 创建 Stack 类
+        const remStack = new Stack();
+        // 定义一个进制位数，这里设置了 36 位进制，可自定义位数
+        const digits = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        let number = decNumber;
+        let rem;
+        let baseString = "";
+        if (!(base >= 2 && base <= 36)) {
+          return "";
+        }
+        while (number > 0) {
+          rem = Math.floor(number % base);
+          remStack.push(rem);
+          number = Math.floor(number / base);
+        }
+        while (!remStack.isEmpty()) {
+          // 对栈中的数字做转化
+          baseString += digits[remStack.pop()];
+        }
+        return baseString;
+      }
+
+      // test
+      console.log(baseConverter1(1314, 2)); //10100100010
+      console.log(baseConverter2(1314, 2)); //10100100010
+      console.log(baseConverter1(1314, 8)); //2442
+      console.log(baseConverter2(1314, 8)); //2442
+      console.log(baseConverter1(1314, 16)); //522
+      console.log(baseConverter2(1314, 16)); //522
+      console.log(baseConverter1(1314, 20)); //35E
+      console.log(baseConverter2(1314, 20)); //35E
+      console.log(baseConverter1(1314, 30)); //1DO
+      console.log(baseConverter2(1314, 30)); //1DO
+    </script>
+  </body>
+</html>
