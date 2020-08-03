@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 大数相加，两个很大的数字字符串相加
+
+      // 解法1：普通解法
+      // 时间复杂度 O(max(str1.length, str2.length))
+      // 空间复杂度 O(1)
+      var addStrings1 = function (num1, num2) {
+        let a = num1.length,
+          b = num2.length,
+          result = "",
+          tmp = 0;
+        while (a || b) {
+          a ? (tmp += +num1[--a]) : "";
+          b ? (tmp += +num2[--b]) : "";
+
+          result = (tmp % 10) + result;
+          if (tmp > 9) tmp = 1;
+          else tmp = 0;
+        }
+        if (tmp) result = 1 + result;
+        return result;
+      };
+
+      // 解法2： ES10的 BigInt
+      var addStrings2 = (num1, num2) => {
+        // 用字符串构造 BigInt 进行数学计算，最后转成string
+        return String(BigInt(num1) + BigInt(num2));
+      };
+
+      // test
+      let str1 = "99";
+      let str2 = "111111111111111111111111111111111111101";
+      console.log(addStrings1(str1, str2));
+      console.log(addStrings2(str1, str2));
+    </script>
+  </body>
+</html>
