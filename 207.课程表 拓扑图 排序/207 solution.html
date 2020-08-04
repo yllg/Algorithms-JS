@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    // Source : https://leetcode.com/problems/course-schedule/
+    // Author : 悬笔e绝
+    // Date   : 2019-11-05
+
+    /**
+     * @param {number} numCourses
+     * @param {number[][]} prerequisites
+     * @return {boolean}
+     */
+
+     // 方法1：常规法
+    //首先可以学习的课程是没有先决条件的课程！
+    //定义一个数组indegree，indegree [i]意味着课程i的前提条件数，因此，当indegree [i]等于0时，就可以学习课程i。
+    var canFinish1 = function (numCourses, prerequisites) {
+      var map = []; // 邻接表
+      var indegree = []; // 入度
+      for (var i = 0; i < numCourses; i++)
+        map[i] = [], indegree[i] = 0;
+      prerequisites.forEach(function (item) {
+        var from = item[1];
+        var to = item[0];
+        map[from].push(to);
+        indegree[to]++;
+      });
+      var q = [];
+      var finishNum = 0;
+      for (var i = 0; i < numCourses; i++) {
+        // 入度为 0，没有依赖
+        if (!indegree[i]) {
+          q.push(i);
+          finishNum++;
+        }
+      }
+      while (q.length) {
+        var from = q.shift();
+        map[from].forEach(function (to) {
+          if (--indegree[to] === 0) {
+            q.push(to);
+            finishNum++;
+          }
+        });
+      }
+      return finishNum === numCourses;
+    };
+
+    // 方法2： 基于拓扑图的 BFS 广度优先搜索
+    // 时间复杂度 O(n+m), 空间复杂度 O(n+m) n 为课程数，m 为先修课程的要求数
+    const canFinish2 = (numCourses, prerequisites) => {
+      const inDegree = new Array(numCourses).fill(0); // 入度数组
+      const map = {}; // 邻接表
+      for (let i = 0; i < prerequisites.length; i++) {
+        inDegree[prerequisites[i][0]]++; // 求课的初始入度值 
+        if (map[prerequisites[i][1]]) { // 当前课已经存在于邻接表 
+          map[prerequisites[i][1]].push(prerequisites[i][0]); // 添加依赖它的后续课 
+        } else { // 当前课不存在于邻接表 
+          map[prerequisites[i][1]] = [prerequisites[i][0]];
+        }
+      }
+      const queue = [];
+      for (let i = 0; i <
+        inDegree.length; i++) { // 所有入度为0的课入列 
+        if (inDegree[i] == 0) queue.push(i);
+      }
+      let count = 0;
+      while (queue.length) {
+        const selected = queue.shift(); // 当前选的课，出列 
+        count++; // 选课数+1 
+        const toEnQueue = map[selected]; // 获取这门课对应的后续课 
+        if (toEnQueue && toEnQueue.length) { // 确实有后续课 
+          for (let i = 0; i < toEnQueue.length; i++) {
+            inDegree[toEnQueue[i]]--; // 依赖它的后续课的入度-1 
+            if (inDegree[toEnQueue[i]] == 0) { // 如果因此减为0，入列 
+              queue.push(toEnQueue[i]);
+            }
+          }
+        }
+      }
+      return count == numCourses; // 选了的课等于总课数，true，否则false 
+    };
+
+    // TODO:解法3：深度优先搜索 
+
+    // test
+    var numCourses = 2;
+    var prerequisites = [[1,0]];
+    console.log(canFinish1(numCourses, prerequisites));
+    console.log(canFinish2(numCourses, prerequisites));
+    var numCourses = 2;
+    var prerequisites = [[1,0],[0,1]];
+    console.log(canFinish1(numCourses, prerequisites));
+    console.log(canFinish2(numCourses, prerequisites));
+  </script>
+</body>
+
+</html>
