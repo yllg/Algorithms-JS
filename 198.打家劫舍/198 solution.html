@@ -1,48 +1,93 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
 </head>
+
 <body>
-<script>
-// Source : https://leetcode.com/problems/house-robber/
-// Author : 悬笔e绝
-// Date   : 2019-10-09
+  <script>
+    // Source : https://leetcode.com/problems/house-robber/
+    // Author : 悬笔e绝
+    // Date   : 2019-10-09
 
-/**
- * @param {number[]} nums
- * @return {number}
- */
-var rob = function(nums) {
-  var len = nums.length;
-  if (!len) return 0;
+    /**
+     * @param {number[]} nums
+     * @return {number}
+     */
 
-  var dp = [];
-  dp[0] = [];
-  // 两种情况，是否从第一间开始偷，然后间隔一个一直下去相加
-  dp[0][0] = 0, // not steal 1st room
-  dp[0][1] = nums[0]; // steal 1st room
+    // 解法1 动态规划 
+    var rob1 = function (nums) {
+      var len = nums.length;
+      if (!len) return 0;
+      if (nums.length == 1) {
+        return nums[0];
+      }
+      var dp = [];
+      dp[0] = [];
+      // 两种情况，是否从第一间开始偷，然后间隔一个一直下去相加
+      dp[0][0] = 0, // not steal 1st room
+        dp[0][1] = nums[0]; // steal 1st room
+      for (var i = 1; i < len; i++) {
+        dp[i] = [];
+        dp[i][0] = Math.max(dp[i - 1][0], dp[i - 1][1]);
+        dp[i][1] = dp[i - 1][0] + nums[i];
+      }
+      return Math.max(dp[len - 1][0], dp[len - 1][1]);
+    };
 
-  for (var i = 1; i < len; i++) {
-    dp[i] = [];
+    // 解法2 动归 降维
+    // 时间复杂度 O(n) 空间复杂度 O(n)
+    var rob2 = function (nums) {
+      const len = nums.length;
+      if (len == 0)
+        return 0;
+      if (nums.length == 1) {
+        return nums[0];
+      }
+      const dp = new Array(len + 1);
+      dp[0] = 0;
+      dp[1] = nums[0];
+      for (let i = 2; i <= len; i++) {
+        dp[i] = Math.max(dp[i - 1], dp[i - 2] + nums[i - 1]);
+      }
+      return dp[len];
+    };
 
-    dp[i][0] = Math.max(dp[i - 1][0], dp[i - 1][1]);
-    dp[i][1] = dp[i - 1][0] + nums[i];
-  }
+    // 解法3 动归 + 滚动数组
+    // 使用滚动数组，在每个时刻只需要存储前两间房屋的最高总金额
+    // 时间复杂度 O(n) 空间复杂度 O(1)
+    var rob3 = function (nums) {
+      const len = nums.length;
+      if (len == 0)
+        return 0;
+      if (nums.length == 1) {
+        return nums[0];
+      }
+      let first = nums[0],
+        second = Math.max(nums[0], nums[1]);
+      for (let i = 2; i < len; i++) {
+        let temp = second;
+        second = Math.max(first + nums[i], second);
+        first = temp;
+      }
+      return second;
+    };
 
-  return Math.max(dp[len - 1][0], dp[len - 1][1]);
-};
+    // 测试
+    var nums1 = [1, 2, 3, 1];
+    console.log(rob1(nums1));
+    console.log(rob2(nums1));
+    console.log(rob3(nums1));
 
-// 测试
-var nums1 = [1,2,3,1];
-console.log(rob(nums1));
-
-var nums2 = [2,7,9,3,1];
-console.log(rob(nums2));
-
-</script>
+    var nums2 = [2, 7, 9, 3, 1];
+    console.log(rob1(nums2));
+    console.log(rob2(nums2));
+    console.log(rob3(nums2));
+  </script>
 </body>
+
 </html>
