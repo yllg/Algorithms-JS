@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 解法1： 动态规划
+        // 对二叉树做了一次后序遍历，时间复杂度是 O(n)；
+        // 由于递归会使用到栈空间，空间代价是 O(n)，哈希映射的空间代价也是 O(n)，故空间复杂度也是 O(n)
+        var rob1 = function (root) {
+            const f = new Map();
+            const g = new Map();
+            const dfs = (node) => {
+                if (!node) {
+                    return;
+                }
+                dfs(node.left);
+                dfs(node.right);
+                f.set(node, node.val + (g.get(node.left) || 0) + (g.get(node.right) || 0));
+                g.set(node, Math.max(f.get(node.left) || 0, g.get(node.left) || 0) + Math.max(f.get(node
+                    .right) || 0, g.get(node.right) || 0));
+            }
+            dfs(root);
+            return Math.max(f.get(root) || 0, g.get(root) || 0);
+        };
+
+        // 解法2： 动归 + 空间优化
+        // 时间复杂度是 O(n)
+        // 空间复杂度：O(n)。虽然优化过的版本省去了哈希映射的空间，但是栈空间的使用代价依旧是 O(n)，故空间复杂度不变。
+        var rob2 = function (root) {
+            const dfs = (node) => {
+                if (!node) {
+                    return [0, 0];
+                }
+                const l = dfs(node.left);
+                const r = dfs(node.right);
+                const selected = node.val + l[1] + r[1];
+                const notSelected = Math.max(l[0], l[1]) + Math.max(r[0], r[1]);
+                return [selected, notSelected];
+            }
+            const rootStatus = dfs(root);
+            return Math.max(rootStatus[0], rootStatus[1]);
+        };
+
+    </script>
+</body>
+
+</html>
