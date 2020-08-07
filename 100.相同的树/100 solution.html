@@ -1,81 +1,117 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
 </head>
+
 <body>
-<script>
-// Source : https://leetcode.com/problems/same-tree/
-// Author : 悬笔e绝
-// Date   : 2019-03-12
+  <script>
+    // Source : https://leetcode.com/problems/same-tree/
+    // Author : 悬笔e绝
+    // Date   : 2019-03-12
 
 
-// Definition for a binary tree node.
-function TreeNode(val) {
-    this.val = val;
-    this.left = this.right = null;
-}
+    // Definition for a binary tree node.
+    function TreeNode(val) {
+      this.val = val;
+      this.left = this.right = null;
+    }
 
-/**
- * @param {TreeNode} p
- * @param {TreeNode} q
- * @return {boolean}
- */
+    /**
+     * @param {TreeNode} p
+     * @param {TreeNode} q
+     * @return {boolean}
+     */
 
-var f;
+    // 解法1： 常规的 dfs 深度优先搜索
+    var isSameTree1 = function (p, q) {
+      // if a is different from b, return true
+      function check(a, b) {
+        if (a === null && b === null) return false;
+        if (a === null && b !== null) return true;
+        if (a !== null && b === null) return true;
+        if (a.val === b.val)
+          return false;
+        return true;
+      }
 
-var isSameTree = function(p, q) {
-  f = true;
-  dfs(p, q);
-  return f;
-};
+      function dfs(a, b) {
+        if (!f)
+          return;
+        if (check(a, b)) {
+          f = false;
+          return;
+        }
+        if (a && b && a.left !== undefined && b.left !== undefined)
+          dfs(a.left, b.left);
+        if (a && b && a.right !== undefined && b.right !== undefined)
+          dfs(a.right, b.right);
+      }
+      let f = true;
+      dfs(p, q);
+      return f;
+    };
 
-function dfs(a, b) {
-  if (!f)
-    return;
-  if (check(a, b)) {
-    f = false;
-    return;
-  }
-  if (a && b && a.left !== undefined && b.left !== undefined)
-    dfs(a.left, b.left);
-  if (a && b && a.right !== undefined && b.right !== undefined)
-    dfs(a.right, b.right);
-}
+    // 方法2：优化 dfs
+    var isSameTree2 = function (p, q) {
+      if (p == null && q == null) return true;
+      if (p == null || q == null) return false;
+      return p.val == q.val && isSameTree2(p.left, q.left) && isSameTree2(p.right, q.right);
+    };
 
-// if a is different from b, return true
-function check(a, b) {
-  if (a === null && b === null) return false;
-  if (a === null && b !== null) return true;
-  if (a !== null && b === null) return true;
-  if (a.val === b.val) 
-    return false;
-  return true;
-}
+    // 方法3：迭代 bfs 广度优先搜索
+    const isSameTree3 = (p, q) => {
+      const queue = [{
+        p,
+        q
+      }];
+      while (queue.length) {
+        const cur = queue.shift();
+        if (cur.p == null && cur.q == null) continue;
+        if (cur.p == null || cur.q == null) return false;
+        if (cur.p.val != cur.q.val) return false;
+        queue.push({
+          p: cur.p.left,
+          q: cur.q.left
+        }, {
+          p: cur.p.right,
+          q: cur.q.right
+        });
+      }
+      return true;
+    };
 
-// 测试
-var tree_node_1 = new TreeNode(1);
-tree_node_1.left = 2;
-var tree_node_2 = new TreeNode(1);
-tree_node_2.right = 2;
-console.log(isSameTree(tree_node_1, tree_node_2));
 
-var tree_node_3 = new TreeNode(1);
-tree_node_3.left = 2;
-tree_node_3.rigtht = 1;
-var tree_node_4 = new TreeNode(1);
-tree_node_4.left = 1;
-tree_node_4.right = 2;
-console.log(isSameTree(tree_node_3, tree_node_4));
+    // 测试
+    var tree_node_1 = new TreeNode(1);
+    tree_node_1.left = 2;
+    var tree_node_2 = new TreeNode(1);
+    tree_node_2.right = 2;
+    console.log(isSameTree1(tree_node_1, tree_node_2));
+    console.log(isSameTree2(tree_node_1, tree_node_2));
+    console.log(isSameTree3(tree_node_1, tree_node_2));
 
-var tree_node_5 = new TreeNode(1);
-tree_node_5.left = 1;
-tree_node_5.right = 2;
-console.log(isSameTree(tree_node_5, tree_node_5));
+    var tree_node_3 = new TreeNode(1);
+    tree_node_3.left = 2;
+    tree_node_3.rigtht = 1;
+    var tree_node_4 = new TreeNode(1);
+    tree_node_4.left = 1;
+    tree_node_4.right = 2;
+    console.log(isSameTree1(tree_node_3, tree_node_4));
+    console.log(isSameTree2(tree_node_3, tree_node_4));
+    console.log(isSameTree3(tree_node_3, tree_node_4));
 
-</script>
+    var tree_node_5 = new TreeNode(1);
+    tree_node_5.left = 1;
+    tree_node_5.right = 2;
+    console.log(isSameTree1(tree_node_5, tree_node_5));
+    console.log(isSameTree2(tree_node_5, tree_node_5));
+    console.log(isSameTree3(tree_node_5, tree_node_5));
+  </script>
 </body>
+
 </html>
