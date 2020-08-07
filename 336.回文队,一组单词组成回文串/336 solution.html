@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+
+</body>
+<script>
+    // 方法1：暴力穷举
+    // 时间复杂度是O((n^2)*L) 单词个数为n，单词平均长度为L
+    const isPalindrome1 = (str) => {
+        let l = 0,
+            r = str.length - 1;
+        while (l < r) {
+            if (str[l] != str[r]) return false;
+            l++;
+            r--;
+        }
+        return true;
+    };
+    const palindromePairs1 = (words) => {
+        const res = [];
+        for (let i = 0; i < words.length; i++) {
+            for (let j = i + 1; j < words.length; j++) {
+                if (isPalindrome1(words[i] + words[j])) res.push([i, j]);
+                if (isPalindrome1(words[j] + words[i])) res.push([j, i]);
+            }
+        }
+        return res;
+    };
+
+    // 方法2：利用哈希表
+    // 时间复杂度  O(n*L^2) 单词个数为n，单词平均长度为L
+    const isPalindrome2 = (str) => {
+        let l = 0,
+            r = str.length - 1;
+        while (l < r) {
+            if (str[l++] != str[r--]) return false; // 我很不想这么写，尽量一句话做一件事吧
+        }
+        return true;
+    };
+    const palindromePairs2 = (words) => {
+        const reverseds = new Map();
+        for (let i = 0; i < words.length; i++) {
+            const reversed = words[i].split('').reverse().join('');
+            reverseds.set(reversed, i);
+        }
+        const res = [];
+        for (let i = 0; i < words.length; i++) {
+            const curWord = words[i];
+            if (isPalindrome2(curWord) && reverseds.has('') && curWord !== '') {
+                res.push([reverseds.get(''), i]);
+            }
+            for (let j = 0; j < curWord.length; j++) {
+                const left = curWord.substring(0, j);
+                const right = curWord.substring(j);
+                if (isPalindrome2(left) && reverseds.has(right) && reverseds.get(right) !== i) {
+                    res.push([reverseds.get(right), i]);
+                }
+                if (isPalindrome2(right) && reverseds.has(left) && reverseds.get(left) !== i) {
+                    res.push([i, reverseds.get(left)]);
+                }
+            }
+        }
+        return res;
+    };
+
+    // TODO:方法3：字典树 + manacher
+
+    // test
+    let words1 = ["abcd","dcba","lls","s","sssll"];
+    let words2 = ["bat","tab","cat"];
+    console.log(palindromePairs1(words1));
+    console.log(palindromePairs2(words1));
+    console.log(palindromePairs1(words2));
+    console.log(palindromePairs2(words2));
+</script>
+
+</html>
