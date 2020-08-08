@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法1：显式中序遍历
+        // 时间复杂度：O(N)，其中 N 为二叉搜索树的节点数
+        // 空间复杂度：O(N)
+        const inorder = (root, nums) => {
+            if (root === null) {
+                return;
+            }
+            inorder(root.left, nums);
+            nums.push(root.val);
+            inorder(root.right, nums);
+        }
+
+        const findTwoSwapped = (nums) => {
+            const n = nums.length;
+            let x = -1,
+                y = -1;
+            for (let i = 0; i < n - 1; ++i) {
+                if (nums[i + 1] < nums[i]) {
+                    y = nums[i + 1];
+                    if (x === -1) {
+                        x = nums[i];
+                    } else break;
+                }
+            }
+            return [x, y];
+        }
+
+        const recover = (r, count, x, y) => {
+            if (r !== null) {
+                if (r.val === x || r.val === y) {
+                    r.val = r.val === x ? y : x;
+                    if (--count === 0) {
+                        return;
+                    }
+                }
+                recover(r.left, count, x, y);
+                recover(r.right, count, x, y);
+            }
+        }
+
+        var recoverTree = function (root) {
+            const nums = [];
+            inorder(root, nums);
+            const [first, second] = findTwoSwapped(nums);
+            recover(root, 2, first, second);
+        };
+
+        // 方法2：隐式中序遍历
+        // 时间复杂度：O(N)，其中 N 为二叉搜索树的节点数
+        // 空间复杂度：O(H)，其中 H 为二叉搜索树的高度。中序遍历的时候栈的深度取决于二叉搜索树的高度。
+        const swap = (x, y) => {
+            const temp = x.val;
+            x.val = y.val;
+            y.val = temp;
+        }
+
+        var recoverTree = function (root) {
+            const stack = [];
+            let x = null,
+                y = null,
+                pred = null;
+
+            while (stack.length || root !== null) {
+                while (root !== null) {
+                    stack.push(root);
+                    root = root.left;
+                }
+                root = stack.pop();
+                if (pred !== null && root.val < pred.val) {
+                    y = root;
+                    if (x === null) {
+                        x = pred;
+                    } else break;
+                }
+                pred = root;
+                root = root.right;
+            }
+            swap(x, y);
+        };
+
+        // 方法3：Morris 中序遍历
+        // 时间复杂度：O(N)，其中 N 为二叉搜索树的高度。
+        // 空间复杂度：O(1)
+        const swap = (x, y) => {
+            const temp = x.val;
+            x.val = y.val;
+            y.val = temp;
+        }
+
+        var recoverTree = function (root) {
+            let x = null,
+                y = null,
+                pred = null,
+                predecessor = null;
+
+            while (root !== null) {
+                if (root.left !== null) {
+                    // predecessor 节点就是当前 root 节点向左走一步，然后一直向右走至无法走为止
+                    predecessor = root.left;
+                    while (predecessor.right !== null && predecessor.right !== root)
+                        predecessor = predecessor.right;
+
+                    // 让 predecessor 的右指针指向 root，继续遍历左子树
+                    if (predecessor.right === null) {
+                        predecessor.right = root;
+                        root = root.left;
+                    }
+                    // 说明左子树已经访问完了，我们需要断开链接
+                    else {
+                        if (pred !== null && root.val < pred.val) {
+                            y = root;
+                            if (x === null) {
+                                x = pred;
+                            }
+                        }
+                        pred = root;
+
+                        predecessor.right = null;
+                        root = root.right;
+                    }
+                }
+                // 如果没有左孩子，则直接访问右孩子
+                else {
+                    if (pred !== null && root.val < pred.val) {
+                        y = root;
+                        if (x === null) {
+                            x = pred;
+                        }
+                    }
+                    pred = root;
+
+                    root = root.right;
+                }
+            }
+            swap(x, y);
+        };
+
+    </script>
+</body>
+
+</html>
