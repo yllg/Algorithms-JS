@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法1：按照字符分组
+        // 时间复杂度 O(n),空间复杂度 O(n)
+        var countBinarySubstrings1 = function (s) {
+            const counts = [];
+            let ptr = 0,
+                n = s.length;
+            while (ptr < n) {
+                const c = s.charAt(ptr);
+                let count = 0;
+                while (ptr < n && s.charAt(ptr) === c) {
+                    ++ptr;
+                    ++count;
+                }
+                counts.push(count);
+            }
+            let ans = 0;
+            for (let i = 1; i < counts.length; ++i) {
+                ans += Math.min(counts[i], counts[i - 1]);
+            }
+            return ans;
+        };
+
+        // 方法2: 方法1优化
+        // 时间复杂度 O(n),空间复杂度 O(1)
+        // 对于某一个位置 i，其实我们只关心 i−1 位置的 counts 值是多少，所以可以用一个 last 变量来维护当前位置的前一个位置，这样可以省去一个 counts 数组的空间
+        var countBinarySubstrings2 = function (s) {
+            let ptr = 0,
+                n = s.length,
+                last = 0,
+                ans = 0;
+            while (ptr < n) {
+                const c = s.charAt(ptr);
+                let count = 0;
+                while (ptr < n && s.charAt(ptr) === c) {
+                    ++ptr;
+                    ++count;
+                }
+                ans += Math.min(count, last);
+                last = count;
+            }
+            return ans;
+        };
+
+        // test
+        let s1 = '00110011';
+        console.log(countBinarySubstrings1(s1));
+        console.log(countBinarySubstrings2(s1));
+        let s2 = '10101';
+        console.log(countBinarySubstrings1(s2));
+        console.log(countBinarySubstrings2(s2));
+    </script>
+</body>
+
+</html>
