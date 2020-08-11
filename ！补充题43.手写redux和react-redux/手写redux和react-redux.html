@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 一.实现redux
+        // myRedux.js
+        // 提供 getState() 方法获取 state
+        // 提供 dispatch(action) 方法更新 state
+        // 通过 subscribe(listener) 注册监听器
+        // 通过 subscribe(listener) 返回的函数注销监听器
+        // createStore参数为可变参数，第一个参数为reducer，第二个参数为初始state
+        export function createStore(...arg) {
+            let state = null;
+            let reducer = arg[0];
+            // 使用第二个参数为state初始化
+            if (arg.length > 1) {
+                state = arg[1]
+            }
+            // 保存监听器的数据
+            let listeners = [];
+            let getState = () => state;
+            let subscribe = listener => listeners.push(listener)
+            let dispatch = (action) => {
+                //执行reducer函数，更新状态
+                state = reducer(state, action)
+                //遍历listeners，执行之中的监听器函数
+                listeners.forEach(listener => listener())
+            }
+            return {
+                getState,
+                dispatch,
+                subscribe
+            }
+        }
+        // 使用
+        import {
+            createStore
+        } from '../myredux'
+        import reducer from './reducer'
+        const initialState = {
+            counter: 0,
+            title: 'nihao'
+        }
+        const store = createStore(reducer, initialState)
+        export default store;
+
+
+        // 二.实现react-redux
+        // 1.类组件实现
+        import React,{createContext} from 'react';
+        const {Provider,Consumer} = createContext();
+        export const Container = ({store,children}) => {
+            return (
+                <div>
+                    <Provider value={store}>
+                        {children}
+                    </Provider>
+                </div>
+            )
+        }
+        class Inner extends React.Component{  
+            constructor(props){
+                super(props)
+                this.state = {}
+                let {mapStateToProps,store} = this.props;
+                //从mapStateToProps获得用户需要的状态
+                let mapState = mapStateToProps(store.getState());
+                for(let key in mapState){
+                    this.state[key] = mapState[key]
+                }
+            }
+            componentDidMount(){
+                let {store} = this.props
+                //注册监听，这样当state发生改变时，改变Inner的内部状态，把这个新状态在render中传给了展示组件Comp，Comp就可以实时获取最新状态了
+                store.subscribe(()=>{
+                    let storeState = store.getState();
+                    for(let key  in this.state){
+                        this.setState({
+                            [key]: storeState[key]
+                        })
+                    }
+                })     
+            }
+            render() {
+                let {store,Comp,mapDispatchToProps} = this.props;
+                let actions = mapDispatchToProps(store.dispatch)
+                //把状态和方法传入到展示组件中
+                return (<Comp {...actions} {...this.state} />)
+            }
+        }
+        //connnect是一个高阶组价，返回一个函数，接受展示组件为参数，使用<Consumer/>包装，传入 store
+        export const connect = (mapStateToProps,mapDispatchToProps) =>{
+            return (Comp) => {
+                return () => (
+                    <Consumer>
+                    { (store) =>( <Inner  Comp={Comp}  store={store} mapStateToProps={mapStateToProps} mapDispatchToProps={mapDispatchToProps}></Inner> ) }
+                </Consumer>)
+            }
+        }
+
+        // 2.用hook实现，满足三个基本功能
+        // (1)全局维护一个store，StoreProvider
+        // 注意：useReducer的状态是互相独立的，所以不行，使用useContext
+        import {createContext, useContext} from 'react';
+        const context = createContext(null);
+        export const StoreProvider = context.provider;
+        const store = useContext(context);
+        // do something about store.
+
+        // (2)任何组件都可以获得store，mapStatetoProps
+        // 自定义hook叫做 useStoreState
+        // 要处理两个问题：
+        // 1.store变化要和视图关联起来。
+        // 利用 useEffect 这个内置hook，在组件mount时完成在store上的订阅，并在unmont的时候取消订阅
+        // 2.要关注mapState变化的情况
+        // 使用 useState 来监听， 每次有变更时就执行向对应的setter方法
+        export function useStoreState(mapState) {
+            const store = useContext(context);
+            const mapStateFn = () => mapState(store.getState());
+            const [mappedState, setMappedState] = useState(() => mapStateFn());
+            // If the store or mapState change, rerun mapState
+            const [prevStore, setPrevStore] = useState(store);
+            const [prevMapState, setPrevMapState] = useState(() => mapState);
+            if (prevStore !== store || prevMapState !== mapState) {
+                setPrevStore(store);
+                setPrevMapState(() => mapState);
+                setMappedState(mapStateFn());
+            }
+            const lastRenderedMappedState = useRef();
+            // Set the last mapped state after rendering.
+            useEffect(() => {
+                lastRenderedMappedState.current = mappedState;
+            });
+            useEffect(
+                () => {
+                    // Run the mapState callback and if the result has changed, make the
+                    // component re-render with the new state.
+                    const checkForUpdates = () => {
+                        const newMappedState = mapStateFn();
+                        if (!shallowEqual(newMappedState, lastRenderedMappedState.current)) {
+                            setMappedState(newMappedState);
+                        }
+                    };
+                    // Pull data from the store on first render.
+                    checkForUpdates();
+                    // Subscribe to the store to be notified of subsequent changes.
+                    const unsubscribe = store.subscribe(checkForUpdates);
+                    // The return value of useEffect will be called when unmounting, so
+                    // we use it to unsubscribe from the store.
+                    return unsubscribe;
+                },
+                [store, mapState],
+            );
+            return mappedState
+        }
+
+
+        // (3)派发action的能力，mapDispatchtoProps
+        // 自定义一个hook 叫做 useDispatch
+        export function useDispatch() {
+            const store = useContext(Context);
+            return store.dispatch;
+        }
+
+    </script>
+</body>
+
+</html>
