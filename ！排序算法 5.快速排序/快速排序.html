@@ -1,111 +1,174 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    <title>Document</title>
-  </head>
-  <body>
-    <script>
-      // 1.一行代码实现快排，
-      // 空间复杂度比正常的高啊，slice会返回线数组
-      //以a[0]为基准，再使用filter函数过滤，再左右两边递归，最后合并即可
-      function quickSort1(a) {
-        return a.length <= 1
-          ? a
-          : quickSort1(a.slice(1).filter((item) => item <= a[0])).concat(
-              a[0],
-              quickSort1(a.slice(1).filter((item) => item > a[0]))
-            );
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    // 1.一行代码实现快排，
+    // 空间复杂度比正常的高啊，slice会返回线数组
+    //以a[0]为基准，再使用filter函数过滤，再左右两边递归，最后合并即可
+    function quickSort1(a) {
+      return a.length <= 1 ?
+        a :
+        quickSort1(a.slice(1).filter((item) => item <= a[0])).concat(
+          a[0],
+          quickSort1(a.slice(1).filter((item) => item > a[0]))
+        );
+    }
+
+    // 2.常规的快排，使用了额外的空间
+    var quickSort2 = function (myArray) {
+      // 当被分的数组只剩一个时，退出递归
+      if (myArray.length <= 1) {
+        return myArray;
       }
 
-      // 2.常规的快排，使用了额外的空间
-      var quickSort2 = function (myArray) {
-        // 当被分的数组只剩一个时，退出递归
-        if (myArray.length <= 1) {
-          return myArray;
+      //这里选择中间的值为基准值，当然也可以选择别的为基准值，比如选择第一个数
+      // 中间基准值的index
+      var pivotIndex = Math.floor(myArray.length / 2);
+      // 基准值
+      var pivot = myArray.splice(pivotIndex, 1)[0];
+      // 开辟了新的内存空间，最好是原地交换，不用新的空间
+      var left = [];
+      var right = [];
+      // 小的放左边，大的放右边
+      for (var i = 0; i < myArray.length; i++) {
+        if (myArray[i] < pivot) {
+          left.push(myArray[i]);
+        } else {
+          right.push(myArray[i]);
         }
+      }
+      // 递归
+      // 把数组合并在一起
+      return quickSort1(left).concat([pivot], quickSort1(right));
+    };
 
-        //这里选择中间的值为基准值，当然也可以选择别的为基准值，比如选择第一个数
-        // 中间基准值的index
-        var pivotIndex = Math.floor(myArray.length / 2);
-        // 基准值
-        var pivot = myArray.splice(pivotIndex, 1)[0];
-        // 开辟了新的内存空间，最好是原地交换，不用新的空间
-        var left = [];
-        var right = [];
-        // 小的放左边，大的放右边
-        for (var i = 0; i < myArray.length; i++) {
-          if (myArray[i] < pivot) {
-            left.push(myArray[i]);
-          } else {
-            right.push(myArray[i]);
-          }
+    // 3.快排，使用随机数为基准，双指针原地交换不使用额外空间
+    let quickSort3 = (arr) => {
+      quick(arr, 0, arr.length - 1);
+      return arr;
+    };
+    // 优化：尾递归
+    let quick = (arr, left, right) => {
+      // 优化：长度小于10使用插排
+      if (right - left + 1 < 10) {
+        insertionSort(arr);
+        return;
+      } 
+      // else时，正常执行快排
+      let index;
+      if (left < right) {
+        // 划分数组
+        index = partition(arr, left, right);
+        if (left < index - 1) {
+          quick(arr, left, index - 1);
         }
-        // 递归
-        // 把数组合并在一起
-        return quickSort1(left).concat([pivot], quickSort1(right));
-      };
-
-      // 3.快排，使用随机数为基准，双指针原地交换不使用额外空间
-      let quickSort3 = (arr) => {
-        quick(arr, 0, arr.length - 1);
-        return arr;
-      };
-
-      let quick = (arr, left, right) => {
-        let index;
-        if (left < right) {
-          // 划分数组
-          index = partition(arr, left, right);
-          if (left < index - 1) {
-            quick(arr, left, index - 1);
-          }
-          if (index < right) {
-            quick(arr, index, right);
-          }
+        if (index < right) {
+          quick(arr, index, right);
         }
-      };
+      }
+    };
 
-      let partition = (arr, left, right) => {
-        // 取随机数为基准
-        var datum = arr[Math.floor(Math.random() * (right - left + 1)) + left],
-          i = left,
-          j = right;
-        // 开始调整
-        while (i <= j) {
-          // 左指针右移，遇到比基准大的停止
-          while (arr[i] < datum) {
-            i++;
-          }
-          // 右指针左移，遇到比基准小的元素停止，
-          while (arr[j] > datum) {
-            j--;
-          }
-          // 交换左右指针所指向的元素
-          if (i <= j) {
-            swap(arr, i, j);
-            i += 1;
-            j -= 1;
-          }
+    let partition = (arr, left, right) => {
+      // 取随机数为基准
+      // let datum = arr[Math.floor(Math.random() * (right - left + 1)) + left];
+      // 优化：前中后三数取中间值
+      let datum = SelectPivotMedianOfThree(arr, left, right);
+      let i = left,
+        j = right;
+      // 开始调整
+      while (i <= j) {
+        // 左指针右移，遇到比基准大的停止
+        while (arr[i] < datum) {
+          i++;
         }
-        return i;
-      };
+        // 右指针左移，遇到比基准小的元素停止，
+        while (arr[j] > datum) {
+          j--;
+        }
+        // 交换左右指针所指向的元素
+        if (i <= j) {
+          swap(arr, i, j);
+          i += 1;
+          j -= 1;
+        }
+      }
+      return i;
+    };
 
-      // 交换
-      let swap = (arr, i, j) => {
-        let temp = arr[i];
-        arr[i] = arr[j];
-        arr[j] = temp;
-      };
+    // 交换
+    let swap = (arr, i, j) => {
+      let temp = arr[i];
+      arr[i] = arr[j];
+      arr[j] = temp;
+    };
 
-      var arr1 = [5, 3, 7, 2, 3, 9, 0, 6, 1, 3, 2];
-      var arr2 = [5, 3, 7, 2, 3, 9, 0, 6, 1, 3, 2];
-      var arr3 = [5, 3, 7, 2, 3, 9, 0, 6, 1, 3, 2];
-      console.log(quickSort1(arr1));
-      console.log(quickSort2(arr2));
-      console.log(quickSort3(arr3));
-    </script>
-  </body>
+    // 4-1.快排优化1，三数取中
+    function SelectPivotMedianOfThree(arr, low, high) {
+      let mid = low + ((high - low) >> 1); //计算数组中间的元素的下标
+      //使用三数取中法选择枢轴
+      if (arr[mid] > arr[high]) //目标: arr[mid] <= arr[high]
+      {
+        swap(arr[mid], arr[high]);
+      }
+      if (arr[low] > arr[high]) //目标: arr[low] <= arr[high]
+      {
+        swap(arr[low], arr[high]);
+      }
+      if (arr[mid] > arr[low]) //目标: arr[low] >= arr[mid]
+      {
+        swap(arr[mid], arr[low]);
+      }
+      //此时，arr[mid] <= arr[low] <= arr[high]
+      return arr[low];
+      //low的位置上保存这三个位置中间的值
+      //分割时可以直接使用low位置的元素作为枢轴，而不用改变分割函数了
+    }
+
+    // 4-2.快排优化2，使用插排，长度小于一定长度使用插排，比如小于10
+    function insertionSort(myArray) {
+      var len = myArray.length, // 数组的长度
+        value, // 当前比较的值
+        i, // 未排序部分的当前位置
+        j; // 已排序部分的当前位置
+
+      //默认第一个元素是已排好序的部分，所以i从1开始是未排序的部分
+      for (i = 1; i < len; ++i) {
+        // 储存当前位置的值,未排序部分的第一个值
+        value = myArray[i];
+
+        /*
+         * 已排序部分从后往前一个个的和value比较
+         * 如果大于value，就往后移动一位
+         * j也在不断减少，最后就是value插入的位置
+         */
+        j = i;
+        while (j > 0 && myArray[j - 1] > value) {
+          myArray[j] = myArray[j - 1];
+          j--;
+        }
+        //j是value最终插入到有序部分的索引
+        myArray[j] = value;
+      }
+      return myArray;
+    }
+
+    // TODO:4-3.每一次分割结束，把与Key相同的元素聚集在一起，聚集在基准元素的周围，下次分割可以跳过这些元素
+
+    var arr1 = [5, 3, 7, 2, 3, 9, 0, 6, 1, 3, 2];
+    var arr2 = [5, 3, 7, 2, 3, 9, 0, 6, 1, 3, 2];
+    var arr3 = [5, 3, 7, 2, 3, 9, 0, 6, 1, 3, 2];
+    console.log(quickSort1(arr1));
+    console.log(quickSort2(arr2));
+    console.log(quickSort3(arr3));
+  </script>
+</body>
+
 </html>
