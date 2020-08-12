@@ -1,35 +1,69 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
-  </head>
-  <body>
-    <script>
-      // 解题思路：从array中取出n个数全排列，在取的同时判断是否符合条件，
-      // 尾递归优化，每次递归完成，将当前的运算结果 作为参数传入下层函数
-      // 时间和空间复杂度 都是 O(n)
-      function getAllCombin(array, n, sum, temp) {
-        if (temp.length === n) {
-          if (temp.reduce((t, c) => t + c) === sum) {
-            return temp;
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    // N数之和：找出 所有 满足条件的 不重复 值的组合
+    // 思路：n == 2 时是 twoSum 的双指针解法，n > 2 时就是穷举第一个数字，然后递归调用计算 (n-1)Sum，最后组装答案
+    function NSum(nums, n, target) {
+      // 要先排序
+      nums.sort((a, b) => a - b);
+      return nSumTarget(nums, n, 0, target);
+    }
+
+    function nSumTarget(nums, n, start, target) {
+      let sz = nums.length;
+      let res = [];
+      // 至少是 2Sum，且数组大小不应该小于 n
+      if (n < 2 || sz < n) return res;
+      // 2Sum 是 base case
+      if (n == 2) {
+        // 双指针那一套操作
+        let lo = start,
+          hi = sz - 1;
+        while (lo < hi) {
+          let sum = nums[lo] + nums[hi];
+          let left = nums[lo],
+            right = nums[hi];
+          if (sum < target) {
+            while (lo < hi && nums[lo] == left) lo++;
+          } else if (sum > target) {
+            while (lo < hi && nums[hi] == right) hi--;
+          } else {
+            res.push([left, right]); // 结果输出 值，不是索引
+            while (lo < hi && nums[lo] == left) lo++;
+            while (lo < hi && nums[hi] == right) hi--;
           }
-          return false;
         }
-        for (let i = 0; i < array.length; i++) {
-          const current = array.shift();
-          temp.push(current);
-          const result = getAllCombin(array, n, sum, temp);
-          if (result) {
-            return result;
+      } else {
+        // n > 2 时，递归计算 (n-1)Sum 的结果
+        for (let i = start; i < sz; i++) {
+          let sub = nSumTarget(nums, n - 1, i + 1, target - nums[i]);
+          for (let arr of sub) {
+            // (n-1)Sum 加上 nums[i] 就是 nSum
+            arr.push(nums[i]); // 结果输出 值，不是索引
+            res.push(arr);
           }
-          temp.pop();
-          array.push(current);
+          while (i < sz - 1 && nums[i] == nums[i + 1]) i++;
         }
       }
-      const arr = [1, 5, 6, 2, 4, 3, 2];
-      console.log(getAllCombin(arr, 5, 20, []));
-    </script>
-  </body>
+      return res;
+    }
+
+    // test
+    let arr1 = [2, 11, 7, 15];
+    console.log(NSum(arr1, 2, 9));
+    let arr2 = [1, 1, 2, 5, 6, 2, 4, 3, 2];
+    console.log(NSum(arr2, 3, 6));
+    let arr3 = [1, 1, 2, 5, 6, 2, 4, 3, 2];
+    console.log(NSum(arr3, 4, 8));
+  </script>
+</body>
+
 </html>
