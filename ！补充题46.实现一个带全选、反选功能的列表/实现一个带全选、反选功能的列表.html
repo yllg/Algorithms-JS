@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<script>
+    //全选和全不选（第一个参数为复选框名称，第二个参数为是全选还是全不选）
+    function allCheck(name, boolValue) {
+        var allvalue = document.getElementsByName(name);
+        for (var i = 0; i < allvalue.length; i++) {
+            if (allvalue[i].type == "checkbox")
+                allvalue[i].checked = boolValue;
+        }
+    }
+    //反选 参数为复选框名称
+    function reserveCheck(name) {
+        var revalue = document.getElementsByName(name);
+        for (i = 0; i < revalue.length; i++) {
+            if (revalue[i].checked == true)
+                revalue[i].checked = false;
+            else
+                revalue[i].checked = true;
+        }
+    }
+</script>
+
+<body>
+    <div>
+        <label><input type="checkbox" name="choice" id="choice" width="30px;" /></label>选择1
+        <label><input type="checkbox" name="choice" id="choice" width="30px;" /></label>选择2
+        <label><input type="checkbox" name="choice" id="choice" width="30px;" /></label>选择3
+        <label><input type="checkbox" name="choice" id="choice" width="30px;" /></label>选择4
+        <label><input type="checkbox" name="choice" id="choice" width="30px;" /></label>选择5
+        <p></p>
+        <label><input type="checkbox" name="choice" id="choice" width="30px;" /></label>选择6
+        <label><input type="checkbox" name="choice" id="choice" width="30px;" /></label>选择7
+        <label><input type="checkbox" name="choice" id="choice" width="30px;" /></label>选择8
+        <label><input type="checkbox" name="choice" id="choice" width="30px;" /></label>选择9
+        <label><input type="checkbox" name="choice" id="choice" width="30px;" /></label>选择10
+        <p></p>
+        <a href="javascript:allCheck('choice',true)">全选</a>
+        <a href="javascript:allCheck('choice',false)">全不选</a>
+        <a href="javascript:reserveCheck('choice')">反选</a>
+    </div>
+</body>
+
+</html>
