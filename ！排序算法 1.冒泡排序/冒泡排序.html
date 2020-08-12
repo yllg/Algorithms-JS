@@ -10,7 +10,7 @@
 
 <body>
     <script>
-        //冒泡排序
+        // 一.普通版本 冒泡排序
         //1.依次比较相邻的两个数，如果第一个比第二个小，不变。如果第一个比第二个大，调换顺序。一轮下来，最后一个是最大的数
         //2.对除了最后一个之外的数重复第一步，直到只剩一个数
         function bubbleSort(myArray) {
@@ -36,9 +36,51 @@
             myArray[p2] = temp;
         }
 
-        //测试一下
-        var dataStore = [1, 8, 3, 2, 9, 5, 4, 7];
-        console.log(bubbleSort(dataStore));
+        // 二.优化
+        // 1.处理整体已经有序的情况；
+        // 2.处理局部有序的情况
+        // 3.双向冒泡，同时将最大值和最小值归位
+        function bubbleSortOptTriple(array) {
+            let start = 0,
+                startPos = start,
+                end = array.length - 1,
+                endPos = end;
+            while (start < end) {
+                let isSorted = true; // 设置有序无序的标志变量
+                // 从前向后过一遍，处理最大值
+                for (let i = start; i < end; i++) {
+                    if (array[i] > array[i + 1]) {
+                        swap(array, i, i + 1);
+                        endPos = i; // 记录这个交换位置
+                        isSorted = false; // 设置无序标志
+                    }
+                }
+                if (isSorted) {
+                    return array;
+                }
+                end = endPos; // 设置下一轮的遍历终点
+                // 从后向前过一遍，处理最小值
+                for (let i = end; i > start; i--) {
+                    if (array[i] < array[i - 1]) {
+                        swap(array, i, i - 1);
+
+                        startPos = i; // 记录这个交换位置
+                        isSorted = false; // 设置无序标志
+                    }
+                }
+                if (isSorted) {
+                    return array;
+                }
+                start = startPos; // 设置下一轮的遍历终点
+            }
+            return array;
+        }
+
+        //test
+        var dataStore1 = [1, 8, 3, 2, 9, 5, 4, 7];
+        var dataStore2 = [1, 8, 3, 2, 9, 5, 4, 7];
+        console.log(bubbleSort(dataStore1));
+        console.log(bubbleSortOptTriple(dataStore2));
     </script>
 </body>
 
