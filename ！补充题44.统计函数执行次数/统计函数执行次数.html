@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        var getFunCallTimes = (function () {
+            // 装饰器，在当前函数执行前先执行另一个函数
+            function decoratorBefore(fn, beforeFn) {
+                return function () {
+                    var ret = beforeFn.apply(this, arguments);
+                    // 在前一个函数中判断，不需要执行当前函数
+                    if (ret !== false) {
+                        fn.apply(this, arguments);
+                    }
+                };
+            }
+            // 执行次数
+            var funTimes = {};
+            // 给fun添加装饰器，fun执行前将进行计数累加
+            return function (fun, funName) {
+                // 存储的key值
+                funName = funName || fun;
+                // 不重复绑定，有则返回
+                if (funTimes[funName]) {
+                    return funTimes[funName];
+                }
+                // 绑定
+                funTimes[funName] = decoratorBefore(fun, function () {
+                    // 计数累加
+                    funTimes[funName].callTimes++;
+                    // console.log('count', funTimes[funName].callTimes);
+                });
+                // 定义函数的值为计数值（初始化）
+                funTimes[funName].callTimes = 0;
+                return funTimes[funName];
+            }
+        })();
+
+        function firstFunction() {
+            console.log('我是第一个函数');
+        }
+        function secondFunction() {
+            console.log('我是第二个函数');
+        }
+        firstFunction = getFunCallTimes(firstFunction, 'firstFunction');
+        firstFunction();
+        firstFunction();
+        firstFunction();
+        firstFunction();
+        console.log(firstFunction.callTimes); // 4
+        secondFunction = getFunCallTimes(secondFunction);
+        secondFunction();
+        console.log(secondFunction.callTimes); // 1
+        secondFunction();
+        console.log(secondFunction.callTimes); // 2
+    </script>
+</body>
+
+</html>
