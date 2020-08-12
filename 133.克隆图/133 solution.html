@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法1 深度优先搜索
+        // 时间复杂度 O(n) 空间复杂度 O(n)
+        var cloneGraph = function (node) {
+            if (!node) return null;
+            let map = new Map();
+            let stack = [node];
+            let newNode = new Node(node.val, []);
+            map.set(node.val, newNode);
+            while (stack.length) {
+                let _node = stack.pop();
+                let _newNode = map.get(_node.val);
+                _node.neighbors.forEach(neighbor => {
+                    let _newNB = map.get(neighbor.val);
+                    if (!_newNB) {
+                        stack.push(neighbor);
+                        _newNB = new Node(neighbor.val, []);
+                        map.set(neighbor.val, _newNB);
+                    }
+                    _newNode.neighbors.push(_newNB);
+                })
+            }
+            return newNode;
+        };
+
+        // 方法2 深度优先搜索 简洁版本
+        // 时间复杂度 O(n) 空间复杂度 O(n)
+        var cloneGraph = function (graph, map = {}) {
+            if (!graph) return graph;
+            const v = new Node(graph.val, []);
+            map[v.val] = v;
+            for (let w of graph.neighbors) {
+                if (map[w.val]) {
+                    v.neighbors.push(map[w.val]);
+                } else {
+                    v.neighbors.push(cloneGraph(w, map));
+                }
+            }
+            return v;
+        }
+
+        // 方法3 递归法
+        // 时间复杂度 O(n) 空间复杂度 O(n)
+        var cloneGraph = function (node) {
+            return clone(node, new Map());
+        };
+        const clone = (node, map) => {
+            if (!node) return null;
+            let newNode = map.get(node);
+            if (newNode) {
+                return newNode;
+            }
+            newNode = new Node(node.val);
+            map.set(node, newNode);
+            node.neighbors.forEach(neighbor => {
+                newNode.neighbors.push(clone(neighbor, map));
+            })
+            return newNode;
+        }
+    </script>
+</body>
+
+</html>
