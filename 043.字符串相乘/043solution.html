@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 解法1：做加法 再对结果累加
+        // 时间复杂度：O(mn+n^2) 空间复杂度是O(m+n)
+        // 不够优秀，略了；加法可以参考 415题；
+
+        // 解法2：做乘法
+        // 时间复杂度：O(mn) 空间复杂度是O(m+n)
+        const multiply = (num1, num2) => {
+            const len1 = num1.length;
+            const len2 = num2.length;
+            const pos = new Array(len1 + len2).fill(0);
+            for (let i = len1 - 1; i >= 0; i--) {
+                const n1 = +num1[i];
+                for (let j = len2 - 1; j >= 0; j--) {
+                    const n2 = +num2[j];
+                    const multi = n1 * n2;
+                    const sum = pos[i + j + 1] + multi;
+
+                    pos[i + j + 1] = sum % 10;
+                    pos[i + j] += sum / 10 | 0;
+                }
+            }
+            let res = pos.join('');
+            while (res.length && res[0] == '0') {
+                res = res.substring(1);
+            }
+            return res.length ? res : '0';
+        };
+
+        // 解法3：看成卷积，进行 快速傅立叶变换（Fast Fourier Transform，FFT）
+        // TODO:之后补上
+
+        // test
+        let num1 = '2', num2 = '3';
+        console.log(multiply(num1, num2));
+        let num3 = '123', num4 = '456';
+        console.log(multiply(num3, num4));
+    </script>
+</body>
+
+</html>
