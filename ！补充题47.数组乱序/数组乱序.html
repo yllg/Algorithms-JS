@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        /**
+         * 用于验证 shuffle 方法是否完全随机
+         定义一个长为 10 的数组 ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j']，并使用传入的乱序函数进行十万次操作，并将数组中每个元素在每个位置出现的次数存放到变量 countObj 中，最终将 countObj 打印出来。
+         */
+        function test_shuffle(shuffleFn) {
+            // 多次乱序数组的次数
+            let n = 100000;
+            // 保存每个元素在每个位置上出现的次数
+            let countObj = {
+                a: Array.from({
+                    length: 10
+                }).fill(0),
+                b: Array.from({
+                    length: 10
+                }).fill(0),
+                c: Array.from({
+                    length: 10
+                }).fill(0),
+                d: Array.from({
+                    length: 10
+                }).fill(0),
+                e: Array.from({
+                    length: 10
+                }).fill(0),
+                f: Array.from({
+                    length: 10
+                }).fill(0),
+                g: Array.from({
+                    length: 10
+                }).fill(0),
+                h: Array.from({
+                    length: 10
+                }).fill(0),
+                i: Array.from({
+                    length: 10
+                }).fill(0),
+                j: Array.from({
+                    length: 10
+                }).fill(0),
+            }
+            for (let i = 0; i < n; i++) {
+                let arr = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j'];
+                shuffleFn(arr);
+                countObj.a[arr.indexOf('a')]++;
+                countObj.b[arr.indexOf('b')]++;
+                countObj.c[arr.indexOf('c')]++;
+                countObj.d[arr.indexOf('d')]++;
+                countObj.e[arr.indexOf('e')]++;
+                countObj.f[arr.indexOf('f')]++;
+                countObj.g[arr.indexOf('g')]++;
+                countObj.h[arr.indexOf('h')]++;
+                countObj.i[arr.indexOf('i')]++;
+                countObj.j[arr.indexOf('j')]++;
+            }
+            console.table(countObj);
+        }
+
+
+        // 1.常见的实现
+        // 有问题，伪随机，并不是真正的随机
+        // 原因 sort 使用了插入排序和快排两种方案。 当目标数组长度小于10时，使用插入排序；反之，使用快速排序。
+        // 其实不管用什么排序方法，大多数排序算法的时间复杂度介于O(n)到O(n²)之间，元素之间的比较次数通常情况下要远小于n(n-1)/2，也就意味着有一些元素之间根本就没机会相比较（也就没有了随机交换的可能），这些 sort 随机排序的算法自然也不能真正随机。
+        function shuffle1(arr) {
+            return arr.sort(() => Math.random() - 0.5);
+        }
+
+        // 2.改进，使用splice方法 实现真随机
+        // 性能上并不好，需要遍历几次数组，并且还要对数组进行 splice 操作。
+        function shuffle2(arr) {
+            let newArr = arr.map(item => ({
+                val: item,
+                ram: Math.random()
+            }));
+            newArr.sort((a, b) => a.ram - b.ram);
+            arr.splice(0, arr.length, ...newArr.map(i => i.val));
+            return arr;
+        }
+
+        // 3.Fisher–Yates 洗牌算法 最优的真随机
+        // 就是将数组从后向前遍历，然后将当前元素与随机位置的元素进行交换。
+        // 只需要通过一次遍历即可将数组随机打乱顺序，性能极为优异~
+        function shuffle3(arr) {
+            let m = arr.length;
+            while (m > 1) {
+                let index = Math.floor(Math.random() * m--);
+                [arr[m], arr[index]] = [arr[index], arr[m]]
+            }
+            return arr;
+        }
+
+        // test
+        test_shuffle(shuffle1);
+        test_shuffle(shuffle2);
+        test_shuffle(shuffle3);
+    </script>
+</body>
+
+</html>
