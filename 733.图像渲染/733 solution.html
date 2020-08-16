@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 解法1：广度优先搜索 BFS
+        // 时间复杂度：O(n)。空间复杂度：O(n)
+        const floodFill1 = (image, sr, sc, newColor) => {
+            const m = image.length;
+            const n = image[0].length;
+            const oldColor = image[sr][sc];
+            if (oldColor == newColor) return image;
+            const queue = [
+                [sr, sc]
+            ];
+            while (queue.length) {
+                const [i, j] = queue.shift();
+                image[i][j] = newColor;
+
+                if (i - 1 >= 0 && image[i - 1][j] == oldColor) queue.push([i - 1, j]);
+                if (i + 1 < m && image[i + 1][j] == oldColor) queue.push([i + 1, j]);
+                if (j - 1 >= 0 && image[i][j - 1] == oldColor) queue.push([i, j - 1]);
+                if (j + 1 < n && image[i][j + 1] == oldColor) queue.push([i, j + 1]);
+            }
+            return image;
+        };
+
+        // 解法2：深度优先搜索 DFS
+        // 时间复杂度：O(n)。空间复杂度：O(n)
+        const floodFill2 = (image, sr, sc, newColor) => {
+            const m = image.length;
+            const n = image[0].length;
+            const oldColor = image[sr][sc];
+            if (oldColor == newColor) return image;
+
+            const fill = (i, j) => {
+                if (i < 0 || i >= m || j < 0 || j >= n || image[i][j] != oldColor) {
+                    return;
+                }
+                image[i][j] = newColor;
+                fill(i - 1, j);
+                fill(i + 1, j);
+                fill(i, j - 1);
+                fill(i, j + 1);
+            };
+
+            fill(sr, sc);
+            return image;
+        };
+        // test
+        let image = [[1,1,1],[1,1,0],[1,0,1]], sr = 1, sc = 1, newColor = 2;
+        console.log(floodFill1(image, sr, sc, newColor));
+        console.log(floodFill2(image, sr, sc, newColor));
+    </script>
+</body>
+
+</html>
