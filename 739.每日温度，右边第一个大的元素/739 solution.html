@@ -7,6 +7,7 @@
   </head>
   <body>
     <script>
+      // 要想观测到更高的气温，至少需要等待的天数。
       // 单调栈，类似题目--42.接雨水, 84.柱状图最大矩形
 
       // 解法1：暴力法 两重循环 O(n^2)
@@ -48,7 +49,10 @@
         for (let i = 0; i < T.length; i++) {
           while (stack.length && T[i] > T[stack[stack.length - 1]]) {
             let prevIndex = stack.pop();
+            // 找到 索引差值
             res[prevIndex] = i - prevIndex;
+            // 找到 第一个大的元素值
+            // res[prevIndex] = T[i];
           }
           stack.push(i);
         }
