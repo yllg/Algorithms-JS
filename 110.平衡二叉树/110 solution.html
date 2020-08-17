@@ -1,55 +1,86 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
 </head>
+
 <body>
-<script>
-// Source : https://leetcode.com/problems/balanced-binary-tree/
-// Author : 悬笔e绝
-// Date   : 2019-04-22
+  <script>
+    // Source : https://leetcode.com/problems/balanced-binary-tree/
+    // Author : 悬笔e绝
+    // Date   : 2019-04-22
 
-// Definition for a binary tree node.
- function TreeNode(val) {
-    this.val = val;
-    this.left = this.right = null;
- }
-/**
- * @param {TreeNode} root
- * @return {boolean}
- */
+    // Definition for a binary tree node.
+    function TreeNode(val) {
+      this.val = val;
+      this.left = this.right = null;
+    }
+    /**
+     * @param {TreeNode} root
+     * @return {boolean}
+     */
 
-var ans;
+    // 解法1： 常规法，自顶向下
+    var isBalanced1 = function (root) {
+      let ans = true;
+      dfs(root);
 
-function dfs(root) {
-  if (!root) return;
-  var a = root.left ? dfs(root.left) : 0
-    , b = root.right ? dfs(root.right) : 0;
-  if (Math.abs(a - b) > 1) {
-    ans = false;
-  }
-  return Math.max(a, b) + 1;
-}
+      function dfs(root) {
+        if (!root) return;
+        var a = root.left ? dfs(root.left) : 0,
+          b = root.right ? dfs(root.right) : 0;
+        if (Math.abs(a - b) > 1) {
+          ans = false;
+        }
+        return Math.max(a, b) + 1;
+      }
+      return ans;
+    };
 
-var isBalanced = function(root) {
-  ans = true;
-  dfs(root);
-  return ans;
-};
+    // 解法2： 自顶向下 暴力法
+    // 时间复杂度 O(nlogn) 空间复杂度 O(n)
+    var isBalanced2 = function (root) {
+      if (!root) return true;
+      var depth = function (node) {
+        if (!node) return -1
+        return 1 + Math.max(depth(node.left), depth(node.right))
+      }
+      return Math.abs(depth(root.left) - depth(root.right)) <= 1 &&
+        isBalanced2(root.left) &&
+        isBalanced2(root.right)
+    }
 
-// 测试
-var tree_node_1_1 = new TreeNode(9);
-var tree_node_1_2 = new TreeNode(20);
-tree_node_1_2.left = new TreeNode(15);
-tree_node_1_2.right = new TreeNode(7);
-var tree_node_1 = new TreeNode(3);
-tree_node_1.left = tree_node_1_1;
-tree_node_1.right = tree_node_1_2;
-console.log(isBalanced(tree_node_1));
+    // 解法3： 自底向上
+    // 利用后序遍历；时间复杂度 O(nlogn) 空间复杂度 O(n)
+    var isBalanced3 = function (root) {
+      var balanced = function (node) {
+        if (!node) return 0
+        const left = balanced(node.left)
+        const right = balanced(node.right)
+        if (left === -1 || right === -1 || Math.abs(left - right) > 1) {
+          return -1
+        }
+        return Math.max(left, right) + 1
+      }
+      return balanced(root) !== -1
+    };
 
-</script>
+    // 测试
+    var tree_node_1_1 = new TreeNode(9);
+    var tree_node_1_2 = new TreeNode(20);
+    tree_node_1_2.left = new TreeNode(15);
+    tree_node_1_2.right = new TreeNode(7);
+    var tree_node_1 = new TreeNode(3);
+    tree_node_1.left = tree_node_1_1;
+    tree_node_1.right = tree_node_1_2;
+    console.log(isBalanced1(tree_node_1));
+    console.log(isBalanced2(tree_node_1));
+    console.log(isBalanced3(tree_node_1));
+  </script>
 </body>
+
 </html>
