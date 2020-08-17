@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 把下面代码 放到目标网页的控制台执行 即可看到结果
+        let el = Array.from(document.getElementsByTagName('*'));
+        let elObj = {};
+        // 正则判断是否是 s/h 开头
+        let reg = /^[s|h].+/gi
+        el.map(item => {
+            const tagName = item.tagName;
+            if(reg.test(tagName)) {
+                !elObj[tagName] ? elObj[tagName] = 1 : elObj[tagName]++
+            }
+        });
+        console.log(elObj);
+    </script>
+</body>
+
+</html>
