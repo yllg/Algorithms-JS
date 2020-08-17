@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>并发请求控制</title>
+    <style>
+      img {
+        display: block;
+        height: 450px;
+        margin-bottom: 20px;
+      }
+    </style>
+  </head>
+  <body>
+  </body>
+  <script>
+    const fetchData = (url, timeout) => {
+      currentCount++;
+      return new Promise((resolve) => {
+        setTimeout(() => {
+          resolve(url + 'result');
+        }, 1000);
+      });
+      // return Promise.race([
+      //   new Promise((resolve) => {
+      //     setTimeout(() => {
+      //       resolve(url + "result"); // 模拟请求获得数据
+      //     }, Math.random() * timeout * 2);
+      //   }),
+      //   new Promise((resolve) => {
+      //     setTimeout(() => {
+      //       resolve(null);
+      //     }, timeout);
+      //   }),
+      // ]);
+    };
+
+    const batchGet = (urlLists, batchnum, timeout) => {
+      const recursion = (urlArr) => {
+        return fetchData(urlArr.shift(), timeout).then((res) => {
+          console.log("当前并发量:", currentCount--);
+          console.log("data", res);
+          if (urlArr.length > 0) {
+            return recursion(urlArr);
+          }
+          return `finish ${res}`;
+        });
+      };
+      let asyncList = [];
+      let listCopy = [].concat(urlLists);
+      while (batchnum--) {
+        asyncList.push(recursion(listCopy));
+      }
+      return Promise.all(asyncList);
+    };
+
+    // test
+    var urls = [
+      "url:1",
+      "url:2",
+      "url:3",
+      "url:4",
+      "url:5",
+      "url:6",
+      "url:7",
+      "url:8",
+      "url:9",
+      "url:10",
+      "url:11",
+      "url:12",
+    ];
+    var batchnum = 5;
+    var timeout = 3000;
+    var currentCount = 0;
+    batchGet(urls, batchnum, timeout).then((response) => {
+      console.log("finish", response);
+    });
+  </script>
+</html>
