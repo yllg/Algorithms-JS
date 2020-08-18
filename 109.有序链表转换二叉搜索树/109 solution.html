@@ -1,76 +1,116 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
 </head>
+
 <body>
-<script>
-// Source : https://leetcode.com/problems/convert-sorted-list-to-binary-search-tree/
-// Author : 悬笔e绝
-// Date   : 2019-04-17
+  <script>
+    // Source : https://leetcode.com/problems/convert-sorted-list-to-binary-search-tree/
+    // Author : 悬笔e绝
+    // Date   : 2019-04-17
 
-//  Definition for a binary tree node.
- function TreeNode(val) {
-     this.val = val;
-     this.left = this.right = null;
- }
- //  Definition for singly-linked list.
- function ListNode(val) {
-     this.val = val;
-     this.next = null;
- }
+    //  Definition for a binary tree node.
+    function TreeNode(val) {
+      this.val = val;
+      this.left = this.right = null;
+    }
+    //  Definition for singly-linked list.
+    function ListNode(val) {
+      this.val = val;
+      this.next = null;
+    }
 
-/**
- * @param {number[]} nums
- * @return {TreeNode}
- */
- var sortedArrayToBST = function(nums) {
-  return dfs(0, nums.length - 1);
+    /**
+     * @param {number[]} nums
+     * @return {TreeNode}
+     */
 
-  function dfs(start, end) {
-    if (start > end)
-      return null;
+    // 方法1：有序列表转成有序数组
+    // 时间复杂度 O(n)，空间复杂度 O(n)
+    const sortedListToBST1 = (head) => {
+      const arr = [];
+      while (head) {
+        arr.push(head.val);
+        head = head.next;
+      }
+      const buildBST = (start, end) => {
+        if (start > end) return null;
+        const mid = (start + end) >>> 1;
+        const root = new TreeNode(arr[mid]);
+        root.left = buildBST(start, mid - 1);
+        root.right = buildBST(mid + 1, end);
+        return root;
+      };
+      return buildBST(0, arr.length - 1);
+    };
 
-    var mid = (start + end) >> 1;
-    var node = new TreeNode(nums[mid]);
-    node.left = dfs(start, mid - 1);
-    node.right = dfs(mid + 1, end);
+    // 方法2：快慢指针法
+    // 时间复杂度 O(nlogn)，空间复杂度 O(logn)
+    const sortedListToBST2 = (head) => {
+      if (head == null) return null;
+      let slow = head;
+      let fast = head;
+      let preSlow; // 保存slow的前一个节点
+      while (fast && fast.next) {
+        preSlow = slow;
+        slow = slow.next;
+        fast = fast.next.next;
+      }
+      const root = new TreeNode(slow.val);
+      if (preSlow != null) { // 中点slow不是head，需要构建左子树
+        preSlow.next = null; // 切断preSlow和中点slow
+        root.left = sortedListToBST2(head);
+      }
+      root.right = sortedListToBST2(slow.next);
+      return root;
+    };
 
-    return node;
-  }
-};
+    // 方法3：中序遍历
+    // 时间复杂度 O(n)，空间复杂度 O(logn)
+    const sortedListToBST3 = (head) => {
+      if (head == null) return null;
+      let len = 0;
+      let h = head; // h初始指向头结点
+      while (head) { // 求链表的节点个数
+        len++;
+        head = head.next;
+      }
+      const buildBST = (start, end) => {
+        if (start > end) return null; // 递归的出口，返回null节点
+        const mid = (start + end) >>> 1; // 求mid，不是为了构建它，是为了分治
+        const left = buildBST(start, mid - 1);
+        const root = new TreeNode(h.val); // 按 h.val 构建节点
+        h = h.next; // h指针步进              
+        root.left = left; // root构建出来了，接上左子树        
+        root.right = buildBST(mid + 1, end); // 构建当前root的右子树
+        return root;
+      };
+      return buildBST(0, len - 1);
+    };
 
-/**
- * @param {ListNode} head
- * @return {TreeNode}
- */
-var sortedListToBST = function(head) {
-  var ans = [];
-  while (head) {
-    ans.push(head.val);
-    head = head.next;
-  }
 
-  return sortedArrayToBST(ans);
-};
+    // test
+    //N4是尾节点，N1是头节点
+    var N5 = new ListNode(9);
+    N5.next = null;
+    var N4 = new ListNode(5);
+    N4.nest = N5;
+    var N3 = new ListNode(0);
+    N3.next = N4;
+    var N2 = new ListNode(-3);
+    N2.next = N3;
+    var N1 = new ListNode(-10);
+    N1.next = N2;
 
-//N4是尾节点，N1是头节点
-var N5 = new ListNode(9);
-N5.next = null;
-var N4 = new ListNode(5);
-N4.nest = N5;
-var N3 = new ListNode(0);
-N3.next = N4;
-var N2 = new ListNode(-3);
-N2.next = N3;
-var N1 = new ListNode(-10);
-N1.next = N2;
-
-console.log(sortedListToBST(N1));
-
-</script>
+    console.log(sortedListToBST1(N1));
+    console.log(sortedListToBST2(N1));
+    console.log(sortedListToBST3(N1));
+  </script>
 </body>
+
 </html>
