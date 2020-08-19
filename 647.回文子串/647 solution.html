@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法1：暴力法 中心扩展
+        // 时间复杂度 O(n^2), 空间复杂度 O(1)
+        var countSubstrings1 = function (s) {
+            const n = s.length;
+            let ans = 0;
+            for (let i = 0; i < 2 * n - 1; ++i) {
+                let l = i / 2,
+                    r = i / 2 + i % 2;
+                while (l >= 0 && r < n && s.charAt(l) == s.charAt(r)) {
+                    --l;
+                    ++r;
+                    ++ans;
+                }
+            }
+            return ans;
+        };
+
+        // 方法2：动态规划 
+        // 时间复杂度 O(n^2), 空间复杂度 O(n)
+        const countSubstrings2 = (s) => {
+            let count = 0;
+            const len = s.length;
+
+            const dp = new Array(len);
+            for (let i = 0; i < len; i++) {
+                dp[i] = new Array(len).fill(false);
+            }
+
+            for (let j = 0; j < len; j++) {
+                for (let i = 0; i <= j; i++) {
+                    if (i == j) {
+                        dp[i][j] = true;
+                    } else if (s[i] == s[j]) {
+                        dp[i][j] = j - i == 1 || dp[i + 1][j - 1];
+                    }
+                    if (dp[i][j]) count++;
+                }
+            }
+            return count;
+        };
+
+        // 方法3：manacher 马拉车算法
+        // 时间复杂度 O(n), 空间复杂度 O(n)
+        var countSubstrings3 = function (s) {
+            let n = s.length;
+            let t = ['$', '#'];
+            for (let i = 0; i < n; ++i) {
+                t.push(s.charAt(i));
+                t.push('#');
+            }
+            n = t.length;
+            t.push('!');
+            t = t.join('');
+            const f = new Array(n);
+            let iMax = 0,
+                rMax = 0,
+                ans = 0;
+            for (let i = 1; i < n; ++i) {
+                // 初始化 f[i]
+                f[i] = i <= rMax ? Math.min(rMax - i + 1, f[2 * iMax - i]) : 1;
+                // 中心拓展
+                while (t.charAt(i + f[i]) == t.charAt(i - f[i])) {
+                    ++f[i];
+                }
+                // 动态维护 iMax 和 rMax
+                if (i + f[i] - 1 > rMax) {
+                    iMax = i;
+                    rMax = i + f[i] - 1;
+                }
+                // 统计答案, 当前贡献为 (f[i] - 1) / 2 上取整
+                ans += Math.floor(f[i] / 2);
+            }
+            return ans;
+        };
+
+        // test
+        let s = "aaa";
+        console.log(countSubstrings1(s));
+        console.log(countSubstrings2(s));
+        console.log(countSubstrings3(s));
+    </script>
+</body>
+
+</html>
