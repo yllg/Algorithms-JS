@@ -1,60 +1,90 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
 </head>
+
 <body>
-<script>
-// Source : https://leetcode.com/problems/minimum-depth-of-binary-tree/
-// Author : 悬笔e绝
-// Date   : 2019-04-24
+  <script>
+    // Source : https://leetcode.com/problems/minimum-depth-of-binary-tree/
+    // Author : 悬笔e绝
+    // Date   : 2019-04-24
 
-//  Definition for a binary tree node.
- function TreeNode(val) {
-     this.val = val;
-     this.left = this.right = null;
- }
-/**
- * @param {TreeNode} root
- * @return {number}
- */
+    //  Definition for a binary tree node.
+    function TreeNode(val) {
+      this.val = val;
+      this.left = this.right = null;
+    }
+    /**
+     * @param {TreeNode} root
+     * @return {number}
+     */
 
-var ans;
+    // 方法1: 深度优先搜索
+    // 遍历整棵树，记录最小深度
+    // 时间复杂度 O(N) N是树的节点数
+    // 空间复杂度 O(H) H是树的高度
+    const minDepth1 = function (root) {
+      let ans = 0;
+      dfs(root, 1);
 
-function dfs(root, depth) {
-  if (!root)
-    return;
-  if (ans && depth >= ans)
-    return;
-  if (!root.left && !root.right) {
-    ans = depth;
-    return;
-  }
-  if (root.left) 
-    dfs(root.left, depth + 1);
-  if (root.right)
-    dfs(root.right, depth + 1);
-}
+      function dfs(root, depth) {
+        if (!root)
+          return;
+        if (ans && depth >= ans)
+          return;
+        if (!root.left && !root.right) {
+          ans = depth;
+          return;
+        }
+        if (root.left)
+          dfs(root.left, depth + 1);
+        if (root.right)
+          dfs(root.right, depth + 1);
+      }
 
-var minDepth = function(root) {
-  ans = 0;
-  dfs(root, 1);
-  return ans;
-};
+      return ans;
+    };
 
-// 测试
-var tree_node_1_1 = new TreeNode(9);
-var tree_node_1_2 = new TreeNode(20);
-tree_node_1_2.left = new TreeNode(15);
-tree_node_1_2.right = new TreeNode(7);
-var tree_node_1 = new TreeNode(3);
-tree_node_1.left = tree_node_1_1;
-tree_node_1.right = tree_node_1_2;
-console.log(minDepth(tree_node_1)); // 2
+    // 方法2: 广度优先搜索
+    // 保证了最先搜索到的叶子节点的深度一定最小。
+    // 时间复杂度 O(N) N是树的节点数
+    // 空间复杂度 O(N) H是树的高度
+    const minDepth2 = (root) => {
+      if (root == null) return 0;
+      const queue = [root];
+      let depth = 1;
+      while (queue.length) {
+        const levelSize = queue.length;
+        for (let i = 0; i < levelSize; i++) {
+          const cur = queue.shift();
+          // 当前节点没有子节点了，现在就是最小深度了
+          if (cur.left == null && cur.right == null) {
+            return depth;
+          }
+          // 让子节点入列考察
+          if (cur.left) queue.push(cur.left);
+          if (cur.right) queue.push(cur.right);
+        }
+        depth++; // 肯定有下一层，如果没有早就return了
+      }
+    };
 
-</script>
+    // 测试
+    var tree_node_1_1 = new TreeNode(9);
+    var tree_node_1_2 = new TreeNode(20);
+    tree_node_1_2.left = new TreeNode(15);
+    tree_node_1_2.right = new TreeNode(7);
+    var tree_node_1 = new TreeNode(3);
+    tree_node_1.left = tree_node_1_1;
+    tree_node_1.right = tree_node_1_2;
+    console.log(minDepth1(tree_node_1)); // 2
+    console.log(minDepth2(tree_node_1)); // 2
+  </script>
 </body>
+
 </html>
