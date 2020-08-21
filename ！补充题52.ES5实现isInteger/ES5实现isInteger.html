@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // Number.isInteger() 判断参数是否为整数
+        // 方法1
+        function isInteger1(value) {
+            return typeof value === 'number' && 
+                isFinite(value) && 
+                Math.floor(value) === value;
+        }
+        // 方法2 异或
+        function isInteger2(value) {
+            return typeof value === 'number' && 
+                isFinite(value) && 
+               (value ^ 0) === value;
+        }
+        // 方法3 取余
+        function isInteger3(value) {
+            return typeof value === 'number' && 
+                isFinite(value) && 
+               (value % 1) === 0;
+        }
+
+        // test
+        console.log(isInteger1(1));
+        console.log(isInteger2(1));
+        console.log(isInteger3(1));
+        console.log(isInteger1(1.1));
+        console.log(isInteger2(1.1));
+        console.log(isInteger3(1.1));
+    </script>
+</body>
+
+</html>
