@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 先入先出
+        // 方法1 函数封装类
+        function Node(data) {
+            this.data = data;
+            this.next = null;
+        }
+
+        function Queue() {
+            // 初始化列表，创建一个指向队列节点的头指针
+            this.front = null;
+            this.len = 0;
+        }
+        Queue.prototype = {
+            add(node) { // 入队：创建一个新节点，添加到链表尾部；如果链表为空，让头指针指向该节点
+                let current = this.front;
+                if (current) {
+                    while (current.next != null) {
+                        current = current.next;
+                    }
+                    current.next = new Node(node);
+                    this.len++;
+                } else {
+                    this.front = new Node(node);
+                    this.len = 1;
+                }
+            },
+            remove() { // 出队 free 头指针指向第一个节点，让头指针指向该节点的下一个节点，然后返回该节点的值
+                if (this.front) {
+                    let current = this.front;
+                    let data = current.data;
+                    this.front = current.next;
+                    this.len--;
+                    return data;
+                } else {
+                    throw new Error('the queue is enpty!');
+                }
+            },
+            isEmpty() { // 判断空
+                return this.front === null;
+            },
+            getFront() { // 获取第一个元素
+                return this.front.data;
+            },
+            getLength() { // 获取队列长度
+                return this.len;
+            },
+            printQueue() { // 打印队列全部元素
+                let temp = this.front;
+                while (temp) {
+                    console.log(temp.data);
+                    temp = temp.next;
+                }
+            },
+            clear() { // 清空队列
+                while (this.front) {
+                    let node = this.front;
+                    this.front = this.front.next;
+                    node.next = null;
+                    node = null;
+                }
+                this.len = 0;
+            }
+        }
+
+        // test
+        let queue = new Queue();
+        queue.add(1);
+        queue.add(2);
+        queue.add(3);
+        queue.printQueue();
+        console.log('------------');
+        queue.remove();
+        queue.add(1);
+        queue.printQueue();
+        console.log('------------');
+        console.log(queue.getFront());
+        console.log(queue.isEmpty());
+        console.log(queue.getLength());
+        queue.clear();
+        console.log(queue);
+    </script>
+</body>
+
+</html>
