@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 回溯法
+        // 时间复杂度：O(1)。一共有 92169216 种可能性，对于每种可能性，各项操作的时间复杂度都是 O(1)，因此总时间复杂度是 O(1)。
+
+        //空间复杂度：O(1)。空间复杂度取决于递归调用层数与存储中间状态的列表，因为一共有 44 个数，所以递归调用的层数最多为 44，存储中间状态的列表最多包含 44 个元素，因此空间复杂度为常数。
+        const judgePoint24 = (nums) => {
+            const len = nums.length;
+            if (len == 1) { // 递归的出口，剩一个数，处理一下精度丢失的问题
+                const diff = nums[0] - 24;
+                return Math.abs(diff) < 0.00001;
+            }
+            for (let i = 0; i < len; i++) {
+                for (let j = i + 1; j < len; j++) {
+                    const copyNums = nums.slice(); // 拷贝一份原数组
+                    copyNums.splice(j, 1); // 先删除索引大的数字
+                    copyNums.splice(i, 1); // 这样才不会影响索引小的数字的位置
+
+                    let n1 = nums[i];
+                    let n2 = nums[j];
+                    let isValid = false; // 这是一个标识变量
+
+                    isValid = isValid || judgePoint24(copyNums.concat(n1 + n2));
+                    // 减 与 被减
+                    isValid = isValid || judgePoint24(copyNums.concat(n1 - n2));
+                    isValid = isValid || judgePoint24(copyNums.concat(n2 - n1));
+                    // 乘
+                    isValid = isValid || judgePoint24(copyNums.concat(n1 * n2));
+                    if (n2 !== 0) { // 除
+                        isValid = isValid || judgePoint24(copyNums.concat(n1 / n2));
+                    }
+                    if (n1 !== 0) { // 被除
+                        isValid = isValid || judgePoint24(copyNums.concat(n2 / n1));
+                    }
+                    if (isValid) return true; // 一旦递归返回了true，isValid就是true，返回它
+                }
+            }
+            return false; // 始终都不能返回true，则返回false
+        };
+
+        // test
+        let nums = [4, 1, 8, 7];
+        console.log(judgePoint24(nums));
+    </script>
+</body>
+
+</html>
