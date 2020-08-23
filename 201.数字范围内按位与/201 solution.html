@@ -1,51 +1,83 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
 </head>
+
 <body>
-<script>
-// Source : https://leetcode.com/problems/bitwise-and-of-numbers-range/
-// Author : 悬笔e绝
-// Date   : 2019-10-22
+  <script>
+    // Source : https://leetcode.com/problems/bitwise-and-of-numbers-range/
+    // Author : 悬笔e绝
+    // Date   : 2019-10-22
 
-/**
- * @param {number} m
- * @param {number} n
- * @return {number}
- */
+    /**
+     * @param {number} m
+     * @param {number} n
+     * @return {number}
+     */
 
-function getBitNum(a, pos) {
-  a++;
-  var res = Math.pow(2, pos)
-    , loop = ~~(a / res)
-    , num = loop * (res / 2) + Math.max(a % res - res / 2, 0);
-  return num;
-}
+    // 方法1：常规法
+    var rangeBitwiseAnd1 = function (m, n) {
+      function getBitNum(a, pos) {
+        a++;
+        var res = Math.pow(2, pos),
+          loop = ~~(a / res),
+          num = loop * (res / 2) + Math.max(a % res - res / 2, 0);
+        return num;
+      }
+      var ans = 0,
+        tmp = n,
+        digits = 0;
+      while (tmp) {
+        digits++;
+        tmp >>= 1;
+      }
+      for (var i = 0; i < digits; i++) {
+        var num = getBitNum(n, i + 1) - getBitNum(m - 1, i + 1);
+        if (num === n - m + 1)
+          ans += Math.pow(2, i);
+      }
+      return ans;
+    };
 
-var rangeBitwiseAnd = function(m, n) {
-  var ans = 0
-    , tmp = n
-    , digits = 0;
-  while (tmp) {
-    digits++;
-    tmp >>= 1;
-  }
-  for (var i = 0; i < digits; i++) {
-    var num = getBitNum(n, i + 1) - getBitNum(m - 1, i + 1);
-    if (num === n - m + 1)
-      ans += Math.pow(2, i);
-  }
-  return ans;
-};
+    // 方法2：位移
+    // 时间复杂度：O(log n)。算法的时间复杂度取决于 m 和 n 的二进制位数，由于 m ≤ n，因此时间复杂度取决于 n 的二进制位数。
+    // 空间复杂度：O(1)。我们只需要常数空间存放若干变量。
+    var rangeBitwiseAnd2 = function (m, n) {
+      let shift = 0;
+      // 找到公共前缀
+      while (m < n) {
+        m >>= 1;
+        n >>= 1;
+        ++shift;
+      }
+      return m << shift;
+    };
 
-//测试
-console.log(rangeBitwiseAnd(5,7));
-console.log(rangeBitwiseAnd(0,1));
 
-</script>
+    // 方法3：Brian Kernighan 算法
+    // 时间复杂度：O(log n)。同位移法，但是这个算法需要的迭代次数会更少，因为它跳过了两个数字之间的所有零位。
+    // 空间复杂度：O(1)。我们只需要常数空间存放若干变量。
+    var rangeBitwiseAnd3 = function (m, n) {
+      while (m < n) {
+        // 抹去最右边的 1
+        n = n & (n - 1);
+      }
+      return n;
+    };
+
+    //测试
+    console.log(rangeBitwiseAnd1(5, 7));
+    console.log(rangeBitwiseAnd2(5, 7));
+    console.log(rangeBitwiseAnd3(5, 7));
+    console.log(rangeBitwiseAnd1(0, 1));
+    console.log(rangeBitwiseAnd2(0, 1));
+    console.log(rangeBitwiseAnd3(0, 1));
+  </script>
 </body>
+
 </html>
