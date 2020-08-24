@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法1：枚举；略
+
+        // 方法2：字符串匹配
+        // 将原字符串给出拷贝一遍组成新字符串；
+        // 掐头去尾留中间，如果还包含原字符串，则满足题意。
+        var repeatedSubstringPattern = function (s) {
+            let s1 = (s + s).slice(1, -1);
+            return s1.indexOf(s) != -1;
+        };
+
+        // 方法3：正则
+        var repeatedSubstringPattern = function (s) {
+            let reg = /^(\w+)\1+$/
+            return reg.test(s)
+        };
+
+        // TODO:方法4: KMP算法,优化 KMP 算法
+    </script>
+</body>
+
+</html>
