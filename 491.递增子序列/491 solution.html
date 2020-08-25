@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 解法1：DFS回溯 + 哈希
+        // 时间复杂度 时间复杂度：O(2^n * n)
+        // 空间复杂度：O(2^n)
+        const findSubsequences = (nums) => {
+            const res = [];
+            const len = nums.length;
+            const set = new Set();
+
+            const dfs = (start, path) => {
+                if (path.length >= 2) {
+                    const str = path.join(','); // 转成字符串，存入set
+                    if (!set.has(str)) { // 避免重复的子序列进入res
+                        res.push(path.slice()); // 推入一份拷贝，path还要继续用
+                        set.add(str);
+                    }
+                }
+                for (let i = start; i < len; i++) {
+                    const prev = path[path.length - 1];
+                    const cur = nums[i];
+                    if (path.length == 0 || prev <= cur) {
+                        path.push(cur); // 选择当前的数字
+                        dfs(i + 1, path); // 继续往下递归
+                        path.pop(); // 撤销选择当前数字，选择别的数字
+                    }
+                }
+            };
+            dfs(0, []);
+            return res;
+        };
+
+        // 解法2：DFS回溯 ，减枝，不开辟额外空间去重
+        // 时间复杂度 时间复杂度：O(2^n * n)
+        // 空间复杂度：O(n)
+        const findSubsequences = (nums) => {
+            const res = [];
+            const len = nums.length;
+
+            const dfs = (start, path) => {
+                if (start == len) { // 指针已经越界
+                    if (path.length >= 2) {
+                        res.push(path.slice());
+                        return;
+                    }
+                }
+                path.push(nums[start]);
+                for (let i = start + 1; i <= len; i++) {
+                    const cur = nums[start];
+                    const next = nums[i];
+                    if (i < len && cur == next) { // i还没越界，且当前选择和后一个选择相同
+                        dfs(i, path); // 还是会递归当前选择，但做完了就break
+                        break;
+                    } else if (i == len || cur < next) { // i已经越界，让它进入递归中去return
+                        dfs(i, path); // 或cur < next满足条件，往下递归
+                    }
+                }
+                path.pop();
+            };
+            for (let i = 0; i < len; i++) {
+                dfs(i, []);
+            }
+            return res;
+        };
+    </script>
+</body>
+
+</html>
