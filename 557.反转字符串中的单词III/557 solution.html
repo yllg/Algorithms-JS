@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 各个单词间的顺序不变，单词自身反转
+        // 使用额外的空间
+        // 时间复杂度 O(n)
+        // 空间复杂度 O(n)
+        var reverseWords = function (s) {
+            const ret = [];
+            const length = s.length;
+            let i = 0;
+            while (i < length) {
+                let start = i;
+                while (i < length && s.charAt(i) != ' ') {
+                    i++;
+                }
+                for (let p = start; p < i; p++) {
+                    ret.push(s.charAt(start + i - 1 - p));
+                }
+                while (i < length && s.charAt(i) == ' ') {
+                    i++;
+                    ret.push(' ');
+                }
+            }
+            return ret.join('');
+        };
+
+        // test
+        let s = "Let's take LeetCode contest";
+        // "s'teL ekat edoCteeL tsetnoc"
+        console.log(reverseWords(s));
+    </script>
+</body>
+
+</html>

@@ -12,6 +12,7 @@
 // Author : 悬笔e绝
 // Date   : 2019-07-31
 
+// 单词自身顺序不变，整体各个单词顺序反转
 /**
  * @param {string} str
  * @returns {string}
@@ -25,6 +26,11 @@ var reverseWords = function(str) {
   var arr = str.split(' ').reverse();
   return arr.join(' ');
 };
+
+// test
+let s = "the sky is blue";
+// "blue is sky the"
+console.log(reverseWords(s));
 </script>
 </body>
 </html>

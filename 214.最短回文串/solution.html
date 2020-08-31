@@ -1,67 +1,120 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
 </head>
+
 <body>
-<script>
-// Source : https://leetcode.com/problems/shortest-palindrome/
-// Author : 悬笔e绝
-// Date   : 2019-11-24
+  <script>
+    // Source : https://leetcode.com/problems/shortest-palindrome/
+    // Author : 悬笔e绝
+    // Date   : 2019-11-24
 
-/**
- * @param {string} s
- * @return {string}
- */
+    /**
+     * @param {string} s
+     * @return {string}
+     */
 
-function Manacher(s) {
-  var str = '*#'
-    , dp = []
-    , maxn = 0
-    , idx = 0;
+    // 方法1：暴力法
+    // 时间复杂度：O(n^2)
+    // 将字符串翻转过来，加到开头，判断中间去重，得到最短回文串
+    const shortestPalindrome1 = (s) => { // s：ananab
+      const len = s.length;
+      const rev_s = s.split('').reverse().join(''); // rev_s：banana
+      for (let i = len; i >= 0; i--) { // ananab==banana?、anana==anana?、……
+        if (s.substring(0, i) == rev_s.substring(len - i)) {
+          return rev_s.substring(0, len - i) + s; // 返回 b + ananab
+        }
+      }
+    }
 
-  for (var i = 0, len = s.length; i < len; i++)
-    str += s[i] + '#';
+    // 方法2： 马拉车
+    // 时间复杂度：O(n)
+    function Manacher(s) {
+      var str = '*#',
+        dp = [],
+        maxn = 0,
+        idx = 0;
 
-  for (var i = 1, len = str.length; i < len; i++) {
-    if (maxn > i) dp[i] = Math.min(dp[2 * idx - i], maxn - i);
-    else dp[i] = 1;
+      for (var i = 0, len = s.length; i < len; i++)
+        str += s[i] + '#';
 
-    while (str[i - dp[i]] === str[i + dp[i]]) dp[i]++;
+      for (var i = 1, len = str.length; i < len; i++) {
+        if (maxn > i) dp[i] = Math.min(dp[2 * idx - i], maxn - i);
+        else dp[i] = 1;
 
-    if (dp[i] + i > maxn)
-      maxn = dp[i] + i, idx = i;
-  }
+        while (str[i - dp[i]] === str[i + dp[i]]) dp[i]++;
 
-  var ans = 0
-    , pos;
+        if (dp[i] + i > maxn)
+          maxn = dp[i] + i, idx = i;
+      }
 
-  var pos;
-  for (var i = 1; i < len; i++) {
-    if (i === dp[i])
-      pos = i;
-  }
+      var ans = 0,
+        pos;
 
-  var tmp = str[pos] === '#' ? '' : str[pos];
-  for (var i = pos + 1; i < len; i++) {
-    var res = str[i] === '#' ? '' : str[i];
-    tmp = res + tmp + res;
-  }
+      var pos;
+      for (var i = 1; i < len; i++) {
+        if (i === dp[i])
+          pos = i;
+      }
 
-  return tmp;
-}
+      var tmp = str[pos] === '#' ? '' : str[pos];
+      for (var i = pos + 1; i < len; i++) {
+        var res = str[i] === '#' ? '' : str[i];
+        tmp = res + tmp + res;
+      }
 
-var shortestPalindrome = function(s) {
-  var str = Manacher(s);
-  return str;
-};
+      return tmp;
+    }
 
-//测试
-var s = "aacecaaa";
-console.log('shortestPalindrome', shortestPalindrome(s));
-</script>
+    var shortestPalindrome2 = function (s) {
+      var str = Manacher(s);
+      return str;
+    };
+
+    // 方法3：KMP算法
+    // 时间复杂度：O(n)
+    const shortestPalindrome3 = (s) => {
+      const rev_s = s.split('').reverse().join('');
+      const str = s + "#" + rev_s;
+      const next = new Array(str.length).fill(0);
+      // 单独封装出来，方便学习记忆，是固定的模板代码
+      const kmp = (next, str) => {
+        next[0] = 0;
+        let len = 0;
+        let i = 1;
+        while (i < str.length) {
+          if (str[i] == str[len]) {
+            len++;
+            next[i] = len;
+            i++;
+          } else {
+            if (len == 0) {
+              next[i] = 0;
+              i++;
+            } else {
+              len = next[len - 1];
+            }
+          }
+        }
+      };
+      kmp(next, str);
+      const maxLen = next[str.length - 1]; // 最长回文前缀的长度
+      const add = s.substring(maxLen).split('').reverse().join('');
+      return add + s;
+    };
+
+
+    //测试
+    var s = "aacecaaa";
+    console.log('shortestPalindrome', shortestPalindrome1(s));
+    console.log('shortestPalindrome', shortestPalindrome2(s));
+    console.log('shortestPalindrome', shortestPalindrome3(s));
+  </script>
 </body>
+
 </html>
