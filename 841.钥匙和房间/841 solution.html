@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法1：DFS
+        // 时间复杂度：O(n+m), 空间复杂度 O(n)
+        /**
+        * @param {number[][]} rooms
+        * @return {boolean}
+        */
+        var canVisitAllRooms1 = function (rooms) {
+            let opens = new Set();
+            let openRooms = (key) => {
+                if (!opens.has(key)) {//没开门才可以进去拿钥匙
+                    opens.add(key);//把该房间加入opens
+                    for (let otherKey of rooms[key]) {
+                        openRooms(otherKey);
+                    }
+                }
+            }
+            openRooms(0);
+            return opens.size >= rooms.length;
+        }
+
+        // 方法2：BFS
+        // 时间复杂度：O(n+m), 空间复杂度 O(n)
+        /**
+        * @param {number[][]} rooms
+        * @return {boolean}
+        */
+        var canVisitAllRooms2 = function (rooms) {
+            let opens = new Set();
+            let keys = [0];
+            while (keys.length) {
+                let key = keys.shift();
+                if (!opens.has(key)) {
+                    opens.add(key);
+                    for (let otherKey of rooms[key]) {
+                        keys.push(otherKey);
+                    }
+                }
+            }
+            return opens.size >= rooms.length;
+        };
+
+        // test
+        let rooms = [[1],[2],[3],[]];
+        console.log(canVisitAllRooms1(rooms))
+        console.log(canVisitAllRooms2(rooms))
+
+    </script>
+</body>
+
+</html>
