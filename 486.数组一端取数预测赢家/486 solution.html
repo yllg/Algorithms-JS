@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法1：递归
+        // 时间复杂度：O(2^n); 空间复杂度 O(n)
+        const PredictTheWinner1 = (nums) => {
+
+            const helper = (i, j) => { // i，j是两端的索引
+                if (i == j) { // 递归的出口，此时只有一个选择，并且没有剩余的可选
+                    return nums[i];
+                }
+                const pickI = nums[i] - helper(i + 1, j); // 选择左端
+                const pickJ = nums[j] - helper(i, j - 1); // 选择右端
+                return Math.max(pickI, pickJ);            // 取较大者
+            };
+
+            return helper(0, nums.length - 1) >= 0;
+        };
+
+        // 方法2：记忆化递归
+        const PredictTheWinner2 = (nums) => {
+            const len = nums.length;
+
+            const memo = new Array(len);
+            for (let i = 0; i < memo.length; i++) {
+                memo[i] = new Array(len);
+            }
+
+            const helper = (i, j) => {
+                if (memo[i][j] !== undefined) {
+                    return memo[i][j];
+                }
+                if (i == j) {
+                    memo[i][j] = nums[i];
+                    return nums[i];
+                }
+                const pickI = nums[i] - helper(i + 1, j);
+                const pickJ = nums[j] - helper(i, j - 1);
+                memo[i][j] = Math.max(pickI, pickJ);
+                return memo[i][j];
+            };
+
+            return helper(0, len - 1) >= 0;
+        };
+
+        // 方法3：动态规划
+        // 时间复杂度：O(n^2); 空间复杂度 O(n)
+        const PredictTheWinner3 = (nums) => {
+            const len = nums.length;
+
+            const dp = new Array(len);
+            for (let i = 0; i < len; i++) {
+                dp[i] = new Array(len);
+            }
+            // base case
+            for (let i = 0; i < len; i++) {
+                dp[i][i] = nums[i];
+            }
+            // iteration
+            for (let i = len - 2; i >= 0; i--) {
+                for (let j = i + 1; j < len; j++) {
+                    const pickI = nums[i] - dp[i + 1][j];
+                    const pickJ = nums[j] - dp[i][j - 1];
+                    dp[i][j] = Math.max(pickI, pickJ);
+                }
+            }
+
+            return dp[0][len - 1] >= 0;
+        };
+
+        // test
+        let nums = [1, 5, 2];
+        console.log(PredictTheWinner1(nums));
+        console.log(PredictTheWinner2(nums));
+        console.log(PredictTheWinner3(nums));
+    </script>
+</body>
+
+</html>
