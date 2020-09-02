@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法1：有限状态自动机
+        // 时间复杂度 O(n), 空间复杂度 O(1)
+        /**
+        * @param {string} s
+        * @return {boolean}
+        */
+        var isNumber = function (s) {
+            var states = [
+                new Map([[' ', 0], ['s', 1], ['d', 2], ['.', 4]]),
+                new Map([['d', 2], ['.', 4]]),
+                new Map([['d', 2], ['.', 3], ['e', 5], [' ', 8]]),
+                new Map([['d', 3], ['e', 5], [' ', 8]]),
+                new Map([['d', 3]]),
+                new Map([['s', 6], ['d', 7]]),
+                new Map([['d', 7]]),
+                new Map([['d', 7], [' ', 8]]),
+                new Map([[' ', 8]])
+            ]
+            var p = 0, t;
+            for (c of s) {
+                if ('0' <= c && c <= '9') t = 'd';
+                else if (c == '+' || c == '-') t = 's';
+                else if (c == 'e' || c == 'E') t = 'e';
+                else if (c == '.' || c == ' ') t = c;
+                else t = '?';
+                console.log(t)
+                if (!states[p].has(t)) return false;
+                p = states[p].get(t);
+            }
+            return p == 2 || p == 3 || p == 7 || p == 8;
+        };
+
+        // 方法2：正则
+        var isNumber = function (s) {
+            return /^[+-]?(\d+(\.\d*)?|(\.\d+))(e[+-]?\d+)?$/i.test(s.trim());
+        };
+    </script>
+</body>
+
+</html>
