@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 在 n×n 的棋盘上放置 n 个皇后，同一行、同一列、同一对角线上不能出现两个皇后
+        // 解法： 回溯法
+        // 时间复杂度 O(n!) 空间复杂度 O(n)
+        const solveNQueens = (n) => {
+            const board = new Array(n);
+            for (let i = 0; i < n; i++) { // 创建一个充满“点”的棋盘
+                board[i] = new Array(n).fill('.');
+            }
+
+            const res = [];
+            const isValid = (row, col) => {
+                for (let i = 0; i < row; i++) {
+                    for (let j = 0; j < n; j++) {
+                        if (board[i][j] == 'Q' &&
+                            (j == col || i + j === row + col || i - j === row - col)
+                        ) {
+                            return false;
+                        }
+                    }
+                }
+                return true;
+            };
+            const helper = (row) => {
+                if (row == n) { // 递归的出口
+                    const stringsBoard = board.slice(); // 拷贝一份board
+                    for (let i = 0; i < n; i++) {
+                        stringsBoard[i] = stringsBoard[i].join(''); // 将每一行拼成字符串
+                    }
+                    res.push(stringsBoard); // 解 推入res数组
+                    return;
+                }
+                for (let col = 0; col < n; col++) { // 枚举选择
+                    if (isValid(row, col)) { // 提前去掉无效的选择
+                        board[row][col] = "Q"; // 作出选择，放置皇后
+                        helper(row + 1);       // 继续选择，往下递归
+                        board[row][col] = '.'; // 撤销当前选择
+                    }
+                }
+            };
+            helper(0);  // 搜索的开始按钮，从第0行开始
+            return res;
+        };
+
+    </script>
+</body>
+
+</html>
