@@ -1,54 +1,82 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
 </head>
+
 <body>
-<script>
-// Source : https://leetcode.com/problems/binary-tree-paths/
-// Author : 悬笔e绝
-// Date   : 2020-02-18
+  <script>
+    // Source : https://leetcode.com/problems/binary-tree-paths/
+    // Author : 悬笔e绝
+    // Date   : 2020-02-18
 
-/**
- * Definition for a binary tree node.
- * function TreeNode(val) {
- *     this.val = val;
- *     this.left = this.right = null;
- * }
- */
-/**
- * @param {TreeNode} root
- * @return {string[]}
- */
-var ans, res;
+    /**
+     * Definition for a binary tree node.
+     * function TreeNode(val) {
+     *     this.val = val;
+     *     this.left = this.right = null;
+     * }
+     */
+    /**
+     * @param {TreeNode} root
+     * @return {string[]}
+     */
 
-function dfs(root) {
-  if (!root) return;
-  res.push(root.val);
-  if (!root.left && !root.right) {
-    var str = res.reduce(function(pre, item) {
-      return pre + '->' + item;
-    });
-    str = str.toString()
-    ans.push(str);
-    res.pop();
-    return;
-  }
-  if (root.left) 
-    dfs(root.left);
-  if (root.right)
-    dfs(root.right);
-  res.pop();
-}
+    // 方法1：深度优先搜索
+    // 时间复杂度 O(n^2), 空间复杂度 O(n^2)
+    var binaryTreePaths = function (root) {
+      const dfs = (root) => {
+        if (!root) return;
+        res.push(root.val);
+        if (!root.left && !root.right) {
+          var str = res.reduce(function (pre, item) {
+            return pre + '->' + item;
+          });
+          str = str.toString()
+          ans.push(str);
+          res.pop();
+          return;
+        }
+        if (root.left)
+          dfs(root.left);
+        if (root.right)
+          dfs(root.right);
+        res.pop();
+      }
+      let ans = [],
+        res = [];
+      dfs(root);
+      return ans;
+    };
 
-var binaryTreePaths = function(root) {
-  ans = [], res = [];
-  dfs(root);
-  return ans;
-};
-
-</script>
+    // 方法2：DFS 简洁版本
+    // 时间复杂度 O(n^2), 空间复杂度 O(n^2)
+    const binaryTreePaths = (root) => {
+      if (root == null) {
+        return [];
+      }
+      const res = [];
+      const buildPath = (root, pathStr) => {
+        if (root.left == null && root.right == null) {
+          pathStr += root.val;
+          res.push(pathStr);
+          return;
+        }
+        pathStr += root.val + '->';
+        if (root.left) {
+          buildPath(root.left, pathStr);
+        }
+        if (root.right) {
+          buildPath(root.right, pathStr);
+        }
+      };
+      buildPath(root, '');
+      return res;
+    };
+  </script>
 </body>
+
 </html>
