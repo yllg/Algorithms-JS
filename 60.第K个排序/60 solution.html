@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法1：回溯法
+        // 时间复杂度 O(n!); 空间复杂度 O(n)
+        const getPermutation = (n, k) => {
+            let count = 0;
+            const used = new Set();
+            const helper = (temp) => {
+                if (temp.length == n) { // 选齐了 生成了一个排列
+                    count++;
+                    if (count == k) { // 正好是第k个
+                        return temp.join(''); // 拼成字符串，返回出来
+                    }
+                    return; // 结束当前递归，考察别的选择
+                }
+                for (let i = 1; i <= n; i++) { // 枚举出所有选择
+                    if (used.has(i)) continue; // 已经选过，跳过
+                    temp.push(i); // 选择
+                    used.add(i);
+                    const res = helper(temp); // 递归 往下选，获取返回值
+                    temp.pop(); // 撤销选择
+                    used.delete(i);
+                    if (res) { // 有返回值，说明找到了，返回res，结束掉遍历
+                        return res;
+                    }
+                }
+            };
+            return helper([]);
+        };
+
+        // 方法2：回溯 + 剪枝
+        // 时间复杂度 O(n^2); 空间复杂度 O(n)
+        const getPermutation = (n, k) => {
+            const used = new Set();
+            let factorial = 1; // 阶乘
+            for (let i = 1; i <= n; i++) {
+                factorial = factorial * i;
+            }
+            const helper = (temp) => { // temp是当前已选的数字数组
+                const progress = temp.length; // progress表示当前已选了几个数字
+                if (progress == n) { // 因为是空降到正确的组，选够了n个即可返回
+                    return temp.join('');
+                }
+                const groupNum = factorial / (n - progress); // 一个分组有多少个排列
+                factorial = groupNum; // 更新一下阶乘
+                for (let i = 1; i <= n; i++) {
+                    if (used.has(i)) continue;
+
+                    if (k > groupNum) { // k大于一组的个数
+                        k = k - groupNum; // 更新k，
+                        continue; // 跳过这一组，即跳过当前的数字i
+                    }
+                    temp.push(i); // 选择i
+                    used.add(i); // 记录选择
+                    return helper(temp); // 继续选
+                }
+            };
+            return helper([]);
+        };
+
+        // 方法3：数学找规律
+        // 时间复杂度 O(n^2); 空间复杂度 O(n)
+        const getPermutation = (n, k) => { // 以 n=4 k=10 为例
+            const nums = [];
+            let factorial = 1; // 阶乘  
+            for (let i = 1; i <= n; i++) {
+                nums.push(i); // [1, 2, 3, 4]
+                factorial = factorial * i; // 4!   24
+            }
+            k--; // nums中数字们的索引是从0开始，k要先减去1
+            let resStr = '';
+            while (nums.length > 0) { // 选了一个数字就删掉，直到为空
+                factorial = factorial / nums.length; //  3! .. 2! .. 1!
+                const index = k / factorial | 0; // 当前选择的数字的索引
+                resStr += nums[index]; // 加上当前选的数字
+                nums.splice(index, 1); // nums删去选的这个数字
+                k = k % factorial; // 更新 k，
+            }
+            return resStr;
+        };
+    </script>
+</body>
+
+</html>
