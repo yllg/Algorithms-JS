@@ -21,6 +21,9 @@ function TreeNode(val) {
  * @param {TreeNode} root
  * @return {number[][]}
  */
+
+ // BFS 广度优先搜索
+ // 时间复杂度 O(n) 空间复杂度 O(n)
  var levelOrderBottom = function(root) {
   if (!root) return [];
   var ans = [], tmp = [root];
