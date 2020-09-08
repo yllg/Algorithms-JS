@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法1：普通回溯+剪枝
+        const combine1 = (n, k) => {
+            const res = [];
+            const helper = (start, path) => { // start是枚举选择的起点 path是当前构建的路径（组合）
+                if (path.length == k) {
+                    res.push(path.slice());       // 拷贝一份path，推入res
+                    return;                       // 结束当前递归
+                }
+                for (let i = start; i <= n; i++) { // 枚举出所有选择
+                    path.push(i);                    // 选择
+                    helper(i + 1, path);             // 向下继续选择
+                    path.pop();                      // 撤销选择
+                }
+            };
+            helper(1, []); // 递归的入口，从数字1开始选
+            return res;
+        }
+
+        // 方法2：数学的组合公式
+        const combine2 = (n, k) => {
+            const res = [];
+            const helper = (n, k, path) => {
+                if (n < k || k == 0) { // k不能大于n，或，找齐了k个，就结束递归
+                    if (k == 0) {
+                        res.push(path.slice());
+                    }
+                    return;
+                }
+                helper(n - 1, k - 1, path.concat(n)); // 选n，C(n-1, k-1)
+                helper(n - 1, k, path); // 不选n，C(n-1,k)
+            };
+
+            helper(n, k, []);
+            return res;
+        };
+
+        console.log(combine1(4,2));
+        console.log(combine2(4,2));
+    </script>
+</body>
+
+</html>
