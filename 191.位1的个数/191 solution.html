@@ -17,7 +17,8 @@
  * @return {number}
  */
 
-var hammingWeight = function(n) {
+// 方法1
+var hammingWeight1 = function(n) {
   var ans = 0;
   while(n) {
     if (n & 1) ans ++;
@@ -25,6 +26,32 @@ var hammingWeight = function(n) {
   }
   return ans;
 };
+
+// 方法2
+const hammingWeight2 = (n) => {
+  let res = 0;
+  while(n !== 0) {
+    res += n&1;
+    n >>>= 1;
+  }
+  return res;
+}
+
+// 方法3
+const hammingWeight3 = (n) => {
+  if (n < 0) {
+    n = n >>> 0; // 能够取到负数的补码
+  }
+  let arr = n.toString(2).split('');
+  return arr.reduce((a,b) => {
+    return b === "1" ? a + 1 : a;
+  }, 0);
+}
+
+// test
+console.log(hammingWeight1(88));
+console.log(hammingWeight2(88));
+console.log(hammingWeight3(88));
 </script>
 </body>
 </html>
