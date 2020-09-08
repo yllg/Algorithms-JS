@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法1： 利用srot函数
+        let nearBySort1 = (arr, n) => {
+            arr.sort((a, b) => {
+                return Math.abs(a - n) - Math.abs(b - n);
+            });
+            return arr;
+        }
+
+        // 方法2：基于差距进行归并排序 
+        // 时间复杂度 O(nlogn)
+        let nearBySort2 = function (arr, n) {
+            let splitArr = [];
+            for (let i = 0; i < arr.length; i++) {
+                splitArr.push(arr[i]);
+            }
+            let half = Math.ceil(splitArr.length / 2);
+            return mergeArr(n, splitArr.slice(0, 0 + half), splitArr.slice(0 + half));
+        }
+
+        let mergeArr = (n, left, right) => {
+            if (!left) {
+                return right;
+            }
+            if (!right) {
+                return left;
+            }
+            let sortArr = [], leftIndex = 0, rightIndex = 0, leftLen = left.length, rightLen = right.length;
+            while (leftIndex < leftLen || rightIndex < rightLen) {
+                let leftNum = left[leftIndex], rightNum = right[rightIndex];
+                if (leftNum === undefined) {
+                    sortArr.push(rightNum);
+                    rightIndex++;
+                } else if (rightNum === undefined) {
+                    sortArr.push(leftNum);
+                    leftIndex++;
+                } else {
+                    let leftDistance = Math.abs(n - leftNum);
+                    let rightDistance = Math.abs(n - rightNum);
+                    if (leftDistance <= rightDistance) {
+                        sortArr.push(leftNum);
+                        leftIndex++;
+                    } else {
+                        sortArr.push(rightNum);
+                        rightIndex++;
+                    }
+                }
+            }
+            return sortArr;
+        }
+
+        // 方法3
+        // 差距肯定是固定排序的正整数，可以创建散列表进行记录，进行最终合并
+        // 时间复杂度 O(n)
+        let nearBySort3 = (arr, n) => {
+            let distanceObj = {}, len = arr.length,distance=0,maxDistance=0,result=[];
+            for (let i = 0; i < len; i++) {
+                distance = Math.abs(n, arr[i]);
+                if (distance > maxDistance) {
+                    maxDistance = distance;
+                }                
+                if (distanceObj[distance]) {
+                    distanceObj[distance].push(arr[i]);
+                } else {
+                    distanceObj[distance] = [arr[i]];
+                }
+            }
+            for (let j = 0; j <= maxDistance; j++) {
+                if(distanceObj[j] !== undefined) {
+                    return distanceObj[j];
+                }                
+            }
+            return result;
+        }
+
+        // test
+        let arr = [-3, 28, -1, 0, 7, 33], n = -1;
+        console.log(nearBySort1(arr, n));
+        console.log(nearBySort2(arr, n));
+        console.log(nearBySort3(arr, n));
+    </script>
+</body>
+
+</html>
