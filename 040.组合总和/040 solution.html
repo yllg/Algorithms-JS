@@ -14,24 +14,23 @@
         // Author : 悬笔e绝
         // Date   : 2018-03-30
 
-
+        // 数组中元素在每个组合只能使用一次
+        // 方法1：dfs
         /**
          * @param {number[]} candidates
          * @param {number} target
          * @return {number[][]}
          */
-        var combinationSum2 = function (candidates, target) {
+        var combinationSum2_1 = function (candidates, target) {
             //升序整理下
             candidates.sort(function (a, b) {
                 return a - b;
             });
-            
             var len = candidates.length;
             var res = [];
             var ans = [];
             //递归函数来处理
             dfs(0, 0);
-            
             function dfs(index, sum) {
                 if (sum > target)
                     return;
@@ -40,7 +39,6 @@
                     ans.push(res.concat());
                     return;
                 }
-                
                 //i从index开始，保证每个数字只使用1次
                 for (var i = index; i < len; i++) {
                     // 删除重复的组合
@@ -51,13 +49,37 @@
                     res.pop();
                 }
             }
-
             return ans;
+        };
+
+        // 方法2： 回溯
+        const combinationSum2_2 = (candidates, target) => {
+            candidates.sort();    // 排序
+            const res = [];
+            const dfs = (start, temp, sum) => { // start是索引 当前选择范围的第一个
+                if (sum >= target) {        // 爆掉了，不用继续选了
+                    if (sum == target) {      // 满足条件，加入解集
+                        res.push(temp.slice()); // temp是地址引用，后续还要用，所以拷贝一份
+                    }
+                    return;                   // 结束当前递归
+                }
+                for (let i = start; i < candidates.length; i++) {             // 枚举出选择
+                    if (candidates[i - 1] == candidates[i] && i - 1 >= start) { // 当前选项和隔壁选项一样，跳过
+                        continue;
+                    }
+                    temp.push(candidates[i]);              // 作出选择
+                    dfs(i + 1, temp, sum + candidates[i]); // 递归，向下选择，并更新sum
+                    temp.pop();                            // 撤销选择，
+                }
+            };
+            dfs(0, [], 0);
+            return res;
         };
 
         //测试
         var nums = [10, 1, 2, 7, 6, 1, 5];
-        console.log(combinationSum2(nums,8));
+        console.log(combinationSum2_1(nums, 8));
+        console.log(combinationSum2_2(nums, 8));
 
     </script>
 </body>
