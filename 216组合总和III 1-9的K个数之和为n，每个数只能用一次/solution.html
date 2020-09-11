@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+
+    // Source : https://leetcode.com/problems/combination-sum-iii/
+    // Author : 悬笔e绝
+    // Date   : 2019-12-02
+
+    /**
+     * @param {number} k
+     * @param {number} n
+     * @return {number[][]}
+     */
+
+    // 1-9的K个数之和为n，每个数只能用一次
+
+    // 方法1：常规dfs
+    var combinationSum3 = function (k, n) {
+      ans = [];
+      for (var i = 1; i <= 9; i++)
+        dfs([i], i, 1, k, i, n);
+      return ans;
+
+      function dfs(arr, last, num, k, sum, n) {
+        if (num === k && sum === n) {
+          var tmp = arr.map(function (item) {
+            return item;
+          });
+
+          ans.push(tmp);
+          return;
+        }
+
+        if (num > k || sum > n)
+          return;
+
+        for (var i = last + 1; i <= 9; i++) {
+          arr[arr.length] = i;
+          dfs(arr, i, num + 1, k, sum + i, n);
+          arr.pop();
+        }
+      }
+    };
+
+    // 方法2：回溯
+    const combinationSum3 = (k, n) => {
+      const res = [];
+
+      const dfs = (start, temp, sum) => {
+        if (temp.length == k) {     // You've selected k numbers. End recursion
+          if (sum == n) {           // The sum of numbers in a combination equals n
+            res.push(temp.slice()); // Add its copy to the solution set
+          }
+          return;
+        }
+        for (let i = start; i <= 9; i++) { // Enumerate the options
+          temp.push(i);                    // Make a choice
+          dfs(i + 1, temp, sum + i);       // Explore
+          temp.pop();                      // Undo the choice
+        }
+      };
+
+      dfs(1, [], 0);  // press the search button
+      return res;
+    };
+
+    // 方法3：二进制子集枚举
+    // 时间复杂度：O(M×2^M)，其中 M 为集合的大小，本题中 M 固定为 9。一共有 2^M个状态，每个状态需要 O(M+k)=O(M) 的判断 （k≤M）故时间复杂度为 O(M*2^M)
+    // 空间复杂度：O(M)。即 temp 的空间代价。
+    var combinationSum3 = function (k, n) {
+      let temp = [];
+      const ans = [];
+      const check = (mask, k, n) => {
+        temp = [];
+        for (let i = 0; i < 9; ++i) {
+          if ((1 << i) & mask) {
+            temp.push(i + 1);
+          }
+        }
+        return temp.length === k && temp.reduce((previous, value) => previous + value, 0) === n;
+      }
+
+      for (let mask = 0; mask < (1 << 9); ++mask) {
+        if (check(mask, k, n)) {
+          ans.push(temp);
+        }
+      }
+      return ans;
+    };
+
+    // 方法4：数学 组合枚举
+    // 时间复杂度：O((kM)×k)，其中 M 为集合的大小，本题中 M 固定为 9。一共有 ( kM​ ) 个组合，每次判断需要的时间代价是 O(k)。
+    // 空间复杂度：O(M) temp 数组的空间代价是 O(k)，递归栈空间的代价是 O(M)，故空间复杂度为 O(M+k)=O(M).
+    var combinationSum3 = function (k, n) {
+      const temp = [];
+      const res = [];
+      const dfs = (cur, n, k, sum, res) => {
+        if (temp.length + (n - cur + 1) < k || temp.length > k) {
+          return;
+        }
+        if (temp.length === k && temp.reduce((previous, value) => previous + value, 0) === sum) {
+          res.push(temp.slice());
+          return;
+        }
+        temp.push(cur);
+        dfs(cur + 1, n, k, sum, res);
+        temp.pop();
+        dfs(cur + 1, n, k, sum, res);
+      }
+
+      dfs(1, 9, k, n, res);
+      return res;
+    };
+
+  </script>
+</body>
+
+</html>
