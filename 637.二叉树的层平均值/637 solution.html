@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法1： BFS广度优先搜索
+        const averageOfLevels = (root) => {
+            const res = [];
+            const queue = [];
+            queue.push(root);
+            while (queue.length) {
+                const levelSize = queue.length;
+                let levelSum = 0;
+                for (let i = 0; i < levelSize; i++) {
+                    const cur = queue.shift();
+                    levelSum += cur.val;
+                    if (cur.left) {
+                        queue.push(cur.left);
+                    }
+                    if (cur.right) {
+                        queue.push(cur.right);
+                    }
+                }
+                res.push(levelSum / levelSize);
+            }
+            return res;
+        };
+
+        // 测试
+        // Definition for a binary tree node.
+        function TreeNode(val) {
+            this.val = val;
+            this.left = this.right = null;
+        }
+
+        var tree_node_1_1 = new TreeNode(9);
+        var tree_node_1_2 = new TreeNode(20);
+        tree_node_1_2.left = new TreeNode(15);
+        tree_node_1_2.right = new TreeNode(7);
+        var tree_node_1 = new TreeNode(3);
+        tree_node_1.left = tree_node_1_1;
+        tree_node_1.right = tree_node_1_2;
+        console.log(averageOfLevels(tree_node_1));
+    </script>
+</body>
+
+</html>
