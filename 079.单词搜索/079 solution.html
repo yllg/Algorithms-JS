@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法1：DFS
+        var exist1 = function (board, word) {
+            const h = board.length,
+                w = board[0].length;
+            const directions = [
+                [0, 1],
+                [0, -1],
+                [1, 0],
+                [-1, 0]
+            ];
+            const visited = new Array(h);
+            for (let i = 0; i < visited.length; ++i) {
+                visited[i] = new Array(w).fill(false);
+            }
+            const check = (i, j, s, k) => {
+                if (board[i][j] != s.charAt(k)) {
+                    return false;
+                } else if (k == s.length - 1) {
+                    return true;
+                }
+                visited[i][j] = true;
+                let result = false;
+                for (const [dx, dy] of directions) {
+                    let newi = i + dx,
+                        newj = j + dy;
+                    if (newi >= 0 && newi < h && newj >= 0 && newj < w) {
+                        if (!visited[newi][newj]) {
+                            const flag = check(newi, newj, s, k + 1);
+                            if (flag) {
+                                result = true;
+                                break;
+                            }
+                        }
+                    }
+                }
+                visited[i][j] = false;
+                return result;
+            }
+            for (let i = 0; i < h; i++) {
+                for (let j = 0; j < w; j++) {
+                    const flag = check(i, j, word, 0);
+                    if (flag) {
+                        return true;
+                    }
+                }
+            }
+            return false;
+        };
+
+        // 方法2：回溯
+        const exist2 = (board, word) => {
+            const m = board.length;
+            const n = board[0].length;
+            const used = new Array(m); // 二维矩阵used
+            for (let i = 0; i < m; i++) {
+                used[i] = new Array(n);
+            }
+            const canFind = (row, col, i) => { // row col是当前点的坐标，i是当前考察的字符索引
+                if (i > word.length - 1) { // 递归的出口，指针i越界，说明word所有字符都没有返回false，返回true
+                    return true;
+                }
+                // 递归的当前点，要有意义，要存在
+                if (row < 0 || row >= m || col < 0 || col >= n) {
+                    return false;
+                }
+                // 路径不能重复走同一个点，选择了当前点，下次就不能再回来选它
+                if (used[row][col] || board[row][col] != word[i]) { // 当前的点已经走过，或当前点就不是word[i]
+                    return false;
+                }
+                // 排除掉这些，现在我们知道，至少当前点是没问题的，在used中标记一下，对它进行了访问
+                used[row][col] = true;
+                // 递归考察下一个字符，进行四个方向的深搜
+                const canFindRest =
+                    canFind(row + 1, col, i + 1) ||
+                    canFind(row - 1, col, i + 1) ||
+                    canFind(row, col + 1, i + 1) ||
+                    canFind(row, col - 1, i + 1);
+
+                if (canFindRest) { // 基于当前点，如果找得出剩下的字符组成的路径，则canFindRest为真
+                    return true; // 直接返回真
+                }
+                used[row][col] = false; // 否则返回false，继续考察别的分支，并撤销当前点的访问状态。
+                return false;
+            };
+            for (let i = 0; i < m; i++) {
+                for (let j = 0; j < n; j++) {
+                    if (board[i][j] == word[0] && canFind(i, j, 0)) { // 找到word的第一个字符，dfs的起点
+                        return true; // 起点一样，dfs的结果也true，则找到了目标路径
+                    }
+                }
+            }
+            return false; // 怎么样都没有返回true，则返回false
+        };
+
+        // test
+        let board = [
+            ['A', 'B', 'C', 'E'],
+            ['S', 'F', 'C', 'S'],
+            ['A', 'D', 'E', 'E']
+        ];
+        console.log(exist1(board, "ABCCED"));
+        console.log(exist2(board, "ABCCED"));
+        console.log(exist1(board, "ABCB"));
+        console.log(exist2(board, "ABCB"));
+    </script>
+</body>
+
+</html>
