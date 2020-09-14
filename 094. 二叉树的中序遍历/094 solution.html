@@ -12,23 +12,75 @@
     <script>
         // Author : 悬笔e绝
         // Date   : 2018-12-12
-        
-        function dfs(root, ans) {
-            if (!root) return;
-            dfs(root.left, ans);
-            // 中序 ~ 左=>根=>右
-            ans.push(root.val);
-            dfs(root.right, ans);
-        }
-        
+
         /**
-        * @param {TreeNode} root
-        * @return {number[]}
-        */
-        var inorderTraversal = function (root) {
+         * @param {TreeNode} root
+         * @return {number[]}
+         */
+        // 方法1 ：dfs递归
+        // 时间复杂度 O(n), 空间复杂度 O(n)
+        var inorderTraversal1 = function (root) {
             var ans = [];
+
+            function dfs(root, ans) {
+                if (!root) return;
+                dfs(root.left, ans);
+                // 中序 ~ 左=>根=>右
+                ans.push(root.val);
+                dfs(root.right, ans);
+            }
             dfs(root, ans);
             return ans;
+        };
+
+        // 方法2：栈
+        // 时间复杂度 O(n), 空间复杂度 O(n)
+        var inorderTraversal2 = function (root) {
+            const res = [];
+            const stk = [];
+            while (root || stk.length) {
+                while (root) {
+                    stk.push(root);
+                    root = root.left;
+                }
+                root = stk.pop();
+                res.push(root.val);
+                root = root.right;
+            }
+            return res;
+        };
+
+        // 方法3：Morris 中序遍历
+        // 时间复杂度 O(n), 空间复杂度 O(1)
+        var inorderTraversal3 = function (root) {
+            const res = [];
+            let predecessor = null;
+            while (root) {
+                if (root.left) {
+                    // predecessor 节点就是当前 root 节点向左走一步，然后一直向右走至无法走为止
+                    predecessor = root.left;
+                    while (predecessor.right && predecessor.right !== root) {
+                        predecessor = predecessor.right;
+                    }
+                    // 让 predecessor 的右指针指向 root，继续遍历左子树
+                    if (!predecessor.right) {
+                        predecessor.right = root;
+                        root = root.left;
+                    }
+                    // 说明左子树已经访问完了，我们需要断开链接
+                    else {
+                        res.push(root.val);
+                        predecessor.right = null;
+                        root = root.right;
+                    }
+                }
+                // 如果没有左孩子，则直接访问右孩子
+                else {
+                    res.push(root.val);
+                    root = root.right;
+                }
+            }
+            return res;
         };
 
         // Definition for a binary tree node.
@@ -36,7 +88,7 @@
             this.val = val;
             this.left = this.right = null;
         }
-        
+
         // 测试
         // 定义一个二叉树 [1,null,2,3]
         var N3 = new TreeNode(3);
@@ -45,7 +97,9 @@
         var N1 = new TreeNode(1);
         N1.right = N2;
         // 输出[1,3,2]
-        console.log(inorderTraversal(N1));
+        console.log(inorderTraversal1(N1));
+        console.log(inorderTraversal2(N1));
+        console.log(inorderTraversal3(N1));
     </script>
 </body>
 
