@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        /**
+         * Definition for a binary tree node.
+         * function TreeNode(val) {
+         *     this.val = val;
+         *     this.left = this.right = null;
+         * }
+         */
+
+        // 方法1：DFS
+        // 时间复杂度 O(n); 空间复杂度 O(n)
+        /**
+         * @param {TreeNode} root
+         * @return {number}
+         */
+        var sumOfLeftLeaves = function (root) {
+            let _result = 0;
+            if (root === null) return _result;
+
+            function dfs(node) {
+                // 终止条件，遇到叶子结点
+                if (node === null) return
+                let left = node.left,
+                    right = node.right
+                // node的左节点，其left和right均为null
+                if (left != null && left.left == null && left.right == null) {
+                    _result = _result + left.val
+                }
+                // 继续遍历子树
+                dfs(left)
+                dfs(right)
+            }
+            dfs(root)
+            return _result
+        };
+
+        // 方法2：BFS
+        // 时间复杂度 O(n); 空间复杂度 O(n)
+        var sumOfLeftLeaves = function (root) {
+            let _result = 0,
+                quene = [root];
+            if (root === null) return _result;
+            while (quene.length) {
+                let node = quene.shift()
+                // 终止条件，遇到叶子结点
+                if (node === null) continue
+                let left = node.left;
+                // node的左节点，其left和right均为null
+                if (left != null && left.left === null && left.right === null) {
+                    _result = _result + left.val
+                }
+                // 子树继续入栈待遍历
+                quene.push(left)
+                quene.push(node.right)
+            }
+            return _result
+        };
+    </script>
+</body>
+
+</html>
