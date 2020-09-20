@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 不包含重复元素 的整数数组
+        // 方法1：迭代法
+        var subsets1 = function (nums) {
+            const ans = [];
+            const n = nums.length;
+            for (let mask = 0; mask < (1 << n); ++mask) {
+                const t = [];
+                for (let i = 0; i < n; ++i) {
+                    if (mask & (1 << i)) {
+                        t.push(nums[i]);
+                    }
+                }
+                ans.push(t);
+            }
+            return ans;
+        };
+
+        // 方法2：递归法
+        var subsets2 = function (nums) {
+            const t = [];
+            const ans = [];
+            const n = nums.length;
+            const dfs = (cur) => {
+                if (cur === nums.length) {
+                    ans.push(t.slice());
+                    return;
+                }
+                t.push(nums[cur]);
+                dfs(cur + 1, nums);
+                t.pop(t.length - 1);
+                dfs(cur + 1, nums);
+            }
+            dfs(0, nums);
+            return ans;
+        };
+
+        // test
+        let nums = [1,2,3];
+        console.log(subsets1(nums));
+        console.log(subsets2(nums));
+    </script>
+</body>
+
+</html>
