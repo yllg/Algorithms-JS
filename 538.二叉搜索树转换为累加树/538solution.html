@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法1：反序中序遍历
+        // 时间复杂度 O(n) 空间复杂度 O(n)
+        const convertBST = (root) => {
+            let sum = 0;
+
+            const inOrder = (root) => {
+                if (root == null) { // 遍历到null节点，没有节点值可累加，开始返回
+                    return;
+                }
+                if (root.right) { // 先进入右子树
+                    inOrder(root.right);
+                }
+
+                sum += root.val; // 节点值累加给sum
+                root.val = sum; // 累加的结果，赋给root.val
+
+                if (root.left) { // 把“事情”做完了，才进入左子树
+                    inOrder(root.left);
+                }
+            };
+
+            inOrder(root); // 递归的入口，从根节点开始
+            return root;
+        }
+    </script>
+</body>
+
+</html>
