@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法1：递归
+        // 时间复杂度：O(N)，其中 N 为树中节点的数量。对于每个节点，我们在常数时间内计算出 a,b,c 三个状态变量。
+        // 空间复杂度：O(N)。每次递归调用时，我们需要开辟常数大小的空间存储状态变量的取值，而递归栈的深度等于树的深度，即 O(N)。
+        var minCameraCover = function (root) {
+            const dfs = (root) => {
+                if (!root) {
+                    return [Math.floor(Number.MAX_SAFE_INTEGER / 2), 0, 0];
+                }
+                const [la, lb, lc] = dfs(root.left);
+                const [ra, rb, rc] = dfs(root.right);
+                const a = lc + rc + 1;
+                const b = Math.min(a, Math.min(la + rb, ra + lb));
+                const c = Math.min(a, lb + rb);
+                return [a, b, c];
+            }
+
+            return dfs(root)[1];
+        };
+
+        // test 
+        let root = [0,0,null,0,0];
+        console.log(minCameraCover(root));
+    </script>
+</body>
+
+</html>
