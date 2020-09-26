@@ -1,85 +1,103 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
 </head>
+
 <body>
-<script>
-// Source : https://leetcode.com/problems/path-sum-ii/
-// Author : 悬笔e绝
-// Date   : 2019-05-06
+  <script>
+    // Source : https://leetcode.com/problems/path-sum-ii/
+    // Author : 悬笔e绝
+    // Date   : 2019-05-06
 
-//  Definition for a binary tree node.
- function TreeNode(val) {
-     this.val = val;
-     this.left = this.right = null;
- }
-/**
- * @param {TreeNode} root
- * @param {number} sum
- * @return {number[][]}
- */
-
-var tmp = [];
-var ans = [];
-
-function dfs(root, sum) {
-  if (!root)
-    return;
-
-  tmp.push(root.val);
-
-  if (!root.left && !root.right) {
-    if (root.val === sum) {
-      var res = tmp.map(function(item) {
-        return item;
-      });
-
-      ans.push(res);
+    //  Definition for a binary tree node.
+    function TreeNode(val) {
+      this.val = val;
+      this.left = this.right = null;
     }
-    return;
-  }
+    /**
+     * @param {TreeNode} root
+     * @param {number} sum
+     * @return {number[][]}
+     */
 
-  if (root.left) {
-    dfs(root.left, sum - root.val);
-    // recall
-    tmp.pop();
-  }
+    // 方法1：dfs
+    // 时间复杂度 O(n^2)  空间复杂度 O(n)
+    var pathSum1 = function (root, sum) {
+      let tmp = [],
+        ans = [];
 
-  if (root.right) {
-    dfs(root.right, sum - root.val);
-    // recall
-    tmp.pop();
-  }
-}
+      function dfs(root, sum) {
+        if (!root)
+          return;
+        tmp.push(root.val);
+        if (!root.left && !root.right) {
+          if (root.val === sum) {
+            var res = tmp.map(function (item) {
+              return item;
+            });
+            ans.push(res);
+          }
+          return;
+        }
+        if (root.left) {
+          dfs(root.left, sum - root.val);
+          // recall
+          tmp.pop();
+        }
+        if (root.right) {
+          dfs(root.right, sum - root.val);
+          // recall
+          tmp.pop();
+        }
+      }
+      dfs(root, sum);
+      return ans;
+    };
 
-var pathSum = function(root, sum) {
-  tmp = [];
-  ans = [];
-  dfs(root, sum);
-  return ans;
-};
+    // 方法2：递归DFS
+    var pathSum2 = function (root, sum) {
+      let res = [];
 
+      function help(root, sum, res, arr) {
+        if (root === null) return;
+        arr.push(root.val);
+        if (root.left === null && root.right === null && root.val === sum) {
+          // 注意这里不能直接存放arr
+          // 直接存放arr的话这里存的是数组的引用
+          res.push([...arr]);
+        }
+        help(root.left, sum - root.val, res, arr);
+        help(root.right, sum - root.val, res, arr);
+        // 上面两步都结束之后要把arr出栈进行回溯
+        arr.pop();
+      }
+      help(root, sum, res, []);
+      return res;
+    };
 
-// 测试
-var tree_node_3_2 = new TreeNode(4);
-tree_node_3_2.right = new TreeNode(1);
-tree_node_3_2.left = new TreeNode(5);
-var tree_node_3_1 = new TreeNode(11);
-tree_node_3_1.left = new TreeNode(7);
-tree_node_3_1.right = new TreeNode(2);
-var tree_node_2_1 = new TreeNode(4);
-tree_node_2_1.left = tree_node_3_1;
-var tree_node_2_2 = new TreeNode(8);
-tree_node_2_2.left = new TreeNode(13);
-tree_node_2_2.right = tree_node_3_2;
-var tree_node_1 = new TreeNode(5);
-tree_node_1.left = tree_node_2_1;
-tree_node_1.right = tree_node_2_2;
-console.log(pathSum(tree_node_1, 22));
-</script>
+    // 测试
+    var tree_node_3_2 = new TreeNode(4);
+    tree_node_3_2.right = new TreeNode(1);
+    tree_node_3_2.left = new TreeNode(5);
+    var tree_node_3_1 = new TreeNode(11);
+    tree_node_3_1.left = new TreeNode(7);
+    tree_node_3_1.right = new TreeNode(2);
+    var tree_node_2_1 = new TreeNode(4);
+    tree_node_2_1.left = tree_node_3_1;
+    var tree_node_2_2 = new TreeNode(8);
+    tree_node_2_2.left = new TreeNode(13);
+    tree_node_2_2.right = tree_node_3_2;
+    var tree_node_1 = new TreeNode(5);
+    tree_node_1.left = tree_node_2_1;
+    tree_node_1.right = tree_node_2_2;
+    console.log(pathSum1(tree_node_1, 22));
+    console.log(pathSum2(tree_node_1, 22));
+  </script>
 </body>
+
 </html>
