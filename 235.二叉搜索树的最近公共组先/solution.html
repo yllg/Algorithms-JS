@@ -38,7 +38,7 @@ var lowestCommonAncestor = function(root, p, q) {
 };
 
 // 方法2：迭代, 一次遍历
-// 时间复杂度 O(n) 空间复杂度 O()
+// 时间复杂度 O(n) 空间复杂度 O(1)
 const lowestCommonAncestor = (root, p, q) => {
   while (root) {
     if (p.val < root.val && q.val < root.val) {
