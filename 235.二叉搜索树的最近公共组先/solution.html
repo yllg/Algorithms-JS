@@ -26,18 +26,32 @@
  * @param {TreeNode} q
  * @return {TreeNode}
  */
-var lowestCommonAncestor = function(root, p, q) {
-  var valueA = p.val;
-  var valueB = q.val;
-  var value  = root.val;
 
-  if (valueA < value && valueB < value)
+// 方法1：递归
+var lowestCommonAncestor = function(root, p, q) {
+  if (p.val < root.val && q.val < root.val)
     return lowestCommonAncestor(root.left, p, q);
-  else if (valueA > value && valueB > value)
+  else if (p.val > root.val && q.val > root.val)
     return lowestCommonAncestor(root.right, p, q);
   else
     return root;
 };
+
+// 方法2：迭代, 一次遍历
+// 时间复杂度 O(n) 空间复杂度 O()
+const lowestCommonAncestor = (root, p, q) => {
+  while (root) {
+    if (p.val < root.val && q.val < root.val) {
+      root = root.left;
+    } else if (p.val > root.val && q.val > root.val) {
+      root = root.right;
+    } else {
+      break;
+    }
+  }
+  return root;
+};
+
 </script>
 </body>
 </html>
