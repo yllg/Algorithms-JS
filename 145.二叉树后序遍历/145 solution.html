@@ -1,46 +1,81 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
 </head>
+
 <body>
-<script>
-// Source : https://leetcode.com/problems/binary-tree-postorder-traversal/
-// Author : 悬笔e绝
-// Date   : 2019-07-19
+  <script>
+    // Source : https://leetcode.com/problems/binary-tree-postorder-traversal/
+    // Author : 悬笔e绝
+    // Date   : 2019-07-19
 
-//  Definition for a binary tree node.
- function TreeNode(val) {
-     this.val = val;
-     this.left = this.right = null;
- }
-/**
- * @param {TreeNode} root
- * @return {number[]}
- */
+    //  Definition for a binary tree node.
+    function TreeNode(val) {
+      this.val = val;
+      this.left = this.right = null;
+    }
+    /**
+     * @param {TreeNode} root
+     * @return {number[]}
+     */
 
- function dfs(root, ans) {
-  if (!root) return;
-  dfs(root.left, ans);
-  dfs(root.right, ans);
-  ans.push(root.val);
-}
+    // 方法1：递归
+    // 时间复杂度 O(n) 空间复杂度 O(n)
+    var postorderTraversal1 = function (root) {
+      let result = []
+      var postorderTraversalNode = (node) => {
+        if (node) {
+          // 先遍历左子树
+          postorderTraversalNode(node.left)
+          // 再遍历右子树
+          postorderTraversalNode(node.right)
+          // 最后根节点
+          result.push(node.val)
+        }
+      }
+      postorderTraversalNode(root)
+      return result
+    };
 
-var postorderTraversal = function(root) {
-  var ans = [];
-  dfs(root, ans);
-  return ans;
-};
+    // 方法2：迭代
+    // 时间复杂度 O(n) 空间复杂度 O(n)
+    const postorderTraversal2 = (root) => {
+      const list = [];
+      const stack = [];
+      // 当根节点不为空的时候，将根节点入栈
+      if (root) stack.push(root)
+      while (stack.length > 0) {
+        const node = stack.pop()
+        // 根左右=>右左根
+        list.unshift(node.val)
+        // 先进栈左子树后右子树
+        // 出栈的顺序就变更为先右后左
+        // 右先头插法入list
+        // 左再头插法入list
+        // 实现右左根=>左右根
+        if (node.left !== null) {
+          stack.push(node.left)
+        }
+        if (node.right !== null) {
+          stack.push(node.right)
+        }
+      }
+      return list
+    }
 
-// 测试
-var tree_node_1_2 = new TreeNode(2);
-tree_node_1_2.left = new TreeNode(3);
-var tree_node_1 = new TreeNode(1);
-tree_node_1.right = tree_node_1_2;
-console.log(postorderTraversal(tree_node_1));
-</script>
+    // 测试
+    var tree_node_1_2 = new TreeNode(2);
+    tree_node_1_2.left = new TreeNode(3);
+    var tree_node_1 = new TreeNode(1);
+    tree_node_1.right = tree_node_1_2;
+    console.log(postorderTraversal1(tree_node_1));
+    console.log(postorderTraversal2(tree_node_1));
+  </script>
 </body>
+
 </html>
