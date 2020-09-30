@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法1：模拟
+        // 时间复杂度O(n) 空间复杂度O(1) 
+        var insertIntoBST = function (root, val) {
+            if (root === null) {
+                return new TreeNode(val);
+            }
+            let pos = root;
+            while (pos !== null) {
+                if (val < pos.val) {
+                    if (pos.left === null) {
+                        pos.left = new TreeNode(val);
+                        break;
+                    } else {
+                        pos = pos.left;
+                    }
+                } else {
+                    if (pos.right === null) {
+                        pos.right = new TreeNode(val);
+                        break;
+                    } else {
+                        pos = pos.right;
+                    }
+                }
+            }
+            return root;
+        };
+
+        // 方法2：递归 dfs
+        var insertIntoBST = function (root, val) {
+            if (root === null) {
+                return new TreeNode(val);
+            }
+            function dfs(root) {
+                if(!root) return;
+                if (root && !root.left && !root.right) {
+                    if (root.val > val) {
+                        root.left = node;
+                    } else if (root.val < val) {
+                        root.right = node;
+                    }
+                }
+                if (root.val < val) {
+                    if (!root.right) {
+                        root.right = node;
+                        return;
+                    }
+                    dfs(root.right);
+                }
+                if (root.val > val) {
+                    if (!root.left) {
+                        root.left = node;
+                        return;
+                    }
+                    dfs(root.left);
+                }
+            }
+            var node = new TreeNode(val);
+            dfs(root);
+            return root;
+        };
+
+    </script>
+</body>
+
+</html>
