@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 动态规划
+        // 时间复杂度 O(n) 空间复杂度 O(1)
+        /**
+         * @param {string} leaves
+         * @return {number}
+         */
+        var minimumOperations = function (leaves) {
+            var len = leaves.length;
+            // 初始状态不可能为 2, 3，设置为 Infinity
+            var dp = [leaves[0] === 'r' ? 0 : 1, Infinity, Infinity];
+
+            for (var i = 1; i < len; i++) {
+                var isRed = leaves[i] === 'r';
+                dp = [
+                    dp[0] + (isRed ? 0 : 1),
+                    Math.min(dp[0], dp[1]) + (isRed ? 1 : 0),
+                    Math.min(dp[1], dp[2]) + (isRed ? 0 : 1),
+                ];
+            }
+            return dp[2];
+        };
+
+        // test
+        let leaves = "rrryyyrryyyrr";
+        console.log(minimumOperations(leaves));
+    </script>
+</body>
+
+</html>
