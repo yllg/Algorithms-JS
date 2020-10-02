@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法1：暴力法
+        // 时间复杂度 O(mn) 空间复杂度 O(1); m是J的长度，n是S的长度
+        var numJewelsInStones1 = function (J, S) {
+            J = J.split('');
+            return S.split('').reduce((prev, val) => {
+                for (const ch of J) {
+                    if (ch === val) {
+                        return prev + 1;
+                    }
+                }
+                return prev;
+            }, 0);
+        };
+
+        // 方法2：哈希集合
+        // 时间复杂度 O(m + n) 空间复杂度 O(m)
+        var numJewelsInStones2 = function (J, S) {
+            const jewelsSet = new Set(J.split(''));
+            return S.split('').reduce((prev, val) => {
+                return prev + jewelsSet.has(val);
+            }, 0);
+        };
+
+        // test
+        let J = "aA", S = "aAAbbbb";
+        console.log(numJewelsInStones1(J,S));
+        console.log(numJewelsInStones2(J,S));
+    </script>
+</body>
+
+</html>
