@@ -19,8 +19,8 @@
          * @param {ListNode} l2
          * @return {ListNode}
          */
-
-        var addTwoNumbers = function (l1, l2) {
+        // 解法1：常规法
+        var addTwoNumbers1 = function (l1, l2) {
             var add = 0,
                 ans, head;
             //可能两个链表的长度不一样
@@ -55,9 +55,40 @@
                 head.next = node;
                 head = node;
             }
-
             return ans;
         };
+
+        // 解法2：模拟
+        // 时间复杂度 O(max(m,n)) 空间复杂度 O(max(m,n))
+        var addTwoNumbers2 = function (l1, l2) {
+            let head = null,
+                tail = null;
+            let carry = 0;
+            while (l1 || l2) {
+                const n1 = l1 ? l1.val : 0;
+                const n2 = l2 ? l2.val : 0;
+                const sum = n1 + n2 + carry;
+                if (!head) {
+                    head = tail = new ListNode(sum % 10);
+                } else {
+                    tail.next = new ListNode(sum % 10);
+                    tail = tail.next;
+                }
+                carry = Math.floor(sum / 10);
+                if (l1) {
+                    l1 = l1.next;
+                }
+                if (l2) {
+                    l2 = l2.next;
+                }
+            }
+            if (carry > 0) {
+                tail.next = new ListNode(carry);
+            }
+            return head;
+        };
+
+
 
         //Definition for singly-linked list.
         function ListNode(val) {
@@ -78,8 +109,8 @@
         var b1 = new ListNode(5);
         b1.next = b2;
 
-        var result = addTwoNumbers(a1, b1);
-        console.log(result);
+        console.log(addTwoNumbers1(a1, b1));
+        console.log(addTwoNumbers2(a1, b1));
     </script>
 </body>
 
