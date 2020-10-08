@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法1：双指针
+        // 时间复杂度 O(n) 空间复杂度 O(1)
+        var reverseString = function (s) {
+            const n = s.length;
+            for (let left = 0, right = n - 1; left < right; ++left, --right) {
+                [s[left], s[right]] = [s[right], s[left]];
+            }
+        };
+
+        // test
+        let s = ["h","e","l","l","o"];
+        reverseString(s)
+        console.log(s);
+    </script>
+</body>
+
+</html>
