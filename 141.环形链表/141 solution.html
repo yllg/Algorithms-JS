@@ -1,47 +1,69 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
 </head>
+
 <body>
-<script>
-// Source : https://leetcode.com/problems/linked-list-cycle/
-// Author : 悬笔e绝
-// Date   : 2019-07-03
+  <script>
+    // Source : https://leetcode.com/problems/linked-list-cycle/
+    // Author : 悬笔e绝
+    // Date   : 2019-07-03
 
-//   Definition for singly-linked list.
-function ListNode(val) {
-    this.val = val;
-    this.next = null;
-}
+    // 方法1： 暴力法
+    var hasCycle = (head) => {
+      let cur = head; // cur指针
+      let step1 = 0; // step1统计cur指针走的步数
+      while (cur) {
+        step1++
+        let cur2 = head; // cur2指针 从头开始
+        let step2 = 0; // step2统计cur2指针走的步数
+        while (cur2) {
+          step2++;
+          if (cur == cur2) { // cur和cur2指针指向相同的元素
+            if (step1 == step2) { // cur2指针和cur走的步数一样，走到了cur这里
+              break; // 退出内层循环
+            } else { // cur2指针和cur相遇，但步数不一样
+              return true; // 说明链表有环，cur比cur2正好多走一个环
+            }
+          }
+          cur2 = cur2.next; // cur2一次走一步
+        }
+        cur = cur.next; // cur一次走一步
+      }
+      return false;
+    };
 
-/**
- * @param {ListNode} head
- * @return {boolean}
- */
- var hasCycle = function(head) {
-  flag = false;
-  dfs(head);
-  return flag;
-};
+    // 方法2：哈希表
+    // 时间复杂度 O(n) 空间复杂度 O(n)
+    var hasCycle = (head) => {
+      let map = new Map()
+      while (head) {
+        if (map.has(head)) return true
+        map.set(head, true)
+        head = head.next
+      }
+      return false
+    }
 
-function dfs(node) {
-  if (flag)
-    return;
-  if (node === null)
-    return;
-  if (node.flag) {
-    flag = true;
-    return;
-  }
-  if (node.next === null)
-    return;
-  node.flag = true;
-  dfs(node.next);
-}
-</script>
+    // 方法3：快慢指针
+    // 时间复杂度 O(n) 空间复杂度 O(1)
+    var hasCycle = (head) => {
+      let fastP = head;
+      let slowP = head;
+      while (fastP) { // 快指针指向真实节点
+        if (fastP.next == null) return false; // 如果下一个为null，说明没有环
+        slowP = slowP.next; // 慢的走一步
+        fastP = fastP.next.next; // 快的走两步
+        if (slowP == fastP) return true; // 快慢指针相遇，有环
+      }
+      return false; // fastP指向null了，也始终不相遇
+    }
+  </script>
 </body>
+
 </html>
