@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    // Source : https://leetcode.com/problems/linked-list-cycle-ii/
+    // Author : 悬笔e绝
+    // Date   : 2019-07-05
+
+    /**
+     * Definition for singly-linked list.
+     * function ListNode(val) {
+     *     this.val = val;
+     *     this.next = null;
+     * }
+     */
+
+    /**
+     * @param {ListNode} head
+     * @return {ListNode}
+     */
+
+    // 方法1：哈希表
+    // 时间复杂度 O(n) 空间复杂度 O(n)
+    var detectCycle = function (head) {
+      const visited = new Set();
+      while (head !== null) {
+        if (visited.has(head)) {
+          return head;
+        }
+        visited.add(head);
+        head = head.next;
+      }
+      return null;
+    };
+
+    // 方法2：快慢指针
+    // 时间复杂度 O(n) 空间复杂度 O(1)
+    var detectCycle = function (head) {
+      if (head === null) {
+        return null;
+      }
+      let slow = head,
+        fast = head;
+      while (fast !== null) {
+        slow = slow.next;
+        if (fast.next !== null) {
+          fast = fast.next.next;
+        } else {
+          return null;
+        }
+        if (fast === slow) {
+          let ptr = head;
+          while (ptr !== slow) {
+            ptr = ptr.next;
+            slow = slow.next;
+          }
+          return ptr;
+        }
+      }
+      return null;
+    };
+  </script>
+</body>
+
+</html>
