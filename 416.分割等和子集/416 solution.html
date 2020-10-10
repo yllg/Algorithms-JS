@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法1：动态规划
+        // 时间复杂度：O(n×target)，其中 n 是数组的长度，target 是整个数组的元素和的一半
+        // 空间复杂度：O(n×target)
+        var canPartition1 = function (nums) {
+            const n = nums.length;
+            if (n < 2) {
+                return false;
+            }
+            let sum = 0,
+                maxNum = 0;
+            for (const num of nums) {
+                sum += num;
+                maxNum = maxNum > num ? maxNum : num;
+            }
+            if (sum & 1) {
+                return false;
+            }
+            const target = Math.floor(sum / 2);
+            if (maxNum > target) {
+                return false;
+            }
+            const dp = new Array(n).fill(0).map(v => new Array(target + 1, false));
+            for (let i = 0; i < n; i++) {
+                dp[i][0] = true;
+            }
+            dp[0][nums[0]] = true;
+            for (let i = 1; i < n; i++) {
+                const num = nums[i];
+                for (let j = 1; j <= target; j++) {
+                    if (j >= num) {
+                        dp[i][j] = dp[i - 1][j] | dp[i - 1][j - num];
+                    } else {
+                        dp[i][j] = dp[i - 1][j];
+                    }
+                }
+            }
+            return dp[n - 1][target];
+        };
+
+        // 方法2：动归 + 降维
+        // 时间复杂度：O(n×target)，其中 n 是数组的长度，target 是整个数组的元素和的一半
+        // 空间复杂度：O(target)，其中 target 是整个数组的元素和的一半
+        var canPartition2 = function (nums) {
+            const n = nums.length;
+            if (n < 2) {
+                return false;
+            }
+            let sum = 0,
+                maxNum = 0;
+            for (const num of nums) {
+                sum += num;
+                maxNum = maxNum > num ? maxNum : num;
+            }
+            if (sum & 1) {
+                return false;
+            }
+            const target = Math.floor(sum / 2);
+            if (maxNum > target) {
+                return false;
+            }
+            const dp = new Array(target + 1).fill(false);
+            dp[0] = true;
+            for (const num of nums) {
+                for (let j = target; j >= num; --j) {
+                    dp[j] |= dp[j - num];
+                }
+            }
+            return dp[target];
+        };
+
+        // test
+        let nums1 = [1, 5, 11, 5];
+        console.log(canPartition1(nums1));
+        console.log(canPartition2(nums1));
+        let nums2 = [1, 2, 3, 5];
+        console.log(canPartition1(nums2));
+        console.log(canPartition2(nums2));
+    </script>
+</body>
+
+</html>
