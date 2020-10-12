@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 中序遍历
+        // 时间复杂度 O(n) 空间复杂度 O(n) ; n为节点数
+        // 二叉搜索树 中序遍历就是递增的；题目要求任意两个节点的最小的差值，它肯定发生在递增排列后，相邻的节点值之间。用一个变量，保存上一个访问处理的节点值，求出当前访问的节点值与它之差，挑战最小的纪录，更小就更新。
+        var getMinimumDifference = function (root) {
+            let ans = Number.MAX_SAFE_INTEGER,
+                pre = -1;
+            const dfs = (root) => {
+                if (root === null) {
+                    return;
+                }
+                dfs(root.left);
+                if (pre == -1) {
+                    pre = root.val;
+                } else {
+                    ans = Math.min(ans, root.val - pre);
+                    pre = root.val;
+                }
+                dfs(root.right);
+            }
+            dfs(root);
+            return ans;
+        };
+    </script>
+</body>
+
+</html>
