@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 查找N个字符串中共同出现的字符
+
+        // 方法1：计数法
+        // 用数组存每个字符串各字符出现的次数，把数组放在list中，最后比较list中数组代表各字符出现次数的最小值
+        var commonChars1 = function (A) {
+            let arrayList = [];
+            for (let str of A) {
+                let arr = new Array(26).fill(0);
+                for (let i = 0; i < str.length; i++) {
+                    arr[str[i].charCodeAt() - 'a'.charCodeAt()]++;
+                }
+                arrayList.push(arr);
+            }
+            let res = [];
+            for (let i = 0; i < 26; i++) {
+                let min = 100;
+                for (let j = 0; j < arrayList.length; j++) {
+                    if (arrayList[j][i] < min) {
+                        min = arrayList[j][i];
+                    }
+                }
+                for (let k = 0; k < min; k++) {
+                    res.push(String.fromCharCode(i + 'a'.charCodeAt()));
+                }
+            }
+            return res;
+        };
+
+        // 方法2：优化
+        // 跟方法一的区别就是遍历每个字符串的时候，直接比较代表出现字符数的数组各项的大小
+        var commonChars2 = function (A) {
+            let arr = new Array(26).fill(100);
+            for (let str of A) {
+                let tmpArr = new Array(26).fill(0);
+                str.split("").forEach((v) => {
+                    tmpArr[v.charCodeAt() - 'a'.charCodeAt()]++;
+                })
+                for (let i = 0; i < 26; i++) {
+                    arr[i] = Math.min(arr[i], tmpArr[i]);
+                }
+            }
+            let res = [];
+            for (let i = 0; i < 26; i++) {
+                for (let k = 0; k < arr[i]; k++) {
+                    res.push(String.fromCharCode(i + 'a'.charCodeAt()));
+                }
+            }
+            return res;
+        }
+
+        // 方法3： JS的简便写法，效率不一定更好
+        var commonChars3 = function (A) {
+            let res = A[0].split("");
+            for (let i = 1; i < A.length; i++) {
+                let tmp = A[i].split("");
+                res = res.filter(e => {
+                    let index = tmp.indexOf(e);
+                    return index !== -1 ? tmp[index] = 1 : false
+                });
+            }
+            return res;
+        }
+
+        // test
+        let A = ["bella","label","roller"];
+        console.log(commonChars1(A))
+        console.log(commonChars2(A))
+        console.log(commonChars3(A))
+    </script>
+</body>
+
+</html>
