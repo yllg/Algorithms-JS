@@ -13,11 +13,12 @@
         // Source : https://leetcode.com/problems/swap-nodes-in-pairs/
         // Author : 悬笔e绝
         // Date   : 2018-03-23
-       
+
         /**
          * @param {ListNode} head
          * @return {ListNode}
          */
+        // 方法1：常规法
         var swapPairs = function (head) {
             if (!head)
                 return null;
@@ -49,12 +50,41 @@
             return arr[0];
         };
 
+        // 方法2：递归
+        // 时间复杂度 O(n) 空间复杂度 O(n) ; n为节点数
+        var swapPairs = function (head) {
+            if (head === null || head.next === null) {
+                return head;
+            }
+            const newHead = head.next;
+            head.next = swapPairs(newHead.next);
+            newHead.next = head;
+            return newHead;
+        };
+
+        // 方法3：迭代
+        // 时间复杂度 O(n) 空间复杂度 O(1) ; n为节点数
+        var swapPairs = function (head) {
+            const dummyHead = new ListNode(0);
+            dummyHead.next = head;
+            let temp = dummyHead;
+            while (temp.next !== null && temp.next.next !== null) {
+                const node1 = temp.next;
+                const node2 = temp.next.next;
+                temp.next = node2;
+                node1.next = node2.next;
+                node2.next = node1;
+                temp = node1;
+            }
+            return dummyHead.next;
+        };
+
+        // test
         // Definition for singly-linked list.
         function ListNode(val) {
             this.val = val;
             this.next = null;
         }
-
         //测试 1->2->3->4->5
         var N5 = new ListNode(5);
         var N4 = new ListNode(4);
@@ -67,7 +97,6 @@
         N1.next = N2;
 
         console.log(swapPairs(N1));
-
     </script>
 </body>
 
