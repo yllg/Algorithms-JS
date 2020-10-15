@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 解法1：前缀和+暴力法
+        function maxSubArray(list) {
+            const len = list.length;
+            let max = -Number.MAX_VALUE;
+            let sum = 0;
+            for (let i = 0; i < len; i++) {
+                sum = 0;
+                for (let j = i; j < len; j++) {
+                    sum += list[j];
+                    if (sum > max) {
+                        max = sum;
+                    }
+                }
+            }
+
+            return max;
+        }
+
+        // 解法2：优化前缀和
+        function maxSubArray(list) {
+            const len = list.length;
+            let max = list[0];
+            let min = 0;
+            let sum = 0;
+            for (let i = 0; i < len; i++) {
+                sum += list[i];
+                if (sum - min > max) max = sum - min;
+                if (sum < min) {
+                    min = sum;
+                }
+            }
+            return max;
+        }
+
+        // 解法3：分治法
+        function maxSubArray(list) {
+            function helper(list, m, n) {
+                if (m === n) return list[m];
+                let sum = 0;
+                let lmax = -Number.MAX_VALUE;
+                let rmax = -Number.MAX_VALUE;
+                const mid = ((n - m) >> 1) + m;
+                const l = helper(list, m, mid);
+                const r = helper(list, mid + 1, n);
+                for (let i = mid; i >= m; i--) {
+                    sum += list[i];
+                    if (sum > lmax) lmax = sum;
+                }
+                sum = 0;
+                for (let i = mid + 1; i <= n; i++) {
+                    sum += list[i];
+                    if (sum > rmax) rmax = sum;
+                }
+                return Math.max(l, r, lmax + rmax);
+            }
+            return helper(list, 0, list.length - 1);
+        }
+
+        // 解法4：动态规划
+        function maxSubArray(list) {
+            const len = list.length;
+            let max = list[0];
+            for (let i = 1; i < len; i++) {
+                list[i] = Math.max(0, list[i - 1]) + list[i];
+                if (list[i] > max) max = list[i];
+            }
+            return max;
+        }
+    </script>
+</body>
+
+</html>
