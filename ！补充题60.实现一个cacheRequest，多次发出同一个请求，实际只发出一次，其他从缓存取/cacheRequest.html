@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 用 Map 来缓存；
+        // 如果请求在pending，返回并继续等待
+        // 请求用 setTimeout 模拟
+        const request = (url, option) => new Promise((res) => {
+            setTimeout(() => {
+                res({ data: option });
+            }, 2000);
+        });
+
+        const cache = new Map();
+        const cacheRequest = (url, option) => {
+            let key = `${url}:${option.method}`;
+            // 有缓存
+            if (cache.has(key)) {
+                console.log('从缓存取')
+                if (cache.get(key).status === 'pending') {
+                    return cache.get(key).myWait;
+                }
+                return Promise.resolve(cache.get(key).data);
+            } else {
+                console.log('发请求')
+                // 无缓存，发起真的请求
+                let requestApi = request(url, option);
+                cache.set(key, { status: 'pending', myWait: requestApi });
+                return requestApi.then(res => {
+                    cache.set(key, { status: 'success', data: res });
+                    return Promise.resolve(res);
+                }).catch(err => {
+                    cache.set(key, { status: 'fall', data: err });
+                    return Promise.reject(err);
+                });
+            }
+        }
+
+        // test
+        cacheRequest('url1', {option:'get'})
+            .then(res => { console.log(res) });
+        cacheRequest('url1', {option:'get'})
+            .then(res => { console.log(res) });
+        cacheRequest('url2', {option:'get'})
+            .then(res => { console.log(res) });
+        setTimeout(() => {
+            cacheRequest('url1', {option:'get'})
+                .then(res => { console.log(res) });
+        }, 4000);
+    </script>
+</body>
+
+</html>
