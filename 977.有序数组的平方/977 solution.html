@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法1：双指针
+        // 时间复杂度：O(n)，空间复杂度：O(n)
+        const sortedSquares1 = (A) => {
+            let start = 0;
+            let end = A.length - 1;
+            const res = new Array(A.length);
+
+            for (let i = A.length - 1; i >= 0; i--) {
+                const s = A[start] * A[start];
+                const e = A[end] * A[end];
+                if (s > e) {
+                    res[i] = s;
+                    start++;
+                } else {
+                    res[i] = e;
+                    end--;
+                }
+            }
+            return res;
+        };
+
+        // 方法2：用JS函数
+        const sortedSquares2 = (A) => {
+            return A.map(e => e * e).sort((a, b) => a - b);
+        };
+
+        // test
+        let A = [-4,-1,0,3,10];
+        console.log(sortedSquares1(A));
+        console.log(sortedSquares2(A));
+    </script>
+</body>
+
+</html>
