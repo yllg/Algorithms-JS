@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 返回解法的数量
+
+        // 方法1：基于集合的回溯
+        // 时间复杂度：O(N!)，其中 N 是皇后数量。
+        // 空间复杂度：O(N)，其中 N 是皇后数量。
+        const backtrack = (n, row, columns, diagonals1, diagonals2) => {
+            if (row === n) {
+                return 1;
+            } else {
+                let count = 0;
+                for (let i = 0; i < n; i++) {
+                    if (columns.has(i)) {
+                        continue;
+                    }
+                    const diagonal1 = row - i;
+                    if (diagonals1.has(diagonal1)) {
+                        continue;
+                    }
+                    const diagonal2 = row + i;
+                    if (diagonals2.has(diagonal2)) {
+                        continue;
+                    }
+                    columns.add(i);
+                    diagonals1.add(diagonal1);
+                    diagonals2.add(diagonal2);
+                    count += backtrack(n, row + 1, columns, diagonals1, diagonals2);
+                    columns.delete(i);
+                    diagonals1.delete(diagonal1);
+                    diagonals2.delete(diagonal2);
+                }
+                return count;
+            }
+        }
+        var totalNQueens = function (n) {
+            const columns = new Set();
+            const diagonals1 = new Set();
+            const diagonals2 = new Set();
+            return backtrack(n, 0, columns, diagonals1, diagonals2);
+        };
+
+        // 方法2：基于位运算的回溯
+        // 时间复杂度：O(N!)，其中 N 是皇后数量。
+        // 空间复杂度：O(N)，其中 N 是皇后数量。
+        const __builtin_popcount = (x) => x.toString(2).split('').reduce((prev, v) => prev + (v === '1'), 0);
+        const solve = (n, row, columns, diagonals1, diagonals2) => {
+            if (row === n) {
+                return 1;
+            } else {
+                let count = 0;
+                let availablePositions = ((1 << n) - 1) & (~(columns | diagonals1 | diagonals2));
+                while (availablePositions != 0) {
+                    const position = availablePositions & (-availablePositions);
+                    availablePositions = availablePositions & (availablePositions - 1);
+                    count += solve(n, row + 1, columns | position, (diagonals1 | position) << 1, (diagonals2 |
+                        position) >> 1);
+                }
+                return count;
+            }
+        }
+        var totalNQueens = function (n) {
+            return solve(n, 0, 0, 0, 0);
+        };
+
+        // test 
+        let n = 4;
+        console.log(totalNQueens(n));
+    </script>
+</body>
+
+</html>
