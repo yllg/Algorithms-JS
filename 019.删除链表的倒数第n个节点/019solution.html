@@ -19,6 +19,7 @@
          * @param {number} n
          * @return {ListNode}
          */
+        // 方法1：常规方法
         var removeNthFromEnd = function (head, n) {
             var arr = [];
             //把所有的值取出来new一个节点，存到arr中；注意：每一个的next都是null
@@ -36,6 +37,45 @@
             return arr.length === 0 ? null : arr[0];
         };
 
+        // 方法2：快慢指针 + 添加 preHead 节点
+        // 时间复杂度 O(n) 空间复杂度 O(1)
+        var removeNthFromEnd = function (head, n) {
+            let preHead = new ListNode(0)
+            preHead.next = head
+            let fast = preHead,
+                slow = preHead
+            // 快先走 n+1 步
+            while (n--) {
+                fast = fast.next
+            }
+            // fast、slow 一起前进
+            while (fast && fast.next) {
+                fast = fast.next
+                slow = slow.next
+            }
+            slow.next = slow.next.next
+            return preHead.next
+        };
+
+        // 方法3：快慢指针 + 单独处理倒数第 n 节点
+        // 时间复杂度 O(n) 空间复杂度 O(1)
+        var removeNthFromEnd = function (head, n) {
+            let fast = head,
+                slow = head
+            // 快先走 n 步
+            while (--n) {
+                fast = fast.next
+            }
+            if (!fast.next) return head.next
+            fast = fast.next
+            // fast、slow 一起前进
+            while (fast && fast.next) {
+                fast = fast.next
+                slow = slow.next
+            }
+            slow.next = slow.next.next
+            return head
+        };
 
         // 定义一个链表结构
         function ListNode(val) {
@@ -50,9 +90,8 @@
         N2.next = N3;
         var N1 = new ListNode(1);
         N1.next = N2;
-        
-        console.log(removeNthFromEnd(N1,3));
-         
+
+        console.log(removeNthFromEnd(N1, 3));
     </script>
 </body>
 
