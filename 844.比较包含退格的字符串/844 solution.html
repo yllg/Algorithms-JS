@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法1：字符串函数
+        // 封装一个方法，先将字符串转换为数组，然后申明一个空数组，遇到#就执行pop(),否则就就执行push().
+        var backspaceCompare1 = function (S, T) {
+            if (S === T) {
+                return true;
+            }
+            let s = deal(S);
+            let t = deal(T);
+            if (s === t) {
+                return true;
+            } else {
+                return false;
+            }
+
+            function deal(str) {
+                let arr = str.split("");
+                let result = [];
+                arr.forEach((item) => {
+                    if (item === '#') {
+                        result.pop();
+                    } else {
+                        result.push(item);
+                    }
+                })
+                return result.join('');
+            }
+        };
+
+        // 方法2：正则表达式
+        var backspaceCompare2 = function (S, T) {
+            let reg = /[a-z](?=\#)\#/g;
+            S = S.replace(/^\#/, '').replace(reg, '');
+            T = T.replace(/^\#/, '').replace(reg, '');
+            if (!S.includes('#') && !T.includes('#')) {
+                return S == T;
+            }
+            return backspaceCompare(S, T);
+        };
+
+        // 方法3：双指针
+        // 时间复杂度：O(N+M)，其中 N 和 M 分别为字符串 S 和 T 的长度。我们需要遍历两字符串各一次。
+        // 空间复杂度：O(1)。对于每个字符串，我们只需要定义一个指针和一个计数器即可
+        /**
+         * @param {string} S
+         * @param {string} T
+         * @return {boolean}
+         */
+        var backspaceCompare3 = function (S, T) {
+            let sPointer = S.length - 1,
+                tPointer = T.length - 1
+            let skipS = 0,
+                skipT = 0
+            while (sPointer >= 0 || tPointer >= 0) {
+                while (sPointer >= 0) {
+                    if (S[sPointer] === '#') {
+                        skipS++
+                        sPointer--
+                    } else if (skipS > 0) {
+                        skipS--
+                        sPointer--
+                    } else {
+                        break
+                    }
+                }
+                while (tPointer >= 0) {
+                    if (T[tPointer] === '#') {
+                        skipT++
+                        tPointer--
+                    } else if (skipT > 0) {
+                        skipT--
+                        tPointer--
+                    } else {
+                        break
+                    }
+                }
+                if (sPointer >= 0 && tPointer >= 0) {
+                    if (S[sPointer] !== T[tPointer]) {
+                        return false
+                    }
+                } else if (sPointer >= 0 || tPointer >= 0) {
+                    return false
+                }
+                sPointer--
+                tPointer--
+            }
+            return true
+        };
+
+        // test
+        let S = "ab#c", T = "ad#c";
+        console.log(backspaceCompare1(S, T));
+        console.log(backspaceCompare2(S, T));
+        console.log(backspaceCompare3(S, T));
+    </script>
+</body>
+
+</html>
