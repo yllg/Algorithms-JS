@@ -1,61 +1,114 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
 </head>
+
 <body>
-<script>
-// Source : https://leetcode.com/problems/reorder-list/
-// Author : 悬笔e绝
-// Date   : 2019-07-13
+  <script>
+    // Source : https://leetcode.com/problems/reorder-list/
+    // Author : 悬笔e绝
+    // Date   : 2019-07-13
 
-//  Definition for singly-linked list.
- function ListNode(val) {
-     this.val = val;
-     this.next = null;
- }
+    //  Definition for singly-linked list.
+    function ListNode(val) {
+      this.val = val;
+      this.next = null;
+    }
 
-/**
- * @param {ListNode} head
- * @return {void} Do not return anything, modify head in-place instead.
- */
- var reorderList = function(head) {
-  if (!head)
-    return;
+    // 方法1：快慢指针确认中点 + 翻转插入链表
+    /**
+     * Definition for singly-linked list.
+     * function ListNode(val) {
+     *     this.val = val;
+     *     this.next = null;
+     * }
+     */
+    /**
+     * @param {ListNode} head
+     * @return {void} Do not return anything, modify head in-place instead.
+     */
+    var reorderList = function (head) {
+      const dummy = new ListNode(0)
+      dummy.next = head
+      let slow = dummy
+      let quick = dummy
+      while (quick && quick.next) {
+        slow = slow.next
+        quick = quick.next
+        quick = quick.next
+      }
+      let right = slow.next
+      slow.next = null
+      let left = dummy.next
+      right = reverseList(right)
+      while (left && right) {
+        let lNext = left.next
+        let rNext = right.next
+        right.next = left.next
+        left.next = right
+        left = lNext
+        right = rNext
+      }
+      return dummy.next
+    }
+    var reverseList = (list) => {
+      let prev = null
+      let cur = list
+      while (cur) {
+        let next = cur.next
+        cur.next = prev
+        prev = cur
+        cur = next
+      }
+      return prev
+    }
 
-  var node = head;
-  var ans = [];
-
-  while (node) {
-    ans.push(node);
-    node = node.next;
-  }
-
-  // remove the head node
-  ans.shift();
-
-  // rearrange the node array
-  var res = [];
-  var f = true;
-
-  while (ans.length) {
-    var tmp = f ? ans.pop() : ans.shift();
-    res.push(tmp);
-    f = !f;
-  }
-
-  // make a new list
-  for (var i = 0, len = res.length; i < len; i++)
-    if (i !== len - 1)
-      res[i].next = res[i + 1];
-    else
-      res[i].next = null;
-
-  head.next = res[0];
-};
-</script>
+    // 方法2：利用数组即可出队又可出栈的特点，两头取节点然后做节点连接。
+    /**
+     * Definition for singly-linked list.
+     * function ListNode(val, next) {
+     *     this.val = (val===undefined ? 0 : val)
+     *     this.next = (next===undefined ? null : next)
+     * }
+     */
+    /**
+     * @param {ListNode} head
+     * @return {void} Do not return anything, modify head in-place instead.
+     */
+    var reorderList = function (head) {
+      const queue = [];
+      let cur = head;
+      let next;
+      let tail;
+      // 先遍历一遍链表，把节点存放到万能数组里
+      while (cur) {
+        const archive = cur;
+        cur = cur.next;
+        // js链表其实是嵌套结构，不宜把next也引入，所以由数组自然顺序接替链表顺序,next清空
+        archive.next = null;
+        queue.push(archive);
+      }
+      while (queue.length) {
+        // 头部出队
+        cur = queue.shift();
+        // 尾部出栈
+        tail = queue.pop();
+        // 如果尾部有节点则拼接
+        if (tail) {
+          cur.next = tail;
+          // 尾部要和下一个节点建立好联系
+          tail.next = queue.length ? queue[0] : null;
+        } else {
+          cur.next = null;
+        }
+      }
+    };
+  </script>
 </body>
+
 </html>
