@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法1：双指针
+        // 时间复杂度：O(N+M)，其中 M,N 分别为两个字符串的长度。
+        // 空间复杂度：O(1)。
+        var isLongPressedName = function (name, typed) {
+            const n = name.length,
+                m = typed.length;
+            let i = 0,
+                j = 0;
+            while (j < m) {
+                if (i < n && name[i] === typed[j]) {
+                    i++;
+                    j++;
+                } else if (j > 0 && typed[j] === typed[j - 1]) {
+                    j++;
+                } else {
+                    return false;
+                }
+            }
+            return i === n;
+        };
+
+        // test
+        const name = "alex";
+        let typed = "aaleex";
+        console.log(isLongPressedName(name, typed));
+    </script>
+</body>
+
+</html>
