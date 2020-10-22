@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法1：贪心算法+双指针
+        // 时间复杂度：O(n)
+        // 其中 n 是字符串的长度。需要遍历字符串两次，第一次遍历时记录每个字母最后一次出现的下标位置，第二次遍历时进行字符串的划分。
+        //空间复杂度：O(Σ)
+        // 其中 Σ 是字符串中的字符集大小。这道题中，字符串只包含小写字母，因此 Σ=26。
+
+        const partitionLabels = (S) => {
+            const maxPos = {};
+            for (let i = 0; i < S.length; i++) { // 存放字母与它的最远位置
+                maxPos[S[i]] = i;
+            }
+
+            const res = [];
+            let start = 0; // 待切割的起始位置
+            let scanedCharMaxPos = 0; // 已扫描的字符中最远的位置
+
+            for (let i = 0; i < S.length; i++) {
+                const curCharMaxPos = maxPos[S[i]]; // 当前扫描的字符的最远位置
+                scanedCharMaxPos = Math.max(scanedCharMaxPos, curCharMaxPos); // 更新「已扫描的字符中最远的位置」
+                if (i == scanedCharMaxPos) { // 正好扫描到「已扫描的字符的最远位置」，到达切割点
+                    res.push(i - start + 1);
+                    start = i + 1; // 更新，下一个待切割的字符串的起始位置
+                }
+            }
+            return res;
+        };
+
+        // test
+        let S = "ababcbacadefegdehijhklij";
+        console.log(partitionLabels(S));
+    </script>
+</body>
+
+</html>
