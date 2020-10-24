@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>图片懒加载</title>
+    <style>
+        img {
+            display: block;
+            height: 450px;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+
+<body>
+    <img data-src="./images/1.png" alt="" />
+    <img data-src="./images/2.png" alt="" />
+    <img data-src="./images/3.png" alt="" />
+    <img data-src="./images/4.png" alt="" />
+    <img data-src="./images/5.png" alt="" />
+    <img data-src="./images/6.png" alt="" />
+</body>
+<script>
+    var imgs = document.querySelectorAll("img");
+
+    // 节流函数,定时器版本
+    function throttle(func, wait) {
+        let timer = null;
+        return function (...args) {
+            if (!timer) {
+                func(...args);
+                timer = setTimeout(() => {
+                    timer = null;
+                }, wait);
+            }
+        };
+    }
+
+    //方法1： H + S > offsetTop
+    function lazyLoad1(imgs) {
+        //offsetTop是元素与offsetParent的距离，循环获取直到页面顶部
+        function getTop(e) {
+            var T = e.offsetTop;
+            while ((e = e.offsetParent)) {
+                T += e.offsetTop;
+            }
+            return T;
+        }
+        var H = document.documentElement.clientHeight; //获取可视区域高度
+        var S = document.documentElement.scrollTop || document.body.scrollTop;
+        Array.from(imgs).forEach(function (img) {
+            // +100 提前100个像素就开始加载
+            // 并且只处理没有src即没有加载过的图片
+            if (H + S + 100 > getTop(img) && !img.src) {
+                img.src = img.dataset.src;
+            }
+        });
+    }
+    const throttleLazyLoad1 = throttle(lazyLoad1, 200);
+
+    // 方法2：el.getBoundingClientRect().top <= window.innerHeight
+    function lazyLoad2(imgs) {
+        function isIn(el) {
+            var bound = el.getBoundingClientRect();
+            var clientHeight = window.innerHeight;
+            return bound.top <= clientHeight + 100;
+        }
+        Array.from(imgs).forEach(function (img) {
+            if (isIn(img) && !img.src) {
+                img.src = img.dataset.src;
+            }
+        });
+    }
+    const throttleLazyLoad2 = throttle(lazyLoad2, 200);
+
+    // 滚轮事件监听
+    // window.onload = window.onscroll = function () {
+    //   throttleLazyLoad1(imgs);
+    //   // throttleLazyLoad2(imgs);
+    // };
+
+    // 方法3：IntersectionObserver
+    function lazyLoad3(imgs) {
+        const io = new IntersectionObserver((ioes) => {
+            ioes.forEach((ioe) => {
+                const img = ioe.target;
+                const intersectionRatio = ioe.intersectionRatio;
+                if (intersectionRatio > 0 && intersectionRatio <= 1) {
+                    if (!img.src) {
+                        img.src = img.dataset.src;
+                    }
+                }
+                img.onload = img.onerror = () => io.unobserve(img);
+            });
+        });
+        imgs.forEach((img) => io.observe(img));
+    }
+    lazyLoad3(imgs);
+</script>
+
+</html>
