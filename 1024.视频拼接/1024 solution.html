@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法1：动态规划
+        // 时间复杂度：O(T×N)，其中 T 是区间的长度，N 是子区间的数量。
+        // 空间复杂度：O(T)，其中 T 是区间的长度。
+        const videoStitching = (clips, T) => {
+            clips.sort((a, b) => a[0] - b[0]); // 按开始时间从小到大排序
+            // dp[j]：涵盖[0:j]需要的clip的最少个数，目标是求dp[T]，初始值为101，大于所有可能值
+            const dp = new Array(T + 1).fill(101);
+            dp[0] = 0; // 涵盖[0:0]不需要clip，所以为0
+
+            for (let i = 0; i < clips.length; i++) { // 遍历每个片段
+                const [start, end] = clips[i]; // 获取当前片段的开始和结束时间
+                if (dp[start] == 101) { // 该片段上都覆盖不了，直接退出循环，保持为101
+                    break;
+                }
+                for (let j = start + 1; j <= end; j++) { // 计算当前片段上每个点的dp[j]
+                    dp[j] = Math.min(dp[j], dp[start] + 1);
+                }
+            }
+            if (dp[T] == 101) {
+                return -1;
+            }
+            return dp[T];
+        };
+
+
+        // 方法2：贪心
+        // 时间复杂度：O(T+N)，其中 T 是区间的长度，N 是子区间的数量。
+        // 空间复杂度：O(T)，其中 T 是区间的长度。
+        /**
+         * @param {number[][]} clips
+         * @param {number} T
+         * @return {number}
+         */
+        var videoStitching = function (clips, T) {
+            // 去除clips的引用，这里不去除引用也可以
+            let i = 0,
+                l = 0,
+                s = clips.slice(0);
+            while (i < T) {
+                // 找出局部最优解区间
+                let j = 0,
+                    c = s.slice(0),
+                    k = 0,
+                    v = c.length;
+                for (; k < v; k++) { // 这里必须从头开始找
+                    if (c[k][0] <= i && c[k][1] >= i && c[k][1] > j) {
+                        j = c[k][1];
+                        // 删除已找到的区间，因为后续不需要。压缩空间换取时间
+                        s.splice(k, 1);
+                    }
+                }
+                if (i == j) { // 与上一个最优解区间最大值相同
+                    return -1;
+                }
+                l++;
+                //if (j >= T) { // 已找到头了
+                //    return l; // break;
+                //}
+                i = j;
+            }
+            return l;
+        };
+    </script>
+</body>
+
+</html>
