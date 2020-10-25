@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法1：一次遍历 存储当前状态
+        // 时间复杂度 O(n) 空间复杂度 O(1)
+        /**
+         * @param {number[]} A
+         * @return {number}
+         */
+        var longestMountain = function (A) {
+            let flag = {
+                up: -1,
+                down: -1
+            }
+            let ans = 0;
+            for (let i = 0, len = 0; i < A.length; i++) {
+                if (flag.up == -1 && flag.down == -1) {
+                    if (A[i] < A[i + 1]) {
+                        len++;
+                        flag.up = 0;
+                        continue;
+                    }
+                }
+                if (flag.up == 0 && flag.down == -1) {
+                    if (A[i] < A[i + 1]) {
+                        len++;
+                        continue;
+                    }
+                    if (A[i] == A[i + 1]) {
+                        len = 0;
+                        flag.up = -1;
+                        continue;
+                    }
+                    if (A[i] > A[i + 1]) {
+                        len++;
+                        if (A[i + 2] == undefined) {
+                            ans = Math.max(len + 1, ans);
+                            break;
+                        }
+                        flag.up = 1;
+                        flag.down = 0;
+                        continue;
+                    }
+                }
+                if (flag.up == 1 && flag.down == 0) {
+                    if (A[i] > A[i + 1]) {
+                        len++;
+                        if (A[i + 2] == undefined) {
+                            ans = Math.max(len + 1, ans);
+                            break;
+                        }
+                        continue;
+                    }
+                    if (A[i] == A[i + 1]) {
+                        ans = Math.max(len + 1, ans);
+                        len = 0;
+                        flag.up = -1;
+                        flag.down = -1;
+                        continue;
+                    }
+                    if (A[i] < A[i + 1]) {
+                        ans = Math.max(len + 1, ans);
+                        len = 1;
+                        flag.up = 0;
+                        flag.down = -1;
+                        continue;
+                    }
+                }
+            }
+            return ans
+        };
+
+        // test
+        let A = [2,1,4,7,3,2,5];
+        console.log(longestMountain(A))
+    </script>
+</body>
+
+</html>
