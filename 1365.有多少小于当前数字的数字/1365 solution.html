@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法1：暴力
+        // 时间复杂度：O(N^2)，其中 N 为数组的长度。
+        // 空间复杂度：O(1)。
+        var smallerNumbersThanCurrent = function (nums) {
+            const n = nums.length;
+            const ret = [];
+            for (let i = 0; i < n; ++i) {
+                let cnt = 0;
+                for (let j = 0; j < n; ++j) {
+                    if (nums[j] < nums[i]) {
+                        cnt++;
+                    }
+                }
+                ret[i] = cnt;
+            }
+            return ret;
+        };
+
+        // 方法2：快速排序
+        // 时间复杂度：O(NlogN)，其中 N 为数组的长度。排序需要 O(NlogN) 的时间，随后需要 O(N) 时间来遍历。
+        // 空间复杂度：O(N)。因为要额外开辟一个数组。
+        var smallerNumbersThanCurrent = function (nums) {
+            const n = nums.length;
+            const data = new Array(n).fill(0).map(v => new Array(2).fill(0));
+            for (let i = 0; i < n; ++i) {
+                data[i][0] = nums[i];
+                data[i][1] = i;
+            }
+            data.sort((a, b) => a[0] - b[0]);
+
+            const ret = new Array(n);
+            let prev = -1;
+            for (let i = 0; i < n; ++i) {
+                if (prev == -1 || data[i][0] !== data[i - 1][0]) {
+                    prev = i;
+                }
+                ret[data[i][1]] = prev;
+            }
+            return ret;
+        };
+
+        // 方法3：计数排序
+        // 时间复杂度：O(N+K)，其中 K 为值域大小。需要遍历两次原数组，同时遍历一次频次数组 cnt 找出前缀和。
+        // 空间复杂度：O(K)。因为要额外开辟一个值域大小的数组。
+        var smallerNumbersThanCurrent = function (nums) {
+            const cnt = new Array(101).fill(0);
+            const n = nums.length;
+            for (let i = 0; i < n; ++i) {
+                cnt[nums[i]] += 1;
+            }
+            for (let i = 1; i <= 100; ++i) {
+                cnt[i] += cnt[i - 1];
+            }
+            const ret = [];
+            for (let i = 0; i < n; ++i) {
+                ret.push(nums[i] ? cnt[nums[i] - 1] : 0);
+            }
+            return ret;
+        };
+    </script>
+</body>
+
+</html>
