@@ -15,7 +15,7 @@
          * @param {number[]} A
          * @return {number}
          */
-        var longestMountain = function (A) {
+        var longestMountain1 = function (A) {
             let flag = {
                 up: -1,
                 down: -1
@@ -78,9 +78,62 @@
             return ans
         };
 
+        // 方法2：动态规划
+        /**
+         * @param {number[]} A
+         * @return {number}
+         */
+        var longestMountain2 = function (A) {
+            //当前状态，默认是起始点
+            let flag = 0;
+            //当前长度，起始点占一个长度
+            let curlen = 1;
+            //最大长度
+            let max = 1;
+            for (let i = 1; i < A.length; i++) {
+                //进行状态转换，无论前一点是什么状态，当前点都将转换为起始点
+                if (A[i] === A[i - 1]) {
+                    //前一点为上升，当前点转换为起始点，长度置为默认
+                    if (flag === 1) {
+                        flag = 0;
+                        curlen = 1;
+                    } else if (flag === 2) { //前一点为下降，则当前点是新山脉的起点。前一点是旧山脉的终点，将上一个山脉长度进行比较保存。
+                        max = max > curlen ? max : curlen;
+                        flag = 0;
+                        curlen = 1;
+                    }
+                } else if (A[i] > A[i - 1]) {
+                    //前一个为起始点，则当前点转换为上升点
+                    if (flag === 0) {
+                        curlen += 1;
+                        flag = 1;
+                    } else if (flag === 1) { //前一个为上升点，则当前点依旧是上升点，长度+1
+                        curlen += 1;
+                    } else { //前一个为下降点，则当前点为上升点。前一点既是旧山脉的终点，也是新山脉的起点，并更新山脉最长长度。
+                        max = max > curlen ? max : curlen;
+                        flag = 1;
+                        curlen = 2;
+                    }
+                } else {
+                    //上升点转为下降点
+                    if (flag === 1) {
+                        curlen += 1;
+                        flag = 2;
+                        //下降点则继续
+                    } else if (flag === 2) {
+                        curlen += 1;
+                    } //flag = 0，则未进入山脉，依旧是起始点。
+                    max = max > curlen ? max : curlen; //下降点进行山脉长度更新
+                }
+            }
+            if (max >= 3) return max;
+            return 0;
+        };
+
         // test
-        let A = [2,1,4,7,3,2,5];
-        console.log(longestMountain(A))
+        let A = [2, 1, 4, 7, 3, 2, 5];
+        console.log(longestMountain1(A))
+        console.log(longestMountain2(A))
     </script>
 </body>
 
