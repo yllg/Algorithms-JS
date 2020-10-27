@@ -1,46 +1,84 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
 </head>
+
 <body>
-<script>
-// Source : https://leetcode.com/problems/binary-tree-preorder-traversal/
-// Author : 悬笔e绝
-// Date   : 2019-07-15
+  <script>
+    // Source : https://leetcode.com/problems/binary-tree-preorder-traversal/
+    // Author : 悬笔e绝
+    // Date   : 2019-07-15
 
-// Definition for a binary tree node.
-function TreeNode(val) {
-    this.val = val;
-    this.left = this.right = null;
-}
-/**
- * @param {TreeNode} root
- * @return {number[]}
- */
-function dfs(root, ans) {
-  if (!root) return;
-  ans.push(root.val);
+    // Definition for a binary tree node.
+    function TreeNode(val) {
+      this.val = val;
+      this.left = this.right = null;
+    }
+    /**
+     * @param {TreeNode} root
+     * @return {number[]}
+     */
 
-  dfs(root.left, ans);
-  dfs(root.right, ans);
-}
+    // 方法1：递归
+    // 空间复杂度：O(n)
+    // 时间复杂度：O(n)
+    var preorderTraversal = (root) => {
+      let result = []
+      var preOrderTraverseNode = (node) => {
+        if (node) {
+          // 先根节点
+          result.push(node.val)
+          // 然后遍历左子树
+          preOrderTraverseNode(node.left)
+          // 再遍历右子树
+          preOrderTraverseNode(node.right)
+        }
+      }
+      preOrderTraverseNode(root)
+      return result
+    };
 
-var preorderTraversal = function(root) {
-  var ans = [];
-  dfs(root, ans);
-  return ans;
-};
+    // 方法2：迭代
+    // 空间复杂度：O(n)
+    // 时间复杂度：O(n)
+    const preorderTraversal = (root) => {
+      const list = [];
+      const stack = [];
+      // 当根节点不为空的时候，将根节点入栈
+      if (root) stack.push(root)
+      while (stack.length > 0) {
+        const curNode = stack.pop()
+        // 第一步的时候，先访问的是根节点
+        list.push(curNode.val)
+        // 我们先打印左子树，然后右子树
+        // 所以先加入栈的是右子树，然后左子树
+        if (curNode.right !== null) {
+          stack.push(curNode.right)
+        }
+        if (curNode.left !== null) {
+          stack.push(curNode.left)
+        }
+      }
+      return list
+    }
 
-// 测试
-var tree_node_1_2 = new TreeNode(2);
-tree_node_1_2.left = new TreeNode(3);
-var tree_node_1 = new TreeNode(1);
-tree_node_1.right = tree_node_1_2;
-console.log(preorderTraversal(tree_node_1));
-</script>
+    // TODO：方法3 Morris
+    // 空间复杂度：O(n)
+    // 时间复杂度：O(1)
+
+
+    // 测试
+    var tree_node_1_2 = new TreeNode(2);
+    tree_node_1_2.left = new TreeNode(3);
+    var tree_node_1 = new TreeNode(1);
+    tree_node_1.right = tree_node_1_2;
+    console.log(preorderTraversal(tree_node_1));
+  </script>
 </body>
+
 </html>
