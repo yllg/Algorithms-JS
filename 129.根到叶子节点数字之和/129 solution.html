@@ -1,63 +1,93 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
 </head>
+
 <body>
-<script>
-// Source : https://leetcode.com/problems/sum-root-to-leaf-numbers/
-// Author : 悬笔e绝
-// Date   : 2019-06-12
+  <script>
+    // Source : https://leetcode.com/problems/sum-root-to-leaf-numbers/
+    // Author : 悬笔e绝
+    // Date   : 2019-06-12
 
-// Definition for a binary tree node.
-function TreeNode(val) {
-    this.val = val;
-    this.left = this.right = null;
-}
-/**
- * @param {TreeNode} root
- * @return {number}
- */
+    // Definition for a binary tree node.
+    function TreeNode(val) {
+      this.val = val;
+      this.left = this.right = null;
+    }
 
-var ans;
-// 递归
-function dfs(root, sum) {
-  if (!root.left && !root.right) {
-    ans += sum * 10 + root.val;
-    return;
-  }
-  if (root.left)
-    dfs(root.left, sum * 10 + root.val);
-  if (root.right)
-    dfs(root.right, sum * 10 + root.val);
-}
+    // 方法1：深度优先搜索
+    // 时间复杂度：O(n)，其中 n 是二叉树的节点个数。
+    // 空间复杂度：O(n)
+    const dfs = (root, prevSum) => {
+      if (root === null) {
+        return 0;
+      }
+      const sum = prevSum * 10 + root.val;
+      if (root.left == null && root.right == null) {
+        return sum;
+      } else {
+        return dfs(root.left, sum) + dfs(root.right, sum);
+      }
+    }
+    var sumNumbers1 = function (root) {
+      return dfs(root, 0);
+    };
 
-var sumNumbers = function(root) {
-  if (root === null)
-    return 0;
-  ans = 0;
-  dfs(root, 0);
-  return ans;
-};
+    // 方法2：广度优先搜索
+    // 时间复杂度：O(n)，其中 n 是二叉树的节点个数。
+    // 空间复杂度：O(n)
+    var sumNumbers2 = function (root) {
+      if (root === null) {
+        return 0;
+      }
+      let sum = 0;
+      const nodeQueue = [];
+      const numQueue = [];
+      nodeQueue.push(root);
+      numQueue.push(root.val);
+      while (nodeQueue.length) {
+        const node = nodeQueue.shift();
+        const num = numQueue.shift();
+        const left = node.left,
+          right = node.right;
+        if (left === null && right === null) {
+          sum += num;
+        } else {
+          if (left !== null) {
+            nodeQueue.push(left);
+            numQueue.push(num * 10 + left.val);
+          }
+          if (right !== null) {
+            nodeQueue.push(right);
+            numQueue.push(num * 10 + right.val);
+          }
+        }
+      }
+      return sum;
+    };
 
-// 测试
-var tree_node_1 = new TreeNode(1);
-tree_node_1.left = new TreeNode(2);
-tree_node_1.right = new TreeNode(3);
-console.log(sumNumbers(tree_node_1));
+    // 测试
+    var tree_node_1 = new TreeNode(1);
+    tree_node_1.left = new TreeNode(2);
+    tree_node_1.right = new TreeNode(3);
+    console.log(sumNumbers1(tree_node_1));
+    console.log(sumNumbers2(tree_node_1));
 
-var tree_node_2_1 = new TreeNode(9);
-tree_node_2_1.left = new TreeNode(5);
-tree_node_2_1.right = new TreeNode(1);
-var tree_node_2_2 = new TreeNode(0);
-var tree_node_2 = new TreeNode(4);
-tree_node_2.left = tree_node_2_1;
-tree_node_2.right = tree_node_2_2;
-console.log(sumNumbers(tree_node_2));
-
-</script>
+    var tree_node_2_1 = new TreeNode(9);
+    tree_node_2_1.left = new TreeNode(5);
+    tree_node_2_1.right = new TreeNode(1);
+    var tree_node_2_2 = new TreeNode(0);
+    var tree_node_2 = new TreeNode(4);
+    tree_node_2.left = tree_node_2_1;
+    tree_node_2.right = tree_node_2_2;
+    console.log(sumNumbers1(tree_node_2));
+    console.log(sumNumbers2(tree_node_2));
+  </script>
 </body>
+
 </html>
