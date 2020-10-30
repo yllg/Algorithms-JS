@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法1：迭代
+        // 对于一个陆地格子的每条边，它被算作岛屿的周长当且仅当这条边为网格的边界或者相邻的另一个格子为水域。 因此，我们可以遍历每个陆地格子，看其四个方向是否为边界或者水域，如果是，将这条边的贡献（即 11）加入答案 \textit{ans}ans 中即可。
+        // 时间复杂度 O(nm), 空间复杂度 O(1)
+        var islandPerimeter1 = function (grid) {
+            const dx = [0, 1, 0, -1];
+            const dy = [1, 0, -1, 0];
+            const n = grid.length,
+                m = grid[0].length;
+            let ans = 0;
+            for (let i = 0; i < n; ++i) {
+                for (let j = 0; j < m; ++j) {
+                    if (grid[i][j]) {
+                        let cnt = 0;
+                        for (let k = 0; k < 4; ++k) {
+                            let tx = i + dx[k];
+                            let ty = j + dy[k];
+                            if (tx < 0 || tx >= n || ty < 0 || ty >= m || !grid[tx][ty]) {
+                                cnt += 1;
+                            }
+                        }
+                        ans += cnt;
+                    }
+                }
+            }
+            return ans;
+        };
+
+        // 方法2：深度优先搜索
+        // 时间复杂度 O(nm), 空间复杂度 O(nm)
+        var islandPerimeter2 = function (grid) {
+            const dx = [0, 1, 0, -1];
+            const dy = [1, 0, -1, 0];
+            const n = grid.length,
+                m = grid[0].length;
+            const dfs = (x, y) => {
+                if (x < 0 || x >= n || y < 0 || y >= m || grid[x][y] === 0) {
+                    return 1;
+                }
+                if (grid[x][y] === 2) {
+                    return 0;
+                }
+                grid[x][y] = 2;
+                let res = 0;
+                for (let i = 0; i < 4; ++i) {
+                    const tx = x + dx[i];
+                    const ty = y + dy[i];
+                    res += dfs(tx, ty);
+                }
+                return res;
+            }
+            let ans = 0;
+            for (let i = 0; i < n; ++i) {
+                for (let j = 0; j < m; ++j) {
+                    if (grid[i][j] === 1) {
+                        ans += dfs(i, j);
+                    }
+                }
+            }
+            return ans;
+        };
+
+        // test
+        let grid = [
+            [0, 1, 0, 0],
+            [1, 1, 1, 0],
+            [0, 1, 0, 0],
+            [1, 1, 0, 0]
+        ];
+        console.log(islandPerimeter1(grid))
+        console.log(islandPerimeter2(grid))
+    </script>
+</body>
+
+</html>
