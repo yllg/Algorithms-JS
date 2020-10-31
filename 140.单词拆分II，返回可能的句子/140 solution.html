@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法1：记忆化搜索
+        // 时间复杂度 O(n⋅2^n), 空间复杂度 O(n⋅2^n)
+        const backtrack = (s, length, wordSet, index, map) => {
+            if (map.has(index)) {
+                return map.get(index);
+            }
+            const wordBreaks = [];
+            if (index === length) {
+                wordBreaks.push([]);
+            }
+            for (let i = index + 1; i <= length; i++) {
+                const word = s.substring(index, i);
+                if (wordSet.has(word)) {
+                    const nextWordBreaks = backtrack(s, length, wordSet, i, map);
+                    for (const nextWordBreak of nextWordBreaks) {
+                        const wordBreak = [word, ...nextWordBreak]
+                        wordBreaks.push(wordBreak);
+                    }
+                }
+            }
+            map.set(index, wordBreaks);
+            return wordBreaks;
+        }
+        var wordBreak = function (s, wordDict) {
+            const map = new Map();
+            const wordBreaks = backtrack(s, s.length, new Set(wordDict), 0, map);
+            const breakList = [];
+            for (const wordBreak of wordBreaks) {
+                breakList.push(wordBreak.join(' '));
+            }
+            return breakList;
+        };
+    </script>
+</body>
+
+</html>
