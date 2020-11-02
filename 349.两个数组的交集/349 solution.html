@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法1：两个集合
+        // 时间复杂度：O(m+n)，其中 m 和 n 分别是两个数组的长度
+        // 空间复杂度：O(m+n)
+        const set_intersection = (set1, set2) => {
+            if (set1.size > set2.size) {
+                return set_intersection(set2, set1);
+            }
+            const intersection = new Set();
+            for (const num of set1) {
+                if (set2.has(num)) {
+                    intersection.add(num);
+                }
+            }
+            return [...intersection];
+        }
+        var intersection1 = function (nums1, nums2) {
+            const set1 = new Set(nums1);
+            const set2 = new Set(nums2);
+            return set_intersection(set1, set2);
+        };
+
+        // 方法2：排序+双指针
+        // 时间复杂度：O(mlogm+nlogn)，其中 m 和 n 分别是两个数组的长度
+        // 空间复杂度：O(logm+logn)
+        var intersection2 = function (nums1, nums2) {
+            nums1.sort((x, y) => x - y);
+            nums2.sort((x, y) => x - y);
+            const length1 = nums1.length,
+                length2 = nums2.length;
+            let index1 = 0,
+                index2 = 0;
+            const intersection = [];
+            while (index1 < length1 && index2 < length2) {
+                const num1 = nums1[index1],
+                    num2 = nums2[index2];
+                if (num1 === num2) {
+                    // 保证加入元素的唯一性
+                    if (!intersection.length || num1 !== intersection[intersection.length - 1]) {
+                        intersection.push(num1);
+                    }
+                    index1++;
+                    index2++;
+                } else if (num1 < num2) {
+                    index1++;
+                } else {
+                    index2++;
+                }
+            }
+            return intersection;
+        };
+
+        // test
+        let nums1 = [1,2,2,1], nums2 = [2,2];
+        console.log(intersection1(nums1,nums2));
+        console.log(intersection2(nums1,nums2));
+    </script>
+</body>
+
+</html>
