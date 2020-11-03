@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法1：线性扫描
+        // 时间复杂度 0(n), 空间复杂度 O(1)
+        var validMountainArray = function (A) {
+            const N = A.length;
+            let i = 0;
+            // 递增扫描
+            while (i + 1 < N && A[i] < A[i + 1]) {
+                i++;
+            }
+            // 最高点不能是数组的第一个位置或最后一个位置
+            if (i === 0 || i === N - 1) {
+                return false;
+            }
+            // 递减扫描
+            while (i + 1 < N && A[i] > A[i + 1]) {
+                i++;
+            }
+            return i === N - 1;
+        };
+
+        //test
+        let A = [0,3,2,1];
+        console.log(validMountainArray(A));
+    </script>
+</body>
+
+</html>
