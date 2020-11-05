@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法1：单向bfs广度优先搜索
+        var ladderLength = function (beginWord, endWord, wordList, q = [beginWord], i = 0, r = {}, h = {}, l, w) {
+            wordList.forEach(w => [...w].forEach((p, i) => h[p = w.substring(0, i) + '.' + w.substring(i + 1)] ? h[
+                p].push(w) : h[p] = [w]))
+            while (q.length) {
+                l = q.length, i++
+                while (l--) {
+                    if (r[w = q.shift()]) continue
+                    else r[w] = 1
+                    if (w === endWord) return i;
+                    [...w].forEach((_, i) => q.push(...(h[w.substring(0, i) + '.' + w.substring(i + 1)] || [])))
+                }
+            }
+            return 0
+        };
+
+        // 方法2：双向广度优先搜索
+        var ladderLength = function (beginWord, endWord, wordList) {
+            const words = new Set(wordList)
+            if (!words.has(endWord)) return 0
+            let begins = new Set([beginWord]),
+                ends = new Set([endWord])
+            let res = 1
+            while (begins.size > 0) {
+                const nextBegins = new Set()
+                for (const w of begins) {
+                    for (let i = 0; i < w.length; i++) {
+                        for (let j = 0; j < 26; j++) {
+                            const c = String.fromCharCode(97 + j)
+                            if (w[i] !== c) {
+                                const newWord = w.slice(0, i) + c + w.slice(i + 1)
+                                if (ends.has(newWord)) return res + 1
+                                if (words.has(newWord)) {
+                                    nextBegins.add(newWord)
+                                    words.delete(newWord)
+                                }
+                            }
+                        }
+                    }
+                }
+                // 若begins所有项(新单词)都没能在ends和words找到，那意味着没有路径走到ends了，newBegins为空
+                begins = nextBegins
+                res++
+                if (begins.size > ends.size)[begins, ends] = [ends, begins] // 理解时可以不看这行
+            }
+            return 0
+        };
+    </script>
+</body>
+
+</html>
