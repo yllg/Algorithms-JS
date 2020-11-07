@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法1：位运算
+        // 除以 2 可以用移位运算符：n >> 1
+        // 除以 2 的余数 可以用位与运算符：n & 1
+        function sortByBits(arr) {
+            function countBits(n) {
+                let count = 0;
+                while (n != 0) {
+                    count += n & 1;
+                    n >>= 1;
+                }
+                return count;
+            }
+            return arr.sort((a, b) => {
+                return countBits(a) - countBits(b) || a - b;
+            });
+        }
+        
+        // TODO 方法2：暴力法
+
+        // TODO 方法3：递推预处理
+
+        // test
+        let arr = [0,1,2,3,4,5,6,7,8];
+        console.log(sortByBits(arr))
+    </script>
+</body>
+
+</html>
