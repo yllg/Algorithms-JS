@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法1：排序
+        // 一行排序
+        const kClosest = (points, K) => points.sort((a, b, c = Math.sqrt((a[0] ** 2) + (a[1] ** 2)), d = Math.sqrt((b[
+            0] ** 2) + (b[1] ** 2))) => c - d).splice(0, K)
+
+        // 快速排序
+        var kClosest = function (points, K) {
+            if (points.length === 0 || K === 0) {
+                return []
+            }
+            const myPow = ([a, b]) => (Math.abs(a) ** 2) + (Math.abs(b) ** 2);
+            const quickSort = (arr) => {
+                if (arr.length <= 1) return arr;
+                let key = arr.shift();
+                let left = [],
+                    right = [];
+                for (let item of arr) {
+                    if (myPow(item) < myPow(key)) {
+                        left.push(item)
+                    } else {
+                        right.push(item)
+                    }
+                }
+                return quickSort(left).concat([key], quickSort(right))
+            }
+            return quickSort(points).slice(0, K)
+        };
+
+        // 方法2：小顶堆
+        /**
+         * @param {number[][]} points
+         * @param {number} K
+         * @return {number[][]}
+         */
+        class BigHeap {
+            constructor() {
+                this.heap = [];
+                this.heap[0] = null; // 占位，不使用
+                this.count = 0; // 堆元素个数
+            }
+            insert(n) {
+                this.heap.push(n);
+                this.count++;
+                this.swim(this.heap.length - 1);
+            }
+            swim(i) {
+                while (i > 1 && !this.morethan(i, this.parent(i))) {
+                    this.each(i, this.parent(i));
+                    i = this.parent(i);
+                }
+            }
+            sink(i) {
+                while (i < this.heap.length) {
+                    let left = 2 * i,
+                        right = 2 * i + 1,
+                        temp = i,
+                        len = this.heap.length;
+                    if (left < len && !this.morethan(left, temp)) temp = left;
+                    if (right < len && !this.morethan(right, temp)) temp = right;
+                    if (temp == i) return;
+                    this.each(temp, i);
+                    i = temp;
+                }
+            }
+            parent(i) {
+                return i >> 1;
+            }
+            morethan(i, j) {
+                return this.sqrt(this.heap[i]) > this.sqrt(this.heap[j]);
+            }
+            each(i, j) {
+                [this.heap[i], this.heap[j]] = [this.heap[j], this.heap[i]];
+            }
+            sqrt(arr) {
+                return arr[0] * arr[0] + arr[1] * arr[1];
+            }
+            delMax() {
+                this.each(1, this.heap.length - 1);
+                this.count--;
+                let max = this.heap.pop();
+                this.sink(1);
+                return max;
+            }
+        }
+        var kClosest = function (points, K) {
+            let heap = new BigHeap(K);
+            for (let i = 0; i < points.length; i++) {
+                heap.insert(points[i]);
+            }
+            let recent = [];
+            while (K-- > 0 && heap.count > 0) {
+                recent.push(heap.delMax());
+            }
+            return recent;
+        };
+
+        // TODO:方法3：优先队列
+
+        // TODO:方法4： 快速选择，快排的思想
+    </script>
+</body>
+
+</html>
