@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法1：贪心+单调栈
+        // 时间复杂度O(n) 空间复杂度O(n)
+        var removeKdigits = function (num, k) {
+            const stk = [];
+            for (const digit of num) {
+                while (stk.length > 0 && stk[stk.length - 1] > digit && k) {
+                    stk.pop();
+                    k -= 1;
+                }
+                stk.push(digit);
+            }
+            for (; k > 0; --k) {
+                stk.pop();
+            }
+            let ans = "";
+            let isLeadingZero = true;
+            for (const digit of stk) {
+                if (isLeadingZero && digit === '0') {
+                    continue;
+                }
+                isLeadingZero = false;
+                ans += digit;
+            }
+            return ans === "" ? "0" : ans;
+        };
+
+        // test
+        let num = "1432219", k = 3;
+        console.log(removeKdigits(num, k)); // 1219
+    </script>
+</body>
+
+</html>
