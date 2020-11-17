@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法1：直接排序
+        // 时间复杂度 O(RClog(RC))， 空间复杂度O(log(RC))
+        var allCellsDistOrder = function (R, C, r0, c0) {
+            var res = [];
+            for (let i = 0; i < R; ++i) {
+                for (let j = 0; j < C; ++j) {
+                    let temp = [i, j];
+                    res.push(temp);
+                }
+            }
+            res.sort((a, b) => {
+                let ta = Math.abs(a[0] - r0) + Math.abs(a[1] - c0),
+                    tb = Math.abs(b[0] - r0) + Math.abs(b[1] - c0);
+                return ta - tb;
+            });
+            return res;
+        };
+
+        // TODO:方法2：桶排序
+        // TODO:方法3：几何法
+    </script>
+</body>
+
+</html>
