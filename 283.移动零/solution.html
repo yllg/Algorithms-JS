@@ -1,24 +1,59 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
-<script>
-// Source : https://leetcode.com/problems/move-zeroes/
-// Author : 悬笔e绝
-// Date   : 2020-03-06
 
-var moveZeroes = function(nums) {
-  for (var i = nums.length; i--; ) {
-    if (!nums[i]) {
-      nums.splice(i, 1);
-      nums.push(0);
-    }
-  }
-};
-</script>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    // Source : https://leetcode.com/problems/move-zeroes/
+    // Author : 悬笔e绝
+    // Date   : 2020-03-06
+
+    // 方法1：使用数组函数 
+    var moveZeroes = function (nums) {
+      for (var i = nums.length; i--;) {
+        if (!nums[i]) {
+          nums.splice(i, 1);
+          nums.push(0);
+        }
+      }
+    };
+
+    // 方法2：sort函数
+    var moveZeroes = function (nums) {
+      nums.sort((a, b) => b ? 0 : -1)
+    };
+
+    // 方法3：reduce + 双指针
+    var moveZeroes = function (nums) {
+      nums.reduce((p, v, i) => (v !== 0 && ([nums[p], nums[i]] = [nums[i], nums[p]], ++p), p), 0)
+    };
+
+    // 方法4：常规双指针
+    // 时间复杂度O(n) 空间复杂度O(1)
+    var moveZeroes = function (nums) {
+      let i = 0,
+        j = 0;
+      while (i < nums.length) {
+        if (nums[i] != 0) {
+          [nums[i], nums[j]] = [nums[j], nums[i]];
+          i++;
+          j++;
+        } else {
+          i++;
+        }
+      }
+    };
+
+    // test
+    let nums = [0,1,0,3,12];
+    moveZeroes(nums);
+    console.log(nums);
+  </script>
 </body>
+
 </html>
