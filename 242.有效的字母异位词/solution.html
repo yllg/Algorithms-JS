@@ -1,31 +1,65 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
 </head>
+
 <body>
-<script>
-// Source : https://leetcode.com/problems/valid-anagram/
-// Author : 悬笔e绝
-// Date   : 2020-02-16
+  <script>
+    // Source : https://leetcode.com/problems/valid-anagram/
+    // Author : 悬笔e绝
+    // Date   : 2020-02-16
 
-/**
- * @param {string} s
- * @param {string} t
- * @return {boolean}
- */
+    /**
+     * @param {string} s
+     * @param {string} t
+     * @return {boolean}
+     */
 
-// 拆开再排序即可~
-var isAnagram = function(s, t) {
-  if (s.length !== t.length)
-    return false;
-  var a = s.split('').sort()
-    , b = t.split('').sort();
+    // 方法1：排序
+    // 时间复杂度O(nlogn) 空间复杂度O(logn)
+    var isAnagram = function (s, t) {
+      if (s.length !== t.length)
+        return false;
+      var a = s.split('').sort(),
+        b = t.split('').sort();
 
-  return a.toString() === b.toString();
-};
-</script>
+      return a.toString() === b.toString();
+    };
+
+    // 方法2：排序 一行代码
+    // 时间复杂度O(nlogn) 空间复杂度O(logn)
+    var isAnagram = function (s, t) {
+      return s.length == t.length && [...s].sort().join('') === [...t].sort().join('')
+    };
+
+    // 方法3：哈希表
+    // 时间复杂度O(n) n为s的长度 
+    // 空间复杂度O(S) S 为字符集大小，此处 S=26
+    var isAnagram = function (s, t) {
+      if (s.length !== t.length) {
+        return false;
+      }
+      const table = new Array(26).fill(0);
+      for (let i = 0; i < s.length; ++i) {
+        table[s.codePointAt(i) - 'a'.codePointAt(0)]++;
+      }
+      for (let i = 0; i < t.length; ++i) {
+        table[t.codePointAt(i) - 'a'.codePointAt(0)]--;
+        if (table[t.codePointAt(i) - 'a'.codePointAt(0)] < 0) {
+          return false;
+        }
+      }
+      return true;
+    };
+
+    // test 
+    let s = "anagram", t = "nagaram";
+    console.log(isAnagram(s, t));
+  </script>
 </body>
+
 </html>
