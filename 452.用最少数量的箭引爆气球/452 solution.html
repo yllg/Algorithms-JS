@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法1：排序+贪心算法
+        // 时间复杂度 O(nlogn) 空间复杂度 O(logn)
+        var findMinArrowShots = function (points) {
+            if (!points.length) {
+                return 0;
+            }
+            points.sort((a, b) => a[1] - b[1]);
+            let pos = points[0][1]
+            let ans = 1;
+            for (let balloon of points) {
+                if (balloon[0] > pos) {
+                    pos = balloon[1];
+                    ans++;
+                }
+            }
+            return ans;
+        };
+
+        // test
+        let points = [[10,16],[2,8],[1,6],[7,12]];
+        console.log(findMinArrowShots(points))
+    </script>
+</body>
+
+</html>
