@@ -1,67 +1,99 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
 </head>
+
 <body>
-<script>
-// Source : https://leetcode.com/problems/count-complete-tree-nodes/
-// Author : 悬笔e绝
-// Date   : 2019-12-17
+  <script>
+    // Source : https://leetcode.com/problems/count-complete-tree-nodes/
+    // Author : 悬笔e绝
+    // Date   : 2019-12-17
 
-/**
- * Definition for a binary tree node.
- * function TreeNode(val) {
- *     this.val = val;
- *     this.left = this.right = null;
- * }
- */
-/**
- * @param {TreeNode} root
- * @return {number}
- */
-var countNodes = function(root) {
-  if (!root)
-    return 0;
+    /**
+     * Definition for a binary tree node.
+     * function TreeNode(val) {
+     *     this.val = val;
+     *     this.left = this.right = null;
+     * }
+     */
 
-  var depth = 0;
+    // 方法1:二分查找+位运算
+    // 时间复杂度 O(log^2 n) 空间复杂度 O(1)
+    const exists = (root, level, k) => {
+      let bits = 1 << (level - 1);
+      let node = root;
+      while (node !== null && bits > 0) {
+        if (!(bits & k)) {
+          node = node.left;
+        } else {
+          node = node.right;
+        }
+        bits >>= 1;
+      }
+      return node !== null;
+    }
 
-  // find the depth of the tree
-  var node = root;
-  while (node) {
-    depth++;
-    node = node.left;
-  }
+    var countNodes = function (root) {
+      if (root === null) {
+        return 0;
+      }
+      let level = 0;
+      let node = root;
+      while (node.left !== null) {
+        level++;
+        node = node.left;
+      }
+      let low = 1 << level,
+        high = (1 << (level + 1)) - 1;
+      while (low < high) {
+        const mid = Math.floor((high - low + 1) / 2) + low;
+        if (exists(root, level, mid)) {
+          low = mid;
+        } else {
+          high = mid - 1;
+        }
+      }
+      return low;
+    };
 
-  var minn = 1 << (depth - 1);
-  var maxn = (1 << depth) - 1;
-  var start = minn;
-  var end = maxn;
 
-  // binary search
-  while (start <= end) {
-    var mid = (start + end) >> 1;
-    if (isExisting(mid, minn, maxn, root))
-      start = mid + 1;
-    else
-      end = mid - 1;
-  }
+    // 方法2：递归
+    var countNodes = function (root) {
+      if (!root) return 0
+      return 1 + countNodes(root.left) + countNodes(root.right)
+    };
 
-  return end;
 
-  function isExisting(num, left, right, node) {
-    if (left === right)
-      return !!node;
-    var tmp = (left + right) >> 1;
-    if (num <= tmp)
-      return isExisting(num, left, tmp, node.left);
-    else
-      return isExisting(num, tmp + 1, right, node.right);
-  }
-};
-</script>
+    // 方法3：利用完全二叉树的性质
+    var countNodes = function (root) {
+      if (!root) return 0
+      const leftDeep = deep(root.left)
+      const rightDeep = deep(root.right)
+      if (leftDeep === rightDeep) {
+        // the count of left node is Math.pow(2, leftDeep) - 1, so the total is
+        // Math.pow(2, leftDeep) - 1 + countNodes(root.right) + 1, 1 means parent node
+        return Math.pow(2, leftDeep) + countNodes(root.right)
+      } else {
+        return Math.pow(2, rightDeep) + countNodes(root.left)
+      }
+    };
+    // get the deep of current node cleverly with features of the complete tree.
+    var deep = function (node) {
+      if (!node) return 0
+      let nodeVal = node
+      let count = 1
+      while (nodeVal.left) {
+        count++
+        nodeVal = nodeVal.left
+      }
+      return count
+    }
+  </script>
 </body>
+
 </html>
