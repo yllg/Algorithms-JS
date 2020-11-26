@@ -1,39 +1,116 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
 </head>
+
 <body>
-<script>
-// Source : https://leetcode.com/problems/maximum-gap/
-// Author : 悬笔e绝
-// Date   : 2019-08-16
+  <script>
+    // Source : https://leetcode.com/problems/maximum-gap/
+    // Author : 悬笔e绝
+    // Date   : 2019-08-16
 
-/**
- * @param {number[]} nums
- * @return {number}
- */
-var maximumGap = function(nums) {
-  if (nums.length < 2)
-    return 0;
-  nums.sort(function(a, b) {
-    return a - b;
-  });
-  var ans = -1;
-  nums.reduce(function(pre, cur, index, array) {
-    ans = Math.max(ans, cur - pre);
-    return cur;
-  });
-  return ans;
-};
+    // 方法1:常规法
+    /**
+     * @param {number[]} nums
+     * @return {number}
+     */
+    var maximumGap = function (nums) {
+      if (nums.length < 2)
+        return 0;
+      nums.sort(function (a, b) {
+        return a - b;
+      });
+      var ans = -1;
+      nums.reduce(function (pre, cur, index, array) {
+        ans = Math.max(ans, cur - pre);
+        return cur;
+      });
+      return ans;
+    };
 
-//测试
-var nums = [3,6,9,1];
-console.log(maximumGap(nums));
+    // 方法2：基数排序
+    // 时间复杂度 O(n) 空间复杂度 O(n)
+    var maximumGap = function (nums) {
+      const n = nums.length;
+      if (n < 2) {
+        return 0;
+      }
+      let exp = 1;
+      const buf = new Array(n).fill(0);
+      const maxVal = Math.max(...nums);
 
-</script>
+      while (maxVal >= exp) {
+        const cnt = new Array(10).fill(0);
+        for (let i = 0; i < n; i++) {
+          let digit = Math.floor(nums[i] / exp) % 10;
+          cnt[digit]++;
+        }
+        for (let i = 1; i < 10; i++) {
+          cnt[i] += cnt[i - 1];
+        }
+        for (let i = n - 1; i >= 0; i--) {
+          let digit = Math.floor(nums[i] / exp) % 10;
+          buf[cnt[digit] - 1] = nums[i];
+          cnt[digit]--;
+        }
+        nums.splice(0, n, ...buf);
+        exp *= 10;
+      }
+      let ret = 0;
+      for (let i = 1; i < n; i++) {
+        ret = Math.max(ret, nums[i] - nums[i - 1]);
+      }
+      return ret;
+    };
+
+    // 方法3：基于桶算法
+    // 时间复杂度 O(n) 空间复杂度 O(n)
+    var maximumGap = function (nums) {
+      const n = nums.length;
+      if (n < 2) {
+        return 0;
+      }
+      const minVal = Math.min(...nums);
+      const maxVal = Math.max(...nums);
+      const d = Math.max(1, Math.floor(maxVal - minVal) / (n - 1));
+      const bucketSize = Math.floor((maxVal - minVal) / d) + 1;
+      const bucket = new Array(bucketSize).fill(0).map(x => new Array(2).fill(0));
+      for (let i = 0; i < bucketSize; ++i) {
+        bucket[i].fill(-1);
+      }
+      for (let i = 0; i < n; i++) {
+        const idx = Math.floor((nums[i] - minVal) / d);
+        if (bucket[idx][0] === -1) {
+          bucket[idx][0] = bucket[idx][1] = nums[i];
+        } else {
+          bucket[idx][0] = Math.min(bucket[idx][0], nums[i]);
+          bucket[idx][1] = Math.max(bucket[idx][1], nums[i]);
+        }
+      }
+      let ret = 0;
+      let prev = -1;
+      for (let i = 0; i < bucketSize; i++) {
+        if (bucket[i][0] == -1) {
+          continue;
+        }
+        if (prev != -1) {
+          ret = Math.max(ret, bucket[i][0] - bucket[prev][1]);
+        }
+        prev = i;
+      }
+      return ret;
+    };
+
+
+    //测试
+    var nums = [3, 6, 9, 1];
+    console.log(maximumGap(nums));
+  </script>
 </body>
+
 </html>
