@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法1：贪心+排序
+        // 时间复杂度 O(nlogn) 空间复杂度 O(1)
+        var largestPerimeter = function (A) {
+            A.sort((a, b) => a - b);
+            for (let i = A.length - 1; i >= 2; --i) {
+                if (A[i - 2] + A[i - 1] > A[i]) {
+                    return A[i - 2] + A[i - 1] + A[i];
+                }
+            }
+            return 0;
+        };
+
+        // test
+        let A = [3,2,3,4];
+        console.log(largestPerimeter(A));
+    </script>
+</body>
+
+</html>
