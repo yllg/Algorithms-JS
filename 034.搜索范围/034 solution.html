@@ -20,6 +20,7 @@
          * @return {number[]}
          */
 
+        // 方法1：常规法
         var searchRange = function (nums, target) {
             var idx = [];
             //forEach方法，把匹配的元素的索引存起来
@@ -34,9 +35,38 @@
             return [idx[0], idx[idx.length - 1]];
         };
 
+        // 方法2：二分法
+        // 时间复杂度 O(logn) 空间复杂度 O(1)
+        const binarySearch = (nums, target, lower) => {
+            let left = 0,
+                right = nums.length - 1,
+                ans = nums.length;
+            while (left <= right) {
+                const mid = Math.floor((left + right) / 2);
+                if (nums[mid] > target || (lower && nums[mid] >= target)) {
+                    right = mid - 1;
+                    ans = mid;
+                } else {
+                    left = mid + 1;
+                }
+            }
+            return ans;
+        }
+
+        var searchRange = function (nums, target) {
+            let ans = [-1, -1];
+            const leftIdx = binarySearch(nums, target, true);
+            const rightIdx = binarySearch(nums, target, false) - 1;
+            if (leftIdx <= rightIdx && rightIdx < nums.length && nums[leftIdx] === target && nums[rightIdx] ===
+                target) {
+                ans = [leftIdx, rightIdx];
+            }
+            return ans;
+        };
+
         //测试
         var nums = [5, 7, 7, 8, 8, 10];
-        console.log(searchRange(nums,8));
+        console.log(searchRange(nums, 8));
     </script>
 </body>
 
