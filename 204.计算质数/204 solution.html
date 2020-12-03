@@ -1,63 +1,121 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    <title>Document</title>
-  </head>
-  <body>
-    <script>
-      // Source : https://leetcode.com/problems/count-primes/
-      // Author : 悬笔e绝
-      // Date   : 2019-10-29
 
-      /**
-       * @param {number} n
-       * @return {number}
-       */
-      // 解法1
-      // 时间复杂度比较难算： O( N * loglogN )
-      // 空间复杂度 O(n)
-      var countPrimes1 = function (n) {
-        // if modified to 'var hash = []'
-        // it will be Memory Limit Exceeded
-        // I don't know why
-        // I think both are the same
-        var hash = new Array(n),
-          a = Math.sqrt(n);
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+  <title>Document</title>
+</head>
 
-        for (var i = 2; i <= a; i++) {
-          if (!hash[i]) for (var j = i * i; j < n; j += i) hash[j] = true;
-        }
+<body>
+  <script>
+    // Source : https://leetcode.com/problems/count-primes/
+    // Author : 悬笔e绝
+    // Date   : 2019-10-29
 
-        var ans = 0;
-        for (var i = 2; i < n; i++) if (!hash[i]) ans++;
+    /**
+     * @param {number} n
+     * @return {number}
+     */
+    // 解法1
+    // 时间复杂度比较难算： O( N * loglogN )
+    // 空间复杂度 O(n)
+    var countPrimes1 = function (n) {
+      // if modified to 'var hash = []'
+      // it will be Memory Limit Exceeded
+      // I don't know why
+      // I think both are the same
+      var hash = new Array(n),
+        a = Math.sqrt(n);
 
-        return ans;
-      };
+      for (var i = 2; i <= a; i++) {
+        if (!hash[i])
+          for (var j = i * i; j < n; j += i) hash[j] = true;
+      }
 
-      // 方法2，优化
-      // 只要跑几圈判断 2 ~ (n-1) 中每一个数是不是质数
-      // 质数p 定义是 p%2, p%3, p%4, ... p%(p-1) 都不等于0
-      // 实际上不需要 除到 p-1，只要除到 “p的平方根”就可以，而且可以跳过2的倍数
-      var countPrimes2 = function (n) {
-        let count = 0;
-        let signs = new Array(n).fill(0);
-        for (let i = 2; i < n; i++) {
-          if (!signs[i - 1]) {
-            count++;
-            for (let j = i * i; j <= n; j += i) {
-              signs[j - 1] = true;
-            }
+      var ans = 0;
+      for (var i = 2; i < n; i++)
+        if (!hash[i]) ans++;
+
+      return ans;
+    };
+
+    // 方法2，优化
+    // 只要跑几圈判断 2 ~ (n-1) 中每一个数是不是质数
+    // 质数p 定义是 p%2, p%3, p%4, ... p%(p-1) 都不等于0
+    // 实际上不需要 除到 p-1，只要除到 “p的平方根”就可以，而且可以跳过2的倍数
+    var countPrimes2 = function (n) {
+      let count = 0;
+      let signs = new Array(n).fill(0);
+      for (let i = 2; i < n; i++) {
+        if (!signs[i - 1]) {
+          count++;
+          for (let j = i * i; j <= n; j += i) {
+            signs[j - 1] = true;
           }
         }
-        return count;
-      };
+      }
+      return count;
+    };
 
-      // 测试
-      console.log(countPrimes1(10));
-      console.log(countPrimes2(10));
-    </script>
-  </body>
+    // 方法3 枚举
+    // 时间复杂度：O(n*sqrt{n}) 空间复杂度 O(1)
+    const isPrime = (x) => {
+      for (let i = 2; i * i <= x; ++i) {
+        if (x % i == 0) {
+          return false;
+        }
+      }
+      return true;
+    }
+    var countPrimes = function (n) {
+      let ans = 0;
+      for (let i = 2; i < n; ++i) {
+        ans += isPrime(i);
+      }
+      return ans;
+    };
+
+    // 方法4：埃氏筛
+    // 时间复杂度 O(nloglogn) 空间复杂度 O(n)
+    var countPrimes = function (n) {
+      const isPrime = new Array(n).fill(1);
+      let ans = 0;
+      for (let i = 2; i < n; ++i) {
+        if (isPrime[i]) {
+          ans += 1;
+          for (let j = i * i; j < n; j += i) {
+            isPrime[j] = 0;
+          }
+        }
+      }
+      return ans;
+    };
+
+    // 方法5：线性筛
+    // 时间复杂度 O(n) 空间复杂度 O(n)
+    var countPrimes = function (n) {
+      const isPrime = new Array(n).fill(1);
+      const primes = [];
+      for (let i = 2; i < n; ++i) {
+        if (isPrime[i]) {
+          primes.push(i);
+        }
+        for (let j = 0; j < primes.length && i * primes[j] < n; ++j) {
+          isPrime[i * primes[j]] = 0;
+          if (i % primes[j] === 0) {
+            break;
+          }
+        }
+      }
+      return primes.length;
+    };
+
+    // 测试
+    console.log(countPrimes1(10));
+    console.log(countPrimes2(10));
+  </script>
+</body>
+
 </html>
