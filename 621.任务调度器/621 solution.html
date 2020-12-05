@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法1：模拟
+        // 时间复杂度 O(∣tasks∣⋅∣Σ∣) 空间复杂度 O(∣Σ∣)
+        var leastInterval = function (tasks, n) {
+            const freq = _.countBy(tasks);
+            // 任务总数
+            const m = Object.keys(freq).length;
+            const nextValid = new Array(m).fill(1);
+            const rest = Object.values(freq);
+            let time = 0;
+            for (let i = 0; i < tasks.length; i++) {
+                time++;
+                let minNextValid = Number.MAX_VALUE;
+                for (let j = 0; j < m; j++) {
+                    if (rest[j] > 0) {
+                        minNextValid = Math.min(nextValid[j], minNextValid);
+                    }
+                }
+                time = Math.max(time, minNextValid);
+
+                let best = -1;
+                for (let j = 0; j < m; j++) {
+                    if (rest[j] && nextValid[j] <= time) {
+                        if (best === -1 || rest[j] > rest[best]) {
+                            best = j;
+                        }
+                    }
+                }
+                nextValid[best] = time + n + 1;
+                rest[best]--;
+            }
+            return time;
+        };
+
+        // 方法2：构造
+        // 时间复杂度 O(∣tasks∣⋅∣Σ∣) 空间复杂度 O(∣Σ∣)
+        var leastInterval = function (tasks, n) {
+            const freq = _.countBy(tasks);
+            // 最多的执行次数
+            const maxExec = Math.max(...Object.values(freq));
+            // 具有最多执行次数的任务数量
+            let maxCount = 0;
+            Object.values(freq).forEach(v => {
+                if (v === maxExec) {
+                    maxCount++;
+                }
+            })
+            return Math.max((maxExec - 1) * (n + 1) + maxCount, tasks.length);
+        };
+    </script>
+</body>
+
+</html>
