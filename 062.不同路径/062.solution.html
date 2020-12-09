@@ -1,49 +1,64 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
-  </head>
-  <body>
-    <script>
-      // 解法一：排列组合
-      // m-1 + n-1 的总步数中，选出 m-1 步向下的 即：C（（m+n-2），（m-1））
-      function factorial(n) {
-        var result = 1,
-          i = 2;
-        while (i <= n) {
-          result *= i;
-          i++;
-        }
-        return result;
-      }
 
-      var uniquePaths_1 = function (m, n) {
-        var ans = factorial(m + n - 2) / factorial(m - 1) / factorial(n - 1);
-        return ans;
-      };
-      // 解法二： 动态规划
-      var uniquePaths_2 = function (m, n) {
-        var ans = [];
-        for (let i = 0; i < m; i++) {
-          ans[i] = [];
-        }
-        for (let i = 0; i < m; i++) {
-          for (let j = 0; j < n; j++) {
-            if (i===0 || j===0) {
-                ans[i][j] = 1;
-            } else {
-                ans[i][j] = ans[i-1][j] + ans[i][j-1];
-            }
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    // 解法1： 动态规划
+    // 时间复杂度O(mn) 空间复杂度O(mn)
+    var uniquePaths = function (m, n) {
+      var ans = [];
+      for (let i = 0; i < m; i++) {
+        ans[i] = [];
+      }
+      for (let i = 0; i < m; i++) {
+        for (let j = 0; j < n; j++) {
+          if (i === 0 || j === 0) {
+            ans[i][j] = 1;
+          } else {
+            ans[i][j] = ans[i - 1][j] + ans[i][j - 1];
           }
         }
-        return ans[m-1][n-1];
-      };
+      }
+      return ans[m - 1][n - 1];
+    };
 
-      // test
-      console.log(uniquePaths_1(3, 2));
-      console.log(uniquePaths_2(3, 2));
-    </script>
-  </body>
+    // 解法2：排列组合
+    // m-1 + n-1 的总步数中，选出 m-1 步向下的 即：C（（m+n-2），（m-1））
+    function factorial(n) {
+      var result = 1,
+        i = 2;
+      while (i <= n) {
+        result *= i;
+        i++;
+      }
+      return result;
+    }
+
+    var uniquePaths = function (m, n) {
+      var ans = factorial(m + n - 2) / factorial(m - 1) / factorial(n - 1);
+      return ans;
+    };
+
+    // 方法3：组合数学 简化
+    // 时间复杂度O(m) 空间复杂度O(1)
+    var uniquePaths = function (m, n) {
+      let ans = 1;
+      for (let x = n, y = 1; y < m; ++x, ++y) {
+        ans = Math.floor(ans * x / y);
+      }
+      return ans;
+    };
+
+    // test
+    console.log(uniquePaths(3, 2));
+    console.log(uniquePaths(3, 2));
+  </script>
+</body>
+
 </html>
