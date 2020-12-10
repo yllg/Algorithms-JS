@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法1：模拟+贪心
+        // 时间复杂度O(n) 空间复杂度O(1)
+        var lemonadeChange = function (bills) {
+            let five = 0,
+                ten = 0;
+            for (const bill of bills) {
+                if (bill === 5) {
+                    five += 1;
+                } else if (bill === 10) {
+                    if (five === 0) {
+                        return false;
+                    }
+                    five -= 1;
+                    ten += 1;
+                } else {
+                    if (five > 0 && ten > 0) {
+                        five -= 1;
+                        ten -= 1;
+                    } else if (five >= 3) {
+                        five -= 3;
+                    } else {
+                        return false;
+                    }
+                }
+            }
+            return true;
+        };
+
+        // test
+        let bills = [5,5,5,10,20];
+        console.log(lemonadeChange(bills))
+    </script>
+</body>
+
+</html>
