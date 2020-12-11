@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法1：循环队列
+        // 时间复杂度 O(n) 空间复杂度 O(n)
+        var predictPartyVictory = function (senate) {
+            const n = senate.length;
+            const radiant = [],
+                dire = [];
+            for (const [i, ch] of Array.from(senate).entries()) {
+                if (ch === 'R') {
+                    radiant.push(i);
+                } else {
+                    dire.push(i);
+                }
+            }
+            while (radiant.length && dire.length) {
+                if (radiant[0] < dire[0]) {
+                    radiant.push(radiant[0] + n);
+                } else {
+                    dire.push(dire[0] + n);
+                }
+                radiant.shift();
+                dire.shift();
+            }
+            return radiant.length ? "Radiant" : "Dire";
+        };
+        
+        // test
+        let senate = "RD";
+        console.log(predictPartyVictory(senate))
+    </script>
+</body>
+
+</html>
