@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法1：贪心
+        // 时间复杂度 O(logn) 空间复杂度 O(logn)
+        var monotoneIncreasingDigits = function (N) {
+            const strN = N.toString().split('').map(v => +v);
+            let i = 1;
+            while (i < strN.length && strN[i - 1] <= strN[i]) {
+                i += 1;
+            }
+            if (i < strN.length) {
+                while (i > 0 && strN[i - 1] > strN[i]) {
+                    strN[i - 1] -= 1;
+                    i -= 1;
+                }
+                for (i += 1; i < strN.length; ++i) {
+                    strN[i] = 9;
+                }
+            }
+            return parseInt(strN.join(''));
+        };
+
+        // test
+        let N = 332;
+        console.log(monotoneIncreasingDigits(N))
+    </script>
+</body>
+
+</html>
