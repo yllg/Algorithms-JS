@@ -1,47 +1,70 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
 </head>
+
 <body>
-<script>
-// Source : https://leetcode.com/problems/word-pattern/
-// Author : 悬笔e绝
-// Date   : 2020-03-10
+  <script>
+    // Source : https://leetcode.com/problems/word-pattern/
+    // Author : 悬笔e绝
+    // Date   : 2020-03-10
 
-/**
- * @param {string} pattern
- * @param {string} str
- * @return {boolean}
- */
-var wordPattern = function(pattern, str) {
-  var arr = str.split(' ');
-  if (pattern.length !== arr.length)
-    return false;
-
-  var a2b = {}
-    , b2a = {};
-
-  for (var i = 0, len = pattern.length; i < len; i++) {
-    var a = pattern[i]
-      , b = arr[i];
-    if (!a2b[a]) {
-      a2b[a] = b;
-    } else {
-      if (a2b[a] !== b)
+    // 方法1：常规法
+    var wordPattern = function (pattern, str) {
+      var arr = str.split(' ');
+      if (pattern.length !== arr.length)
         return false;
-    }
-    if (!b2a[b]) {
-      b2a[b] = a;
-    } else {
-      if (b2a[b] !== a)
+
+      var a2b = {},
+        b2a = {};
+
+      for (var i = 0, len = pattern.length; i < len; i++) {
+        var a = pattern[i],
+          b = arr[i];
+        if (!a2b[a]) {
+          a2b[a] = b;
+        } else {
+          if (a2b[a] !== b)
+            return false;
+        }
+        if (!b2a[b]) {
+          b2a[b] = a;
+        } else {
+          if (b2a[b] !== a)
+            return false;
+        }
+      }
+      return true;
+    };
+
+    // 方法2：哈希表
+    // 时间复杂度 O(n+m) 空间复杂度 O(n+m)
+    var wordPattern = function (pattern, s) {
+      const word2ch = new Map();
+      const ch2word = new Map();
+      const words = s.split(' ');
+      if (pattern.length !== words.length) {
         return false;
-    }
-  }
-  return true;
-};
-</script>
+      }
+      for (const [i, word] of words.entries()) {
+        const ch = pattern[i];
+        if (word2ch.has(word) && word2ch.get(word) != ch || ch2word.has(ch) && ch2word.get(ch) !== word) {
+          return false;
+        }
+        word2ch.set(word, ch);
+        ch2word.set(ch, word);
+      }
+      return true;
+    };
+
+    // test
+    let pattern = "abba", str = "dog cat cat dog";
+    console.log(wordPattern(pattern, str))
+  </script>
 </body>
+
 </html>
