@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法1：动态规划 优化存储空间
+        // 时间复杂度 O(n) 空间复杂度 O(1)
+        var maxProfit = function (prices, fee) {
+            const n = prices.length;
+            let [sell, buy] = [0, -prices[0]];
+            for (let i = 1; i < n; i++) {
+                [sell, buy] = [Math.max(sell, buy + prices[i] - fee), Math.max(buy, sell - prices[i])]
+            }
+            return sell;
+        };
+
+        // test
+        let prices = [1, 3, 2, 8, 4, 9], fee = 2;
+        console.log(maxProfit(prices, fee))
+    </script>
+</body>
+
+</html>
