@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法1：计数
+        // 时间复杂度 O(n) 空间复杂度 O(n)
+        var findTheDifference = function (s, t) {
+            const cnt = new Array(26).fill(0);
+            for (const ch of s) {
+                cnt[ch.charCodeAt() - 'a'.charCodeAt()]++;
+            }
+            for (const ch of t) {
+                cnt[ch.charCodeAt() - 'a'.charCodeAt()]--;
+                if (cnt[ch.charCodeAt() - 'a'.charCodeAt()] < 0) {
+                    return ch;
+                }
+            }
+            return ' ';
+        };
+
+        // 方法2：求和
+        // 时间复杂度 O(n) 空间复杂度 O(1)
+        var findTheDifference = function (s, t) {
+            let as = 0,
+                at = 0;
+            for (let i = 0; i < s.length; i++) {
+                as += s[i].charCodeAt();
+            }
+            for (let i = 0; i < t.length; i++) {
+                at += t[i].charCodeAt();
+            }
+            return String.fromCharCode(at - as);
+        };
+
+        // 方法3：位运算
+        // 时间复杂度 O(n) 空间复杂度 O(1)
+        var findTheDifference = function (s, t) {
+            let ret = 0;
+            for (const ch of s) {
+                ret ^= ch.charCodeAt();
+            }
+            for (const ch of t) {
+                ret ^= ch.charCodeAt();
+            }
+            return String.fromCharCode(ret);
+        };
+
+        // test
+        let s = "abcd", t = "abcde";
+        console.log(findTheDifference(s, t))
+    </script>
+</body>
+
+</html>
