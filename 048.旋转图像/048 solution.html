@@ -14,23 +14,54 @@
         // Author : 悬笔e绝
         // Date   : 2018-04-02
 
-        /**
-         * @param {number[][]} matrix
-         * @return {void} Do not return anything, modify matrix in-place instead.
-         */
+        // 方法1: 借助辅助数组
+        // 时间复杂度 O(n^2) 空间复杂度 O(n^2)
         var rotate = function (matrix) {
-            var len = matrix.length,
-                tmp = [];
-            //copy一个数组tmp作为中间量，双重循环
-            for (var i = 0; i < len; i++) {
-                tmp[i] = [];
-                for (var j = 0; j < len; j++)
-                    tmp[i][j] = matrix[i][j];
+            const n = matrix.length;
+            const matrix_new = new Array(n).fill(0).map(() => new Array(n).fill(0));
+            for (let i = 0; i < n; i++) {
+                for (let j = 0; j < n; j++) {
+                    matrix_new[j][n - i - 1] = matrix[i][j];
+                }
             }
-            //双重循环，中间矩阵竖着从下往上放到原数组中
-            for (var i = 0; i < len; i++)
-                for (var j = 0; j < len; j++)
-                    matrix[i][j] = tmp[len - j - 1][i];
+            for (let i = 0; i < n; i++) {
+                for (let j = 0; j < n; j++) {
+                    matrix[i][j] = matrix_new[i][j];
+                }
+            }
+        };
+
+        // 方法2：原地旋转
+        // 时间复杂度 O(n^2) 空间复杂度 O(1)
+        var rotate = function (matrix) {
+            const n = matrix.length;
+            for (let i = 0; i < Math.floor(n / 2); ++i) {
+                for (let j = 0; j < Math.floor((n + 1) / 2); ++j) {
+                    const temp = matrix[i][j];
+                    matrix[i][j] = matrix[n - j - 1][i];
+                    matrix[n - j - 1][i] = matrix[n - i - 1][n - j - 1];
+                    matrix[n - i - 1][n - j - 1] = matrix[j][n - i - 1];
+                    matrix[j][n - i - 1] = temp;
+                }
+            }
+        };
+
+        // 方法3: 用翻转代替旋转
+        // 时间复杂度 O(n^2) 空间复杂度 O(1)
+        var rotate = function (matrix) {
+            const n = matrix.length;
+            // 水平翻转
+            for (let i = 0; i < Math.floor(n / 2); i++) {
+                for (let j = 0; j < n; j++) {
+                    [matrix[i][j], matrix[n - i - 1][j]] = [matrix[n - i - 1][j], matrix[i][j]];
+                }
+            }
+            // 主对角线翻转
+            for (let i = 0; i < n; i++) {
+                for (let j = 0; j < i; j++) {
+                    [matrix[i][j], matrix[j][i]] = [matrix[j][i], matrix[i][j]];
+                }
+            }
         };
 
         //测试
