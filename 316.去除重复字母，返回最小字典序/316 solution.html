@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法1：贪心+单调栈
+        // 时间复杂的 O(n) 空间复杂的 O(∣Σ∣)
+        var removeDuplicateLetters = function (s) {
+            const vis = new Array(26).fill(0);
+            // TODO: _ 是啥？
+            const num = _.countBy(s);
+
+            const sb = new Array();
+            for (let i = 0; i < s.length; i++) {
+                const ch = s[i];
+                if (!vis[ch.charCodeAt() - 'a'.charCodeAt()]) {
+                    while (sb.length > 0 && sb[sb.length - 1] > ch) {
+                        if (num[sb[sb.length - 1]] > 0) {
+                            vis[sb[sb.length - 1].charCodeAt() - 'a'.charCodeAt()] = 0;
+                            sb.pop();
+                        } else {
+                            break;
+                        }
+                    }
+                    vis[ch.charCodeAt() - 'a'.charCodeAt()] = 1;
+                    sb.push(ch);
+                }
+                num[ch]--;
+            }
+            return sb.join('');
+        };
+    </script>
+</body>
+
+</html>
