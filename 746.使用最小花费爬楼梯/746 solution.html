@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法1：动态规划
+        // 时间复杂度 O(n) 空间复杂度 O(1)
+        var minCostClimbingStairs = function (cost) {
+            const n = cost.length;
+            const dp = new Array(n + 1);
+            dp[0] = dp[1] = 0;
+            for (let i = 2; i <= n; i++) {
+                dp[i] = Math.min(dp[i - 1] + cost[i - 1], dp[i - 2] + cost[i - 2]);
+            }
+            return dp[n];
+        };
+
+        // test
+        let cost = [10, 15, 20];
+        console.log(minCostClimbingStairs(cost));
+    </script>
+</body>
+
+</html>
