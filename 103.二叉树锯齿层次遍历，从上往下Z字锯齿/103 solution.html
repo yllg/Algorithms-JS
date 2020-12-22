@@ -1,64 +1,95 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
 </head>
+
 <body>
-<script>
-// Source : https://leetcode.com/problems/binary-tree-zigzag-level-order-traversal/
-// Author : 悬笔e绝
-// Date   : 2019-03-27
+  <script>
+    // Source : https://leetcode.com/problems/binary-tree-zigzag-level-order-traversal/
+    // Author : 悬笔e绝
+    // Date   : 2019-03-27
 
-// Definition for a binary tree node.
-function TreeNode(val) {
-    this.val = val;
-    this.left = this.right = null;
-}
+    // Definition for a binary tree node.
+    function TreeNode(val) {
+      this.val = val;
+      this.left = this.right = null;
+    }
 
-/**
- * @param {TreeNode} root
- * @return {number[][]}
- */
- var zigzagLevelOrder = function(root) {
-  var maxn = -1;
-  var ans = [];
-  dfs(root, 0);
+    // 方法1：深度优先遍历
+    var zigzagLevelOrder = function (root) {
+      var maxn = -1;
+      var ans = [];
+      dfs(root, 0);
 
-  function dfs(node, step) {
-    if (!node)
-      return;
-    maxn = step > maxn ? step : maxn;
-    if (!ans[step])
-      ans[step] = [];
-    ans[step].push(node.val);
-    dfs(node.left, step + 1);
-    dfs(node.right, step + 1);
-  }
+      function dfs(node, step) {
+        if (!node)
+          return;
+        maxn = step > maxn ? step : maxn;
+        if (!ans[step])
+          ans[step] = [];
+        ans[step].push(node.val);
+        dfs(node.left, step + 1);
+        dfs(node.right, step + 1);
+      }
 
-  for (var i = 0; i <= maxn; i++)
-    (i & 1) && (ans[i].reverse());
-  return ans;
-};
+      for (var i = 0; i <= maxn; i++)
+        (i & 1) && (ans[i].reverse());
+      return ans;
+    };
 
-// 测试
-var tree_node_1_1 = new TreeNode(9);
-var tree_node_1_2 = new TreeNode(20);
-tree_node_1_2.left = new TreeNode(15);
-tree_node_1_2.right = new TreeNode(7);
-var tree_node_1 = new TreeNode(3);
-tree_node_1.left = tree_node_1_1;
-tree_node_1.right = tree_node_1_2;
-console.log(zigzagLevelOrder(tree_node_1));
+    // 方法2：广度优先遍历
+    // 时间复杂度 O(n) 空间复杂度 O(n)
+    var zigzagLevelOrder = function (root) {
+      if (!root) {
+        return [];
+      }
+      const ans = [];
+      const nodeQueue = [root];
+      let isOrderLeft = true;
+      while (nodeQueue.length) {
+        let levelList = [];
+        const size = nodeQueue.length;
+        for (let i = 0; i < size; ++i) {
+          const node = nodeQueue.shift();
+          if (isOrderLeft) {
+            levelList.push(node.val);
+          } else {
+            levelList.unshift(node.val);
+          }
+          if (node.left !== null) {
+            nodeQueue.push(node.left);
+          }
+          if (node.right !== null) {
+            nodeQueue.push(node.right);
+          }
+        }
+        ans.push(levelList);
+        isOrderLeft = !isOrderLeft;
+      }
+      return ans;
+    };
 
-// [
-//   [3],
-//   [20,9],
-//   [15,7]
-// ]
+    // 测试
+    var tree_node_1_1 = new TreeNode(9);
+    var tree_node_1_2 = new TreeNode(20);
+    tree_node_1_2.left = new TreeNode(15);
+    tree_node_1_2.right = new TreeNode(7);
+    var tree_node_1 = new TreeNode(3);
+    tree_node_1.left = tree_node_1_1;
+    tree_node_1.right = tree_node_1_2;
+    console.log(zigzagLevelOrder(tree_node_1));
 
-</script>
+    // [
+    //   [3],
+    //   [20,9],
+    //   [15,7]
+    // ]
+  </script>
 </body>
+
 </html>
