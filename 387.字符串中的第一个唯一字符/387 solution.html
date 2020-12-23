@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法1：哈希表存储频数
+        // 时间复杂度 O(n) 空间复杂度 O(|Σ|)
+        var firstUniqChar = function (s) {
+            const frequency = _.countBy(s);
+            for (const [i, ch] of Array.from(s).entries()) {
+                if (frequency[ch] === 1) {
+                    return i;
+                }
+            }
+            return -1;
+        };
+
+        // 方法2：哈希表存储索引
+        // 时间复杂度 O(n) 空间复杂度 O(|Σ|)
+        var firstUniqChar = function (s) {
+            const position = new Map();
+            const n = s.length;
+            for (let [i, ch] of Array.from(s).entries()) {
+                if (position.has(ch)) {
+                    position.set(ch, -1);
+                } else {
+                    position.set(ch, i);
+                }
+            }
+            let first = n;
+            for (let pos of position.values()) {
+                if (pos !== -1 && pos < first) {
+                    first = pos;
+                }
+            }
+            if (first === n) {
+                first = -1;
+            }
+            return first;
+        };
+
+        // 方法3：队列
+        // 时间复杂度 O(n) 空间复杂度 O(|Σ|)
+        var firstUniqChar = function (s) {
+            const position = new Map();
+            const q = [];
+            const n = s.length;
+            for (let [i, ch] of Array.from(s).entries()) {
+                if (!position.has(ch)) {
+                    position.set(ch, i);
+                    q.push([s[i], i]);
+                } else {
+                    position.set(ch, -1);
+                    while (q.length && position.get(q[0][0]) === -1) {
+                        q.shift();
+                    }
+                }
+            }
+            return q.length ? q[0][1] : -1;
+        };
+
+        // test
+        let s = "leetcode";
+        console.log(firstUniqChar(s))
+    </script>
+</body>
+
+</html>
