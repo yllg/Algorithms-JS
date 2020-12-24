@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法1：两次遍历
+        // 时间复杂度 O(n) 空间复杂度 O(n)
+        var candy = function (ratings) {
+            const n = ratings.length;
+            const left = new Array(n).fill(0);
+            for (let i = 0; i < n; i++) {
+                if (i > 0 && ratings[i] > ratings[i - 1]) {
+                    left[i] = left[i - 1] + 1;
+                } else {
+                    left[i] = 1;
+                }
+            }
+            let right = 0,
+                ret = 0;
+            for (let i = n - 1; i > -1; i--) {
+                if (i < n - 1 && ratings[i] > ratings[i + 1]) {
+                    right++;
+                } else {
+                    right = 1;
+                }
+                ret += Math.max(left[i], right);
+            }
+            return ret;
+        };
+
+        // 方法2：常数空间遍历
+        // 时间复杂度 O(n) 空间复杂度 O(1)
+        var candy = function (ratings) {
+            const n = ratings.length;
+            let ret = 1;
+            let inc = 1,
+                dec = 0,
+                pre = 1;
+
+            for (let i = 1; i < n; i++) {
+                if (ratings[i] >= ratings[i - 1]) {
+                    dec = 0;
+                    if (ratings[i] === ratings[i - 1]) pre = 1;
+                    else pre++;
+                    ret += pre;
+                    inc = pre;
+                } else {
+                    dec++;
+                    if (dec === inc) {
+                        dec++;
+                    }
+                    ret += dec;
+                    pre = 1;
+                }
+            }
+            return ret;
+        };
+
+        // test
+        let ratings = [1,2,2];
+        console.log(candy(ratings))
+    </script>
+</body>
+
+</html>
