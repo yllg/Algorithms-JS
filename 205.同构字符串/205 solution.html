@@ -1,43 +1,60 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
 </head>
+
 <body>
-<script>
-// Source : https://leetcode.com/problems/isomorphic-strings/
-// Author : 悬笔e绝
-// Date   : 2019-11-02
+  <script>
+    // Source : https://leetcode.com/problems/isomorphic-strings/
+    // Author : 悬笔e绝
+    // Date   : 2019-11-02
 
-/**
- * @param {string} s
- * @param {string} t
- * @return {boolean}
- */
-var isIsomorphic = function(s, t) {
-  if (s.length !== t.length)
-    return false;
-  var len = s.length
-    , hash = {}
-    , _hash = {};
-  for (var i = 0; i < len; i++) {
-    var a = s[i]
-      , b = t[i];
-    if (!hash[a] && !_hash[b])
-      hash[a] = b, _hash[b] = a;
-    else if (hash[a] !== b || _hash[b] !== a)
-      return false;
-  }
-  return true;
-};
+    // 方法1 哈希表
+    var isIsomorphic = function (s, t) {
+      if (s.length !== t.length)
+        return false;
+      var len = s.length,
+        hash = {},
+        _hash = {};
+      for (var i = 0; i < len; i++) {
+        var a = s[i],
+          b = t[i];
+        if (!hash[a] && !_hash[b])
+          hash[a] = b, _hash[b] = a;
+        else if (hash[a] !== b || _hash[b] !== a)
+          return false;
+      }
+      return true;
+    };
 
-// 测试
-var s = "paper";
-var t = "title"
-console.log(isIsomorphic(s,t));
-</script>
+    // 方法2：哈希表 简化代码
+    // 时间复杂度 O(n) 空间复杂度 O(/Σ/)
+    var isIsomorphic = function (s, t) {
+      const s2t = {};
+      const t2s = {};
+      const len = s.length;
+      for (let i = 0; i < len; ++i) {
+        const x = s[i],
+          y = t[i];
+        if ((s2t[x] && s2t[x] !== y) || (t2s[y] && t2s[y] !== x)) {
+          return false;
+        }
+        s2t[x] = y;
+        t2s[y] = x;
+      }
+      return true;
+    };
+
+    // 测试
+    var s = "paper";
+    var t = "title"
+    console.log(isIsomorphic(s, t));
+  </script>
 </body>
+
 </html>
