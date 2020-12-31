@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法1：动态规划
+        // 时间复杂度：O(n^2) 空间复杂度：O(n) 
+        var eraseOverlapIntervals = function (intervals) {
+            if (!intervals.length) {
+                return 0;
+            }
+            intervals.sort((a, b) => a[0] - b[0]);
+            const n = intervals.length;
+            const f = new Array(n).fill(1);
+
+            for (let i = 1; i < n; i++) {
+                for (let j = 0; j < i; j++) {
+                    if (intervals[j][1] <= intervals[i][0]) {
+                        f[i] = Math.max(f[i], f[j] + 1);
+                    }
+                }
+            }
+            return n - Math.max(...f);
+        };
+
+        // 方法2：贪心算法
+        // 时间复杂度：O(nlogn) 空间复杂度：O(logn) 
+        var eraseOverlapIntervals = function (intervals) {
+            if (!intervals.length) {
+                return 0;
+            }
+            intervals.sort((a, b) => a[1] - b[1]);
+            const n = intervals.length;
+            let right = intervals[0][1];
+            let ans = 1;
+            for (let i = 1; i < n; ++i) {
+                if (intervals[i][0] >= right) {
+                    ++ans;
+                    right = intervals[i][1];
+                }
+            }
+            return n - ans;
+        };
+
+        // test
+        let intervals = [ [1,2], [2,3], [3,4], [1,3] ];
+        console.log(eraseOverlapIntervals(intervals));
+    </script>
+</body>
+
+</html>
