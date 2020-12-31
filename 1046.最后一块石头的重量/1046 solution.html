@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法1：最大堆
+        // 时间复杂度：O(nlogn) 空间复杂度：O(n)
+        var lastStoneWeight = function (stones) {
+            const pq = new MaxPriorityQueue();
+            for (const stone of stones) {
+                pq.enqueue('x', stone);
+            }
+            while (pq.size() > 1) {
+                const a = pq.dequeue()['priority'];
+                const b = pq.dequeue()['priority'];
+                if (a > b) {
+                    pq.enqueue('x', a - b);
+                }
+            }
+            return pq.isEmpty() ? 0 : pq.dequeue()['priority'];
+        };
+    </script>
+</body>
+
+</html>
