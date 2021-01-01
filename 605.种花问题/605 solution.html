@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法1：贪心
+        // 时间复杂度：O(n) 空间复杂度：O(1) 
+        var canPlaceFlowers = function (flowerbed, n) {
+            let count = 0;
+            const m = flowerbed.length;
+            let prev = -1;
+            for (let i = 0; i < m; i++) {
+                if (flowerbed[i] === 1) {
+                    if (prev < 0) {
+                        count += Math.floor(i / 2);
+                    } else {
+                        count += Math.floor((i - prev - 2) / 2);
+                    }
+                    if (count >= n) {
+                        return true;
+                    }
+                    prev = i;
+                }
+            }
+            if (prev < 0) {
+                count += (m + 1) / 2;
+            } else {
+                count += (m - prev - 1) / 2;
+            }
+            return count >= n;
+        };
+
+        // test
+        let  flowerbed = [1,0,0,0,1], n = 1;
+        console.log(canPlaceFlowers(flowerbed, n))
+    </script>
+</body>
+
+</html>
