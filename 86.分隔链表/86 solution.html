@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法1：模拟
+        // 时间复杂度：O(n) 空间复杂度：O(1)
+        var partition = function (head, x) {
+            let small = new ListNode(0);
+            const smallHead = small;
+            let large = new ListNode(0);
+            const largeHead = large;
+            while (head !== null) {
+                if (head.val < x) {
+                    small.next = head;
+                    small = small.next;
+                } else {
+                    large.next = head;
+                    large = large.next;
+                }
+                head = head.next;
+            }
+            large.next = null;
+            small.next = largeHead.next;
+            return smallHead.next;
+        };
+
+    </script>
+</body>
+
+</html>
