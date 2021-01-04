@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法1：动态规划
+        // 时间复杂度：O(n) 空间复杂度：O(1)
+        var fib = function (n) {
+            if (n < 2) {
+                return n;
+            }
+            let p = 0,
+                q = 0,
+                r = 1;
+            for (let i = 2; i <= n; i++) {
+                p = q;
+                q = r;
+                r = p + q;
+            }
+            return r;
+        };
+
+        // 方法2：矩阵快速幂
+        // 时间复杂度：O(logn) 空间复杂度：O(1)
+        var fib = function (n) {
+            if (n < 2) {
+                return n;
+            }
+            const q = [
+                [1, 1],
+                [1, 0]
+            ];
+            const res = pow(q, n - 1);
+            return res[0][0];
+        };
+
+        const pow = (a, n) => {
+            let ret = [
+                [1, 0],
+                [0, 1]
+            ];
+            while (n > 0) {
+                if ((n & 1) === 1) {
+                    ret = multiply(ret, a);
+                }
+                n >>= 1;
+                a = multiply(a, a);
+            }
+            return ret;
+        }
+
+        const multiply = (a, b) => {
+            const c = new Array(2).fill(0).map(() => new Array(2).fill(0));
+            for (let i = 0; i < 2; i++) {
+                for (let j = 0; j < 2; j++) {
+                    c[i][j] = a[i][0] * b[0][j] + a[i][1] * b[1][j];
+                }
+            }
+            return c;
+        }
+
+
+        // 方法3：通项公式
+        // pow 函数的时空复杂度与 CPU 支持的指令集相关
+        var fib = function (n) {
+            const sqrt5 = Math.sqrt(5);
+            const fibN = Math.pow((1 + sqrt5) / 2, n) - Math.pow((1 - sqrt5) / 2, n);
+            return Math.round(fibN / sqrt5);
+        };
+
+        // test 
+        let n = 4;
+        console.log(fib(n));
+    </script>
+</body>
+
+</html>
