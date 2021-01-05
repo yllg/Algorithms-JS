@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法1：一次遍历
+        // 时间复杂度：O(n) 空间复杂度：O(1)
+        var largeGroupPositions = function (s) {
+            const ret = [];
+            const n = s.length;
+            let num = 1;
+            for (let i = 0; i < n; i++) {
+                if (i === n - 1 || s[i] !== s[i + 1]) {
+                    if (num >= 3) {
+                        ret.push([i - num + 1, i]);
+                    }
+                    num = 1;
+                } else {
+                    num++;
+                }
+            }
+            return ret;
+        };
+
+        // test
+        let s = "abcdddeeeeaabbbcd";
+        console.log(largeGroupPositions(s))
+    </script>
+</body>
+
+</html>
