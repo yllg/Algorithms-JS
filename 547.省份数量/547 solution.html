@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法1：深度优先搜索
+        // 时间复杂度：O(n^2) 空间复杂度：O(n)
+        var findCircleNum = function (isConnected) {
+            const provinces = isConnected.length;
+            const visited = new Set();
+            let circles = 0;
+            for (let i = 0; i < provinces; i++) {
+                if (!visited.has(i)) {
+                    dfs(isConnected, visited, provinces, i);
+                    circles++;
+                }
+            }
+            return circles;
+        };
+
+        const dfs = (isConnected, visited, provinces, i) => {
+            for (let j = 0; j < provinces; j++) {
+                if (isConnected[i][j] == 1 && !visited.has(j)) {
+                    visited.add(j);
+                    dfs(isConnected, visited, provinces, j);
+                }
+            }
+        };
+
+        // 方法2：广度优先搜索
+        // 时间复杂度：O(n^2) 空间复杂度：O(n)
+        var findCircleNum = function (isConnected) {
+            const provinces = isConnected.length;
+            const visited = new Set();
+            let circles = 0;
+            const queue = new Array();
+            for (let i = 0; i < provinces; i++) {
+                if (!visited.has(i)) {
+                    queue.push(i);
+                    while (queue.length) {
+                        const j = queue.shift();
+                        visited.add(j);
+                        for (let k = 0; k < provinces; k++) {
+                            if (isConnected[j][k] === 1 && !visited.has(k)) {
+                                queue.push(k);
+                            }
+                        }
+                    }
+                    circles++;
+                }
+            }
+            return circles;
+        };
+
+        // 方法3：查并集
+        // 时间复杂度：O(n^2 * logn) 空间复杂度：O(n)
+        var findCircleNum = function (isConnected) {
+            const provinces = isConnected.length;
+            const parent = new Array(provinces).fill(0)
+                .map((element, index) => index);
+
+            for (let i = 0; i < provinces; i++) {
+                for (let j = i + 1; j < provinces; j++) {
+                    if (isConnected[i][j] == 1) {
+                        union(parent, i, j);
+                    }
+                }
+            }
+            let circles = 0;
+            parent.forEach((element, index) => {
+                if (element === index) {
+                    circles++;
+                }
+            });
+
+            return circles;
+        };
+
+        const union = (parent, index1, index2) => {
+            parent[find(parent, index1)] = find(parent, index2);
+        }
+
+        const find = (parent, index) => {
+            if (parent[index] !== index) {
+                parent[index] = find(parent, parent[index]);
+            }
+            return parent[index];
+        }
+
+        // test
+        let isConnected = [[1,1,0],[1,1,0],[0,0,1]];
+        console.log(findCircleNum(isConnected))
+    </script>
+</body>
+
+</html>
