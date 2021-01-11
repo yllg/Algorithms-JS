@@ -1,46 +1,68 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
 </head>
+
 <body>
-<script>
-// Source : https://leetcode.com/problems/summary-ranges/
-// Author : 悬笔e绝
-// Date   : 2020-01-09
+  <script>
+    // Source : https://leetcode.com/problems/summary-ranges/
+    // Author : 悬笔e绝
+    // Date   : 2020-01-09
 
-/**
- * @param {number[]} nums
- * @return {string[]}
- */
+    // 方法1:常规法
+    var summaryRanges = function (nums) {
+      var ans = [];
+      var tmp = [];
+      for (var i = 0, len = nums.length; i < len; i++) {
+        if (!tmp.length) tmp.push(nums[i]);
+        else if (nums[i] === tmp[tmp.length - 1] + 1)
+          tmp.push(nums[i]);
+        else {
+          if (tmp.length === 1) ans.push(tmp[0] + '');
+          else ans.push(tmp[0] + '->' + tmp[tmp.length - 1]);
+          tmp = [];
+          tmp.push(nums[i]);
+        }
+      }
+      if (tmp.length) {
+        if (tmp.length === 1) ans.push(tmp[0] + '');
+        else ans.push(tmp[0] + '->' + tmp[tmp.length - 1]);
+      }
+      return ans;
+    };
 
-var summaryRanges = function(nums) {
-  var ans = [];
-  var tmp = [];
-  for(var i = 0, len = nums.length; i < len; i++) {
-    if (!tmp.length) tmp.push(nums[i]);
-    else if (nums[i] === tmp[tmp.length - 1] + 1)
-      tmp.push(nums[i]);
-    else {
-      if (tmp.length === 1) ans.push(tmp[0] + '');
-      else ans.push(tmp[0] + '->' + tmp[tmp.length - 1]);
-      tmp = [];
-      tmp.push(nums[i]);
-    }
-  }
+    // 方法2：一次遍历
+    // 时间复杂度 O(n), 空间复杂度 O(1)
+    var summaryRanges = function (nums) {
+      const ret = [];
+      let i = 0;
+      const n = nums.length;
+      while (i < n) {
+        const low = i;
+        i++;
+        while (i < n && nums[i] === nums[i - 1] + 1) {
+          i++;
+        }
+        const high = i - 1;
+        const temp = ['' + nums[low]];
+        if (low < high) {
+          temp.push('->');
+          temp.push('' + nums[high]);
+        }
+        ret.push(temp.join(''));
+      }
+      return ret;
+    };
 
-  if (tmp.length) {
-    if (tmp.length === 1) ans.push(tmp[0] + '');
-    else ans.push(tmp[0] + '->' + tmp[tmp.length - 1]);
-  }
-
-  return ans;
-};
-
-
-</script>
+    // test
+    let nums = [0,1,2,4,5,7];
+    console.log(summaryRanges(nums))
+  </script>
 </body>
+
 </html>
