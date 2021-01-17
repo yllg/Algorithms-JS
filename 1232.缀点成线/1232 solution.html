@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法1：数学
+        // 时间复杂度 O(n), 空间复杂度 O(1)
+        var checkStraightLine = function (coordinates) {
+            const deltaX = coordinates[0][0],
+                deltaY = coordinates[0][1];
+            const n = coordinates.length;
+            for (let i = 0; i < n; i++) {
+                coordinates[i][0] -= deltaX;
+                coordinates[i][1] -= deltaY;
+            }
+            const A = coordinates[1][1],
+                B = -coordinates[1][0];
+            for (let i = 2; i < n; i++) {
+                const [x, y] = [coordinates[i][0], coordinates[i][1]];
+                if (A * x + B * y !== 0) {
+                    return false;
+                }
+            }
+            return true;
+        };
+
+        // test
+        let coordinates = [[1,2],[2,3],[3,4],[4,5],[5,6],[6,7]];
+        console.log(checkStraightLine(coordinates))
+    </script>
+</body>
+
+</html>
