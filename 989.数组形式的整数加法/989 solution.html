@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法1：逐位相加
+        // 时间复杂度：O(max(n,logK))，其中 n 为数组的长度。
+        // 空间复杂度：O(max(n,logK))
+        var addToArrayForm = function (A, K) {
+            const res = [];
+            const n = A.length;
+            for (let i = n - 1; i >= 0 || K > 0; --i, K = Math.floor(K / 10)) {
+                if (i >= 0) {
+                    K += A[i];
+                }
+                res.push(K % 10);
+            }
+            res.reverse();
+            return res;
+        };
+    </script>
+</body>
+
+</html>
