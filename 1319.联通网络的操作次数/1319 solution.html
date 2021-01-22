@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法1：深度优先搜索
+        // 时间复杂度：O(n + m)
+        // 空间复杂度：O(n + m)
+        var makeConnected = function (n, connections) {
+            if (connections.length < n - 1) {
+                return -1;
+            }
+            const edges = new Map();
+            for (const [x, y] of connections) {
+                edges.get(x) ? edges.get(x).push(y) : edges.set(x, [y]);
+                edges.get(y) ? edges.get(y).push(x) : edges.set(y, [x]);
+            }
+            const used = new Array(n).fill(0);
+            let ans = 0;
+            for (let i = 0; i < n; i++) {
+                if (!used[i]) {
+                    dfs(i, used, edges);
+                    ans++;
+                }
+            }
+            return ans - 1;
+        };
+        const dfs = (u, used, edges) => {
+            used[u] = 1;
+            if (edges.get(u)) {
+                for (const v of edges.get(u)) {
+                    if (!used[v]) {
+                        dfs(v, used, edges);
+                    }
+                }
+            }
+        }
+
+        // 方法2：并查集
+        // 时间复杂度：O(n + m)
+        // 空间复杂度：O(n + m)
+        var makeConnected = function (n, connections) {
+            if (connections.length < n - 1) {
+                return -1;
+            }
+
+            const uf = new UnionFind(n);
+            for (const conn of connections) {
+                uf.unite(conn[0], conn[1]);
+            }
+
+            return uf.setCount - 1;
+        };
+        // 并查集模板
+        class UnionFind {
+            constructor(n) {
+                this.parent = new Array(n).fill(0).map((element, index) => index);
+                this.size = new Array(n).fill(1);
+                // 当前连通分量数目
+                this.setCount = n;
+            }
+            findset(x) {
+                if (this.parent[x] === x) {
+                    return x;
+                }
+                this.parent[x] = this.findset(this.parent[x]);
+                return this.parent[x];
+            }
+            unite(a, b) {
+                let x = this.findset(a),
+                    y = this.findset(b);
+                if (x === y) {
+                    return false;
+                }
+                if (this.size[x] < this.size[y]) {
+                    [x, y] = [y, x];
+                }
+                this.parent[y] = x;
+                this.size[x] += this.size[y];
+                this.setCount -= 1;
+                return true;
+            }
+            connected(a, b) {
+                const x = this.findset(a),
+                    y = this.findset(b);
+                return x === y;
+            }
+        }
+
+        // test
+        let n = 6, connections = [[0,1],[0,2],[0,3],[1,2],[1,3]];
+        console.log(makeConnected(n, connections))
+    </script>
+</body>
+
+</html>
