@@ -10,6 +10,8 @@
 <body>
     <script>
         // 方法1：并查集
+        // 时间复杂度：O(n^2*log n)，其中 n 是网格的边长。
+        // 空间复杂度：O(n^2)
         var regionsBySlashes = function (grid) {
             const n = grid.length;
             const f = new Array(n * n * 4).fill(0)
