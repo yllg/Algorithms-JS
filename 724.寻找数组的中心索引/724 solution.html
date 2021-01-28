@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法1：前缀和
+        // 时间复杂度 O(n), 空间复杂度 O(1)
+        var pivotIndex = function (nums) {
+            const total = nums.reduce((a, b) => a + b, 0);
+            let sum = 0;
+            for (let i = 0; i < nums.length; i++) {
+                if (2 * sum + nums[i] === total) {
+                    return i;
+                }
+                sum += nums[i];
+            }
+            return -1;
+        };
+
+        // test
+        let nums = [1, 7, 3, 6, 5, 6];
+        console.log(pivotIndex(nums));
+    </script>
+</body>
+
+</html>
