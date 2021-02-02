@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法1：双指针
+        // 时间复杂度：O(n), 空间复杂度：O(∣Σ∣)
+        var characterReplacement = function (s, k) {
+            const num = new Array(26).fill(0);
+            const n = s.length;
+            let maxn = 0,
+                left = 0,
+                right = 0;
+
+            while (right < n) {
+                num[s[right].charCodeAt() - 'A'.charCodeAt()]++;
+                maxn = Math.max(maxn, num[s[right].charCodeAt() - 'A'.charCodeAt()])
+                if (right - left + 1 - maxn > k) {
+                    num[s[left].charCodeAt() - 'A'.charCodeAt()]--;
+                    left++;
+                }
+                right++;
+            }
+            return right - left;
+        };
+
+        // test
+        let s = "AABABBA",
+            k = 1;
+        console.log(characterReplacement(s, k))
+    </script>
+</body>
+
+</html>
