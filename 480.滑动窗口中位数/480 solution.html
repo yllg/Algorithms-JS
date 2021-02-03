@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法1：堆
+        var medianSlidingWindow = function (nums, k) {
+            // 堆的实现
+            class H {
+                constructor(compare) {
+                    this.list = [null];
+                    this.size = 0;
+                    if (compare) this.compare = compare;
+                }
+                swap(i, j) {
+                    const tmp = this.list[i];
+                    this.list[i] = this.list[j];
+                    this.list[j] = tmp;
+                }
+                compare(child, parent) {
+                    return this.list[child] > this.list[parent];
+                }
+                down(u) {
+                    let t = u;
+                    if (2 * u <= this.size && this.compare(2 * u, t)) t = 2 * u;
+                    if (2 * u + 1 <= this.size && this.compare(2 * u + 1, t)) t = 2 * u + 1;
+                    if (t !== u) {
+                        this.swap(u, t);
+                        this.down(t);
+                    }
+                }
+                up(u) {
+                    while (u >>> 1 >= 1 && this.compare(u, u >>> 1)) {
+                        this.swap(u, u >>> 1);
+                        u >>>= 1;
+                    }
+                }
+                push(val) {
+                    this.list.push(val);
+                    this.size++;
+                    this.up(this.size);
+                }
+                pop() {
+                    const top = this.list[1];
+                    this.swap(1, this.size);
+                    this.size--;
+                    this.down(1);
+                    this.list.pop();
+                    return top;
+                }
+                // 本题需要的api
+                remove(index) {
+                    this.swap(index, this.size);
+                    this.size--;
+                    this.down(index);
+                    this.up(index);
+                    this.list.pop();
+                }
+            }
+
+            // 295题拿过来用
+            class MedianFinder {
+                constructor() {
+                    this.small = new H();
+                    this.big = new H(function (child, parent) {
+                        return this.list[child] < this.list[parent];
+                    });
+                }
+                insert(val) {
+                    if (this.big.size && val > this.big.list[1]) {
+                        this.big.push(val);
+                    } else {
+                        this.small.push(val);
+                        const top = this.small.pop();
+                        this.big.push(top);
+                    }
+                    if (this.big.size > this.small.size + 1) {
+                        const top = this.big.pop();
+                        this.small.push(top);
+                    }
+                }
+                // 额外处理下删除数据的逻辑
+                remove(val) {
+                    const si = this.small.list.indexOf(val);
+                    if (si > -1) {
+                        this.small.remove(si);
+                    } else {
+                        const bi = this.big.list.indexOf(val);
+                        if (bi > -1) this.big.remove(bi);
+                    }
+                    if (this.big.size > this.small.size + 1) {
+                        const top = this.big.pop();
+                        this.small.push(top);
+                    }
+                    if (this.big.size < this.small.size) {
+                        const top = this.small.pop();
+                        this.big.push(top);
+                    }
+                }
+                findMedian() {
+                    if (this.small.size === this.big.size) {
+                        return (this.small.list[1] + this.big.list[1]) / 2;
+                    } else {
+                        return this.big.list[1];
+                    }
+                }
+            }
+
+            // 主体逻辑很简单，维护固定长度的数据，每次取出中位数
+            const mf = new MedianFinder();
+            const n = nums.length;
+            const res = [];
+            for (let r = 0; r < n; r++) {
+                mf.insert(nums[r]);
+
+                const l = r - k + 1;
+                if (l >= 0) {
+                    res.push(mf.findMedian());
+                    mf.remove(nums[l]);
+                }
+            }
+            return res;
+        };
+
+        // test
+        let nums = [1, 3, -1, -3, 5, 3, 6, 7],
+            k = 3;
+        console.log(medianSlidingWindow(nums, k))
+    </script>
+</body>
+
+</html>
