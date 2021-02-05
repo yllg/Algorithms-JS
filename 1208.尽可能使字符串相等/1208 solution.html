@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法一：前缀和 + 二分查找
+        // 时间复杂度 O(nlogn), 空间复杂度 O(n)
+        var equalSubstring = function (s, t, maxCost) {
+            const n = s.length;
+            const accDiff = new Array(n + 1).fill(0);
+            for (let i = 0; i < n; i++) {
+                accDiff[i + 1] = accDiff[i] + Math.abs(s[i].charCodeAt() - t[i].charCodeAt());
+            }
+            let maxLength = 0;
+            for (let i = 1; i <= n; i++) {
+                const start = binarySearch(accDiff, i, accDiff[i] - maxCost);
+                maxLength = Math.max(maxLength, i - start);
+            }
+            return maxLength;
+        };
+
+        const binarySearch = (accDiff, endIndex, target) => {
+            let low = 0,
+                high = endIndex;
+            while (low < high) {
+                const mid = Math.floor((high - low) / 2) + low;
+                if (accDiff[mid] < target) {
+                    low = mid + 1;
+                } else {
+                    high = mid;
+                }
+            }
+            return low;
+        }
+
+        // 方法2：双指针
+        // 时间复杂度 O(n), 空间复杂度 O(n)
+        var equalSubstring = function (s, t, maxCost) {
+            const n = s.length;
+            const diff = new Array(n).fill(0);
+            for (let i = 0; i < n; i++) {
+                diff[i] = Math.abs(s[i].charCodeAt() - t[i].charCodeAt());
+            }
+            let maxLength = 0;
+            let start = 0,
+                end = 0;
+            let sum = 0;
+            while (end < n) {
+                sum += diff[end];
+                while (sum > maxCost) {
+                    sum -= diff[start];
+                    start++;
+                }
+                maxLength = Math.max(maxLength, end - start + 1);
+                end++;
+            }
+            return maxLength;
+        };
+
+        // test
+        let s = "abcd",
+            t = "bcdf",
+            cost = 3;
+        console.log(equalSubstring(s, t, cost))
+    </script>
+</body>
+
+</html>
