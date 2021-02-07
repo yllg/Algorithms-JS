@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法1：数组
+        // 时间复杂度 O(n), 空间复杂度 O(1)
+        var checkPossibility = function (nums) {
+            const n = nums.length;
+            let cnt = 0;
+            for (let i = 0; i < n - 1; ++i) {
+                const x = nums[i],
+                    y = nums[i + 1];
+                if (x > y) {
+                    cnt++;
+                    if (cnt > 1) {
+                        return false;
+                    }
+                    if (i > 0 && y < nums[i - 1]) {
+                        nums[i + 1] = x;
+                    }
+                }
+            }
+            return true;
+        };
+
+        // test
+        let nums = [4,2,3];
+        console.log(checkPossibility(nums))
+    </script>
+</body>
+
+</html>
