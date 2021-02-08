@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法一：双指针
+        // 时间复杂度 O(n), 空间复杂度 O(1)
+        var maxTurbulenceSize = function (arr) {
+            const n = arr.length;
+            let ret = 1;
+            let left = 0,
+                right = 0;
+
+            while (right < n - 1) {
+                if (left == right) {
+                    if (arr[left] == arr[left + 1]) {
+                        left++;
+                    }
+                    right++;
+                } else {
+                    if (arr[right - 1] < arr[right] && arr[right] > arr[right + 1]) {
+                        right++;
+                    } else if (arr[right - 1] > arr[right] && arr[right] < arr[right + 1]) {
+                        right++;
+                    } else {
+                        left = right;
+                    }
+                }
+                ret = Math.max(ret, right - left + 1);
+            }
+            return ret;
+        };
+
+        // 方法二：动态规划
+        // 时间复杂度 O(n), 空间复杂度 O(n)
+        var maxTurbulenceSize = function (arr) {
+            const n = arr.length;
+            const dp = new Array(n).fill(0).map(() => new Array(2).fill(0));
+            dp[0][0] = dp[0][1] = 1;
+            for (let i = 1; i < n; i++) {
+                dp[i][0] = dp[i][1] = 1;
+                if (arr[i - 1] > arr[i]) {
+                    dp[i][0] = dp[i - 1][1] + 1;
+                } else if (arr[i - 1] < arr[i]) {
+                    dp[i][1] = dp[i - 1][0] + 1;
+                }
+            }
+
+            let ret = 1;
+            for (let i = 0; i < n; i++) {
+                ret = Math.max(ret, dp[i][0]);
+                ret = Math.max(ret, dp[i][1]);
+            }
+            return ret;
+        };
+
+        // 方法3：动态规划 + 空间优化
+        // 时间复杂度 O(n), 空间复杂度 O(1)
+        var maxTurbulenceSize = function (arr) {
+            let ret = 1;
+            const n = arr.length;
+            let dp0 = 1,
+                dp1 = 1;
+            for (let i = 1; i < n; i++) {
+                if (arr[i - 1] > arr[i]) {
+                    dp0 = dp1 + 1;
+                    dp1 = 1;
+                } else if (arr[i - 1] < arr[i]) {
+                    dp1 = dp0 + 1;
+                    dp0 = 1;
+                } else {
+                    dp0 = 1;
+                    dp1 = 1;
+                }
+                ret = Math.max(ret, dp0);
+                ret = Math.max(ret, dp1);
+            }
+            return ret;
+        };
+
+        // test
+        let arr = [9, 4, 2, 10, 7, 8, 8, 1, 9];
+        console.log(maxTurbulenceSize(arr))
+    </script>
+</body>
+
+</html>
