@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法一：滑动窗口
+        // 时间复杂度 O(n), 空间复杂度 O(n)
+        var subarraysWithKDistinct = function (A, K) {
+            const n = A.length;
+            const num1 = new Array(n + 1).fill(0);
+            const num2 = new Array(n + 1).fill(0);
+            let tot1 = 0,
+                tot2 = 0;
+            let left1 = 0,
+                left2 = 0,
+                right = 0;
+            let ret = 0;
+            while (right < n) {
+                if (num1[A[right]] == 0) {
+                    tot1++;
+                }
+                num1[A[right]]++;
+                if (num2[A[right]] == 0) {
+                    tot2++;
+                }
+                num2[A[right]]++;
+                while (tot1 > K) {
+                    num1[A[left1]]--;
+                    if (num1[A[left1]] == 0) {
+                        tot1--;
+                    }
+                    left1++;
+                }
+                while (tot2 > K - 1) {
+                    num2[A[left2]]--;
+                    if (num2[A[left2]] == 0) {
+                        tot2--;
+                    }
+                    left2++;
+                }
+                ret += left2 - left1;
+                right++;
+            }
+            return ret;
+        };
+
+        // test
+        let A = [1,2,1,2,3], K = 2;
+        console.log(subarraysWithKDistinct(A, K))
+    </script>
+</body>
+
+</html>
