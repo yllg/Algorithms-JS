@@ -1,42 +1,48 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
 </head>
+
 <body>
-<script>
-// Source : https://leetcode.com/problems/pascals-triangle-ii/
-// Author : 悬笔e绝
-// Date   : 2019-05-23
+  <script>
+    // Source : https://leetcode.com/problems/pascals-triangle-ii/
+    // Author : 悬笔e绝
+    // Date   : 2019-05-23
 
-/**
- * @param {number} rowIndex
- * @return {number[]}
- */
- var getRow = function(rowIndex) {
-  var ans = [];
-  for (var i = 0; i < rowIndex + 1; i++) {
-    if (i === 0) {
-      ans[i] = [1];
-      continue;
-    }
-    ans[i] = [];
-    for (var j = 0; j <= i; j++)
-      if (j === 0)
-        ans[i][j] = ans[i - 1][j];
-      else if (j === i)
-        ans[i][j] = ans[i - 1][j - 1];
-      else 
-        ans[i][j] = ans[i - 1][j - 1] + ans[i - 1][j];
-  }
-  return ans[rowIndex];
-};
+    // 方法1：递推
+    // 时间复杂度：O(rowIndex^2)
+    // 空间复杂度：O(1)
+    var getRow = function (rowIndex) {
+      const row = new Array(rowIndex + 1).fill(0);
+      row[0] = 1;
+      for (let i = 1; i <= rowIndex; ++i) {
+        for (let j = i; j > 0; --j) {
+          row[j] += row[j - 1];
+        }
+      }
+      return row;
+    };
 
-console.log(getRow(3));
+    // 方法2：线性递推
+    // 时间复杂度：O(rowIndex)
+    // 空间复杂度：O(1)
+    var getRow = function (rowIndex) {
+      const row = new Array(rowIndex + 1).fill(0);
+      row[0] = 1;
+      for (let i = 1; i <= rowIndex; ++i) {
+        row[i] = row[i - 1] * (rowIndex - i + 1) / i;
+      }
+      return row;
+    };
 
-</script>
+    // test
+    console.log(getRow(3));
+  </script>
 </body>
+
 </html>
