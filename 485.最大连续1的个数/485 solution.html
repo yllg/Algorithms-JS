@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法1：一次遍历
+        // 时间复杂度 O(n), 空间复杂度 O(1)
+        var findMaxConsecutiveOnes = function (nums) {
+            let maxCount = 0,
+                count = 0;
+            const n = nums.length;
+            for (let i = 0; i < n; i++) {
+                if (nums[i] === 1) {
+                    count++;
+                } else {
+                    maxCount = Math.max(maxCount, count);
+                    count = 0;
+                }
+            }
+            maxCount = Math.max(maxCount, count);
+            return maxCount;
+        };
+
+        // test
+        let nums = [1,1,0,1,1,1];
+        console.log(findMaxConsecutiveOnes(nums))
+    </script>
+</body>
+
+</html>
