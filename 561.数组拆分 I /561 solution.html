@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法1：排序
+        // 时间复杂度 O(nlogn)
+        // 空间复杂度 O(logn)
+        var arrayPairSum = function (nums) {
+            nums.sort((a, b) => a - b);
+            let ans = 0;
+            for (let i = 0; i < nums.length; i += 2) {
+                ans += nums[i];
+            }
+            return ans;
+        };
+
+        // test
+        let nums = [1,4,3,2];
+        console.log(arrayPairSum(nums))
+    </script>
+</body>
+
+</html>
