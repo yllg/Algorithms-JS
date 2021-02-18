@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法1：差分数组
+        // 时间复杂度 O(n) 空间复杂度 O(n)
+        var minKBitFlips = function (A, K) {
+            const n = A.length;
+            const diff = new Array(n + 1).fill(0);
+            let ans = 0,
+                revCnt = 0;
+            for (let i = 0; i < n; i++) {
+                revCnt ^= diff[i];
+                if (A[i] === revCnt) { // A[i] ^ revCnt == 0
+                    if ((i + K) > n) {
+                        return -1;
+                    }
+                    ++ans;
+                    revCnt ^= 1;
+                    diff[i + K] ^= 1;
+                }
+            }
+            return ans;
+        };
+
+        // 方法2：滑动窗口
+        // 时间复杂度 O(n) 空间复杂度 O(1)
+        var minKBitFlips = function (A, K) {
+            const n = A.length;
+            let ans = 0,
+                revCnt = 0;
+            for (let i = 0; i < n; ++i) {
+                if (i >= K && A[i - K] > 1) {
+                    revCnt ^= 1;
+                    A[i - K] -= 2; // 复原数组元素，若允许修改数组 A，则可以省略
+                }
+                if (A[i] == revCnt) {
+                    if (i + K > n) {
+                        return -1;
+                    }
+                    ++ans;
+                    revCnt ^= 1;
+                    A[i] += 2;
+                }
+            }
+            return ans;
+        };
+
+        // test
+        let A = [0,0,0,1,0,1,1,0], K = 3;
+        console.log(minKBitFlips(A, K))
+    </script>
+</body>
+
+</html>
