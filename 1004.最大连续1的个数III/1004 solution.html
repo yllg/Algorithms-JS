@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法1：二分查找
+        // 时间复杂度 O(nlogn), 空间复杂度 O(n)
+        var longestOnes = function (A, K) {
+            const n = A.length;
+            const P = new Array(n + 1).fill(0);
+            for (let i = 1; i <= n; ++i) {
+                P[i] = P[i - 1] + (1 - A[i - 1]);
+            }
+
+            let ans = 0;
+            for (let right = 0; right < n; ++right) {
+                const left = binarySearch(P, P[right + 1] - K);
+                ans = Math.max(ans, right - left + 1);
+            }
+            return ans;
+        };
+
+        const binarySearch = (P, target) => {
+            let low = 0,
+                high = P.length - 1;
+            while (low < high) {
+                const mid = Math.floor((high - low) / 2) + low;
+                if (P[mid] < target) {
+                    low = mid + 1;
+                } else {
+                    high = mid;
+                }
+            }
+            return low;
+        }
+
+        // 方法2：滑动窗口
+        // 时间复杂度 O(n), 空间复杂度 O(1)
+        var longestOnes = function (A, K) {
+            const n = A.length;
+            let left = 0,
+                lsum = 0,
+                rsum = 0;
+            let ans = 0;
+            for (let right = 0; right < n; ++right) {
+                rsum += 1 - A[right];
+                while (lsum < rsum - K) {
+                    lsum += 1 - A[left];
+                    ++left;
+                }
+                ans = Math.max(ans, right - left + 1);
+            }
+            return ans;
+        };
+
+        // test
+        let A = [1, 1, 1, 0, 0, 0, 1, 1, 1, 1, 0],
+            K = 2;
+        console.log(longestOnes(A, K))
+    </script>
+</body>
+
+</html>
