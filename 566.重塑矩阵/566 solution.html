@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法1：二维数组的一维表示
+        // 时间复杂度：O(rc)。这里的时间复杂度是在重塑矩阵成功的前提下的时间复杂度，否则C++ 语言中返回的是原数组的一份拷贝，本质上需要的时间复杂度为 O(mn)，而其余语言可以直接返回原数组的对象，需要的时间复杂度仅为 O(1)O(1)。
+        // 空间复杂度：O(1)。这里的空间复杂度不包含返回的重塑矩阵需要的空间。
+        var matrixReshape = function (nums, r, c) {
+            const m = nums.length;
+            const n = nums[0].length;
+            if (m * n != r * c) {
+                return nums;
+            }
+
+            const ans = new Array(r).fill(0).map(() => new Array(c).fill(0));
+            for (let x = 0; x < m * n; ++x) {
+                ans[Math.floor(x / c)][x % c] = nums[Math.floor(x / n)][x % n];
+            }
+            return ans;
+        };
+
+        // test
+        let nums = [
+            [1, 2],
+            [3, 4]
+        ]
+        r = 1, c = 4;
+        console.log(matrixReshape(nums, r, c))
+    </script>
+</body>
+
+</html>
