@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法1：滑动窗口
+        // 时间复杂度 O(n) 空间复杂度 O(1)
+        var maxSatisfied = function (customers, grumpy, X) {
+            let total = 0;
+            const n = customers.length;
+            for (let i = 0; i < n; i++) {
+                if (grumpy[i] === 0) {
+                    total += customers[i];
+                }
+            }
+            let increase = 0;
+            for (let i = 0; i < X; i++) {
+                increase += customers[i] * grumpy[i];
+            }
+            let maxIncrease = increase;
+            for (let i = X; i < n; i++) {
+                increase = increase - customers[i - X] * grumpy[i - X] + customers[i] * grumpy[i];
+                maxIncrease = Math.max(maxIncrease, increase);
+            }
+            return total + maxIncrease;
+        };
+
+        // test
+        let customers = [1, 0, 1, 2, 1, 1, 7, 5],
+            grumpy = [0, 1, 0, 1, 0, 1, 0, 1],
+            X = 3;
+        console.log(maxSatisfied(customers, grumpy, X))
+    </script>
+</body>
+
+</html>
