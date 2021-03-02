@@ -1,41 +1,28 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
 </head>
+
 <body>
-<script>
-// Source : https://leetcode.com/problems/range-sum-query-immutable/
-// Author : 悬笔e绝
-// Date   : 2020-03-17
+  <script>
+    // 方法1：前缀和
+    // 时间复杂度 O(n) 空间复杂度 O(n)
+    var NumArray = function (nums) {
+      const n = nums.length;
+      this.sums = new Array(n + 1).fill(0);
+      for (let i = 0; i < n; i++) {
+        this.sums[i + 1] = this.sums[i] + nums[i];
+      }
+    };
 
-/**
- * @constructor
- * @param {number[]} nums
- */
-var NumArray = function(nums) {
-  this.len = nums.length;
-  this.sum = [];
-  for (var i = 0; i < this.len; i++) {
-    if (!i)
-      this.sum[i] = nums[i];
-    else 
-      this.sum[i] = this.sum[i - 1] + nums[i];
-  }
-};
-
-/**
- * @param {number} i
- * @param {number} j
- * @return {number}
- */
-NumArray.prototype.sumRange = function(i, j) {
-  if (!i)
-    return this.sum[j];
-  return this.sum[j] - this.sum[i - 1];
-};
-</script>
+    NumArray.prototype.sumRange = function (i, j) {
+      return this.sums[j + 1] - this.sums[i];
+    };
+  </script>
 </body>
+
 </html>

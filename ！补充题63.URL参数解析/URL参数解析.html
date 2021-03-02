@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 字符串处理
+        function parseURLParam(url) {
+            const paramsStr = url.split("?")[1]; // 将？后面的字符串提出来
+            const paramsArr = paramsStr.split("&"); // 以 & 分割存到数组中
+            let paramsObj = {};
+            paramsArr.forEach((param) => {
+                if(/=/.test(param)) {
+                    // 处理有value的参数
+                    let [key, val] = param.split("="); // 分割 key 和 value
+                    val = decodeURIComponent(val); // 解码
+                    val = /^\d+$/.test(val) ? parseFloat(val) : val; // 判断是否转为数字
+                    if (paramsObj.hasOwnProperty(key)) {
+                        // 如果对象有key，添加一个值
+                        paramsObj[key] = [].concat(paramsObj[key], val);
+                    } else {
+                        // 如果对象没有这个key，创建key并设置值
+                        paramsObj[key] = val;
+                    }
+                } else {
+                    // 处理没有 value 的参数
+                    paramsObj[param] = true;
+                }
+            });
+            return paramsObj;
+        }
+        // test
+        let urlStr = 'http://www.inode.club?name=yllg&study=js&study=node';
+        console.log(parseURLParam(urlStr))
+    </script>
+</body>
+
+</html>

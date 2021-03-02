@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法1：两次遍历
+        // 时间复杂度 O(n) 空间复杂度 O(1)
+        var isMonotonic = function (A) {
+            return isSorted(A) || isSorted(A.reverse());
+        };
+
+        function isSorted(arr) {
+            return arr.slice(1).every((item, i) => arr[i] <= item)
+        }
+
+        // 方法2：一次遍历
+        // 时间复杂度 O(n) 空间复杂度 O(1)
+        var isMonotonic = function (A) {
+            let inc = true,
+                dec = true;
+            const n = A.length;
+            for (let i = 0; i < n - 1; ++i) {
+                if (A[i] > A[i + 1]) {
+                    inc = false;
+                }
+                if (A[i] < A[i + 1]) {
+                    dec = false;
+                }
+            }
+            return inc || dec;
+        };
+
+        // test
+        let A = [6,5,4,4];
+        console.log(isMonotonic(A))
+    </script>
+</body>
+
+</html>
