@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法1：直接计数
+        // 时间复杂度：O(k×num)，其中 k 是 int 型的二进制位数，k=32
+        // 空进复杂度 O(1)
+        var countBits = function (num) {
+            const bits = new Array(num + 1).fill(0);
+            for (let i = 0; i <= num; i++) {
+                bits[i] = countOnes(i);
+            }
+            return bits
+        };
+        const countOnes = (x) => {
+            let ones = 0;
+            while (x > 0) {
+                x &= (x - 1);
+                ones++;
+            }
+            return ones;
+        }
+
+        // 方法2：动态规划——最高有效位
+        // 时间复杂度：O(num)
+        // 空进复杂度 O(1)
+        var countBits = function (num) {
+            const bits = new Array(num + 1).fill(0);
+            let highBit = 0;
+            for (let i = 1; i <= num; i++) {
+                if ((i & (i - 1)) == 0) {
+                    highBit = i;
+                }
+                bits[i] = bits[i - highBit] + 1;
+            }
+            return bits;
+        };
+
+        // 方法3：动态规划——最低有效位
+        // 时间复杂度：O(num)
+        // 空进复杂度 O(1)
+        var countBits = function (num) {
+            const bits = new Array(num + 1).fill(0);
+            for (let i = 1; i <= num; i++) {
+                bits[i] = bits[i >> 1] + (i & 1);
+            }
+            return bits;
+        };
+
+        // 方法4： 动态规划——最低设置位
+        // 时间复杂度：O(num)
+        // 空进复杂度 O(1)
+        var countBits = function (num) {
+            const bits = new Array(num + 1).fill(0);
+            for (let i = 1; i <= num; i++) {
+                bits[i] = bits[i & (i - 1)] + 1;
+            }
+            return bits;
+        };
+
+        // test
+        let num = 5;
+        console.log(countBits(5)) 
+    </script>
+</body>
+
+</html>
