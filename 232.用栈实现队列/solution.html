@@ -1,55 +1,54 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
 </head>
+
 <body>
-<script>
-// Source : https://leetcode.com/problems/implement-queue-using-stacks/
-// Author : 悬笔e绝
-// Date   : 2020-01-21
+  <script>
+    // Source : https://leetcode.com/problems/implement-queue-using-stacks/
+    // Author : 悬笔e绝
+    // Date   : 2020-01-21
 
-/**
- * @constructor
- */
- var Queue = function() {
-  this.a = [];
-};
-Queue.prototype.push = function(x) {
-  this.a.push(x);
-};
-Queue.prototype.pop = function() {
-  this.a.shift();
-};
-Queue.prototype.peek = function() {
-  return this.a[0];
-};
-Queue.prototype.empty = function() {
-  return this.a.length ? false : true;
-};
+    // 解法1：双栈实现队列，添加和删除
+    // 时间复杂度 O(1) 空间复杂度 O(n)
+    var MyQueue = function () {
+      this.inStack = [];
+      this.outStack = [];
+    };
 
-// 解法2：双栈实现队列，添加和删除
-var CQueue = function() {
-    this.stack1 = []
-    this.stack2 = []
-};
-CQueue.prototype.appendTail = function(value) {
-    this.stack1.push(value)
-};
-CQueue.prototype.deleteHead = function() {
-    if(this.stack2.length) {
-        return this.stack2.pop()
+    MyQueue.prototype.push = function (x) {
+      this.inStack.push(x);
+    };
+
+    MyQueue.prototype.pop = function () {
+      if (!this.outStack.length) {
+        this.in2out();
+      }
+      return this.outStack.pop();
+    };
+
+    MyQueue.prototype.peek = function () {
+      if (!this.outStack.length) {
+        this.in2out();
+      }
+      return this.outStack[this.outStack.length - 1];
+    };
+
+    MyQueue.prototype.empty = function () {
+      return this.outStack.length === 0 && this.inStack.length === 0;
+    };
+
+    MyQueue.prototype.in2out = function () {
+      while (this.inStack.length) {
+        this.outStack.push(this.inStack.pop());
+      }
     }
-    if(!this.stack1.length) return -1
-    while(this.stack1.length) {
-        this.stack2.push(this.stack1.pop())
-    }
-    return this.stack2.pop()
-};
-
-</script>
+  </script>
 </body>
+
 </html>
