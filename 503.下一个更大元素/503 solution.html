@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法1：单调栈 + 循环数组
+        // 时间复杂度 O(n) 空间复杂度 O(n)
+        var nextGreaterElements = function (nums) {
+            const n = nums.length;
+            const ret = new Array(n).fill(-1);
+            const stk = [];
+            for (let i = 0; i < n * 2 - 1; i++) {
+                while (stk.length && nums[stk[stk.length - 1]] < nums[i % n]) {
+                    ret[stk[stk.length - 1]] = nums[i % n];
+                    stk.pop();
+                }
+                stk.push(i % n);
+            }
+            return ret;
+        };
+
+        // test 
+        let nums = [1,2,1];
+        console.log(nextGreaterElements(nums))
+    </script>
+</body>
+
+</html>
