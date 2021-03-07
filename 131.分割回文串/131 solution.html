@@ -1,78 +1,93 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
 </head>
+
 <body>
-<script>
-// Source : https://leetcode.com/problems/palindrome-partitioning/
-// Author : 悬笔e绝
-// Date   : 2019-06-15
+  <script>
+    // 方法一：回溯 + 动态规划预处理
+    // 时间复杂度：O(n * 2^n)
+    // 空间复杂度：O(n ^ 2)
+    var partition = function (s) {
+      const dfs = (i) => {
+        if (i === n) {
+          ret.push(ans.slice());
+          return;
+        }
+        for (let j = i; j < n; ++j) {
+          if (f[i][j]) {
+            ans.push(s.slice(i, j + 1));
+            dfs(j + 1);
+            ans.pop();
+          }
+        }
+      }
 
-/**
- * @param {string} s
- * @return {string[][]}
- */
+      const n = s.length;
+      const f = new Array(n).fill(0).map(() => new Array(n).fill(true));
+      let ret = [],
+        ans = [];
 
-var dp, len, str;
-var ans;
+      for (let i = n - 1; i >= 0; --i) {
+        for (let j = i + 1; j < n; ++j) {
+          f[i][j] = (s[i] === s[j]) && f[i + 1][j - 1];
+        }
+      }
+      dfs(0);
+      return ret;
+    };
 
-// get the dp[]
-function Manacher(s) {
-  var maxn = 0
-    , idx = 0;
-  dp = [], 
-  str = '*#';
-  var i;
-  for (i = 0, len = s.length; i < len; i++)
-    str += s[i] + '#';
-  for (i = 1, len = str.length; i < len; i++) {
-    if (maxn > i) dp[i] = Math.min(dp[2 * idx - i], maxn - i);
-    else dp[i] = 1;
-    while (str[i - dp[i]] === str[i + dp[i]]) dp[i]++;
-    if (dp[i] + i > maxn)
-      maxn = dp[i] + i, idx = i;
-  }
-}
+    // 方法2：回溯 + 记忆化搜索
+    // 时间复杂度：O(n * 2^n)
+    // 空间复杂度：O(n ^ 2)
+    var partition = function (s) {
+      const dfs = (i) => {
+        if (i === n) {
+          ret.push(ans.slice());
+          return;
+        }
+        for (let j = i; j < n; ++j) {
+          if (isPalindrome(i, j) === 1) {
+            ans.push(s.slice(i, j + 1));
+            dfs(j + 1);
+            ans.pop();
+          }
+        }
+      }
 
-function getSubstring(from, to) {
-  var s = str.slice(from, to);
-  return s.replace(/#/g, '');
-}
+      // 记忆化搜索中，f[i][j] = 0 表示未搜索，1 表示是回文串，-1 表示不是回文串
+      const isPalindrome = (i, j) => {
+        if (f[i][j] !== 0) {
+          return f[i][j];
+        }
+        if (i >= j) {
+          f[i][j] = 1;
+        } else if (s[i] === s[j]) {
+          f[i][j] = isPalindrome(i + 1, j - 1);
+        } else {
+          f[i][j] = -1;
+        }
+        return f[i][j];
+      }
 
-function dfs(index) {
-  if (index === len || index === len - 1) {
-    var tmp = res.concat();
-    ans.push(tmp);
-    return;
-  }
-  for (var i = index; i < len; i++) {
-    if (i - dp[i] + 1 <= index) {
-      if (dp[i] === 1 && str[i] === '#') continue;
-      var tmp = getSubstring(index, 2 * i - index + 1);
-      if (tmp === '') continue;
-      res.push(tmp);
-      dfs(2 * i - index + 1);
-      // backtracking
-      res.pop();
-    }
-  }
-}
+      const n = s.length;
+      const ret = [],
+        ans = [];
+      const f = new Array(n).fill(0).map(() => new Array(n).fill(0));
 
-var partition = function(s) {
-  Manacher(s); 
-  ans = [], res = []; // store substrings
-  dfs(1);
-  return ans;
-};
+      dfs(0);
+      return ret;
+    };
 
-// 测试
-var s  = "aab";
-console.log(partition(s));
-
-</script>
+    // test
+    let s = "aab";
+    console.log(partition(s));
+  </script>
 </body>
+
 </html>
