@@ -1,59 +1,83 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
 </head>
+
 <body>
-<script>
-// Source : https://leetcode.com/problems/palindrome-partitioning-ii/
-// Author : 悬笔e绝
-// Date   : 2019-06-17
+  <script>
+    // Source : https://leetcode.com/problems/palindrome-partitioning-ii/
+    // Author : 悬笔e绝
+    // Date   : 2019-06-17
 
-/**
- * @param {string} s
- * @return {number}
- */
+    // 方法1：动态规划
+    var dp, len, str;
 
-var dp, len, str;
+    // get the dp[]
+    function Manacher(s) {
+      var maxn = 0,
+        idx = 0;
+      dp = [],
+        str = '*#';
+      var i;
+      for (i = 0, len = s.length; i < len; i++)
+        str += s[i] + '#';
+      for (i = 1, len = str.length; i < len; i++) {
+        if (maxn > i) dp[i] = Math.min(dp[2 * idx - i], maxn - i);
+        else dp[i] = 1;
+        while (str[i - dp[i]] === str[i + dp[i]]) dp[i]++;
+        if (dp[i] + i > maxn)
+          maxn = dp[i] + i, idx = i;
+      }
+    }
 
-// get the dp[]
-function Manacher(s) {
-  var maxn = 0
-    , idx = 0;
-  dp = [], 
-  str = '*#';
-  var i;
-  for (i = 0, len = s.length; i < len; i++)
-    str += s[i] + '#';
-  for (i = 1, len = str.length; i < len; i++) {
-    if (maxn > i) dp[i] = Math.min(dp[2 * idx - i], maxn - i);
-    else dp[i] = 1;
-    while (str[i - dp[i]] === str[i + dp[i]]) dp[i]++;
-    if (dp[i] + i > maxn)
-      maxn = dp[i] + i, idx = i;
-  }
-}
+    var minCut = function (s) {
+      Manacher(s);
+      var ans = []; // ans[i] represent the minCutNum of the starting i elements
+      ans[0] = 0;
+      for (var i = 1; i < len; i++)
+        ans[i] = Infinity;
+      for (var i = 1; i < len; i++) {
+        var radius = dp[i];
+        for (var j = 1; j <= radius; j++)
+          ans[i + j - 1] = Math.min(ans[i + j - 1], ans[i - j] + 1);
+      }
+      return Math.min(ans[len - 1], ans[len - 2]) - 1;
+    };
 
-var minCut = function(s) {
-  Manacher(s);
-  var ans = [];  // ans[i] represent the minCutNum of the starting i elements
-  ans[0] = 0;
-  for (var i = 1; i < len; i++)
-    ans[i] = Infinity;
-  for (var i = 1; i < len; i++) {
-    var radius = dp[i];
-    for (var j = 1; j <= radius; j++) 
-      ans[i + j - 1] = Math.min(ans[i + j - 1], ans[i - j] + 1);
-  }
-  return Math.min(ans[len - 1], ans[len -2]) - 1;
-};
+    // 方法2：官解的动态规划
+    var minCut = function (s) {
+      const n = s.length;
+      const g = new Array(n).fill(0).map(() => new Array(n).fill(true));
 
-// 测试
-var s = "aab"
-console.log(minCut(s));
-</script>
+      for (let i = n - 1; i >= 0; --i) {
+        for (let j = i + 1; j < n; ++j) {
+          g[i][j] = s[i] == s[j] && g[i + 1][j - 1];
+        }
+      }
+      const f = new Array(n).fill(Number.MAX_SAFE_INTEGER);
+      for (let i = 0; i < n; ++i) {
+        if (g[0][i]) {
+          f[i] = 0;
+        } else {
+          for (let j = 0; j < i; ++j) {
+            if (g[j + 1][i]) {
+              f[i] = Math.min(f[i], f[j] + 1);
+            }
+          }
+        }
+      }
+      return f[n - 1];
+    };
+
+    // 测试
+    var s = "aab"
+    console.log(minCut(s));
+  </script>
 </body>
+
 </html>
