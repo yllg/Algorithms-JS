@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法1：栈
+        // 时间复杂度 O(n) 空间复杂度 O(1)
+        var removeDuplicates = function (S) {
+            const stk = [];
+            for (const ch of S) {
+                if (stk.length && stk[stk.length - 1] === ch) {
+                    stk.pop();
+                } else {
+                    stk.push(ch);
+                }
+            }
+            return stk.join('');
+        };
+
+        // test
+        let S = "abbaca";
+        console.log(removeDuplicates(S))
+    </script>
+</body>
+
+</html>
