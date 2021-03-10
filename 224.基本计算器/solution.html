@@ -1,53 +1,92 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
 </head>
+
 <body>
-<script>
-// Source : https://leetcode.com/problems/basic-calculator/
-// Author : 悬笔e绝
-// Date   : 2019-12-22
+  <script>
+    // Source : https://leetcode.com/problems/basic-calculator/
+    // Author : 悬笔e绝
+    // Date   : 2019-12-22
 
-/**
- * @param {string} s
- * @return {number}
- */
-var calculate = function(s) {
-  var ans = 0;
-  var num = 0;  // single number
-  var sign = 1;
-  var numStack = [];
-  var symStack = [];
+    // 方法1：常规栈
+    var calculate = function (s) {
+      var ans = 0;
+      var num = 0; // single number
+      var sign = 1;
+      var numStack = [];
+      var symStack = [];
 
-  for (var i = 0, len = s.length; i < len; i++) {
-    var item = s[i];
-    if ('0123456789'.indexOf(item) !== -1) {
-      num = num * 10 + (+item);
-    } else {
-      ans += sign * num;
-      num = 0;
-      if (item === '+')
-        sign = 1;
-      else if (item === '-')
-        sign = -1;
-      else if (item === '(') {
-        numStack.push(ans);
-        symStack.push(sign);
-        ans = 0;
-        sign = 1;
-      } else if (item === ')') {
-        ans = symStack.pop() * ans + numStack.pop();
+      for (var i = 0, len = s.length; i < len; i++) {
+        var item = s[i];
+        if ('0123456789'.indexOf(item) !== -1) {
+          num = num * 10 + (+item);
+        } else {
+          ans += sign * num;
+          num = 0;
+          if (item === '+')
+            sign = 1;
+          else if (item === '-')
+            sign = -1;
+          else if (item === '(') {
+            numStack.push(ans);
+            symStack.push(sign);
+            ans = 0;
+            sign = 1;
+          } else if (item === ')') {
+            ans = symStack.pop() * ans + numStack.pop();
+          }
+        }
       }
-    }
-  }
-  ans += sign * num;
-  return ans;
-};
+      ans += sign * num;
+      return ans;
+    };
 
-</script>
+    // 方法2： 括号展开+栈
+    // 时间复杂度 O(n) 空间复杂度O(n)
+    var calculate = function (s) {
+      const ops = [1];
+      let sign = 1;
+
+      let ret = 0;
+      const n = s.length;
+      let i = 0;
+      while (i < n) {
+        if (s[i] === ' ') {
+          i++;
+        } else if (s[i] === '+') {
+          sign = ops[ops.length - 1];
+          i++;
+        } else if (s[i] === '-') {
+          sign = -ops[ops.length - 1];
+          i++;
+        } else if (s[i] === '(') {
+          ops.push(sign);
+          i++;
+        } else if (s[i] === ')') {
+          ops.pop();
+          i++;
+        } else {
+          let num = 0;
+          while (i < n && !(isNaN(Number(s[i]))) && s[i] !== ' ') {
+            num = num * 10 + s[i].charCodeAt() - '0'.charCodeAt();
+            i++;
+          }
+          ret += sign * num;
+        }
+      }
+      return ret;
+    };
+
+    // test
+    let s =  "(1+(4+5+2)-3)+(6+8)";
+    console.log(calculate(s))
+  </script>
 </body>
+
 </html>
