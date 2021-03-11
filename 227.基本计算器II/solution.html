@@ -1,51 +1,93 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
 </head>
+
 <body>
-<script>
-// Source : https://leetcode.com/problems/basic-calculator-ii/
-// Author : 悬笔e绝
-// Date   : 2019-12-30
+  <script>
+    // Source : https://leetcode.com/problems/basic-calculator-ii/
+    // Author : 悬笔e绝
+    // Date   : 2019-12-30
 
-/**
- * @param {string} s
- * @return {number}
- */
-var calculate = function(s) {
-  s = s.replace(/\s/g, '');
-  var num = 0;
-  var numStack = [];
-  var sym = '+';  // 前一个符号，默认可为 '+'
-  for (var i = 0, len = s.length; i < len; i++) {
-    var item = s[i];
-    if (~'+-*/'.indexOf(item) || i === len - 1) {
-      (i === len - 1) && (num = num * 10 + (+item));
-      if (sym === '-')
-        numStack.push(-num);
-      else if (sym === '+')
-        numStack.push(+num);
-      else if (sym === '*')
-        numStack.push(numStack.pop() * num);
-      else
-        numStack.push(~~(numStack.pop() / num));
-      num = 0;
-      sym = item;
-    } else {
-      num = num * 10 + (+item);
-    }
-  }
-  var ans = 0;
-  numStack.forEach(function(item) {
-    ans += item;
-  });
-  return ans;
-};
+    // 除法仅保留整数部分
 
-</script>
+    // 方法1：栈
+    var calculate = function (s) {
+      s = s.replace(/\s/g, '');
+      var num = 0;
+      var numStack = [];
+      var sym = '+'; // 前一个符号，默认可为 '+'
+      for (var i = 0, len = s.length; i < len; i++) {
+        var item = s[i];
+        if (~'+-*/'.indexOf(item) || i === len - 1) {
+          (i === len - 1) && (num = num * 10 + (+item));
+          if (sym === '-')
+            numStack.push(-num);
+          else if (sym === '+')
+            numStack.push(+num);
+          else if (sym === '*')
+            numStack.push(numStack.pop() * num);
+          else
+            numStack.push(~~(numStack.pop() / num));
+          num = 0;
+          sym = item;
+        } else {
+          num = num * 10 + (+item);
+        }
+      }
+      var ans = 0;
+      numStack.forEach(function (item) {
+        ans += item;
+      });
+      return ans;
+    };
+
+    // 方法2：栈 官解
+    // 时间复杂度 O(n) 空间复杂度 O(n)
+    var calculate = function (s) {
+      s = s.trim();
+      const stack = new Array();
+      let preSign = '+';
+      let num = 0;
+      const n = s.length;
+      for (let i = 0; i < n; ++i) {
+        if (!isNaN(Number(s[i])) && s[i] !== ' ') {
+          num = num * 10 + s[i].charCodeAt() - '0'.charCodeAt();
+        }
+        if (isNaN(Number(s[i])) || i === n - 1) {
+          switch (preSign) {
+            case '+':
+              stack.push(num);
+              break;
+            case '-':
+              stack.push(-num);
+              break;
+            case '*':
+              stack.push(stack.pop() * num);
+              break;
+            default:
+              stack.push(stack.pop() / num | 0);
+          }
+          preSign = s[i];
+          num = 0;
+        }
+      }
+      let ans = 0;
+      while (stack.length) {
+        ans += stack.pop();
+      }
+      return ans;
+    };
+
+    // test
+    let s = " 3+5 / 2 "
+    console.log(calculate(s))
+  </script>
 </body>
+
 </html>
