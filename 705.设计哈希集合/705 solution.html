@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法一：链地址法
+        // 时间复杂度：O(n/b)。其中 n为哈希表中的元素数量，b 为链表的数量。假设哈希值是均匀分布的，则每个链表大概长度为 n/b
+        // 空间复杂度：O(n+b)
+
+        //设哈希表的大小为 base，则可以设计一个简单的哈希函数：hash(x)=x mod base。
+        // 我们开辟一个大小为 base 的数组，数组的每个位置是一个链表。当计算出哈希值之后，就插入到对应位置的链表当中。由于我们使用整数除法作为哈希函数，为了尽可能避免冲突，应当将 base 取为一个质数。在这里，我们取 base=769。
+        var MyHashSet = function () {
+            this.BASE = 769;
+            this.data = new Array(this.BASE).fill(0).map(() => new Array());
+        };
+
+        MyHashSet.prototype.add = function (key) {
+            const h = this.hash(key);
+            for (const element of this.data[h]) {
+                if (element === key) {
+                    return;
+                }
+            }
+            this.data[h].push(key);
+        };
+
+        MyHashSet.prototype.remove = function (key) {
+            const h = this.hash(key);
+            const it = this.data[h];
+            for (let i = 0; i < it.length; ++i) {
+                if (it[i] === key) {
+                    it.splice(i, 1);
+                    return;
+                }
+            }
+        };
+
+        MyHashSet.prototype.contains = function (key) {
+            const h = this.hash(key);
+            for (const element of this.data[h]) {
+                if (element === key) {
+                    return true;
+                }
+            }
+            return false;
+        };
+
+        MyHashSet.prototype.hash = function (key) {
+            return key % this.BASE;
+        }
+    </script>
+</body>
+
+</html>
