@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法1：栈
+        // 时间复杂度 O(n) 空间复杂度O(n)
+        var isValidSerialization = function (preorder) {
+            const n = preorder.length;
+            let i = 0;
+            const stack = [1];
+            while (i < n) {
+                if (!stack.length) {
+                    return false;
+                }
+                if (preorder[i] === ',') {
+                    ++i;
+                } else if (preorder[i] === '#') {
+                    stack[stack.length - 1]--;
+                    if (stack[stack.length - 1] === 0) {
+                        stack.pop();
+                    }
+                    ++i;
+                } else {
+                    // 读一个数字
+                    while (i < n && preorder[i] !== ',') {
+                        ++i;
+                    }
+                    stack[stack.length - 1]--;
+                    if (stack[stack.length - 1] === 0) {
+                        stack.pop();
+                    }
+                    stack.push(2);
+                }
+            }
+            return stack.length === 0;
+        };
+
+        // 方法2：计数
+        // 时间复杂度 O(n) 空间复杂度O(1)
+        var isValidSerialization = function (preorder) {
+            const n = preorder.length;
+            let i = 0;
+            let slots = 1;
+            while (i < n) {
+                if (slots === 0) {
+                    return false;
+                }
+                if (preorder[i] === ',') {
+                    ++i;
+                } else if (preorder[i] === '#') {
+                    --slots;
+                    ++i;
+                } else {
+                    // 读一个数字
+                    while (i < n && preorder[i] !== ',') {
+                        ++i;
+                    }
+                    ++slots; // slots = slots - 1 + 2
+                }
+            }
+            return slots === 0;
+        };
+
+        // test
+        let preorder = "9,3,4,#,#,1,#,#,2,#,6,#,#"
+        console.log(isValidSerialization(preorder))
+    </script>
+</body>
+
+</html>
