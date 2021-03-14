@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法一：链地址法
+        // 时间复杂度 O(n/b)
+        // 空间复杂度 O(n+b)
+        var MyHashMap = function () {
+            this.BASE = 769;
+            this.data = new Array(this.BASE).fill(0).map(() => new Array());
+        };
+
+        MyHashMap.prototype.put = function (key, value) {
+            const h = this.hash(key);
+            for (const it of this.data[h]) {
+                if (it[0] === key) {
+                    it[1] = value;
+                    return;
+                }
+            }
+            this.data[h].push([key, value]);
+        };
+
+        MyHashMap.prototype.get = function (key) {
+            const h = this.hash(key);
+            for (const it of this.data[h]) {
+                if (it[0] === key) {
+                    return it[1];
+                }
+            }
+            return -1;
+        };
+
+        MyHashMap.prototype.remove = function (key) {
+            const h = this.hash(key);
+            for (const it of this.data[h]) {
+                if (it[0] === key) {
+                    const idx = this.data[h].indexOf(it);
+                    this.data[h].splice(idx, 1);
+                    return;
+                }
+            }
+        };
+
+        MyHashMap.prototype.hash = function (key) {
+            return key % this.BASE;
+        }
+    </script>
+</body>
+
+</html>
