@@ -1,41 +1,110 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
-  </head>
-  <body>
-    <script>
-      function generateMatrix(n) {
-        // 初始化 n*n 的数组
-        var ans = [],
-          c = 1,
-          j = 0;
-        for (let i = 0; i < n; i++) {
-          ans[i] = [];
-        }
-        while (c <= n * n) {
-          // 按照顺序来处理
-          for (let i = j; i < n - j; i++) {
-            ans[j][i] = c++;
-          }
-          for (let i = j + 1; i < n - j; i++) {
-            ans[i][n - j - 1] = c++;
-          }
-          for (let i = n - j - 2; i >= j; i--) {
-            ans[n - j - 1][i] = c++;
-          }
-          for (let i = n - j - 2; i > j; i--) {
-            ans[i][j] = c++;
-          }
-          j++;
-        }
-        return ans;
-      }
 
-      // test
-      console.log(generateMatrix(2));
-    </script>
-  </body>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    // 方法1：自己写的
+    function generateMatrix(n) {
+      // 初始化 n*n 的数组
+      var ans = [],
+        c = 1,
+        j = 0;
+      for (let i = 0; i < n; i++) {
+        ans[i] = [];
+      }
+      while (c <= n * n) {
+        // 按照顺序来处理
+        for (let i = j; i < n - j; i++) {
+          ans[j][i] = c++;
+        }
+        for (let i = j + 1; i < n - j; i++) {
+          ans[i][n - j - 1] = c++;
+        }
+        for (let i = n - j - 2; i >= j; i--) {
+          ans[n - j - 1][i] = c++;
+        }
+        for (let i = n - j - 2; i > j; i--) {
+          ans[i][j] = c++;
+        }
+        j++;
+      }
+      return ans;
+    }
+
+    // 方法2：模拟
+    // 时间复杂度O(n^2) 空间复杂度 O(1)
+    var generateMatrix = function (n) {
+      const maxNum = n * n;
+      let curNum = 1;
+      const matrix = new Array(n).fill(0).map(() => new Array(n).fill(0));
+      let row = 0,
+        column = 0;
+      const directions = [
+        [0, 1],
+        [1, 0],
+        [0, -1],
+        [-1, 0]
+      ]; // 右下左上
+      let directionIndex = 0;
+      while (curNum <= maxNum) {
+        matrix[row][column] = curNum;
+        curNum++;
+        const nextRow = row + directions[directionIndex][0],
+          nextColumn = column + directions[directionIndex][1];
+        if (nextRow < 0 || nextRow >= n || nextColumn < 0 || nextColumn >= n || matrix[nextRow][nextColumn] !== 0) {
+          directionIndex = (directionIndex + 1) % 4; // 顺时针旋转至下一个方向
+        }
+        row = row + directions[directionIndex][0];
+        column = column + directions[directionIndex][1];
+      }
+      return matrix;
+    };
+
+    // 方法3：按层模拟
+    // 时间复杂度O(n^2) 空间复杂度 O(1)
+    var generateMatrix = function (n) {
+      let num = 1;
+      const matrix = new Array(n).fill(0).map(() => new Array(n).fill(0));
+      let left = 0,
+        right = n - 1,
+        top = 0,
+        bottom = n - 1;
+      while (left <= right && top <= bottom) {
+        for (let column = left; column <= right; column++) {
+          matrix[top][column] = num;
+          num++;
+        }
+        for (let row = top + 1; row <= bottom; row++) {
+          matrix[row][right] = num;
+          num++;
+        }
+        if (left < right && top < bottom) {
+          for (let column = right - 1; column > left; column--) {
+            matrix[bottom][column] = num;
+            num++;
+          }
+          for (let row = bottom; row > top; row--) {
+            matrix[row][left] = num;
+            num++;
+          }
+        }
+        left++;
+        right--;
+        top++;
+        bottom--;
+      }
+      return matrix;
+    };
+
+    // test
+    console.log(generateMatrix(2));
+  </script>
+</body>
+
 </html>
