@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 逆波兰表达式：也叫后缀表达式（将运算符写在操作数之后）
+        // 方法1：栈
+        // 时间复杂度 O(n) 空间复杂度O(n)
+        var evalRPN = function (tokens) {
+            const stack = [];
+            const n = tokens.length;
+            for (let i = 0; i < n; i++) {
+                const token = tokens[i];
+                if (isNumber(token)) {
+                    stack.push(parseInt(token));
+                } else {
+                    const num2 = stack.pop();
+                    const num1 = stack.pop();
+                    if (token === '+') {
+                        stack.push(num1 + num2);
+                    } else if (token === '-') {
+                        stack.push(num1 - num2);
+                    } else if (token === '*') {
+                        stack.push(num1 * num2);
+                    } else if (token === '/') {
+                        stack.push(num1 / num2 > 0 ? Math.floor(num1 / num2) : Math.ceil(num1 / num2));
+                    }
+                }
+            }
+            return stack.pop();
+        };
+
+        const isNumber = (token) => {
+            return !('+' === token || '-' === token || '*' === token || '/' === token);
+        }
+
+        // 方法2：数组模拟栈
+        // 时间复杂度 O(n) 空间复杂度O(n)
+        var evalRPN = function (tokens) {
+            const n = tokens.length;
+            const stack = new Array(Math.floor((n + 1) / 2)).fill(0);
+            let index = -1;
+            for (let i = 0; i < n; i++) {
+                const token = tokens[i];
+                if (token === '+') {
+                    index--;
+                    stack[index] += stack[index + 1];
+                } else if (token === '-') {
+                    index--;
+                    stack[index] -= stack[index + 1];
+                } else if (token === '*') {
+                    index--;
+                    stack[index] *= stack[index + 1];
+                } else if (token === '/') {
+                    index--;
+                    stack[index] = stack[index] / stack[index + 1] > 0 ? Math.floor(stack[index] / stack[index +
+                        1]) : Math.ceil(stack[index] / stack[index + 1]);
+                } else {
+                    index++;
+                    stack[index] = parseInt(token);
+                }
+            }
+            return stack[index];
+        };
+
+        // test
+        let tokens =  ["4","13","5","/","+"];
+        console.log(evalRPN(tokens));
+    </script>
+</body>
+
+</html>
