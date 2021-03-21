@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法1：动态规划
+        // 时间复杂度 O(mn) 空间复杂度 O(mn)
+        var numDistinct = function (s, t) {
+            const m = s.length,
+                n = t.length;
+            if (m < n) {
+                return 0;
+            }
+            const dp = new Array(m + 1).fill(0).map(() => new Array(n + 1).fill(0));
+            for (let i = 0; i <= m; i++) {
+                dp[i][n] = 1;
+            }
+            for (let i = m - 1; i >= 0; i--) {
+                for (let j = n - 1; j >= 0; j--) {
+                    if (s[i] == t[j]) {
+                        dp[i][j] = dp[i + 1][j + 1] + dp[i + 1][j];
+                    } else {
+                        dp[i][j] = dp[i + 1][j];
+                    }
+                }
+            }
+            return dp[0][0];
+        };
+
+        // test 
+        let s = "rabbbit", t = "rabbit";
+        console.log(numDistinct(s, t))
+    </script>
+</body>
+
+</html>
