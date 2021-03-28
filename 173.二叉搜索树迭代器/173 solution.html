@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法1：扁平化
+        // 时间复杂度O(n) 空间复杂度O(n)
+        var BSTIterator = function (root) {
+            this.idx = 0;
+            this.arr = [];
+            this.inorderTraversal(root, this.arr);
+        };
+        BSTIterator.prototype.next = function () {
+            return this.arr[this.idx++];
+        };
+        BSTIterator.prototype.hasNext = function () {
+            return this.idx < this.arr.length;
+        };
+        BSTIterator.prototype.inorderTraversal = function (root, arr) {
+            if (!root) {
+                return;
+            }
+            this.inorderTraversal(root.left, arr);
+            arr.push(root.val);
+            this.inorderTraversal(root.right, arr);
+        };
+
+        // 方法2：迭代
+        // 时间复杂度O(n) 空间复杂度O(n)
+        var BSTIterator = function (root) {
+            this.cur = root;
+            this.stack = [];
+        };
+        BSTIterator.prototype.next = function () {
+            while (this.cur) {
+                this.stack.push(this.cur);
+                this.cur = this.cur.left;
+            }
+            this.cur = this.stack.pop();
+            const ret = this.cur.val;
+            this.cur = this.cur.right;
+            return ret;
+        };
+        BSTIterator.prototype.hasNext = function () {
+            return this.cur !== null || this.stack.length;
+        };
+    </script>
+</body>
+
+</html>
