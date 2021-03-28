@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 将链表每个节点向右移动 K 个位置
+        // 方法一：闭合为环
+        // 时间复杂度O(n) 空间复杂度O(1)
+        var rotateRight = function (head, k) {
+            if (k === 0 || !head || !head.next) {
+                return head;
+            }
+            let n = 1;
+            let cur = head;
+            while (cur.next) {
+                cur = cur.next;
+                n++;
+            }
+            let add = n - k % n;
+            if (add === n) {
+                return head;
+            }
+            cur.next = head;
+            while (add) {
+                cur = cur.next;
+                add--;
+            }
+            const ret = cur.next;
+            cur.next = null;
+            return ret;
+        };
+    </script>
+</body>
+
+</html>

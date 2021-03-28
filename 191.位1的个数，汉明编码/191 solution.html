@@ -1,57 +1,82 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
 </head>
+
 <body>
-<script>
-// Source : https://leetcode.com/problems/number-of-1-bits/
-// Author : 悬笔e绝
-// Date   : 2019-10-01
+  <script>
+    // Source : https://leetcode.com/problems/number-of-1-bits/
+    // Author : 悬笔e绝
+    // Date   : 2019-10-01
 
-/**
- * @param {number} n - a positive integer
- * @return {number}
- */
+    /**
+     * @param {number} n - a positive integer
+     * @return {number}
+     */
 
-// 方法1
-var hammingWeight1 = function(n) {
-  var ans = 0;
-  while(n) {
-    if (n & 1) ans ++;
-    n /= 2;
-  }
-  return ans;
-};
+    // 方法1
+    var hammingWeight = function (n) {
+      let ans = 0;
+      while (n) {
+        if (n & 1) ans++;
+        n /= 2;
+      }
+      return ans;
+    };
 
-// 方法2
-const hammingWeight2 = (n) => {
-  let res = 0;
-  while(n !== 0) {
-    res += n&1;
-    n >>>= 1;
-  }
-  return res;
-}
+    // 方法2
+    var hammingWeight = (n) => {
+      let res = 0;
+      while (n !== 0) {
+        res += n & 1;
+        n >>>= 1;
+      }
+      return res;
+    }
 
-// 方法3
-const hammingWeight3 = (n) => {
-  if (n < 0) {
-    n = n >>> 0; // 能够取到负数的补码
-  }
-  let arr = n.toString(2).split('');
-  return arr.reduce((a,b) => {
-    return b === "1" ? a + 1 : a;
-  }, 0);
-}
+    // 方法3
+    var hammingWeight = (n) => {
+      if (n < 0) {
+        n = n >>> 0; // 能够取到负数的补码
+      }
+      let arr = n.toString(2).split('');
+      return arr.reduce((a, b) => {
+        return b === "1" ? a + 1 : a;
+      }, 0);
+    }
 
-// test
-console.log(hammingWeight1(88));
-console.log(hammingWeight2(88));
-console.log(hammingWeight3(88));
-</script>
+    // 方法4：循环检查二进制位
+    // 时间复杂度 O(K),  k 是 int 型的二进制位数，k=32
+    // 空间复杂度O(1)
+    var hammingWeight = function (n) {
+      let ret = 0;
+      for (let i = 0; i < 32; i++) {
+        if ((n & (1 << i)) !== 0) {
+          ret++;
+        }
+      }
+      return ret;
+    };
+
+    // 方法5：位运算优化
+    // 时间复杂度 O(logn) 空间复杂度O(1)
+    var hammingWeight = function (n) {
+      let ret = 0;
+      while (n) {
+        n &= n - 1;
+        ret++;
+      }
+      return ret;
+    };
+
+    // test
+    console.log(hammingWeight(88));
+  </script>
 </body>
+
 </html>

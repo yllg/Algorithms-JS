@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法1：深度优先搜索
+        // 时间复杂度 O(n) 空间复杂度O(n)
+        var NestedIterator = function (nestedList) {
+            vals = [];
+            const dfs = (nestedList) => {
+                for (const nest of nestedList) {
+                    if (nest.isInteger()) {
+                        vals.push(nest.getInteger());
+                    } else {
+                        dfs(nest.getList());
+                    }
+                }
+            }
+            dfs(nestedList);
+        };
+
+        NestedIterator.prototype.hasNext = function () {
+            return vals.length > 0;
+        };
+
+        NestedIterator.prototype.next = function () {
+            const val = vals[0];
+            vals = vals.slice(1);
+            return val;
+        };
+
+        // 方法2：栈
+        // 时间复杂度 O(1) 空间复杂度O(n)
+        var NestedIterator = function (nestedList) {
+            this.stack = nestedList;
+        };
+
+        NestedIterator.prototype.hasNext = function () {
+            while (this.stack.length !== 0) {
+                if (this.stack[0].isInteger()) {
+                    return true;
+                } else {
+                    let cur = this.stack[0].getList();
+                    this.stack.shift();
+                    this.stack.unshift(...cur);
+                }
+            }
+        };
+
+        NestedIterator.prototype.next = function () {
+            return this.stack.shift().getInteger();
+        };
+    </script>
+</body>
+
+</html>
