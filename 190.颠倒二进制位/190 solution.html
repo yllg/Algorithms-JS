@@ -1,39 +1,66 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
 </head>
+
 <body>
-<script>
-// Source : https://leetcode.com/problems/reverse-bits/
-// Author : 悬笔e绝
-// Date   : 2019-09-26
+  <script>
+    // Source : https://leetcode.com/problems/reverse-bits/
+    // Author : 悬笔e绝
+    // Date   : 2019-09-26
 
-/**
- * @param {number} n - a positive integer
- * @return {number} - a positive integer
- */
+    // 方法1：常规法
+    var sum = [];
+    sum[0] = 1;
+    for (var i = 1; i <= 32; i++)
+      sum[i] = 2 * sum[i - 1];
 
-var sum = [];
-sum[0] = 1;
-for(var i = 1; i <= 32; i++)
-  sum[i] = 2 * sum[i - 1];
+    var reverseBits = function (n) {
+      var tmp = n.toString(2);
+      for (var i = tmp.length; i <= 31; i++)
+        tmp = '0' + tmp;
+      var ans = 0;
+      for (var i = 0, len = tmp.length; i < len; i++) {
+        if (tmp[i] === '1')
+          ans += sum[i];
+      }
+      return ans;
+    };
 
-var reverseBits = function(n) {
-  var tmp = n.toString(2);
-  for(var i = tmp.length; i <= 31; i++) 
-    tmp = '0' + tmp;
-  var ans = 0;
-  for(var i = 0, len = tmp.length; i < len; i++) {
-    if (tmp[i] === '1')
-      ans += sum[i];
-  }
-  return ans;
-};
+    // 方法2：逐位颠倒
+    // 时间复杂度O(logn) 空间复杂度O(1)
+    var reverseBits = function (n) {
+      let rev = 0;
+      for (let i = 0; i < 32 && n > 0; ++i) {
+        rev |= (n & 1) << (31 - i);
+        n >>>= 1;
+      }
+      return rev >>> 0;
+    };
 
-</script>
+    // 方法3：位运算分治
+    // 时间复杂度O(1) 空间复杂度O(1)
+    var reverseBits = function (n) {
+      const M1 = 0x55555555; // 01010101010101010101010101010101
+      const M2 = 0x33333333; // 00110011001100110011001100110011
+      const M4 = 0x0f0f0f0f; // 00001111000011110000111100001111
+      const M8 = 0x00ff00ff; // 00000000111111110000000011111111
+      n = n >>> 1 & M1 | (n & M1) << 1;
+      n = n >>> 2 & M2 | (n & M2) << 2;
+      n = n >>> 4 & M4 | (n & M4) << 4;
+      n = n >>> 8 & M8 | (n & M8) << 8;
+      return (n >>> 16 | n << 16) >>> 0;
+    };
+
+    // test
+    let n = "43261596";
+    console.log(reverseBits(n))
+  </script>
 </body>
+
 </html>
