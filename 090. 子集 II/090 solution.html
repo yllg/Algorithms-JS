@@ -14,10 +14,7 @@
         // Author : 悬笔e绝
         // Date   : 2018-12-06
 
-        /**
-         * @param {number[]} nums
-         * @return {number[][]}
-         */
+        // 方法1：常规法 dfs
         var ans, res, len;
         var hashAns;
 
@@ -25,38 +22,81 @@
             var tmp = res.map(function (item) {
                 return item;
             });
-
             if (!hashAns[tmp.toString()]) {
                 hashAns[tmp.toString()] = true;
                 ans.push(tmp);
             }
-
             for (var i = index; i < len; i++) {
                 res.push(nums[i]);
                 dfs(i + 1, nums);
                 res.pop();
             }
         }
-
         var subsetsWithDup = function (nums) {
             nums.sort(function (a, b) {
                 return a - b;
             });
-
             ans = [],
-            res = [],
-            len = nums.length,
-            hashAns = [];
+                res = [],
+                len = nums.length,
+                hashAns = [];
             // 递归，从第一个元素开始
             dfs(0, nums);
-
             return ans;
         };
-        
-        // 测试
-        var test = [1,2,2];
-        console.log(subsetsWithDup(test));
 
+        // 方法2： 迭代法实现子集枚举
+        // 时间复杂度：O(n×2^n) 空间复杂度 O(n)
+        var subsetsWithDup = function (nums) {
+            nums.sort((a, b) => a - b);
+            let t = [],
+                ans = [];
+            const n = nums.length;
+            for (let mask = 0; mask < (1 << n); ++mask) {
+                t = [];
+                let flag = true;
+                for (let i = 0; i < n; ++i) {
+                    if ((mask & (1 << i)) != 0) {
+                        if (i > 0 && (mask >> (i - 1) & 1) == 0 && nums[i] == nums[i - 1]) {
+                            flag = false;
+                            break;
+                        }
+                        t.push(nums[i]);
+                    }
+                }
+                if (flag) {
+                    ans.push(t.slice());
+                }
+            }
+            return ans;
+        };
+
+        // 方法3: 递归法实现子集枚举
+        // 时间复杂度：O(n×2^n) 空间复杂度 O(n)
+        var subsetsWithDup = function (nums) {
+            nums.sort((a, b) => a - b);
+            let t = [],
+                ans = [];
+            const dfs = (choosePre, cur, nums) => {
+                if (cur === nums.length) {
+                    ans.push(t.slice());
+                    return;
+                }
+                dfs(false, cur + 1, nums);
+                if (!choosePre && cur > 0 && nums[cur - 1] === nums[cur]) {
+                    return;
+                }
+                t.push(nums[cur]);
+                dfs(true, cur + 1, nums);
+                t = t.slice(0, t.length - 1);
+            }
+            dfs(false, 0, nums);
+            return ans;
+        };
+
+        // 测试
+        var test = [1, 2, 2];
+        console.log(subsetsWithDup(test));
     </script>
 </body>
 
