@@ -14,13 +14,11 @@
         // Author : 悬笔e绝
         // Date   : 2018-12-02
 
-        /**
-         * @param {ListNode} head
-         * @return {ListNode}
-         */
+        // 方法1 常规法
         var deleteDuplicates = function (head) {
-            var ans = []  // 存放结果
-                , hash = [];  // 计数
+            var ans = [] // 存放结果
+                ,
+                hash = []; // 计数
 
             while (head) {
                 ans.push(new ListNode(head.val));
@@ -36,7 +34,7 @@
                 if (hash[ans[i].val] > 1)
                     ans.splice(i, 1);
             }
-            
+
             if (!ans.length)
                 return null;
             // 过滤后的节点连起来
@@ -45,7 +43,28 @@
             // 返回首节点
             return ans[0];
         };
-        
+
+        // 方法2：一次遍历
+        // 时间复杂度O(n) 空间复杂度O(1)
+        var deleteDuplicates = function (head) {
+            if (!head) {
+                return head;
+            }
+            const dummy = new ListNode(0, head);
+            let cur = dummy;
+            while (cur.next && cur.next.next) {
+                if (cur.next.val === cur.next.next.val) {
+                    const x = cur.next.val;
+                    while (cur.next && cur.next.val === x) {
+                        cur.next = cur.next.next;
+                    }
+                } else {
+                    cur = cur.next;
+                }
+            }
+            return dummy.next;
+        };
+
         // 定义一个链表结构
         function ListNode(val) {
             this.val = val;
