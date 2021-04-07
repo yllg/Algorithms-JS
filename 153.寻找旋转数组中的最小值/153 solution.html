@@ -1,49 +1,47 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    <title>Document</title>
-  </head>
-  <body>
-    <script>
-      // Source : https://leetcode.com/problems/find-minimum-in-rotated-sorted-array/
-      // Author : 悬笔e绝
-      // Date   : 2019-08-05
 
-      /**
-       * @param {number[]} nums
-       * @return {number}
-       */
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+  <title>Document</title>
+</head>
 
-      // 没有重复元素
+<body>
+  <script>
+    // Source : https://leetcode.com/problems/find-minimum-in-rotated-sorted-array/
+    // Author : 悬笔e绝
+    // Date   : 2019-08-05
 
-      // 解法1：借助JS的函数
-      var findMin1 = function (nums) {
-        return Math.min.apply(null, nums);
-      };
+    // 没有重复元素
 
-      // 解法2：二分查找
-      // 时间复杂度 O(logn) 空间 O(1)
-      var findMin2 = function (nums) {
-        var left = 0;
-        var right = nums.length - 1;
-        while (left < right) {
-          var mid = (left + right) >> 1;
-          if (nums[mid] > nums[right]) {
-            left = mid + 1;
-          } else {
-            right = mid;
-          }
+    // 解法1：借助JS的函数
+    var findMin = function (nums) {
+      return Math.min.apply(null, nums);
+    };
+
+    // 解法2：二分查找
+    // 时间复杂度 O(logn) 空间 O(1)
+    var findMin = function (nums) {
+      var left = 0;
+      var right = nums.length - 1;
+      while (left < right) {
+        var mid = (left + right) >> 1;
+        if (nums[mid] > nums[right]) {
+          left = mid + 1;
+        } else {
+          right = mid;
         }
-        return nums[left];
-      };
+      }
+      return nums[left];
+    };
 
-      //测试
-      const nums = [4, 5, 6, 7, 0, 1, 2];
-      console.log(findMin1(nums));
-      console.log(findMin2(nums));
-    </script>
-  </body>
+    //测试
+    const nums = [4, 5, 6, 7, 0, 1, 2];
+    console.log(findMin(nums));
+    console.log(findMin(nums));
+  </script>
+</body>
+
 </html>
