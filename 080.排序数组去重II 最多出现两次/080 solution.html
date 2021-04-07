@@ -10,33 +10,42 @@
 
 <body>
     <script>
-        // Source : https://leetcode.com/problems/remove-duplicates-from-sorted-array-ii/
-        // Author : 悬笔e绝 
-        // Date   : 2018-04-09
-
-        /**
-         * @param {number[]} nums
-         * @return {number}
-         */
-
+        // 方法1：哈希表
         var removeDuplicates = function (nums) {
             var ans = 0,
                 hash = []; //存字符出现的次数
-
             for (var i = nums.length; i--;) {
                 if (!hash[nums[i]])
                     hash[nums[i]] = 1, ans++;
                 else if (hash[nums[i]] === 1)
                     hash[nums[i]]++, ans++;
-                else 
+                else
                     nums.splice(i, 1); //大于2次就删掉这个
             }
-
             return ans;
         };
 
+        // 方法2：双指针
+        // 时间复杂度O(n) 空间复杂度O(1)
+        var removeDuplicates = function (nums) {
+            const n = nums.length;
+            if (n <= 2) {
+                return n;
+            }
+            let slow = 2,
+                fast = 2;
+            while (fast < n) {
+                if (nums[slow - 2] != nums[fast]) {
+                    nums[slow] = nums[fast];
+                    ++slow;
+                }
+                ++fast;
+            }
+            return slow;
+        };
+
         //测试
-        var nums = [1,1,1,2,2,3];
+        var nums = [1, 1, 1, 2, 2, 3];
         console.log(removeDuplicates(nums));
     </script>
 </body>
