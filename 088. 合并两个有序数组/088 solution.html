@@ -1,82 +1,136 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    <title>088. 合并两个有序数组</title>
-  </head>
 
-  <body>
-    <script>
-      // Source : https://leetcode.com/problems/merge-sorted-array/
-      // Author : 悬笔e绝
-      // Date   : 2018-12-04
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+  <title>088. 合并两个有序数组</title>
+</head>
 
-      /**
-       * @param {number[]} nums1
-       * @param {number} m
-       * @param {number[]} nums2
-       * @param {number} n
-       * @return {void} Do not return anything, modify nums1 in-place instead.
-       */
+<body>
+  <script>
+    // Source : https://leetcode.com/problems/merge-sorted-array/
+    // Author : 悬笔e绝
+    // Date   : 2018-12-04
 
-      //解法1：利用数组的sort 本质是快排
-      // 有序和无需都可以
-      var merge = function (nums1, m, nums2, n) {
-        (nums1.length = m), (nums2.length = n);
-        // 效果 nums1.push(nums2)
-        Array.prototype.push.apply(nums1, nums2);
-        nums1.sort(function (a, b) {
-          return a - b;
-        });
-      };
+    /**
+     * @param {number[]} nums1
+     * @param {number} m
+     * @param {number[]} nums2
+     * @param {number} n
+     * @return {void} Do not return anything, modify nums1 in-place instead.
+     */
 
-      // 解法2：三指针
-      // 输入的数组必须是有序才行
-      // 思路
-      // 1.合并两个有序数组，就是归并排序的一步；
-      // 2.归并排序会开辟一个长度为nums1 + nums2的空间，用两个指针遍历两个数组，把小的放到新数组
-      // 3.这里nums1就是我们新开辟的新数组，我们沿用规定排序的思路，用三个指针
-      // 技巧：
-      // 从后遍历，先比较较大的数，把大的数据放到数组nums1的后面
-      // 如果从小的比起，需要把nums1中所有的数往后挪一位，时间复杂度高
-      const merge2 = (nums1, m, nums2, n) => {
-        let index1 = m - 1;
-        let index2 = n - 1;
-        let tail = m + n - 1;
-        while (index2 >= 0) {
-          if (nums1[index1] > nums2[index2]) {
-            nums1[tail] = nums1[index1];
-            index1--;
-            tail--;
-          } else {
-            nums1[tail] = nums2[index2];
-            index2--;
-            tail--;
-          }
+    //解法1-1：利用数组的sort 本质是快排
+    // 有序和无需都可以
+    var merge = function (nums1, m, nums2, n) {
+      (nums1.length = m), (nums2.length = n);
+      // 效果 nums1.push(nums2)
+      Array.prototype.push.apply(nums1, nums2);
+      nums1.sort(function (a, b) {
+        return a - b;
+      });
+    };
+
+    //解法1-2：直接合并后排序
+    // 时间复杂度 O((m+n)log(m+n)) 空间复杂度O(log(m+n))
+    var merge = function (nums1, m, nums2, n) {
+      nums1.splice(m, nums1.length - m, ...nums2);
+      nums1.sort((a, b) => a - b);
+    };
+
+    // 方法2：双指针
+    // 时间复杂度O(m+n) 空间复杂度O(m+n)
+    var merge = function (nums1, m, nums2, n) {
+      let p1 = 0,
+        p2 = 0;
+      const sorted = new Array(m + n).fill(0);
+      var cur;
+      while (p1 < m || p2 < n) {
+        if (p1 === m) {
+          cur = nums2[p2++];
+        } else if (p2 === n) {
+          cur = nums1[p1++];
+        } else if (nums1[p1] < nums2[p2]) {
+          cur = nums1[p1++];
+        } else {
+          cur = nums2[p2++];
         }
-        return nums1;
-      };
+        sorted[p1 + p2 - 1] = cur;
+      }
+      for (let i = 0; i != m + n; ++i) {
+        nums1[i] = sorted[i];
+      }
+    };
 
-      // 测试
-      var nums1 = [1, 2, 3, 0, 0, 0];
-      var nums2 = [2, 5, 6];
-      merge(nums1, 3, nums2, 3);
-      console.log(nums1);
-      var nums3 = [1, 2, 3, 0, 0, 0];
-      var nums4 = [2, 5, 6];
-      merge2(nums3, 3, nums4, 3);
-      console.log(nums3);
-      var nums5 = [1, 2, 23, 0, 0, 0];
-      var nums6 = [1, 3, 5];
-      merge2(nums5, 3, nums6, 3);
-      console.log(nums5);
-      var nums7 = [1, 23, 2, 0, 0, 0];
-      var nums8 = [5, 3, 1];
-      // 输入乱序，第二种方法不适用
-      merge2(nums7, 3, nums8, 3);
-      console.log(nums7);
-    </script>
-  </body>
+    // 方法3：逆向双指针
+    // 时间复杂度O(m+n) 空间复杂度O(1)
+    var merge = function (nums1, m, nums2, n) {
+      let p1 = m - 1,
+        p2 = n - 1;
+      let tail = m + n - 1;
+      var cur;
+      while (p1 >= 0 || p2 >= 0) {
+        if (p1 === -1) {
+          cur = nums2[p2--];
+        } else if (p2 === -1) {
+          cur = nums1[p1--];
+        } else if (nums1[p1] > nums2[p2]) {
+          cur = nums1[p1--];
+        } else {
+          cur = nums2[p2--];
+        }
+        nums1[tail--] = cur;
+      }
+    };
+
+    // 解法4：三指针
+    // 输入的数组必须是有序才行
+    // 思路
+    // 1.合并两个有序数组，就是归并排序的一步；
+    // 2.归并排序会开辟一个长度为nums1 + nums2的空间，用两个指针遍历两个数组，把小的放到新数组
+    // 3.这里nums1就是我们新开辟的新数组，我们沿用规定排序的思路，用三个指针
+    // 技巧：
+    // 从后遍历，先比较较大的数，把大的数据放到数组nums1的后面
+    // 如果从小的比起，需要把nums1中所有的数往后挪一位，时间复杂度高
+    const merge = (nums1, m, nums2, n) => {
+      let index1 = m - 1;
+      let index2 = n - 1;
+      let tail = m + n - 1;
+      while (index2 >= 0) {
+        if (nums1[index1] > nums2[index2]) {
+          nums1[tail] = nums1[index1];
+          index1--;
+          tail--;
+        } else {
+          nums1[tail] = nums2[index2];
+          index2--;
+          tail--;
+        }
+      }
+      return nums1;
+    };
+
+    // 测试
+    var nums1 = [1, 2, 3, 0, 0, 0];
+    var nums2 = [2, 5, 6];
+    merge(nums1, 3, nums2, 3);
+    console.log(nums1);
+    var nums3 = [1, 2, 3, 0, 0, 0];
+    var nums4 = [2, 5, 6];
+    merge(nums3, 3, nums4, 3);
+    console.log(nums3);
+    var nums5 = [1, 2, 23, 0, 0, 0];
+    var nums6 = [1, 3, 5];
+    merge(nums5, 3, nums6, 3);
+    console.log(nums5);
+    var nums7 = [1, 23, 2, 0, 0, 0];
+    var nums8 = [5, 3, 1];
+    // 输入乱序，第二种方法不适用
+    merge(nums7, 3, nums8, 3);
+    console.log(nums7);
+  </script>
+</body>
+
 </html>
