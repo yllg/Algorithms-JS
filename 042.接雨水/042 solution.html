@@ -1,64 +1,86 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
-  </head>
-  <body>
-    <script>
-      // 解法1： 单调递减栈
-      var trap1 = function (height) {
-        let ans = 0,
-          current = 0,
-          stack = [];
-        while (current < height.length) {
-          while (
-            stack.length &&
-            height[current] > height[stack[stack.length - 1]]
-          ) {
-            let top = stack.pop();
-            if (!stack.length) {
-              break;
-            }
-            let distance = current - stack[stack.length - 1] - 1;
-            let bounded_height =
-              Math.min(height[current], height[stack[stack.length - 1]]) -
-              height[top];
-            ans += distance * bounded_height;
-          }
-          stack.push(current++);
-        }
-        return ans;
-      };
 
-      // 解法2： 双指针
-      var trap2 = function (height) {
-        let left = 0,
-          right = height.length - 1;
-        let ans = 0;
-        let left_max = 0,
-          right_max = 0;
-        while (left < right) {
-          if (height[left] < height[right]) {
-            height[left] >= left_max
-              ? (left_max = height[left])
-              : (ans += left_max - height[left]);
-            ++left;
-          } else {
-            height[right] >= right_max
-              ? (right_max = height[right])
-              : (ans += right_max - height[right]);
-            --right;
-          }
-        }
-        return ans;
-      };
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Document</title>
+</head>
 
-      // test
-      let height = [0, 1, 0, 2, 1, 0, 1, 3, 2, 1, 2, 1];
-      console.log(trap1(height));
-      console.log(trap2(height));
-    </script>
-  </body>
+<body>
+  <script>
+    // 方法1：动态规划
+    // 时间复杂度O(n) 空间复杂度O(n)
+    var trap = function (height) {
+      const n = height.length;
+      if (n == 0) {
+        return 0;
+      }
+      const leftMax = new Array(n).fill(0);
+      leftMax[0] = height[0];
+      for (let i = 1; i < n; ++i) {
+        leftMax[i] = Math.max(leftMax[i - 1], height[i]);
+      }
+      const rightMax = new Array(n).fill(0);
+      rightMax[n - 1] = height[n - 1];
+      for (let i = n - 2; i >= 0; --i) {
+        rightMax[i] = Math.max(rightMax[i + 1], height[i]);
+      }
+      let ans = 0;
+      for (let i = 0; i < n; ++i) {
+        ans += Math.min(leftMax[i], rightMax[i]) - height[i];
+      }
+      return ans;
+    };
+
+    // 解法2： 单调递减栈
+    // 时间复杂度O(n) 空间复杂度O(n)
+    var trap = function (height) {
+      let ans = 0;
+      const stack = [];
+      const n = height.length;
+      for (let i = 0; i < n; ++i) {
+        while (stack.length && height[i] > height[stack[stack.length - 1]]) {
+          const top = stack.pop();
+          if (!stack.length) {
+            break;
+          }
+          const left = stack[stack.length - 1];
+          const currWidth = i - left - 1;
+          const currHeight = Math.min(height[left], height[i]) - height[top];
+          ans += currWidth * currHeight;
+        }
+        stack.push(i);
+      }
+      return ans;
+    };
+
+    // 解法3： 双指针
+    // 时间复杂度O(n) 空间复杂度O(1)
+    var trap = function (height) {
+      let ans = 0;
+      let left = 0,
+        right = height.length - 1;
+      let leftMax = 0,
+        rightMax = 0;
+      while (left < right) {
+        leftMax = Math.max(leftMax, height[left]);
+        rightMax = Math.max(rightMax, height[right]);
+        if (height[left] < height[right]) {
+          ans += leftMax - height[left];
+          ++left;
+        } else {
+          ans += rightMax - height[right];
+          --right;
+        }
+      }
+      return ans;
+    };
+
+    // test
+    let height = [0, 1, 0, 2, 1, 0, 1, 3, 2, 1, 2, 1];
+    console.log(trap(height));
+  </script>
+</body>
+
 </html>
