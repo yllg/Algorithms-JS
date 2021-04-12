@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 因为是二叉搜索树，所以答案一定为相邻两个元素之差的最小值
+        // 方法1：中序遍历
+        // 时间复杂度O(n) 空间复杂度O(n)
+        var minDiffInBST = function (root) {
+            let ans = Number.MAX_SAFE_INTEGER,
+                pre = -1;
+            const dfs = (root) => {
+                if (root === null) {
+                    return;
+                }
+                dfs(root.left);
+                if (pre == -1) {
+                    pre = root.val;
+                } else {
+                    ans = Math.min(ans, root.val - pre);
+                    pre = root.val;
+                }
+                dfs(root.right);
+            }
+            dfs(root);
+            return ans;
+        };
+    </script>
+</body>
+
+</html>
