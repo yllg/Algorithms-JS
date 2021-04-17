@@ -1,31 +1,59 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
 </head>
+
 <body>
-<script>
-// Source : https://leetcode.com/problems/contains-duplicate-iii/
-// Author : 悬笔e绝
-// Date   : 2019-12-12
+  <script>
+    // Source : https://leetcode.com/problems/contains-duplicate-iii/
+    // Author : 悬笔e绝
+    // Date   : 2019-12-12
 
-/**
- * @param {number[]} nums
- * @param {number} k
- * @param {number} t
- * @return {boolean}
- */
-var containsNearbyAlmostDuplicate = function(nums, k, t) {
-  var len = nums.length;
-  for (var i = 0; i < len; i++)
-    for (var j = i + 1; j <= Math.min(i + k, len - 1); j++)
-      if (Math.abs(nums[i] - nums[j]) <= t) return true;
-  return false;
-};
+    // 索引差在k之间，对应值之差小于t
 
-</script>
+    // 方法1：遍历
+    var containsNearbyAlmostDuplicate = function (nums, k, t) {
+      var len = nums.length;
+      for (var i = 0; i < len; i++)
+        for (var j = i + 1; j <= Math.min(i + k, len - 1); j++)
+          if (Math.abs(nums[i] - nums[j]) <= t) return true;
+      return false;
+    };
+
+    // 方法2：桶排序
+    // 时间复杂度O(n) 空间复杂度O(min(n, k))  n是数组长度
+    var containsNearbyAlmostDuplicate = function (nums, k, t) {
+      const n = nums.length;
+      const mp = new Map();
+      for (let i = 0; i < n; ++i) {
+        const x = nums[i];
+        const id = getID(x, t + 1);
+        if (mp.has(id)) {
+          return true;
+        }
+        if (mp.has(id - 1) && Math.abs(x - mp.get(id - 1)) <= t) {
+          return true;
+        }
+        if (mp.has(id + 1) && Math.abs(x - mp.get(id + 1)) <= t) {
+          return true;
+        }
+        mp.set(id, x);
+        if (i >= k) {
+          mp.delete(getID(nums[i - k], t + 1));
+        }
+      }
+      return false;
+    };
+
+    const getID = (x, w) => {
+      return x < 0 ? Math.floor((x + 1) / w) - 1 : Math.floor(x / w);
+    }
+  </script>
 </body>
+
 </html>
