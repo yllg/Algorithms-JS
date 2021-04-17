@@ -1,42 +1,58 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
 </head>
+
 <body>
-<script>
-// Source : https://leetcode.com/problems/largest-number/
-// Author : 悬笔e绝
-// Date   : 2019-09-15
+  <script>
+    // 方法1：常规法，先排序再组合
+    var largestNumber = function (nums) {
+      // 按照最大的数 排序
+      nums.sort(function (a, b) {
+        return (b + '' + a) - (a + '' + b);
+      });
 
-/**
- * @param {number[]} nums
- * @return {string}
- */
-var largestNumber = function(nums) {
-  // 按照最大的数 排序
-  nums.sort(function(a, b) {
-    return (b + '' + a) - (a + '' + b);
-  });
+      var ans = nums.join('');
+      // 数字开头不能是0
+      for (var i = 0; i < ans.length - 1; i++) {
+        if (ans[i] !== '0')
+          break;
+      }
+      return ans.substring(i);
+    };
 
-  var ans = nums.join('');
-  // 数字开头不能是0
-  for (var i = 0; i < ans.length - 1; i++) {
-    if (ans[i] !== '0')
-      break;
-  }
-  return ans.substring(i);
-};
+    // 方法2：排序
+    // 时间复杂度：O(nlognlogm)，其中 n 是给定序列的长度，m 是 3232 位整数的最大值
+    // 空间复杂度:O（logn）
+    var largestNumber = function (nums) {
+      nums.sort((x, y) => {
+        let sx = 10,
+          sy = 10;
+        while (sx <= x) {
+          sx *= 10;
+        }
+        while (sy <= y) {
+          sy *= 10;
+        }
+        return '' + (sx * y + x) - ('' + (sy * x + y));
+      })
+      if (nums[0] === 0) {
+        return '0';
+      }
+      return nums.join('');
+    };
 
-// 测试
-var nums1 = [10, 2];
-console.log(largestNumber(nums1));
-var nums2 = [3,30,34,5,9];
-console.log(largestNumber(nums2));
-
-</script>
+    // 测试
+    var nums1 = [10, 2];
+    console.log(largestNumber(nums1));
+    var nums2 = [3, 30, 34, 5, 9];
+    console.log(largestNumber(nums2));
+  </script>
 </body>
+
 </html>
