@@ -10,26 +10,68 @@
 
 <body>
     <script>
-        // Source : https://leetcode.com/problems/implement-strstr/
-        // Author : 悬笔e绝
-        // Date   : 2018-03-24
-
-        /**
-         * @param {string} haystack
-         * @param {string} needle
-         * @return {number}
-         */
-
-        //使用search函数就好了。。
+        //方法1： 使用search 内置函数
         var strStr = function (haystack, needle) {
             return haystack.search(needle);
         };
 
+        // 方法2：暴力匹配
+        var strStr = function (haystack, needle) {
+            const n = haystack.length,
+                m = needle.length;
+            for (let i = 0; i + m <= n; i++) {
+                let flag = true;
+                for (let j = 0; j < m; j++) {
+                    if (haystack[i + j] != needle[j]) {
+                        flag = false;
+                        break;
+                    }
+                }
+                if (flag) {
+                    return i;
+                }
+            }
+            return -1;
+        };
+
+        // 方法3：Knuth-Morris-Pratt 算法，KMP算法
+        var strStr = function (haystack, needle) {
+            const n = haystack.length,
+                m = needle.length;
+            if (m === 0) {
+                return 0;
+            }
+            const pi = new Array(m).fill(0);
+            for (let i = 1, j = 0; i < m; i++) {
+                while (j > 0 && needle[i] !== needle[j]) {
+                    j = pi[j - 1];
+                }
+                if (needle[i] == needle[j]) {
+                    j++;
+                }
+                pi[i] = j;
+            }
+            for (let i = 0, j = 0; i < n; i++) {
+                while (j > 0 && haystack[i] != needle[j]) {
+                    j = pi[j - 1];
+                }
+                if (haystack[i] == needle[j]) {
+                    j++;
+                }
+                if (j === m) {
+                    return i - m + 1;
+                }
+            }
+            return -1;
+        };
+
         //测试
-        var haystack1 = "hello", needle1 = "ll";
-        var haystack2 = "aaaaa", needle2 = "bba";
-        console.log(strStr(haystack1,needle1));
-        console.log(strStr(haystack2,needle2));
+        var haystack1 = "hello",
+            needle1 = "ll";
+        var haystack2 = "aaaaa",
+            needle2 = "bba";
+        console.log(strStr(haystack1, needle1));
+        console.log(strStr(haystack2, needle2));
     </script>
 </body>
 
