@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法1：有序集合
+        // 参考最大子矩阵题解-这要从最大子序和说起，由简到繁的思路，把二维的变成一维，再求解
+        /**
+         * @param {number[][]} matrix
+         * @param {number} k
+         * @return {number}
+         */
+        var maxSumSubmatrix = function (matrix, max) {
+            let row = matrix.length // 行
+            let column = matrix[0].length // 列
+            let b = Array.from({
+                length: column
+            }, () => 0) // 存储每列之和
+            let res = -Number.MAX_VALUE
+            for (let i = 0; i < row; i++) { // 遍历开始行
+                for (let t = 0; t < b.length; t++) b[t] = 0 // 开始行改变之后需要把每列之和置零
+                for (let j = i; j < row; j++) {
+                    for (let k = 0; k < column; k++) b[k] += matrix[j][k]
+                    // 把所有可能遍历出来
+                    for (let m = 0; m < b.length; m++) {
+                        let sum = 0
+                        for (let n = m; n < b.length; n++) {
+                            sum += b[n]
+                            if (sum <= max && sum > res) { // 只有小于max，且大于之前的值
+                                res = sum
+                            }
+                        }
+                    }
+                }
+            }
+            return res
+        };
+    </script>
+</body>
+
+</html>
