@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 从nums中找出并返回总和为target的元素组合的个数
+        // 方法1：动态规划
+        // 时间复杂度 O(targetXn) 空间复杂度 O(target)
+        var combinationSum4 = function (nums, target) {
+            const dp = new Array(target + 1).fill(0);
+            dp[0] = 1;
+            for (let i = 1; i <= target; i++) {
+                for (const num of nums) {
+                    if (num <= i) {
+                        dp[i] += dp[i - num];
+                    }
+                }
+            }
+            return dp[target];
+        };
+
+        // test
+        let nums = [1,2,3], target = 4;
+        console.log(combinationSum4(nums, target))
+    </script>
+</body>
+
+</html>
