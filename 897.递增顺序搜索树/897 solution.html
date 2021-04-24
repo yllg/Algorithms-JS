@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法1：中序遍历之后生成新的树
+        // 时间复杂度O(n) 空间复杂度O(n)
+        var increasingBST = function (root) {
+            const res = [];
+            inorder(root, res);
+
+            const dummyNode = new TreeNode(-1);
+            let currNode = dummyNode;
+            for (const value of res) {
+                currNode.right = new TreeNode(value);
+                currNode = currNode.right;
+            }
+            return dummyNode.right;
+        };
+        const inorder = (node, res) => {
+            if (!node) {
+                return;
+            }
+            inorder(node.left, res);
+            res.push(node.val);
+            inorder(node.right, res);
+        }
+
+        // 方法2：中序遍历过程中改变节点指向
+        // 时间复杂度O(n) 空间复杂度O(n)
+        var increasingBST = function (root) {
+            const dummyNode = new TreeNode(-1);
+            let resNode = dummyNode;
+            const inorder = (node) => {
+                if (!node) {
+                    return;
+                }
+                inorder(node.left);
+
+                // 在中序遍历的过程中修改节点指向
+                resNode.right = node;
+                node.left = null;
+                resNode = node;
+
+                inorder(node.right);
+            }
+            inorder(root);
+            return dummyNode.right;
+        };
+    </script>
+</body>
+
+</html>
