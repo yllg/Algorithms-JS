@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法1：二分查找转化为判定问题
+        // 时间复杂度 O(nlog(Σw)) 空间复杂度O(1)
+        var shipWithinDays = function (weights, D) {
+            // 确定二分查找左右边界
+            let left = Math.max(...weights),
+                right = weights.reduce((a, b) => a + b);
+            while (left < right) {
+                const mid = Math.floor((left + right) / 2);
+                //  need 为需要运送的天数
+                // cur 为当前这一天已经运送的包裹重量之和
+                let need = 1,
+                    cur = 0;
+                for (const weight of weights) {
+                    if (cur + weight > mid) {
+                        need++;
+                        cur = 0;
+                    }
+                    cur += weight;
+                }
+                if (need <= D) {
+                    right = mid;
+                } else {
+                    left = mid + 1;
+                }
+            }
+            return left;
+        };
+    </script>
+</body>
+
+</html>
