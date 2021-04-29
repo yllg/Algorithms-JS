@@ -1,56 +1,110 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
 </head>
+
 <body>
-<script>
-// Source : https://leetcode.com/problems/single-number-ii/
-// Author : 悬笔e绝
-// Date   : 2019-06-21
+  <script>
+    // Source : https://leetcode.com/problems/single-number-ii/
+    // Author : 悬笔e绝
+    // Date   : 2019-06-21
 
-/**
- * @param {number[]} nums
- * @return {number}
- */
-// 一个出现一次，其他出现3次；
+    /**
+     * @param {number[]} nums
+     * @return {number}
+     */
+    // 一个出现一次，其他出现3次；
 
-// 方法一：常规法
- var singleNumber1 = function(nums) {
-  var tmp = [];
-  for(var i = 0, len = nums.length; i < len; i++) 
-    if (!tmp[nums[i]])
-      tmp[nums[i]] = 1;
-    else
-      tmp[nums[i]]++;
-  for(var i = 0; i < len; i++)
-    if (tmp[nums[i]] === 1)
-      return nums[i];
-};
+    // 方法一：常规法
+    var singleNumber = function (nums) {
+      var tmp = [];
+      for (var i = 0, len = nums.length; i < len; i++)
+        if (!tmp[nums[i]])
+          tmp[nums[i]] = 1;
+        else
+          tmp[nums[i]]++;
+      for (var i = 0; i < len; i++)
+        if (tmp[nums[i]] === 1)
+          return nums[i];
+    };
 
-// 方法二：位运算，不使用额外的空间
-// 时间复杂度 O(n)
-// 空间复杂度 O(1)
-var singleNumber2 = function(nums) {
-    // 位运算
-    let seen_once = seen_twice = 0;
-    nums.forEach(item => {
+    // 方法二：位运算，不使用额外的空间
+    // 时间复杂度 O(n)
+    // 空间复杂度 O(1)
+    var singleNumber = function (nums) {
+      // 位运算
+      let seen_once = seen_twice = 0;
+      nums.forEach(item => {
         seen_once = ~seen_twice & (seen_once ^ item);
         seen_twice = ~seen_once & (seen_twice ^ item);
-    });
-    return seen_once;
-};
+      });
+      return seen_once;
+    };
 
-// 测试
-var nums1 = [2,2,3,2];
-console.log(singleNumber1(nums1)); // 3
-console.log(singleNumber2(nums1)); // 3
-var nums2 = [0,1,0,1,0,1,99];
-console.log(singleNumber1(nums2)); // 99
-console.log(singleNumber2(nums2)); // 99
-</script>
+    // 方法3：哈希表
+    var singleNumber = function (nums) {
+      const freq = new Map();
+      for (const num of nums) {
+        freq.set(num, (freq.get(num) || 0) + 1);
+      }
+      let ans = 0;
+      for (const [num, occ] of freq.entries()) {
+        if (occ === 1) {
+          ans = num;
+          break;
+        }
+      }
+      return ans;
+    };
+
+    // 方法4：依次确定每一个二进制位
+    var singleNumber = function (nums) {
+      let ans = 0;
+      for (let i = 0; i < 32; ++i) {
+        let total = 0;
+        for (const num of nums) {
+          total += ((num >> i) & 1);
+        }
+        if (total % 3 != 0) {
+          ans |= (1 << i);
+        }
+      }
+      return ans;
+    };
+
+    // 方法5：数字电路设计
+    var singleNumber = function (nums) {
+      let a = 0,
+        b = 0;
+      for (const num of nums) {
+        const aNext = (~a & b & num) | (a & ~b & ~num),
+          bNext = ~a & (b ^ num);
+        a = aNext;
+        b = bNext;
+      }
+      return b;
+    };
+
+    // 方法6：数字电路设计优化
+    var singleNumber = function (nums) {
+      let a = 0,
+        b = 0;
+      for (const num of nums) {
+        b = ~a & (b ^ num);
+        a = ~b & (a ^ num);
+      }
+      return b;
+    };
+
+    // 测试
+    var nums2 = [0, 1, 0, 1, 0, 1, 99];
+    console.log(singleNumber(nums2)); // 99
+  </script>
 </body>
+
 </html>
