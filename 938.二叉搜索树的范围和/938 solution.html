@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        //  方法1：深度优先搜索
+        // 时间复杂度O(n) 空间复杂度O(n)
+        var rangeSumBST = function (root, low, high) {
+            if (!root) {
+                return 0;
+            }
+            if (root.val > high) {
+                return rangeSumBST(root.left, low, high);
+            }
+            if (root.val < low) {
+                return rangeSumBST(root.right, low, high);
+            }
+            return root.val + rangeSumBST(root.left, low, high) + rangeSumBST(root.right, low, high);
+        };
+
+        // 方法2：广度优先搜索
+        // 时间复杂度O(n) 空间复杂度O(n)
+        var rangeSumBST = function (root, low, high) {
+            let sum = 0;
+            const q = [root];
+            while (q.length) {
+                const node = q.shift();
+                if (!node) {
+                    continue;
+                }
+                if (node.val > high) {
+                    q.push(node.left);
+                } else if (node.val < low) {
+                    q.push(node.right);
+                } else {
+                    sum += node.val;
+                    q.push(node.left);
+                    q.push(node.right);
+                }
+            }
+            return sum;
+        };
+    </script>
+</body>
+
+</html>
