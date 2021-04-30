@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法1：DFS
+        // 时间复杂度O(n) 空间复杂度O(n)
+        var GetImportance = function (employees, id) {
+            const map = new Map();
+            for (const employee of employees) {
+                map.set(employee.id, employee);
+            }
+            const dfs = (id) => {
+                const employee = map.get(id);
+                let total = employee.importance;
+                const subordinates = employee.subordinates;
+                for (const subId of subordinates) {
+                    total += dfs(subId);
+                }
+                return total;
+
+            }
+
+            return dfs(id);
+        };
+
+        // 方法2：BFS
+        // 时间复杂度O(n) 空间复杂度O(n)
+        var GetImportance = function (employees, id) {
+            const map = new Map();
+            for (const employee of employees) {
+                map.set(employee.id, employee);
+            }
+            let total = 0;
+            const queue = [];
+            queue.push(id);
+            while (queue.length) {
+                const curId = queue.shift();
+                const employee = map.get(curId);
+                total += employee.importance;
+                const subordinates = employee.subordinates;
+                for (const subId of subordinates) {
+                    queue.push(subId);
+                }
+            }
+            return total;
+        };
+    </script>
+</body>
+
+</html>
