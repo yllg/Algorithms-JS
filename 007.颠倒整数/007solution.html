@@ -20,7 +20,6 @@
          */
 
         // int32 的范围: -2^31 ~ 2^31-1
-       
         var reverse = function (x) {
             // 1<<30左移30位，即2的30次方，再*2,就是31次方
             var minn = -(1 << 30) * 2;
@@ -31,7 +30,7 @@
             var arr = x.toString().split('');
             //负数时，去掉第一个负号
             if (x < 0)
-                arr.shift(); 
+                arr.shift();
             //字符数组倒序，然后拼接，转成数字可以去掉字符串开头的0
             ans = Number(arr.reverse().join(''));
             //负数最后记得*-1
@@ -45,9 +44,23 @@
                 return ans;
         };
 
+        // 方法2：数学
+        // 时间复杂度：O(log∣x∣) 空间复杂度O(1)
+        var reverse = function (x) {
+            let rev = 0;
+            while (x !== 0) {
+                const digit = x % 10;
+                x = ~~(x / 10);
+                rev = rev * 10 + digit;
+                if (rev < Math.pow(-2, 31) || rev > Math.pow(2, 31) - 1) {
+                    return 0;
+                }
+            }
+            return rev;
+        };
+
         console.log(reverse(120));
         console.log(reverse(-123));
-
     </script>
 </body>
 
