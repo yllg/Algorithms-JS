@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法1： 模拟
+        // 时间复杂度 O(n) 空间复杂度 O(1)
+        var xorOperation = function (n, start) {
+            let ans = 0;
+            for (let i = 0; i < n; ++i) {
+                ans ^= (start + i * 2);
+            }
+            return ans;
+        };
+
+        // 方法2： 数学
+        // 时间复杂度 O(1) 空间复杂度 O(1)
+        var xorOperation = function (n, start) {
+            let s = start >> 1,
+                e = n & start & 1;
+            let ret = sumXor(s - 1) ^ sumXor(s + n - 1);
+            return ret << 1 | e;
+        };
+        const sumXor = (x) => {
+            if (x % 4 === 0) {
+                return x;
+            }
+            if (x % 4 === 1) {
+                return 1;
+            }
+            if (x % 4 === 2) {
+                return x + 1;
+            }
+            return 0;
+        }
+    </script>
+</body>
+
+</html>
