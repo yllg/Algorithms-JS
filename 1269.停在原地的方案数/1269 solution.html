@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 每一步操作中，你可以将指针向左或向右移动 1 步，或者停在原地; 求回到索引0的方案数
+
+        // 方法1：动态规划
+        // 时间复杂度O(steps×min(arrLen,steps)) 
+        // 空间复杂度O(min(arrLen,steps))
+        var numWays = function (steps, arrLen) {
+            const MODULO = 1000000007;
+            let maxColumn = Math.min(arrLen - 1, steps);
+            let dp = new Array(maxColumn + 1).fill(0);
+            dp[0] = 1;
+            for (let i = 1; i <= steps; i++) {
+                const dpNext = new Array(maxColumn + 1).fill(0);
+                for (let j = 0; j <= maxColumn; j++) {
+                    dpNext[j] = dp[j];
+                    if (j - 1 >= 0) {
+                        dpNext[j] = (dpNext[j] + dp[j - 1]) % MODULO;
+                    }
+                    if (j + 1 <= maxColumn) {
+                        dpNext[j] = (dpNext[j] + dp[j + 1]) % MODULO;
+                    }
+                }
+                dp = dpNext;
+            }
+            return dp[0];
+        };
+
+        // test
+        let steps = 3,
+            arrLen = 2;
+        console.log(numWays(steps, arrLen))
+    </script>
+</body>
+
+</html>
