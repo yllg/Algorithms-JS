@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法1：直接法，按照题意来双层循环
+        var xorQueries = (arr, queries) => {
+            const ret = new Uint16Array(queries.length);
+            for (let i = 0; i < queries.length; ++i) {
+                let val = 0;
+                for (let j = queries[i][0]; j <= queries[i][1]; ++j) {
+                    val ^= arr[j];
+                }
+                ret[i] = val;
+            }
+            return ret;
+        };
+
+        // 方法2：滑动窗口
+        var xorQueries = (arr, queries) => {
+            const ret = new Uint32Array(queries.length);
+            const map = new Map();
+            // 复制原始数组，并按照左边界从小到大排序，如果左边界相同，再按照右边界从小到大排序
+            const sorted = [...queries].sort((a, b) => a[0] === b[0] ? a[1] - b[1] : a[0] - b[0]);
+            let val = left = right = 0;
+            for (let i = 0; i < sorted.length; ++i) {
+                const [start, end] = sorted[i];
+                // 移动左边界
+                while (left < start) val ^= arr[left++];
+                // 移动右边界，需要区分两种情况，因为是基于左边界排序的，所以新的右边界可能比之前的右边界小
+                while (right <= end) val ^= arr[right++];
+                while (right > end + 1) val ^= arr[--right];
+                map.set(left + '-' + (right - 1), val);
+            }
+            for (let i = 0; i < queries.length; ++i) {
+                ret[i] = map.get(queries[i][0] + '-' + queries[i][1]);
+            }
+            return ret;
+        };
+
+        // 方法3：数学特性
+        // 时间复杂度O(n) 空间复杂度O(1)
+        var xorQueries = (arr, queries) => {
+            const ret = new Uint32Array(queries.length);
+            for (let i = 1; i < arr.length; ++i) {
+                arr[i] ^= arr[i - 1];
+            }
+            for (let i = 0; i < queries.length; ++i) {
+                ret[i] = arr[queries[i][1]];
+                queries[i][0] !== 0 && (ret[i] = arr[queries[i][0] - 1] ^ ret[i]);
+            }
+            return ret;
+        };
+
+        // 方法4: 前缀和
+        var xorQueries = function (arr, queries) {
+            const L = arr.length;
+            const LQ = queries.length;
+            const ans = new Array(LQ).fill(0);
+
+            const prefixXorArr = new Array(L);
+            let xOr = 0;
+            for (let i = 0; i < L; i++) {
+                xOr ^= arr[i];
+                prefixXorArr[i] = xOr;
+            }
+            prefixXorArr['-1'] = 0;
+            for (let i = 0; i < LQ; i++) {
+                const start = queries[i][0]
+                const end = queries[i][queries[i].length - 1];
+                ans[i] = (prefixXorArr[start - 1] ^ prefixXorArr[end]);
+            }
+            return ans
+        };
+
+        // test
+        let arr = [1, 3, 4, 8],
+            queries = [
+                [0, 1],
+                [1, 2],
+                [0, 3],
+                [3, 3]
+            ];
+        console.log(xorQueries(arr, queries))
+    </script>
+</body>
+
+</html>
