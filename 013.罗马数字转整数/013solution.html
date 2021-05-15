@@ -14,36 +14,30 @@
         // Author : 悬笔e绝
         // Date   : 2018-03-19
 
-        /**
-         * @param {string} s
-         * @return {number}
-         */
+        // 方法1：模拟
+        // 时间复杂度O(n) 空间复杂度O(1)
+        // 小的数在大的数右边，相加；小的数在大的数左边，要减去
         var romanToInt = function (s) {
-            //定义哈希表
-            var hash = {};
-            hash["I"] = 1;
-            hash["X"] = 10;
-            hash["C"] = 100;
-            hash["M"] = 1000;
-            hash["V"] = 5;
-            hash["L"] = 50;
-            hash["D"] = 500;
-
-            var sum = 0;
-
-            for (var i = 0, len = s.length; i < len; i++) {
-                var item = hash[s[i]];
-                //从左向右取每一个字符
-                var nextItem = i + 1 === len ? 0 : hash[s[i + 1]];
-                //右边大即左边小，需要减掉左边的值，并且让i加1，跳过一个右边的数
-                if (nextItem > item) {
-                    sum += nextItem - item;
-                    i++;
-                } else
-                    //右不大，就累加
-                    sum += item;
+            const symbolValues = new Map();
+            symbolValues.set('I', 1);
+            symbolValues.set('V', 5);
+            symbolValues.set('X', 10);
+            symbolValues.set('L', 50);
+            symbolValues.set('C', 100);
+            symbolValues.set('C', 100);
+            symbolValues.set('D', 500);
+            symbolValues.set('M', 1000);
+            let ans = 0;
+            const n = s.length;
+            for (let i = 0; i < n; ++i) {
+                const value = symbolValues.get(s[i]);
+                if (i < n - 1 && value < symbolValues.get(s[i + 1])) {
+                    ans -= value;
+                } else {
+                    ans += value;
+                }
             }
-            return sum;
+            return ans;
         };
 
         //测试
@@ -63,7 +57,6 @@
         // 右加左减：在一个较大的罗马数字的右边记上一个较小的罗马数字,表示大数字加小数字.在一个较大的数字的左边记上一个较小的罗马数字,表示大数字减小数字.但是,左减不能跨越等级.比如,99不可以用IC表示,用XCIX表示.
         // 加线乘千：在一个罗马数字的上方加上一条横线或者在右下方写M,表示将这个数字乘以1000,即是原数的1000倍.同理,如果上方有两条横线,即是原数的1000000倍.
         // 单位限制：同样单位只能出现3次,如40不能表示为XXXX,而要表示为XL.
-
     </script>
 </body>
 
