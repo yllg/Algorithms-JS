@@ -10,87 +10,57 @@
 
 <body>
     <script>
-        // Source : https://leetcode.com/problems/integer-to-roman/
-        // Author : 悬笔e绝
-        // Date   : 2018-03-18
-
-        /**
-         * @param {number} num
-         * @return {string}
-         */
-
+        // 方法1：模拟
+        // 时间复杂度O(1) 空间复杂度O(1)
         var intToRoman = function (num) {
-            //首先定义一个哈希表，将整数和罗马数一一对应
-            var hash = {};
-            // 千
-            hash["3000"] = "MMM";
-            hash["2000"] = "MM";
-            hash["1000"] = "M";
-            // 百
-            hash["900"] = "CM";
-            hash["800"] = "DCCC";
-            hash["700"] = "DCC";
-            hash["600"] = "DC";
-            hash["500"] = "D";
-            hash["400"] = "CD";
-            hash["300"] = "CCC";
-            hash["200"] = "CC";
-            hash["100"] = "C";
-            // 十
-            hash["90"] = "XC";
-            hash["80"] = "LXXX";
-            hash["70"] = "LXX";
-            hash["60"] = "LX";
-            hash["50"] = "L";
-            hash["40"] = "XL";
-            hash["30"] = "XXX";
-            hash["20"] = "XX";
-            hash["10"] = "X";
-            // 个
-            hash["9"] = "IX";
-            hash["8"] = "VIII";
-            hash["7"] = "VII";
-            hash["6"] = "VI";
-            hash["5"] = "V";
-            hash["4"] = "IV";
-            hash["3"] = "III";
-            hash["2"] = "II";
-            hash["1"] = "I";
-
-            hash["0"] = "";
-
-            var str = "";
-            var tmp;
-
-            // 千
-            //千位数
-            tmp = ~~(num / 1000);
-            //num更新
-            num -= tmp * 1000;
-            //在哈希表中查千位对应的罗马数
-            str += hash[tmp * 1000];
-
-            // 百
-            tmp = ~~(num / 100);
-            num -= tmp * 100;
-            str += hash[tmp * 100];
-
-            // 十
-            tmp = ~~(num / 10);
-            num -= tmp * 10;
-            str += hash[tmp * 10];
-
-            // 个
-            tmp = ~~(num / 1);
-            num -= tmp * 1;
-            str += hash[tmp * 1];
-
-            return str;
+            const values = [1000, 900, 500, 400, 100, 90, 50, 40, 10, 9, 5, 4, 1];
+            const valueSymbols = new Map();
+            valueSymbols.set(1000, "M");
+            valueSymbols.set(900, "CM");
+            valueSymbols.set(500, "D");
+            valueSymbols.set(400, "CD");
+            valueSymbols.set(100, "C");
+            valueSymbols.set(90, "XC");
+            valueSymbols.set(50, "L");
+            valueSymbols.set(40, "XL");
+            valueSymbols.set(10, "X");
+            valueSymbols.set(9, "IX");
+            valueSymbols.set(5, "V");
+            valueSymbols.set(4, "IV");
+            valueSymbols.set(1, "I");
+            const roman = [];
+            for (const value of values) {
+                const symbol = valueSymbols.get(value);
+                while (num >= value) {
+                    num -= value;
+                    roman.push(symbol);
+                }
+                if (num == 0) {
+                    break;
+                }
+            }
+            return roman.join('');
         };
+
+        // 方法2：硬编码数字
+        // 时间复杂度O(1) 空间复杂度O(1)
+        var intToRoman = function (num) {
+            const thousands = ["", "M", "MM", "MMM"];
+            const hundreds = ["", "C", "CC", "CCC", "CD", "D", "DC", "DCC", "DCCC", "CM"];
+            const tens = ["", "X", "XX", "XXX", "XL", "L", "LX", "LXX", "LXXX", "XC"];
+            const ones = ["", "I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX"];
+
+            const roman = [];
+            roman.push(thousands[Math.floor(num / 1000)]);
+            roman.push(hundreds[Math.floor(num % 1000 / 100)]);
+            roman.push(tens[Math.floor(num % 100 / 10)]);
+            roman.push(ones[num % 10]);
+            return roman.join('');
+        };
+
         //测试
         console.log(intToRoman(3214));
         console.log(intToRoman(56));
-
     </script>
 </body>
 

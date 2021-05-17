@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法1：dfs
+        // 时间复杂度：O(n1 + n2) n1 和 n2 是两颗树的节点个数
+        // 空间复杂度：O(n1 + n2) n1 和 n2 是两颗树的节点个数
+        var leafSimilar = function (root1, root2) {
+            const seq1 = [];
+            if (root1) {
+                dfs(root1, seq1);
+            }
+            const seq2 = [];
+            if (root2) {
+                dfs(root2, seq2);
+            }
+            return seq1.toString() === seq2.toString();
+        };
+
+        const dfs = (node, seq) => {
+            if (!node.left && !node.right) {
+                seq.push(node.val);
+            } else {
+                if (node.left) {
+                    dfs(node.left, seq);
+                }
+                if (node.right) {
+                    dfs(node.right, seq);
+                }
+            }
+        }
+    </script>
+</body>
+
+</html>
