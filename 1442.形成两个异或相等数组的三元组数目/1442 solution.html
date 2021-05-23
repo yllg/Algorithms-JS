@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法一：三重循环
+        // 时间复杂度O(n^3) 空间复杂度O(n)
+        var countTriplets = function (arr) {
+            const n = arr.length;
+            const s = [0];
+            for (const num of arr) {
+                s.push(s[s.length - 1] ^ num);
+            }
+            let ans = 0;
+            for (let i = 0; i < n; i++) {
+                for (let j = i + 1; j < n; j++) {
+                    for (let k = j; k < n; k++) {
+                        if (s[i] === s[k + 1]) {
+                            ans++;
+                        }
+                    }
+                }
+            }
+            return ans;
+        };
+
+        // 方法2：二重循环
+        // 时间复杂度O(n^2) 空间复杂度O(n)
+        var countTriplets = function (arr) {
+            const n = arr.length;
+            const s = [0];
+            for (const num of arr) {
+                s.push(s[s.length - 1] ^ num);
+            }
+            let ans = 0;
+            for (let i = 0; i < n; i++) {
+                for (let k = i + 1; k < n; k++) {
+                    if (s[i] === s[k + 1]) {
+                        ans += k - i;
+                    }
+                }
+            }
+            return ans;
+        };
+
+        // 方法3：哈希表（一重循环）
+        // 时间复杂度O(n) 空间复杂度O(n)
+        // 在计算异或前缀和的同时计算答案，从而做到仅遍历 \textit{arr}arr 一次就计算出答案。
+        var countTriplets = function (arr) {
+            const cnt = new Map(),
+                total = new Map();
+            let ans = 0,
+                s = 0;
+            for (const [k, val] of arr.entries()) {
+                const t = s ^ val;
+                if (cnt.has(t)) {
+                    ans += cnt.get(t) * k - total.get(t);
+                }
+                cnt.set(s, (cnt.get(s) || 0) + 1);
+                total.set(s, (total.get(s) || 0) + k);
+                s = t;
+            }
+            return ans;
+        };
+
+        // test
+        let arr = [2,3,1,6,7];
+        console.log(countTriplets(arr))
+    </script>
+</body>
+
+</html>

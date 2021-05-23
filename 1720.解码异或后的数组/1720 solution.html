@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法1：利用异或运算的性质
+        // 时间复杂度 O(n) 空间复杂度 O(1)
+        var decode = function (encoded, first) {
+            const n = encoded.length + 1;
+            const arr = new Array(n).fill(0);
+            arr[0] = first;
+            for (let i = 1; i < n; i++) {
+                arr[i] = arr[i - 1] ^ encoded[i - 1];
+            }
+            return arr;
+        };
+
+        // test
+        let encoded = [1, 2, 3],
+            first = 1;
+        console.log(decode(encoded, first))
+    </script>
+</body>
+
+</html>

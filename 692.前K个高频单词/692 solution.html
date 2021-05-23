@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法1：哈希表+排序
+        // 时间复杂度 O(l×n+l×mlogm) 空间复杂度 O(l×m)
+        var topKFrequent = function (words, k) {
+            const cnt = new Map();
+            for (const word of words) {
+                cnt.set(word, (cnt.get(word) || 0) + 1);
+            }
+            const rec = [];
+            for (const entry of cnt.keys()) {
+                rec.push(entry);
+            }
+            rec.sort((word1, word2) => {
+                return cnt.get(word1) === cnt.get(word2) ? word1.localeCompare(word2) : cnt.get(word2) - cnt
+                    .get(word1);
+            })
+            return rec.slice(0, k);
+        };
+
+        // 方法2： 优先队列
+        // TODO: 待补充
+
+        // test
+        let words = ["i", "love", "leetcode", "i", "love", "coding"],
+            k = 2;
+        console.log(topKFrequent(words, k))
+    </script>
+</body>
+
+</html>

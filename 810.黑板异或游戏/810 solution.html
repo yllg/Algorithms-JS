@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法一：数学
+        // 时间复杂度 O(n) 空间复杂度O(1)
+        // 当且仅当以下两个条件至少满足一个时，\text{Alice}Alice 必胜：
+        // 1.数组 nums 的全部元素的异或结果等于 0；
+        // 2.数组 nums 的长度是偶数。
+        var xorGame = function (nums) {
+            if (nums.length % 2 == 0) {
+                return true;
+            }
+            let xor = 0;
+            for (const num of nums) {
+                xor ^= num;
+            }
+            return xor == 0;
+        };
+
+        // test
+        let nums = [1, 1, 2];
+        console.log(xorGame(nums));
+    </script>
+</body>
+
+</html>
