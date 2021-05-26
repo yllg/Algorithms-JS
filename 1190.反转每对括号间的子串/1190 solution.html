@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法1：栈
+        // 时间复杂度O(n^2) 空间复杂度O(n)
+        var reverseParentheses = function (s) {
+            const stk = [];
+            let str = '';
+            for (const ch of s) {
+                if (ch === '(') {
+                    stk.push(str);
+                    str = '';
+                } else if (ch === ')') {
+                    str = str.split("").reverse().join("");
+                    str = stk[stk.length - 1] + str;
+                    stk.pop();
+                } else {
+                    str += ch;
+                }
+            }
+            return str;
+        };
+
+        // 方法2：预处理括号
+        // 时间复杂度O(n) 空间复杂度O(n)
+        var reverseParentheses = function (s) {
+            const n = s.length;
+            const pair = new Array(n).fill(0);
+            const stack = [];
+            for (let i = 0; i < n; i++) {
+                if (s[i] === '(') {
+                    stack.push(i);
+                } else if (s[i] == ')') {
+                    const j = stack.pop();
+                    pair[i] = j;
+                    pair[j] = i;
+                }
+            }
+
+            const sb = [];
+            let index = 0,
+                step = 1;
+            while (index < n) {
+                if (s[index] === '(' || s[index] === ')') {
+                    index = pair[index];
+                    step = -step;
+                } else {
+                    sb.push(s[index]);
+                }
+                index += step;
+            }
+            return sb.join('');
+        };
+
+        // TEST
+        let s = "(u(love)i)";
+        console.log(reverseParentheses(s))
+    </script>
+</body>
+
+</html>
