@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法1：移位实现位计数
+        // 时间复杂度O(logC) 其中 C 是元素的数据范围，在本题中 log C= log 2^31 = 31
+        // 空间复杂度O(1)
+        var hammingDistance = function (x, y) {
+            let s = x ^ y,
+                ret = 0;
+            while (s != 0) {
+                ret += s & 1;
+                s >>= 1;
+            }
+            return ret;
+        };
+
+        // 方法2：Brian Kernighan 算法
+        // 时间复杂度O(logC) 其中 C 是元素的数据范围，在本题中 log C= log 2^31 = 31
+        // 空间复杂度O(1)
+        var hammingDistance = function (x, y) {
+            let s = x ^ y,
+                ret = 0;
+            while (s != 0) {
+                s &= s - 1;
+                ret++;
+            }
+            return ret;
+        };
+
+        // test
+        let x = 1,
+            y = 4;
+        console.log(hammingDistance(x, y))
+    </script>
+</body>
+
+</html>
