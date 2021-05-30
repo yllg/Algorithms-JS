@@ -1,29 +1,41 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
 </head>
+
 <body>
-<script>
-// Source : https://leetcode.com/problems/power-of-two/
-// Author : 悬笔e绝
-// Date   : 2019-01-19
+  <script>
+    // Source : https://leetcode.com/problems/power-of-two/
+    // Author : 悬笔e绝
+    // Date   : 2019-01-19
 
-/**
- * @param {number} n
- * @return {boolean}
- */
- 
-var isPowerOfTwo = function(n) {
-  //基于2取底数，~~取整
-  var tmp = ~~(Math.log(n) / Math.log(2));
-  // 1左移tmp位，就是2的tmp次方
-  return n === (1 << tmp);
-};
+    // 方法1-1：二进制表示
+    // 时间复杂度O(1) 空间复杂度O(1)
+    var isPowerOfTwo = function (n) {
+      return n > 0 && (n & (n - 1)) === 0;
+    };
+    // 方法1-2：二进制表示
+    // 时间复杂度O(1) 空间复杂度O(1)
+    var isPowerOfTwo = function (n) {
+      return n > 0 && (n & -n) === n;
+    };
 
-</script>
+    // 方法2：判断是否为最大 2 的幂的约数
+    // 时间复杂度O(1) 空间复杂度O(1)
+    var isPowerOfTwo = function (n) {
+      const BIG = 1 << 30;
+      return n > 0 && BIG % n === 0;
+    };
+
+    // test
+    let n = 16;
+    console.log(isPowerOfTwo(n))
+  </script>
 </body>
+
 </html>
