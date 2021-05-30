@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 打印机只能打印相同的字符，问最少需要打印几次
+        // 方法1：动态规划
+        // 时间复杂度O(n^3) 空间复杂度O(n^2)
+        var strangePrinter = function (s) {
+            const n = s.length;
+            const f = new Array(n).fill(0).map(() => new Array(n).fill(0));
+            for (let i = n - 1; i >= 0; i--) {
+                f[i][i] = 1;
+                for (let j = i + 1; j < n; j++) {
+                    if (s[i] == s[j]) {
+                        f[i][j] = f[i][j - 1];
+                    } else {
+                        let minn = Number.MAX_SAFE_INTEGER;
+                        for (let k = i; k < j; k++) {
+                            minn = Math.min(minn, f[i][k] + f[k + 1][j]);
+                        }
+                        f[i][j] = minn;
+                    }
+                }
+            }
+            return f[0][n - 1];
+        };
+
+        // test
+        let s = "aba";
+        console.log(strangePrinter(s))
+    </script>
+</body>
+
+</html>
