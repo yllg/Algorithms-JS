@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法1：前缀和
+        // 时间复杂度：O(n+q)，其中 n 和 q 分别是数组 candiesCount 和 queries 的长度。我们需要 O(n) 的时间计算前缀和，O(q) 的时间得到所有询问的结果。
+        // 空间复杂度：O(n)，即为存储前缀和数组需要的空间。
+        var canEat = function (candiesCount, queries) {
+            const n = candiesCount.length;
+
+            // 前缀和
+            const sum = new Array(n).fill(0);;
+            sum[0] = candiesCount[0];
+            for (let i = 1; i < n; ++i) {
+                sum[i] = sum[i - 1] + candiesCount[i];
+            }
+
+            const q = queries.length;
+            const ans = new Array(q).fill(0);
+            for (let i = 0; i < q; ++i) {
+                const query = queries[i];
+                const favoriteType = query[0],
+                    favoriteDay = query[1],
+                    dailyCap = query[2];
+
+                const x1 = favoriteDay + 1;
+                const y1 = (favoriteDay + 1) * dailyCap;
+                const x2 = favoriteType == 0 ? 1 : sum[favoriteType - 1] + 1;
+                const y2 = sum[favoriteType];
+
+                ans[i] = !(x1 > y2 || y1 < x2);
+            }
+            return ans;
+        };
+    </script>
+</body>
+
+</html>
