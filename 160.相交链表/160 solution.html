@@ -10,51 +10,41 @@
 
 <body>
   <script>
-    // Source : https://leetcode.com/problems/intersection-of-two-linked-lists/
-    // Author : 悬笔e绝
-    // Date   : 2019-08-12
-
-    /**
-     * Definition for singly-linked list.
-     * function ListNode(val) {
-     *     this.val = val;
-     *     this.next = null;
-     * }
-     */
-
-    /**
-     * @param {ListNode} headA
-     * @param {ListNode} headB
-     * @return {ListNode}
-     */
+    // 方法1：哈希集合
+    // 时间复杂度：O(m+n) m 和 n 是两个链表的长度
+    // 空间复杂度：O(m)
     var getIntersectionNode = function (headA, headB) {
-      var lenA = getLen(headA);
-      var lenB = getLen(headB);
-      while (lenA > lenB) {
-        headA = headA.next;
-        lenA--;
+      const visited = new Set();
+      let temp = headA;
+      while (temp !== null) {
+        visited.add(temp);
+        temp = temp.next;
       }
-      while (lenB > lenA) {
-        headB = headB.next;
-        lenB--;
-      }
-      while (headA && headB) {
-        if (headA === headB)
-          return headA;
-        headA = headA.next;
-        headB = headB.next;
+      temp = headB;
+      while (temp !== null) {
+        if (visited.has(temp)) {
+          return temp;
+        }
+        temp = temp.next;
       }
       return null;
     };
 
-    function getLen(node) {
-      var len = 0;
-      while (node) {
-        len++;
-        node = node.next;
+    // 方法2：双指针
+    // 时间复杂度：O(m+n) m 和 n 是两个链表的长度
+    // 空间复杂度：O(1)
+    var getIntersectionNode = function (headA, headB) {
+      if (headA === null || headB === null) {
+        return null;
       }
-      return len;
-    }
+      let pA = headA,
+        pB = headB;
+      while (pA !== pB) {
+        pA = pA === null ? headB : pA.next;
+        pB = pB === null ? headA : pB.next;
+      }
+      return pA;
+    };
   </script>
 </body>
 
