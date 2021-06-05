@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 规则：
+        // 取一个数字 x 并执行以下任一操作：
+        // a:将 x 除以 3 (如果可以被 3 除)
+        // b:将 x 乘以 2
+        // 每次操作后，记下结果。如果从 9 开始，可以得到一个序列
+        // 例子：
+        // 输入: "[4,8,6,3,12,9]"
+        // 输出: [9, 3, 6, 12, 4, 8]
+        // 解释: [9, 3, 6, 12, 4, 8] => 9 / 3 = 3 - > 3 * 2 = 6 - > 6 * 2 = 12 - > 12 / 3 = 4 - > 4 * 2 = 8
+
+        // TODO: 方法1 待整理
+
+        // 方法2： dfs
+        function changeArr(arr) {
+            const map = new Map()
+            let find = false
+            let ret
+            arr.forEach((n) => {
+                map.set(n, (map.get(n) || 0) + 1)
+            })
+            arr.forEach((n) => {
+                if (find) return
+                dfs(n, 2, [n])
+            })
+
+            function dfs(prev, index, res) {
+                if (find) return
+                if (index === arr.length + 1) {
+                    find = true
+                    ret = res
+                }
+                if (map.has(prev * 2) && map.get(prev * 2) > 0) {
+                    map.set(prev * 2, map.get(prev * 2) - 1)
+                    dfs(prev * 2, index + 1, [...res, prev * 2])
+                    map.set(prev * 2, map.get(prev * 2) + 1)
+                }
+                if (!(prev % 3) && map.get(prev / 3) > 0) {
+                    map.set(prev / 3, map.get(prev / 3) - 1)
+                    dfs(prev / 3, index + 1, [...res, prev / 3])
+                    map.set(prev / 3, map.get(prev / 3) + 1)
+                }
+            }
+            return ret
+        }
+
+        // test
+        let arr = [4, 8, 6, 3, 12, 9];
+        console.log(changeArr(arr))
+    </script>
+</body>
+
+</html>
