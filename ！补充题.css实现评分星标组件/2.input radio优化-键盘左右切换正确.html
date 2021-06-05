@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<style>
+    [type="radio"] {
+        -webkit-appearance: none;
+        width: 20px;
+        height: 20px;
+        -webkit-mask: url("data:image/svg+xml,%3Csvg width='12' height='11' viewBox='0 0 12 11' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M6 0l1.693 3.67 4.013.476L8.74 6.89l.788 3.964L6 8.88l-3.527 1.974.788-3.964L.294 4.146l4.013-.476L6 0z' fill='%23F67600'/%3E%3C/svg%3E");
+        -webkit-mask-size: 20px;
+        -webkit-mask-repeat: no-repeat;
+        -webkit-mask-position: center;
+        background-color: coral;
+        /*默认是选中的样式，橙色*/
+        margin: 0;
+        transition: .2s;
+    }
+
+    [type="radio"]:checked~[type="radio"] {
+        background-color: #E8EAED;
+        /*未选中的样式，灰色*/
+    }
+</style>
+
+<body>
+    <div class="raido-group">
+        <input type="radio" name="rate" value="1">
+        <input type="radio" name="rate" value="2">
+        <input type="radio" name="rate" value="3">
+        <input type="radio" name="rate" value="4">
+        <input type="radio" name="rate" value="5">
+    </div>
+</body>
+
+</html>

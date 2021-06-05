@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<style>
+    input[type="range"] {
+        -webkit-appearance: none;
+    }
+
+    input[type="range"i]::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        width: 0;
+    }
+
+    input[type="range"i]::-webkit-slider-thumb {
+        box-shadow: 999px 0px 0px 999px #E8EAED;
+        /*可以实现一个右侧的足够大的阴影*/
+    }
+
+    input[type="range"i]::-webkit-slider-runnable-track {
+        -webkit-mask: url("data:image/svg+xml,%3Csvg width='12' height='11' viewBox='0 0 12 11' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M6 0l1.693 3.67 4.013.476L8.74 6.89l.788 3.964L6 8.88l-3.527 1.974.788-3.964L.294 4.146l4.013-.476L6 0z' fill='%23F67600'/%3E%3C/svg%3E");
+        /*星星图案*/
+        -webkit-mask-size: 20px;
+        -webkit-mask-repeat: repeat-x;
+    }
+</style>
+
+<body>
+    <input type="range" max="5" value="0">
+
+    <!-- TODO: 0605 chrome没有生效；
+        参考文章：https://mp.weixin.qq.com/s/ZyWoQ5G80NZWhX4VHGTtLg 
+    -->
+</body>
+
+</html>

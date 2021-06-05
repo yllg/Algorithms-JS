@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>index</title>
+    <link rel="stylesheet" href="//at.alicdn.com/t/font_1356455_c5d3d3ohlbq.css">
+    <style>
+        /* 去掉默认样式 */
+        input {
+            /* Safari Chrome */
+            -webkit-appearance: none;
+            /* Firefox */
+            -moz-appearance: none;
+            border: none;
+            outline: none;
+            cursor: pointer;
+        }
+
+        .content {
+            display: inline-block;
+        }
+
+        .rate-content {
+            /* 元素反向排列 */
+            display: flex;
+            flex-flow: row-reverse
+        }
+
+        /* 单个星星 */
+        input[name="rate"] {
+            /* 之前引入的iconfont字体 */
+            font-family: "iconfont";
+            font-size: 30px;
+
+            padding-right: 10px;
+            transition: transform .2s ease;
+        }
+
+        /* 默认显示的星星 */
+        input[name="rate"]::after {
+            content: "\e645";
+            color: #999;
+            /* 加点颜色过渡效果 */
+            transition: color .4s ease;
+        }
+
+        /* 选中与移上去样式变化 */
+        input[name="rate"]:checked::after,
+        input[name="rate"]:checked~input[name='rate']::after,
+        input[name="rate"]:hover::after,
+        input[name="rate"]:hover~input[name='rate']::after {
+            content: "\e73c";
+            color: #ffa822;
+        }
+
+        input[name="rate"]:hover {
+            transform: scale(1.3);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="content">
+        <div class="rate-content">
+            <input type="radio" name="rate">
+            <input type="radio" name="rate">
+            <input type="radio" name="rate">
+            <input type="radio" name="rate">
+            <input type="radio" name="rate">
+        </div>
+    </div>
+</body>
+
+</html>
