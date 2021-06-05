@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    // Source : https://leetcode.com/problems/remove-linked-list-elements/
+    // Author : 悬笔e绝
+    // Date   : 2019-10-27
+
+    // Definition for singly-linked list.
+    function ListNode(val) {
+      this.val = val;
+      this.next = null;
+    }
+    /**
+     * @param {ListNode} head
+     * @param {number} val
+     * @return {ListNode}
+     */
+
+    // 方法1：递归
+    // 时间复杂度：O(n) 空间复杂度：O(n)
+    var removeElements = function (head, val) {
+      if (head === null) {
+        return head;
+      }
+      head.next = removeElements(head.next, val);
+      return head.val === val ? head.next : head;
+    };
+
+    // 方法2：迭代
+    // 时间复杂度：O(n) 空间复杂度：O(1)
+    var removeElements = function (head, val) {
+      const dummyHead = new ListNode(0);
+      dummyHead.next = head;
+      let temp = dummyHead;
+      while (temp.next !== null) {
+        if (temp.next.val == val) {
+          temp.next = temp.next.next;
+        } else {
+          temp = temp.next;
+        }
+      }
+      return dummyHead.next;
+    };
+
+    // 测试
+    var node7 = new ListNode(6);
+    var node6 = new ListNode(5);
+    node6.next = node7;
+    var node5 = new ListNode(4);
+    node5.next = node6;
+    var node4 = new ListNode(3);
+    node4.next = node5;
+    var node3 = new ListNode(6);
+    node3.next = node4;
+    var node2 = new ListNode(2);
+    node2.next = node3;
+    var node1 = new ListNode(1);
+    node1.next = node2;
+
+    console.log(removeElements(node1, 6));
+  </script>
+</body>
+
+</html>
