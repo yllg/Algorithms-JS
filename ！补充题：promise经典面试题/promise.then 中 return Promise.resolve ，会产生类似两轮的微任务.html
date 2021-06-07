@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        Promise.resolve()
+        .then(() => {
+            console.log(1);
+        })
+        .then(() => {
+            console.log(2);
+        })
+        .then(() => {
+            console.log(3);
+            return Promise.resolve(4);
+        })
+        .then((res) => {
+            console.log(res);
+        })
+
+        Promise.resolve()
+        .then(() => {
+            console.log(5);
+        })
+        .then(() => {
+            console.log(6);
+        })
+        .then(() => {
+            console.log(7);
+        })
+        .then(() => {
+            console.log(8);
+        })
+        .then(() => {
+            console.log(9);
+        })
+        .then(() => {
+            console.log(10);
+        })
+
+        // 输出结果： 1、5、2、6、3、7、8、9、4、10
+    </script>
+</body>
+
+</html>
