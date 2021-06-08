@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法1：动态规划
+        // 时间复杂度： O(n⋅ sum)。 其中 n 是数组 stones 的长度， sum 为 stones 所有元素之和。
+        // 空间复杂度： O(sum)
+        var lastStoneWeightII = function (stones) {
+            let sum = 0;
+            for (const weight of stones) {
+                sum += weight;
+            }
+            const m = Math.floor(sum / 2);
+            const dp = new Array(m + 1).fill(false);
+            dp[0] = true;
+            for (const weight of stones) {
+                for (let j = m; j >= weight; --j) {
+                    dp[j] = dp[j] || dp[j - weight];
+                }
+            }
+            for (let j = m;; --j) {
+                if (dp[j]) {
+                    return sum - 2 * j;
+                }
+            }
+        };
+
+        // test
+        let stones = [2, 7, 4, 1, 8, 1]
+        console.log(lastStoneWeightII(stones))
+    </script>
+</body>
+
+</html>
