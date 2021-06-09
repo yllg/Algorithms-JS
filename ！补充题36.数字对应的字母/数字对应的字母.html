@@ -1,39 +1,41 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
-  </head>
-  <body>
-    <script>
-      // 输入一个数字，找到对应的字母;
-      // 如输入1 返回a; 输入26返回z; 输入27返回aa;输入28返回ab; 输入53返回aaa;
-      function num2letter(num) {
-        if (num < 1) {
-          console.warn("输入有误");
-          return;
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    // 输入一个数字，找到对应的字母;
+    // 如输入1 返回a; 输入26返回z; 输入27返回aa;输入28返回ab; 输入52返回az;输入53返回ba;输入54返回bb;
+    function num2letter(n) {
+      let res = "";
+      while (n !== 0) {
+        let m = n % 26;
+        n = parseInt(n / 26);
+        if (m === 0) {
+          m = 26;
+          n = n - 1;
         }
-        let temNum = num + 96;
-        let str = "";
-        if (temNum >= 97 && temNum <= 122) {
-          str = String.fromCharCode(temNum);
-        } else {
-          let divideNum = parseInt(num / 26);
-          let remain = num % 26;
-          for (let index = 0; index < divideNum; index++) {
-            str += "a";
-          }
-          str += String.fromCharCode(remain + 96);
-        }
-        return str;
+        // A的 ascii码是65
+        // res = String.fromCharCode(m + 64) + res;
+        // a的ascii码是97
+        res = String.fromCharCode(m + 96) + res;
       }
-      console.log(num2letter(0)); 
-      console.log(num2letter(1)); // 'a'
-      console.log(num2letter(26)); // 'z'
-      console.log(num2letter(27)); // 'aa'
-      console.log(num2letter(28)); // 'ab'
-      console.log(num2letter(53)); // 'aaa'
-    </script>
-  </body>
+      return res;
+    }
+    console.log(num2letter(0));
+    console.log(num2letter(1)); // 'a'
+    console.log(num2letter(26)); // 'z'
+    console.log(num2letter(27)); // 'aa'
+    console.log(num2letter(28)); // 'ab'
+    console.log(num2letter(52)); // 'az'
+    console.log(num2letter(53)); // 'ba'
+    console.log(num2letter(54)); // 'bb'
+  </script>
+</body>
+
 </html>
