@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法一：动态规划
+        // 时间复杂度：O(amount×n)，其中 amount 是总金额，n 是数组 coins 的长度
+        // 空间复杂度：O(amount)，其中 amount 是总金额
+        var change = function (amount, coins) {
+            const dp = new Array(amount + 1).fill(0);
+            dp[0] = 1;
+            for (const coin of coins) {
+                for (let i = coin; i <= amount; i++) {
+                    dp[i] += dp[i - coin];
+                }
+            }
+            return dp[amount];
+        };
+
+        // test 
+        let amount = 5,
+            coins = [1, 2, 5];
+        console.log(change(amount, coins))
+    </script>
+</body>
+
+</html>
