@@ -1,33 +1,62 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
 </head>
+
 <body>
-<script>
-// Source : https://leetcode.com/problems/perfect-squares/
-// Author : 悬笔e绝
-// Date   : 2020-03-05
+  <script>
+    // 方法1：动态规划
+    // 时间复杂度：O(n * sqrt{n})，其中 n 为给定的正整数
+    // 空间复杂度：O(n)
+    var numSquares = function (n) {
+      const f = new Array(n + 1).fill(0);
+      for (let i = 1; i <= n; i++) {
+        let minn = Number.MAX_VALUE;
+        for (let j = 1; j * j <= i; j++) {
+          minn = Math.min(minn, f[i - j * j]);
+        }
+        f[i] = minn + 1;
+      }
+      return f[n];
+    };
 
-/**
- * @param {number} n
- * @return {number}
- */
-var numSquares = function(n) {
-  var dp = [];
-  for (var i = 1; i <= n; i++)
-    dp[i] = Infinity;
-
-  dp[0] = 0;
-  for (var i = 0; i <= n; i++) 
-    for (var j = 1; ; j++) {
-      if (i + j * j > n) break;
-      dp[i + j * j] = Math.min(dp[i + j * j], dp[i] + 1);
+    // 方法2：数学
+    // 时间复杂度：O(n * sqrt{n})，其中 n 为给定的正整数
+    // 空间复杂度：O(1)
+    var numSquares = function (n) {
+      if (isPerfectSquare(n)) {
+        return 1;
+      }
+      if (checkAnswer4(n)) {
+        return 4;
+      }
+      for (let i = 1; i * i <= n; i++) {
+        let j = n - i * i;
+        if (isPerfectSquare(j)) {
+          return 2;
+        }
+      }
+      return 3;
     }
-  return dp[n];
-};
-</script>
+
+    // 判断是否为完全平方数
+    const isPerfectSquare = (x) => {
+      const y = Math.floor(Math.sqrt(x));
+      return y * y == x;
+    }
+
+    // 判断是否能表示为 4^k*(8m+7)
+    const checkAnswer4 = (x) => {
+      while (x % 4 == 0) {
+        x /= 4;
+      }
+      return x % 8 == 7;
+    }
+  </script>
 </body>
+
 </html>
