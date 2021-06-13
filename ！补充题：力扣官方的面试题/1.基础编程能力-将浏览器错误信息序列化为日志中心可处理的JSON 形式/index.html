@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        const reg_mes = /^.*TypeError:\s*(.*)$/;
+        const reg_stack = /^.*(https?:\/\/.+):(\d+):(\d+)$/;
+
+        const ErrorToMessage = (error) => {
+            const stackMsgArr = (error || '').split(`
+        `);
+            const stack = [];
+            let message = "";
+            stackMsgArr.forEach((msg) => {
+                if (!msg.trim()) return;
+                let match_mes = msg.trim().match(reg_mes);
+                if (match_mes) {
+                    message = match_mes[1];
+                    return;
+                }
+                const match_stack = msg.trim().match(reg_stack);
+                if (!match_stack) return;
+                stack.push({
+                    filename: match_stack[1],
+                    line: parseInt(match_stack[2]),
+                    column: parseInt(match_stack[3]),
+                });
+            });
+            return {
+                message: message,
+                stack,
+            };
+        };
+
+        // test
+        const chromeError = `TypeError: Error raised
+        at bar http://192.168.31.8:8000/c.js:2:9
+        at foo http://192.168.31.8:8000/b.js:4:15
+        at calc http://192.168.31.8:8000/a.js:4:3
+        at <anonymous>:1:11
+        at http://192.168.31.8:8000/a.js:22:3
+        `
+
+        let firefoxError = `
+        bar@http://192.168.31.8:8000/c.js:2:9
+        foo@http://192.168.31.8:8000/b.js:4:15
+        calc@http://192.168.31.8:8000/a.js:4:3
+        <anonymous>:1:11
+        http://192.168.31.8:8000/a.js:22:3
+        `
+
+        let testError = `TypeError: Error raised
+            at bar http://192.168.31.8:8000/c.js:2:9`
+
+        console.log(ErrorToMessage(chromeError));
+        console.log(ErrorToMessage(firefoxError));
+        console.log(ErrorToMessage(testError));
+    </script>
+</body>
+
+</html>
