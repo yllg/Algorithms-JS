@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法1：动态规划
+        // 时间复杂度O(n^2) 空间复杂度O(n)
+        var stoneGame = function (piles) {
+            const length = piles.length;
+            const dp = new Array(length).fill(0);
+            for (let i = 0; i < length; i++) {
+                dp[i] = piles[i];
+            }
+            for (let i = length - 2; i >= 0; i--) {
+                for (let j = i + 1; j < length; j++) {
+                    dp[j] = Math.max(piles[i] - dp[j], piles[j] - dp[j - 1]);
+                }
+            }
+            return dp[length - 1] > 0;
+        };
+
+        // 方法2：数学
+        // 时间复杂度O(1) 空间复杂度O(1)
+        var stoneGame = function (piles) {
+            return true;
+        };
+
+        // test
+        let piles = [5, 3, 4, 5];
+        console.log(stoneGame(piles))
+    </script>
+</body>
+
+</html>
