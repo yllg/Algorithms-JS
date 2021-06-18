@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法1：数学
+        // 时间复杂度 O(logn ^ 2)  空间复杂度 O(1)
+        var smallestGoodBase = function (n) {
+            const nVal = parseInt(n);
+            const mMax = Math.floor(Math.log(nVal) / Math.log(2));
+            for (let m = mMax; m > 1; m--) {
+                const k = BigInt(Math.floor(Math.pow(nVal, 1.0 / m)));
+                if (k > 1) {
+                    let mul = BigInt(1),
+                        sum = BigInt(1);
+                    for (let i = 1; i <= m; i++) {
+                        mul *= k;
+                        sum += mul;
+                    }
+                    if (sum === BigInt(n)) {
+                        return k + '';
+                    }
+                }
+            }
+            return (BigInt(n) - BigInt(1)) + '';
+        };
+
+        // test
+        let n = "4681";
+        console.log(smallestGoodBase(n))
+    </script>
+</body>
+
+</html>
