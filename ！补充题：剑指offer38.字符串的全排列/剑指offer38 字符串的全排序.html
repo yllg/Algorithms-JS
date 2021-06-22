@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法1：回溯
+        // 时间复杂度：O(n×n!) 空间复杂度 O(n)
+        var permutation = function (s) {
+            const rec = [],
+                vis = [];
+            const n = s.length;
+            const arr = Array.from(s).sort();
+            const perm = [];
+            const backtrack = (arr, i, n, perm) => {
+                if (i === n) {
+                    rec.push(perm.toString());
+                    return;
+                }
+                for (let j = 0; j < n; j++) {
+                    if (vis[j] || (j > 0 && !vis[j - 1] && arr[j - 1] === arr[j])) {
+                        continue;
+                    }
+                    vis[j] = true;
+                    perm.push(arr[j]);
+                    backtrack(arr, i + 1, n, perm);
+                    perm.pop();
+                    vis[j] = false;
+                }
+            }
+
+            backtrack(arr, 0, n, perm);
+            const size = rec.length;
+            const recArr = new Array(size).fill(0);
+            for (let i = 0; i < size; i++) {
+                recArr[i] = rec[i].split(',').join('');
+            }
+            return recArr;
+        };
+
+        // 方法2：下一个排序
+        // 时间复杂度：O(n×n!) 空间复杂度 O(1)
+        var permutation = function (s) {
+            const ret = [];
+            const arr = Array.from(s).sort();
+            const nextPermutation = (arr) => {
+                let i = arr.length - 2;
+                while (i >= 0 && arr[i] >= arr[i + 1]) {
+                    i--;
+                }
+                if (i < 0) {
+                    return false;
+                }
+                let j = arr.length - 1;
+                while (j >= 0 && arr[i] >= arr[j]) {
+                    j--;
+                }
+                swap(arr, i, j);
+                reverse(arr, i + 1);
+                return true;
+            }
+            const swap = (arr, i, j) => {
+                const temp = arr[i];
+                arr[i] = arr[j];
+                arr[j] = temp;
+            }
+            const reverse = (arr, start) => {
+                let left = start,
+                    right = arr.length - 1;
+                while (left < right) {
+                    swap(arr, left, right);
+                    left++;
+                    right--;
+                }
+            }
+            do {
+                ret.push(arr.join(''));
+            } while (nextPermutation(arr));
+            const size = ret.length;
+            const retArr = new Array(size).fill(0);
+            for (let i = 0; i < size; i++) {
+                retArr[i] = ret[i];
+            }
+            return retArr;
+        };
+
+        // test
+        let s = "abc";
+        console.log(permutation(s))
+    </script>
+</body>
+
+</html>
