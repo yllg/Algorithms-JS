@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法1：枚举时分
+        // 时间复杂度 O(1)  空间复杂度 O(1)
+        var readBinaryWatch = function (turnedOn) {
+            const ans = [];
+            for (let h = 0; h < 12; ++h) {
+                for (let m = 0; m < 60; ++m) {
+                    if (h.toString(2).split('0').join('').length + m.toString(2).split('0').join('').length ===
+                        turnedOn) {
+                        ans.push(h + ":" + (m < 10 ? "0" : "") + m);
+                    }
+                }
+            }
+            return ans;
+        };
+
+        // 方法2：二进制枚举
+        // 时间复杂度 O(1)  空间复杂度 O(1)
+        var readBinaryWatch = function (turnedOn) {
+            const ans = [];
+            for (let i = 0; i < 1024; ++i) {
+                let h = i >> 6,
+                    m = i & 63; // 用位运算取出高 4 位和低 6 位
+                if (h < 12 && m < 60 && i.toString(2).split('0').join('').length === turnedOn) {
+                    ans.push(h + ":" + (m < 10 ? "0" : "") + m);
+                }
+            }
+            return ans;
+        };
+    </script>
+</body>
+
+</html>
