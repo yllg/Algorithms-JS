@@ -1,37 +1,47 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
 </head>
+
 <body>
-<script>
-// Source : https://leetcode.com/problems/excel-sheet-column-title/
-// Author : 悬笔e绝
-// Date   : 2019-08-28
+  <script>
+    // 方法1
+    var convertToTitle = function (n) {
+      var ans = '';
+      while (n) {
+        if (n % 26 === 0) {
+          ans += String.fromCharCode(26 + 64);
+          n = (n / 26) - 1;
+        } else {
+          ans += String.fromCharCode(n % 26 + 64);
+          n = ~~(n / 26);
+        }
+      }
+      return ans.split('').reverse().join('');
+    };
 
-/**
- * @param {number} n
- * @return {string}
- */
-var convertToTitle = function(n) {
-  var ans = '';
-  while (n) {
-    if (n % 26 === 0) {
-      ans += String.fromCharCode(26 + 64);
-      n = (n / 26) - 1;
-    }
-    else {
-      ans += String.fromCharCode(n % 26 + 64);
-      n = ~~(n / 26);
-    }
-  }
+    // 方法2：数学
+    // 时间复杂度： O(log 26​ columnNumber)。 时间复杂度即为将 columnNumber 转换成 26 进制的位数。
+    // 空间复杂度： O(1) 
+    var convertToTitle = function (columnNumber) {
+      const sb = [];
+      while (columnNumber !== 0) {
+        columnNumber--;
+        sb.push(String.fromCharCode(columnNumber % 26 + 'A'.charCodeAt()));
+        columnNumber = Math.floor(columnNumber / 26);
+      }
+      return sb.reverse().join('');
+    };
 
-  return ans.split('').reverse().join('');
-};
-
-</script>
+    // test
+    let columnNumber = 701;
+    console.log(convertToTitle(columnNumber))
+  </script>
 </body>
+
 </html>
