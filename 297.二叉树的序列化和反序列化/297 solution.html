@@ -1,53 +1,89 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
-  </head>
-  <body>
-    <script>
-      //    Definition for a binary tree node.
-      function TreeNode(val) {
-        this.val = val;
-        this.left = this.right = null;
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    // 方法1：深度优先搜索 先序遍历
+    // 时间复杂度 O(n) 空间复杂度 O(n)
+    var serialize = function (root) {
+      return rserialize(root, '');
+    };
+    var deserialize = function (data) {
+      const dataArray = data.split(",");
+      return rdeserialize(dataArray);
+    };
+    const rserialize = (root, str) => {
+      if (root === null) {
+        str += "None,";
+      } else {
+        str += root.val + '' + ",";
+        str = rserialize(root.left, str);
+        str = rserialize(root.right, str);
       }
+      return str;
+    }
+    const rdeserialize = (dataList) => {
+      if (dataList[0] === "None") {
+        dataList.shift();
+        return null;
+      }
+      const root = new TreeNode(parseInt(dataList[0]));
+      dataList.shift();
+      root.left = rdeserialize(dataList);
+      root.right = rdeserialize(dataList);
+      return root;
+    }
 
-      /**
-       * Encodes a tree to a single string.
-       *
-       * @param {TreeNode} root
-       * @return {string}
-       */
-      //序列化
-      // 深度优先遍历的 前序遍历
-      const serialize = (root) => {
-        if (root == null) return "X,"; // 遇到null节点
-        const leftSerialized = serialize(root.left); //左子树的序列化字符串
-        const rightSerialized = serialize(root.right); //右子树的序列化字符串
-        return root.val + "," + leftSerialized + rightSerialized; // 根|左|右
-      };
+    // 方法2：括号表示编码 + 递归下降解码
+    // 时间复杂度 O(n) 空间复杂度 O(n)
+    var serialize = function (root) {
+      if (root == null) {
+        return "X";
+      }
+      const left = "(" + serialize(root.left) + ")";
+      const right = "(" + serialize(root.right) + ")";
+      return left + root.val + right;
+    };
+    var deserialize = function (data) {
+      const ptr = [0];
+      return parse(data, ptr);
+    };
+    const parse = (data, ptr) => {
+      if (data[ptr[0]] === 'X') {
+        ++ptr[0];
+        return null;
+      }
+      let cur = new TreeNode(0);
+      cur.left = parseSubtree(data, ptr);
+      cur.val = parseInt(data, ptr);
+      cur.right = parseSubtree(data, ptr);
+      return cur;
+    }
+    const parseSubtree = (data, ptr) => {
+      ++ptr[0]; // 跳过左括号
+      const subtree = parse(data, ptr);
+      ++ptr[0]; // 跳过右括号
+      return subtree;
+    }
+    const parseInt = (data, ptr) => {
+      let x = 0,
+        sgn = 1;
+      if (isNaN(Number(data[ptr[0]]))) {
+        sgn = -1;
+        ++ptr[0];
+      }
+      while (!isNaN(Number(data[ptr[0]]))) {
+        x = x * 10 + data[ptr[0]++].charCodeAt() - '0'.charCodeAt();
+      }
+      return x * sgn;
+    }
+  </script>
+</body>
 
-      // 反序列化
-      const buildTree = (list) => {
-        // dfs函数
-        const nodeVal = list.shift(); // 当前考察的节点
-        if (nodeVal == "X") return null; // 是X，返回null给父调用
-        const node = new TreeNode(nodeVal); // 创建node节点
-        node.left = buildTree(list); // 构建node的左子树
-        node.right = buildTree(list); // 构建node的右子树
-        return node; // 返回以node为根节点的子树给父调用
-      };
-      /**
-       * Decodes your encoded data to tree.
-       *
-       * @param {string} data
-       * @return {TreeNode}
-       */
-      const deserialize = (data) => {
-        const list = data.split(","); // 转成list数组
-        return buildTree(list); // 构建树，dfs的入口
-      };
-    </script>
-  </body>
 </html>
