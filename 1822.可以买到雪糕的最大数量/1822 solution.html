@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法1:排序 + 贪心
+        // 时间复杂度 O(nlogn) 空间复杂度 O(logn)
+        var maxIceCream = function (costs, coins) {
+            costs.sort((a, b) => a - b);
+            let count = 0;
+            const n = costs.length;
+            for (let i = 0; i < n; i++) {
+                const cost = costs[i];
+                if (coins >= cost) {
+                    coins -= cost;
+                    count++;
+                } else {
+                    break;
+                }
+            }
+            return count;
+        };
+
+        // 方法2：计数排序 + 贪心
+        // 时间复杂度：O(n+C)，其中 n 是数组 costs 的长度，C 是数组 costs 中的元素的最大可能值，这道题中 C=10^5
+        // 空间复杂度：O(C)  C 是数组 costs 中的元素的最大可能值，这道题中 C=10^5
+        var maxIceCream = function (costs, coins) {
+            const freq = new Array(100001).fill(0);
+            for (const cost of costs) {
+                freq[cost]++;
+            }
+            let count = 0;
+            for (let i = 1; i <= 100000; i++) {
+                if (coins >= i) {
+                    const curCount = Math.min(freq[i], Math.floor(coins / i));
+                    count += curCount;
+                    coins -= i * curCount;
+                } else {
+                    break;
+                }
+            }
+            return count;
+        };
+
+        // test
+        let costs = [1, 3, 2, 4, 1],
+            coins = 7;
+        console.log(maxIceCream(costs, coins))
+    </script>
+</body>
+
+</html>
