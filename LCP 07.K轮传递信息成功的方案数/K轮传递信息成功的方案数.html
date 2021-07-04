@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法1：深度优先搜索
+        var numWays = function (n, relation, k) {
+            let ways = 0;
+            const edges = new Array(n).fill(0).map(() => new Array());
+            for (const [src, dst] of relation) {
+                edges[src].push(dst);
+            }
+            const dfs = (index, steps) => {
+                if (steps === k) {
+                    if (index === n - 1) {
+                        ways++;
+                    }
+                    return;
+                }
+                const list = edges[index];
+                for (const nextIndex of list) {
+                    dfs(nextIndex, steps + 1);
+                }
+            }
+            dfs(0, 0);
+            return ways;
+        }
+
+        // 方法2：广度优先搜索
+        var numWays = function (n, relation, k) {
+            const edges = new Array(n).fill(0).map(() => new Array());
+            for (const [src, dst] of relation) {
+                edges[src].push(dst);
+            }
+            let steps = 0;
+            const queue = [0];
+            while (queue.length && steps < k) {
+                steps++;
+                const size = queue.length;
+                for (let i = 0; i < size; i++) {
+                    const index = queue.shift();
+                    const list = edges[index];
+                    for (const nextIndex of list) {
+                        queue.push(nextIndex);
+                    }
+                }
+            }
+            let ways = 0;
+            if (steps === k) {
+                while (queue.length) {
+                    if (queue.shift() === n - 1) {
+                        ways++;
+                    }
+                }
+            }
+            return ways;
+        };
+
+        // 方法3：动态规划
+        var numWays = function (n, relation, k) {
+            let dp = new Array(n).fill(0);
+            dp[0] = 1;
+            for (let i = 0; i < k; i++) {
+                const next = new Array(n).fill(0);
+                for (const [src, dst] of relation) {
+                    next[dst] += dp[src];
+                }
+                dp = next;
+            }
+            return dp[n - 1];
+        };
+    </script>
+</body>
+
+</html>

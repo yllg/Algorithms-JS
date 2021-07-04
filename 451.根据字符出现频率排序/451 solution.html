@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法1：按照出现频率排序
+        // 时间复杂度：O(n+klogk) 遍历字符串统计每个字符出现的频率需要 O(n) 的时间。将字符按照出现频率排序需要 O(klogk) 的时间。
+        // 空间复杂度：O(n+k)，其中 n 是字符串 s 的长度，k 是字符串 s 包含的不同字符的个数。
+        var frequencySort = function (s) {
+            const map = new Map();
+            const length = s.length;
+            for (let i = 0; i < length; i++) {
+                const c = s[i];
+                const frequency = (map.get(c) || 0) + 1;
+                map.set(c, frequency);
+            }
+            const list = [...map.keys()];
+            list.sort((a, b) => map.get(b) - map.get(a));
+            const sb = [];
+            const size = list.length;
+            for (let i = 0; i < size; i++) {
+                const c = list[i];
+                const frequency = map.get(c);
+                for (let j = 0; j < frequency; j++) {
+                    sb.push(c);
+                }
+            }
+            return sb.join('');
+        };
+
+        // 方法2：桶排序
+        // 时间复杂度：O(n+k)，其中 n 是字符串 s 的长度，k 是字符串 s 包含的不同字符的个数。
+        // 空间复杂度：O(n+k)，其中 n 是字符串 s 的长度，k 是字符串 s 包含的不同字符的个数。
+        var frequencySort = function (s) {
+            const mp = new Map();
+            let maxFreq = 0;
+            const length = s.length;
+            for (const ch of s) {
+                const frequency = (mp.get(ch) || 0) + 1;
+                mp.set(ch, frequency);
+                maxFreq = Math.max(maxFreq, frequency);
+            }
+            const buckets = new Array(maxFreq + 1).fill(0).map(() => new Array());
+            for (const [ch, num] of mp.entries()) {
+                buckets[num].push(ch);
+            }
+            const ret = [];
+            for (let i = maxFreq; i > 0; i--) {
+                const bucket = buckets[i];
+                for (const ch of bucket) {
+                    for (let k = 0; k < i; k++) {
+                        ret.push(ch);
+                    }
+                }
+            }
+            return ret.join('');
+        };
+    </script>
+</body>
+
+</html>
