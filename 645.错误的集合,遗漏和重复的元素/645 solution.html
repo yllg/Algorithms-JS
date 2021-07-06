@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法1：排序
+        // 时间复杂度 O(nlogn)
+        // 空间复杂度 O(logn)
+        var findErrorNums = function (nums) {
+            const errorNums = new Array(2).fill(0);
+            const n = nums.length;
+            nums.sort((a, b) => a - b);
+            let prev = 0;
+            for (let i = 0; i < n; i++) {
+                const curr = nums[i];
+                if (curr === prev) {
+                    errorNums[0] = prev;
+                } else if (curr - prev > 1) {
+                    errorNums[1] = prev + 1;
+                }
+                prev = curr;
+            }
+            if (nums[n - 1] !== n) {
+                errorNums[1] = n;
+            }
+            return errorNums;
+        };
+
+        // 方法2：哈希表
+        // 时间复杂度 O(n)
+        // 空间复杂度 O(n)
+        var findErrorNums = function (nums) {
+            const errorNums = new Array(2).fill(0);
+            const n = nums.length;
+            const map = new Map();
+            for (const num of nums) {
+                map.set(num, (map.get(num) || 0) + 1);
+            }
+            for (let i = 1; i <= n; i++) {
+                const count = map.get(i) || 0;
+                if (count === 2) {
+                    errorNums[0] = i;
+                } else if (count === 0) {
+                    errorNums[1] = i;
+                }
+            }
+            return errorNums;
+        };
+
+        // 方法3：位运算
+        // 时间复杂度 O(n)
+        // 空间复杂度 O(1)
+        var findErrorNums = function (nums) {
+            const n = nums.length;
+            let xor = 0;
+            for (const num of nums) {
+                xor ^= num;
+            }
+            for (let i = 1; i <= n; i++) {
+                xor ^= i;
+            }
+            const lowbit = xor & (-xor);
+            let num1 = 0,
+                num2 = 0;
+            for (const num of nums) {
+                if ((num & lowbit) === 0) {
+                    num1 ^= num;
+                } else {
+                    num2 ^= num;
+                }
+            }
+            for (let i = 1; i <= n; i++) {
+                if ((i & lowbit) === 0) {
+                    num1 ^= i;
+                } else {
+                    num2 ^= i;
+                }
+            }
+            for (const num of nums) {
+                if (num === num1) {
+                    return [num1, num2];
+                }
+            }
+            return [num2, num1];
+        };
+
+        // test
+        let nums = [1, 2, 2, 4];
+        console.log(findErrorNums(nums))
+    </script>
+</body>
+
+</html>
