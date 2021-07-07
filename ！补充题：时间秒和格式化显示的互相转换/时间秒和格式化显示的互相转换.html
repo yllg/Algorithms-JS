@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 秒 转化成 时分秒
+        function secondToDate(time) {
+            var h = Math.floor(time / 3600);
+            var m = Math.floor((time / 60 % 60));
+            var s = Math.floor((time % 60));
+            return time = h + "小时" + m + "分钟" + s + "秒";
+        }
+        // 时分秒 转化成 秒
+        function dateToSecond(time) {
+            let hIndex = time.indexOf('小时');
+            let mIndex = time.indexOf('分钟');
+            let sIndex = time.indexOf('秒');
+            var h = time.slice(0, hIndex);
+            var m = time.slice(hIndex + 2, mIndex);
+            var s = time.slice(mIndex + 2, sIndex);
+            return h * 3600 + m * 60 + s * 1;
+        }
+
+        console.log('4100秒', secondToDate(4100));
+        console.log('1小时8分钟20秒', dateToSecond('1小时8分钟20秒'));
+    </script>
+</body>
+
+</html>
