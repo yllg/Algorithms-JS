@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // safeGet
+        // 使用try catch包一下，报错就返回undefined
+        const safeGet = (o, path) => {
+            try {
+                return path.split('.').reduce((o, k) => o[k], o)
+            } catch (e) {
+                return undefined;
+            }
+        }
+
+        // test
+        let obj = {
+            a: {
+                b: {
+                    c: 1,
+                },
+            },
+        };
+        console.log(safeGet(obj, 'a.b'))
+        console.log(safeGet(obj, 'a.b.c'))
+        console.log(safeGet(obj, 'a.b.c.d'))
+
+        // safeSet
+        const safeSet = (content, key, value) => {
+            try {
+                let keyArr = key.split('.');
+                let {
+                    obj,
+                    k
+                } = keyArr.reduce((content, k, i) => {
+                    if (i !== keyArr.length - 1) {
+                        return content[k];
+                    } else {
+                        return {
+                            obj: content,
+                            k
+                        };
+                    }
+                }, content);
+                obj[k] = value;
+            } catch (e) {
+                console.warn('输入key有误')
+            }
+        }
+
+        // test
+        obj = {
+            a: {
+                b: {
+                    c: {
+                        d: 1
+                    },
+                    bx: {
+                        y: 1
+                    },
+                },
+                ax: {
+                    y: 1
+                }
+            }
+        }
+        safeSet(obj, 'a.b.c.d', 3);
+        console.log(obj.a.b.c.d)
+        safeSet(obj, 'a.b.e', 1);
+        console.log(obj.a.b.e)
+        safeSet(obj, 'a.b.m.n', 1);
+    </script>
+</body>
+
+</html>
