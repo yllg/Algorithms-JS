@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 大餐计数，两个元素之和是否等于 2 的幂
+
+        // 方法1：哈希表
+        // 时间复杂度：O(nlogC)，其中 n 是数组 deliciousness 的长度，C是数组deliciousness 中的元素值上限，这道题中 C = 2^20
+        // 空间复杂度 O(n)
+        var countPairs = function (deliciousness) {
+            const MOD = 1000000007;
+            let maxVal = 0;
+            for (const val of deliciousness) {
+                maxVal = Math.max(maxVal, val);
+            }
+            const maxSum = maxVal * 2;
+            let pairs = 0;
+            const map = new Map();
+            const n = deliciousness.length;
+            for (let i = 0; i < n; i++) {
+                const val = deliciousness[i];
+                for (let sum = 1; sum <= maxSum; sum <<= 1) {
+                    const count = map.get(sum - val) || 0;
+                    pairs = (pairs + count) % MOD;
+                }
+                map.set(val, (map.get(val) || 0) + 1);
+            }
+            return pairs;
+        };
+    </script>
+</body>
+
+</html>
