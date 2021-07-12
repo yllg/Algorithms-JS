@@ -1,23 +1,36 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
-<script>
-// Source : https://leetcode.com/problems/h-index-ii/
-// Author : 悬笔e绝
-// Date   : 2020-03-03
 
-var hIndex = function(citations) {
-  var len = citations.length;
-  for (var i = len; ; i--) {
-    if ((!i || citations[len - i] >= i) && (len - i - 1 < 0 || citations[len - i - 1] <= i))
-      return i;
-  }
-};
-</script>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    // 跟274不同在于 输入数组 citations 已经按照升序排序
+    // 方法1：二分查找
+    // 时间复杂度O(logn) 空间复杂度O(1)
+    var hIndex = function (citations) {
+      let n = citations.length;
+      let left = 0,
+        right = n - 1;
+      while (left <= right) {
+        const mid = left + Math.floor((right - left) / 2);
+        if (citations[mid] >= n - mid) {
+          right = mid - 1;
+        } else {
+          left = mid + 1;
+        }
+      }
+      return n - left;
+    };
+
+    // test
+    let citations = [0, 1, 3, 5, 6];
+    console.log(hIndex(citations)); // 3
+  </script>
 </body>
+
 </html>
