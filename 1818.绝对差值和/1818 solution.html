@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 数组 nums1 和 nums2 的 绝对差值和 定义为所有 |nums1[i] - nums2[i]|（0 <= i < n）的 总和（下标从 0 开始）。你可以选用 nums1 中的 任意一个 元素来替换 nums1 中的 至多 一个元素，以 最小化 绝对差值和。
+
+        // 方法1：排序+二分查找
+        // 时间复杂度 O(nlogn) 空间复杂度O(n)
+        var minAbsoluteSumDiff = function (nums1, nums2) {
+            const MOD = 1000000007;
+            const n = nums1.length;
+            const rec = [...nums1];
+            rec.sort((a, b) => a - b);
+            let sum = 0,
+                maxn = 0;
+            for (let i = 0; i < n; i++) {
+                const diff = Math.abs(nums1[i] - nums2[i]);
+                sum = (sum + diff) % MOD;
+                const j = binarySearch(rec, nums2[i]);
+                if (j < n) {
+                    maxn = Math.max(maxn, diff - (rec[j] - nums2[i]));
+                }
+                if (j > 0) {
+                    maxn = Math.max(maxn, diff - (nums2[i] - rec[j - 1]));
+                }
+            }
+            return (sum - maxn + MOD) % MOD;
+        };
+
+        const binarySearch = (rec, target) => {
+            let low = 0,
+                high = rec.length - 1;
+            if (rec[high] < target) {
+                return high + 1;
+            }
+            while (low < high) {
+                const mid = Math.floor((high - low) / 2) + low;
+                if (rec[mid] < target) {
+                    low = mid + 1;
+                } else {
+                    high = mid;
+                }
+            }
+            return low;
+        }
+
+        // test
+        let nums1 = [1, 7, 5],
+            nums2 = [2, 3, 5];
+        console.log(minAbsoluteSumDiff(nums1, nums2))
+    </script>
+</body>
+
+</html>
