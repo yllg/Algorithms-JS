@@ -1,0 +1,22 @@
+{
+  "name": "algorithms-js",
+  "version": "1.0.0",
+  "description": "LeetCode算法题的JS解法✏️📒",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yllg/Algorithms-JS.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/yllg/Algorithms-JS/issues"
+  },
+  "homepage": "https://github.com/yllg/Algorithms-JS#readme",
+  "devDependencies": {
+    "koa": "^2.13.1"
+  }
+}
