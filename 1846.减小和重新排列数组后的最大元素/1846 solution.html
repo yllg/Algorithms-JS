@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法1：排序 + 贪心
+        // 时间复杂度 O(nlogn)
+        // 空间复杂度 O(logn)
+        var maximumElementAfterDecrementingAndRearranging = function (arr) {
+            const n = arr.length;
+            arr.sort((a, b) => a - b);
+            arr[0] = 1;
+            for (let i = 1; i < n; ++i) {
+                arr[i] = Math.min(arr[i], arr[i - 1] + 1);
+            }
+            return arr[n - 1];
+        };
+
+        // 方法2：计数排序 + 贪心
+        // 时间复杂度 O(n)
+        // 空间复杂度 O(n)
+        var maximumElementAfterDecrementingAndRearranging = function (arr) {
+            const n = arr.length;
+            const cnt = new Array(n + 1).fill(0);
+            for (const v of arr) {
+                ++cnt[Math.min(v, n)];
+            }
+            let miss = 0;
+            for (let i = 1; i <= n; ++i) {
+                if (cnt[i] == 0) {
+                    ++miss;
+                } else {
+                    miss -= Math.min(cnt[i] - 1, miss); // miss 不会小于 0，故至多减去 miss 个元素
+                }
+            }
+            return n - miss;
+        };
+
+        // test
+        let arr = [100, 1, 1000];
+        console.log(maximumElementAfterDecrementingAndRearranging(arr))
+    </script>
+</body>
+
+</html>
