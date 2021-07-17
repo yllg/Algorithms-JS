@@ -44,6 +44,8 @@
         }
 
         // 解法3：分治法
+        // 时间复杂度O(n)
+        // 空间复杂度O(logn)
         function maxSubArray(list) {
             function helper(list, m, n) {
                 if (m === n) return list[m];
@@ -68,6 +70,8 @@
         }
 
         // 解法4：动态规划
+        // 时间复杂度O(n)
+        // 空间复杂度O(1)
         function maxSubArray(list) {
             const len = list.length;
             let max = list[0];
@@ -77,6 +81,10 @@
             }
             return max;
         }
+
+        // test
+        let nums = [-2, 1, -3, 4, -1, 2, 1, -5, 4];
+        console.log(maxSubArray(nums))
     </script>
 </body>
 
