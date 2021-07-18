@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        function timeago(dateTimeStamp) {
+            //dateTimeStamp是一个时间毫秒，注意时间戳是秒的形式，在这个毫秒的基础上除以1000，就是十位数的时间戳。13位数的都是时间毫秒。
+            var second = 1000; //把秒、分，时，天，周，半个月，一个月 用毫秒表示
+            var minute = second * 60;
+            var hour = minute * 60;
+            var day = hour * 24;
+            var week = day * 7;
+            var halfamonth = day * 15;
+            var month = day * 30;
+            var now = new Date().getTime(); //获取当前时间毫秒
+            console.log(now);
+            var diffValue = now - dateTimeStamp; //时间差
+            if (diffValue < 0) {
+                return;
+            }
+            var secondC = diffValue / second; //计算时间差的秒、分，时，天，周，月
+            var minC = diffValue / minute;
+            var hourC = diffValue / hour;
+            var dayC = diffValue / day;
+            var weekC = diffValue / week;
+            var monthC = diffValue / month;
+            if (monthC >= 1 && monthC <= 3) {
+                result = " " + parseInt(monthC) + "月前";
+            } else if (weekC >= 1 && weekC <= 3) {
+                result = " " + parseInt(weekC) + "周前";
+            } else if (dayC >= 1 && dayC <= 6) {
+                result = " " + parseInt(dayC) + "天前";
+            } else if (hourC >= 1 && hourC <= 23) {
+                result = " " + parseInt(hourC) + "小时前";
+            } else if (minC >= 1 && minC <= 59) {
+                result = " " + parseInt(minC) + "分钟前";
+            } else if (diffValue >= 0 && diffValue <= minute) {
+                result = " " + parseInt(secondC) + "秒前";
+            } else {
+                var datetime = new Date();
+                datetime.setTime(dateTimeStamp);
+                var Nyear = datetime.getFullYear();
+                var Nmonth =
+                    datetime.getMonth() + 1 < 10 ?
+                    "0" + (datetime.getMonth() + 1) :
+                    datetime.getMonth() + 1;
+                var Ndate =
+                    datetime.getDate() < 10 ? "0" + datetime.getDate() : datetime.getDate();
+                var Nhour =
+                    datetime.getHours() < 10 ?
+                    "0" + datetime.getHours() :
+                    datetime.getHours();
+                var Nminute =
+                    datetime.getMinutes() < 10 ?
+                    "0" + datetime.getMinutes() :
+                    datetime.getMinutes();
+                var Nsecond =
+                    datetime.getSeconds() < 10 ?
+                    "0" + datetime.getSeconds() :
+                    datetime.getSeconds();
+                result = Nyear + "-" + Nmonth + "-" + Ndate;
+            }
+            return result;
+        }
+
+        // test
+        let dateTimeStamp = 1625568281614;
+        console.log(timeago(dateTimeStamp))
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法1：分治
+        /**
+         * @param {number[]} nums
+         * @return {boolean}
+         */
+        var isStraight = function (nums) {
+            /* 
+               分治思想 五张牌构成顺子的充分条件需要满足
+               1. 不重复 使用Set去重
+               2. max - min < 5 最大牌值 减去 最小牌值 小于5 且跳过大小王
+            */
+            const set = new Set()
+            let min = 14,
+                max = 0 // ⚠️ min和max的初始值是两个边界值[0, 13]
+            for (const num of nums) {
+                // 遇到大小王 跳过
+                if (!num) continue
+                // 遇到重复则直接 返回false
+                if (set.has(num)) return false
+                set.add(num)
+                // 迭代更新 min和max 以及set
+                min = Math.min(min, num)
+                max = Math.max(max, num)
+            }
+            return max - min < 5
+        };
+
+        // test
+        let nums = [0, 0, 1, 2, 5];
+        console.log(isStraight(nums))
+
+        // TODO: 区分花色一共52张，选出7张判断顺子
+    </script>
+</body>
+
+</html>
