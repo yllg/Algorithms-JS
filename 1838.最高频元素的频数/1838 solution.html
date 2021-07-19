@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 执行 K 次操作，每次选择一个元素增加1 ，返回最高频元素的最大频数
+        // 方法1：排序 + 滑动窗口
+        // 时间复杂度 O(nlogn) 空间复杂度 O(logn)
+        var maxFrequency = function (nums, k) {
+            nums.sort((a, b) => a - b);
+            const n = nums.length;
+            let total = 0,
+                res = 1,
+                l = 0;
+            for (let r = 1; r < n; r++) {
+                total += (nums[r] - nums[r - 1]) * (r - l);
+                while (total > k) {
+                    total -= nums[r] - nums[l];
+                    l += 1;
+                }
+                res = Math.max(res, r - l + 1);
+            }
+            return res;
+        };
+
+        // test
+        let nums = [1, 2, 4],
+            k = 5;
+        console.log(maxFrequency(nums, k))
+    </script>
+</body>
+
+</html>
