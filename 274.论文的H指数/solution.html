@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    // 方法1：排序
+    // 时间复杂度 O(nlogn)  n为citations数组长度
+    // 空间复杂度 O(logn)
+    var hIndex = function (citations) {
+      citations.sort((a, b) => a - b);
+      let h = 0,
+        i = citations.length - 1;
+      while (i >= 0 && citations[i] > h) {
+        h++;
+        i--;
+      }
+      return h;
+    };
+
+    // 方法2：计数排序
+    // 时间复杂度 O(n)  n为citations数组长度
+    // 空间复杂度 O(n)
+    var hIndex = function (citations) {
+      let n = citations.length,
+        tot = 0;
+      const counter = new Array(n + 1).fill(0);
+      for (let i = 0; i < n; i++) {
+        if (citations[i] >= n) {
+          counter[n]++;
+        } else {
+          counter[citations[i]]++;
+        }
+      }
+      for (let i = n; i >= 0; i--) {
+        tot += counter[i];
+        if (tot >= i) {
+          return i;
+        }
+      }
+      return 0;
+    };
+
+    // test
+    let citations = [3, 0, 6, 1, 5];
+    console.log(hIndex(citations))
+  </script>
+</body>
+
+</html>
