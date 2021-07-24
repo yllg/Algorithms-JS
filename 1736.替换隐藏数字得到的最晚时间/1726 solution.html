@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法1：贪心
+        // 时间复杂度O(1) 空间复杂度O(1)
+        var maximumTime = function (time) {
+            const arr = Array.from(time);
+            if (arr[0] === '?') {
+                arr[0] = ('4' <= arr[1] && arr[1] <= '9') ? '1' : '2';
+            }
+            if (arr[1] === '?') {
+                arr[1] = (arr[0] == '2') ? '3' : '9';
+            }
+            if (arr[3] === '?') {
+                arr[3] = '5';
+            }
+            if (arr[4] === '?') {
+                arr[4] = '9';
+            }
+            return arr.join('');
+        };
+
+        // test
+        let time = "2?:?0";
+        console.log(maximumTime(time))
+    </script>
+</body>
+
+</html>
