@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法1：深度优先搜索
+        // 时间复杂度O(n) 空间复杂度O(n)
+        var findSecondMinimumValue = function (root) {
+            let ans = -1;
+            const rootvalue = root.val;
+            const dfs = (node) => {
+                if (node === null) {
+                    return;
+                }
+                if (ans !== -1 && node.val >= ans) {
+                    return;
+                }
+                if (node.val > rootvalue) {
+                    ans = node.val;
+                }
+                dfs(node.left);
+                dfs(node.right);
+            }
+            dfs(root);
+            return ans;
+        };
+    </script>
+</body>
+
+</html>
