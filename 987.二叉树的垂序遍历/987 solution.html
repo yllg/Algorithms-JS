@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法1：自定义排序
+        // 我们可以从根节点开始，对整棵树进行一次遍历，在遍历的过程中使用数组 nodes 记录下每个节点的行号 row，列号 col 以及值 value。在遍历完成后，我们按照 col 为第一关键字升序，row 为第二关键字升序，value 为第三关键字升序，对所有的节点进行排序即可。
+        // 时间复杂度O(nlog(n)) 空间复杂度O(n)
+        var verticalTraversal = function (root) {
+            const nodes = [];
+            dfs(root, 0, 0, nodes);
+            nodes.sort((tuple1, tuple2) => {
+                if (tuple1[0] !== tuple2[0]) {
+                    return tuple1[0] - tuple2[0];
+                } else if (tuple1[1] !== tuple2[1]) {
+                    return tuple1[1] - tuple2[1];
+                } else {
+                    return tuple1[2] - tuple2[2];
+                }
+            });
+            const ans = [];
+            let lastcol = -Number.MAX_VALUE;
+            for (const tuple of nodes) {
+                let col = tuple[0],
+                    row = tuple[1],
+                    value = tuple[2];
+                if (col !== lastcol) {
+                    lastcol = col;
+                    ans.push([]);
+                }
+                ans[ans.length - 1].push(value);
+            }
+            return ans;
+        }
+        const dfs = (node, row, col, nodes) => {
+            if (node === null) {
+                return;
+            }
+            nodes.push([col, row, node.val]);
+            dfs(node.left, row + 1, col - 1, nodes);
+            dfs(node.right, row + 1, col + 1, nodes);
+        }
+    </script>
+</body>
+
+</html>
