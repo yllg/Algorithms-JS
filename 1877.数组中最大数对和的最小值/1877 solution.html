@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法1：排序 + 贪心
+        // 时间复杂度 O(nlogn) 空间复杂度 O(logn)
+        var minPairSum = function (nums) {
+            const n = nums.length;
+            let res = 0;
+            nums.sort((a, b) => a - b);
+            for (let i = 0; i < Math.floor(n / 2); i++) {
+                res = Math.max(res, nums[i] + nums[n - 1 - i]);
+            }
+            return res;
+        };
+
+        // test
+        let nums = [3, 5, 2, 3];
+        console.log(minPairSum(nums));
+    </script>
+</body>
+
+</html>

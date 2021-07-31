@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法1：贪心 + 二分查找
+        // 公共子序列越长，需要添加的元素个数也就越少。因此最少添加的元素个数为 n 减去两数组的最长公共子序列的长度。
+        // 时间复杂度 O(n+mlogm)   n 是数组 target 的长度，m 是数组 arr 的长度。
+        // 空间复杂度 O(n+m)
+        var minOperations = function (target, arr) {
+            const n = target.length;
+            const pos = new Map();
+            for (let i = 0; i < n; ++i) {
+                pos.set(target[i], i);
+            }
+            const d = [];
+            for (const val of arr) {
+                if (pos.has(val)) {
+                    const idx = pos.get(val);
+                    const it = binarySearch(d, idx);
+                    if (it !== d.length) {
+                        d[it] = idx;
+                    } else {
+                        d.push(idx);
+                    }
+                }
+            }
+            return n - d.length;
+        };
+
+        const binarySearch = (d, target) => {
+            const size = d.length;
+            if (size === 0 || d[size - 1] < target) {
+                return size;
+            }
+            let low = 0,
+                high = size - 1;
+            while (low < high) {
+                const mid = Math.floor((high - low) / 2) + low;
+                if (d[mid] < target) {
+                    low = mid + 1;
+                } else {
+                    high = mid;
+                }
+            }
+            return low;
+        }
+
+        // test
+        let target = [5, 1, 3],
+            arr = [9, 4, 2, 3, 4];
+        console.log(minOperations(target, arr))
+    </script>
+</body>
+
+</html>

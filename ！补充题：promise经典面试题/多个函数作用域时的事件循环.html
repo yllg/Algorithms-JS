@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        const myPromise1 = Promise.resolve(Promise.resolve("Promise 1"));
+        const myPromise2 = Promise.resolve(Promise.resolve("Promise 2"));
+
+        function funcOne() {
+            myPromise1.then(res => {
+                console.log(res);
+                return res;
+            }).then(res => {
+                console.log(res)
+            });
+            setTimeout(() => console.log("Timeout 1"), 0);
+            console.log("Last line 1");
+        }
+
+        async function funcTwo() {
+            const res = await myPromise2;
+            console.log(res)
+            console.log(await res);
+            setTimeout(() => console.log("Timeout 2"), 0);
+            console.log("Last line 2");
+        }
+
+        funcOne();
+        funcTwo();
+
+        // 结果：
+        // Last line 1
+        // Promise 1
+        // Promise 2
+        // Promise 1
+        // Promise 2
+        // Last line 2
+        // Timeout 1
+        // Timeout 2
+
+        // 解析：
+        // await是语法糖，其实还是两个promise各有两个then，会跳来跳去执行
+    </script>
+</body>
+
+</html>

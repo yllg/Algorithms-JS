@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法1：差分数组
+        // 时间复杂度：O(n+l)，其中 n 为 ranges 的长度，l 为 diff 的长度
+        // 空间复杂度：O(l)，即为 diff 的长度。
+        var isCovered = function (ranges, left, right) {
+            const diff = new Array(52).fill(0); // 差分数组
+            for (const [l, r] of ranges) {
+                diff[l]++;
+                diff[r + 1]--;
+            }
+            // 前缀和
+            let curr = 0;
+            for (let i = 1; i < 51; i++) {
+                curr += diff[i];
+                if (left <= i && i <= right && curr <= 0) {
+                    return false;
+                }
+            }
+            return true;
+        };
+
+        // test
+        let ranges = [
+                [1, 2],
+                [3, 4],
+                [5, 6]
+            ],
+            left = 2,
+            right = 5;
+        console.log(isCovered(ranges, left, right))
+    </script>
+</body>
+
+</html>
