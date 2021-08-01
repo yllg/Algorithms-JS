@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法1：暴力
+        var kWeakestRows = function (mat, k) {
+            return mat.map((a, i) => [a, `${i}`.padStart(2, '0')]).sort().map(a => +a[1]).slice(0, k);
+        };
+
+        // 方法2：map映射+排序
+        var kWeakestRows = function (mat, k) {
+            const map = new Map();
+            mat.forEach((a, i) => map.set(a, i));
+            mat.sort();
+            return Array.from({
+                length: k
+            }, (_, i) => map.get(mat[i]));
+        };
+
+        // 方法3：二分法
+        var kWeakestRows = function (mat, k) {
+            const ans = [0],
+                n = mat.length;
+            for (let i = 1; i < n; i++) {
+                // 比最后一项大就跳过
+                if (ans[k - 1] < mat[i]) continue;
+                let l = 0,
+                    r = ans.length;
+                while (l < r) {
+                    const mid = l + ((r - l) >> 1);
+                    if (mat[i] > mat[ans[mid]]) l = mid + 1;
+                    else if (mat[i] < mat[ans[mid]]) r = mid;
+                    // 数组相等根据下标大小选择插入位置
+                    else if (i > ans[mid]) l = mid + 1;
+                    else r = mid;
+                }
+                // 插入元素
+                ans.splice(l, 0, i);
+                // 删除多余元素
+                ans.length = k;
+            }
+            return ans;
+        };
+
+        // 其他：topK等
+
+        // test
+        let mat = [
+                [1, 1, 0, 0, 0],
+                [1, 1, 1, 1, 0],
+                [1, 0, 0, 0, 0],
+                [1, 1, 0, 0, 0],
+                [1, 1, 1, 1, 1]
+            ],
+            k = 3
+
+        console.log(kWeakestRows(mat, k));
+    </script>
+</body>
+
+</html>
