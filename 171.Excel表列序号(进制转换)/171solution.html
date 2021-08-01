@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    // Source : https://leetcode.com/problems/excel-sheet-column-number/
+    // Author : 悬笔e绝
+    // Date   : 2019-09-10
+
+    // 方法1
+    var titleToNumber = function (s) {
+      var a = s.split('').reverse();
+      s = a.join('');
+      var ans = a.reduce(function (pre, item, index) {
+        return pre + Math.pow(26, index) * (s.charCodeAt(index) - 64);
+      }, 0);
+      return ans;
+    };
+
+    // 方法2：进制转换，26进制转10进制
+    // 时间复杂度O(n) 空间复杂度O(1)
+    var titleToNumber = function (columnTitle) {
+      let number = 0;
+      let multiple = 1;
+      for (let i = columnTitle.length - 1; i >= 0; i--) {
+        const k = columnTitle[i].charCodeAt() - 'A'.charCodeAt() + 1;
+        number += k * multiple;
+        multiple *= 26;
+      }
+      return number;
+    };
+
+    // 测试
+    var s1 = "A";
+    console.log(titleToNumber(s1));
+    var s2 = "AB";
+    console.log(titleToNumber(s2));
+    var s3 = "ZY";
+    console.log(titleToNumber(s3));
+  </script>
+</body>
+
+</html>
