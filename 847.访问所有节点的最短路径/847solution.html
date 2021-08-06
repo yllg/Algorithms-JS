@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法1：状态压缩 + 广度优先搜索
+        var shortestPathLength = function (graph) {
+            const n = graph.length;
+            const queue = [];
+            const seen = new Array(n).fill(0).map(() => new Array(1 << n).fill(false));
+            for (let i = 0; i < n; ++i) {
+                queue.push([i, 1 << i, 0]);
+                seen[i][1 << i] = true;
+            }
+            let ans = 0;
+            while (queue.length) {
+                const tuple = queue.shift();
+                const u = tuple[0],
+                    mask = tuple[1],
+                    dist = tuple[2];
+                if (mask === (1 << n) - 1) {
+                    ans = dist;
+                    break;
+                }
+                // 搜索相邻的节点
+                for (const v of graph[u]) {
+                    // 将 mask 的第 v 位置为 1
+                    const maskV = mask | (1 << v);
+                    if (!seen[v][maskV]) {
+                        queue.push([v, maskV, dist + 1]);
+                        seen[v][maskV] = true;
+                    }
+                }
+            }
+            return ans;
+        };
+
+        // 方法2：预处理点对间最短路 + 状态压缩动态规划
+        var shortestPathLength = function (graph) {
+            const n = graph.length;
+            const d = new Array(n).fill(0).map(() => new Array(n).fill(n + 1));
+            for (let i = 0; i < n; ++i) {
+                for (const j of graph[i]) {
+                    d[i][j] = 1;
+                }
+            }
+            // 使用 floyd 算法预处理出所有点对之间的最短路径长度
+            for (let k = 0; k < n; ++k) {
+                for (let i = 0; i < n; ++i) {
+                    for (let j = 0; j < n; ++j) {
+                        d[i][j] = Math.min(d[i][j], d[i][k] + d[k][j]);
+                    }
+                }
+            }
+            const f = new Array(n).fill(0).map(() => new Array(1 << n).fill(Number.MAX_SAFE_INTEGER));
+            for (let mask = 1; mask < (1 << n); ++mask) {
+                // 如果 mask 只包含一个 1，即 mask 是 2 的幂
+                if ((mask & (mask - 1)) === 0) {
+                    const tmp = (mask & (-mask)) - 1;
+                    const u = tmp.toString(2).split('0').join('').length;
+                    f[u][mask] = 0;
+                } else {
+                    for (let u = 0; u < n; ++u) {
+                        if ((mask & (1 << u)) !== 0) {
+                            for (let v = 0; v < n; ++v) {
+                                if ((mask & (1 << v)) !== 0 && u !== v) {
+                                    f[u][mask] = Math.min(f[u][mask], f[v][mask ^ (1 << u)] + d[v][u]);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            let ans = Number.MAX_SAFE_INTEGER;
+            for (let u = 0; u < n; ++u) {
+                ans = Math.min(ans, f[u][(1 << n) - 1]);
+            }
+            return ans;
+        };
+
+        // test
+        let graph = [
+            [1, 2, 3],
+            [0],
+            [0],
+            [0]
+        ];
+        console.log(shortestPathLength(graph))
+    </script>
+</body>
+
+</html>
