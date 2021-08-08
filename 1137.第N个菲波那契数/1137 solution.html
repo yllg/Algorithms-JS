@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法1：动态规划
+        // 时间复杂度O(n) 空间复杂度O(1)
+        var tribonacci = function (n) {
+            if (n === 0) {
+                return 0;
+            }
+            if (n <= 2) {
+                return 1;
+            }
+            let p = 0,
+                q = 0,
+                r = 1,
+                s = 1;
+            for (let i = 3; i <= n; ++i) {
+                p = q;
+                q = r;
+                r = s;
+                s = p + q + r;
+            }
+            return s;
+        };
+
+        // 方法2：矩阵快速幂
+        // 时间复杂度O(logn) 空间复杂度O(1)
+        var tribonacci = function (n) {
+            if (n === 0) {
+                return 0;
+            }
+            if (n <= 2) {
+                return 1;
+            }
+            const q = [
+                [1, 1, 1],
+                [1, 0, 0],
+                [0, 1, 0]
+            ];
+            const res = pow(q, n);
+            return res[0][2];
+        };
+        const pow = (a, n) => {
+            let ret = [
+                [1, 0, 0],
+                [0, 1, 0],
+                [0, 0, 1]
+            ];
+            while (n > 0) {
+                if ((n & 1) === 1) {
+                    ret = multiply(ret, a);
+                }
+                n >>= 1;
+                a = multiply(a, a);
+            }
+            return ret;
+        }
+        const multiply = (a, b) => {
+            const c = new Array(3).fill(0).map(() => new Array(3).fill(0));
+            for (let i = 0; i < 3; i++) {
+                for (let j = 0; j < 3; j++) {
+                    c[i][j] = a[i][0] * b[0][j] + a[i][1] * b[1][j] + a[i][2] * b[2][j];
+                }
+            }
+            return c;
+        }
+
+        // test 
+        let n = 4;
+        console.log(tribonacci(n))
+    </script>
+</body>
+
+</html>
