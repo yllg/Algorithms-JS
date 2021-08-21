@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法1：差分 + 计数
+        // 时间复杂度：O(n)，其中 n 是数组 nums 的长度。
+        // 空间复杂度：O(1)
+        var numberOfArithmeticSlices = function (nums) {
+            const n = nums.length;
+            if (n === 1) {
+                return 0;
+            }
+
+            let d = nums[0] - nums[1],
+                t = 0;
+            let ans = 0;
+            // 因为等差数列的长度至少为 3，所以可以从 i=2 开始枚举
+            for (let i = 2; i < n; ++i) {
+                if (nums[i - 1] - nums[i] === d) {
+                    ++t;
+                } else {
+                    d = nums[i - 1] - nums[i];
+                    t = 0;
+                }
+                ans += t;
+            }
+            return ans;
+        };
+
+        // test
+        let nums = [1, 2, 3, 4];
+        console.log(numberOfArithmeticSlices(nums))
+    </script>
+</body>
+
+</html>

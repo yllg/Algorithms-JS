@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法1：深度优先搜索
+        /**
+         * @param {number[]} nums
+         * @return {boolean}
+         */
+        var circularArrayLoop = function (nums) {
+            const l = nums.length;
+            const set = new Set();
+            const tempSet = new Set();
+            const dfs = (i, pre = null) => {
+                if (i === pre) return false;
+                if (nums[i] * nums[pre] < 0) return false;
+                if (tempSet.has(i)) return true;
+                if (set.has(i)) return false;
+                set.add(i);
+                tempSet.add(i);
+                return dfs((i + nums[i] + Math.abs(nums[i]) * l) % l, i);
+            };
+            for (let i = 0; i < l; i++) {
+                if (set.has(i)) continue;
+                tempSet.clear();
+                const v = dfs(i);
+                if (v) return true;
+            }
+            return false;
+        };
+
+        // 方法2：快慢指针
+
+        // test
+        let nums = [2, -1, 1, 2, 2];
+        console.log(circularArrayLoop(nums))
+    </script>
+</body>
+
+</html>

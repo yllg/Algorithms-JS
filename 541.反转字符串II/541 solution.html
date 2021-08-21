@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 每隔k个反转k个，末尾不够k个时全部反转；
+
+        // 方法1：模拟
+        // 时间复杂度O(n) 空间复杂度O(1)
+        var reverseStr = function (s, k) {
+            const n = s.length;
+            const arr = Array.from(s);
+            for (let i = 0; i < n; i += 2 * k) {
+                reverse(arr, i, Math.min(i + k, n) - 1);
+            }
+            return arr.join('');
+        };
+
+        const reverse = (arr, left, right) => {
+            while (left < right) {
+                const temp = arr[left];
+                arr[left] = arr[right];
+                arr[right] = temp;
+                left++;
+                right--;
+            }
+        }
+
+        // test
+        let s = "abcdefg",
+            k = 2;
+        console.log(reverseStr(s, k))
+    </script>
+</body>
+
+</html>

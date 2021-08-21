@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法1：动态规划 + 哈希表
+        // 时间复杂度O(n^2) 空间复杂度O(n^2)
+        var numberOfArithmeticSlices = function (nums) {
+            let ans = 0;
+            const n = nums.length;
+            const f = new Map();
+            for (let i = 0; i < n; ++i) {
+                f[i] = new Map();
+            }
+            for (let i = 0; i < n; ++i) {
+                for (let j = 0; j < i; ++j) {
+                    const d = nums[i] - nums[j];
+                    const cnt = f[j].get(d) || 0;
+                    ans += cnt;
+                    f[i].set(d, (f[i].get(d) || 0) + cnt + 1);
+                }
+            }
+            return ans;
+        };
+
+        // test
+        let nums = [2, 4, 6, 8, 10];
+        console.log(numberOfArithmeticSlices(nums))
+    </script>
+</body>
+
+</html>

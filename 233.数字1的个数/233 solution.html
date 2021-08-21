@@ -1,33 +1,38 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
 </head>
+
 <body>
-<script>
-// Source : https://leetcode.com/problems/number-of-digit-one/
-// Author : 悬笔e绝
-// Date   : 2020-01-27
+  <script>
+    // Source : https://leetcode.com/problems/number-of-digit-one/
+    // Author : 悬笔e绝
+    // Date   : 2020-01-27
 
-/**
- * @param {number} n
- * @return {number}
- */
-var countDigitOne = function(n) {
-  var len = n.toString().length, ans = 0;
-  n++;
-  var tmp = 1;
-  for (var i = 0; i < len; i++) {
-    ans += ~~(n / tmp / 10) * tmp;
-    ans += (n % (tmp * 10) - tmp) > tmp ? tmp : Math.max(0, n % (tmp * 10) - tmp);
-    tmp *= 10;
-  }
-  return ans;
-};
+    // 方法1：枚举每一数位上1的个数
+    // 时间复杂度: O(logn), 空间复杂度: O(1)
+    var countDigitOne = function (n) {
+      var len = n.toString().length,
+        ans = 0;
+      n++;
+      var tmp = 1;
+      for (var i = 0; i < len; i++) {
+        ans += ~~(n / tmp / 10) * tmp;
+        ans += (n % (tmp * 10) - tmp) > tmp ? tmp : Math.max(0, n % (tmp * 10) - tmp);
+        tmp *= 10;
+      }
+      return ans;
+    };
 
-</script>
+    // test
+    let n = 13;
+    console.log(countDigitOne(n))
+  </script>
 </body>
+
 </html>

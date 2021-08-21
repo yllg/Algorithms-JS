@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法1:动态规划
+        // 时间复杂度：O(maxMove×m×n)。动态规划需要遍历的状态数是 O(maxMove×m×n)，对于每个状态，计算后续状态以及出界的路径数的时间都是 O(1)。
+        // 空间复杂度：O(m×n)。使用空间优化的实现，空间复杂度是 O(m×n)。
+        var findPaths = function (m, n, maxMove, startRow, startColumn) {
+            const MOD = 1000000007;
+            const directions = [
+                [-1, 0],
+                [1, 0],
+                [0, -1],
+                [0, 1]
+            ];
+            let outCounts = 0;
+            let dp = new Array(m).fill(0).map(() => new Array(n).fill(0));
+            dp[startRow][startColumn] = 1;
+            for (let i = 0; i < maxMove; i++) {
+                const dpNew = new Array(m).fill(0).map(() => new Array(n).fill(0));
+                for (let j = 0; j < m; j++) {
+                    for (let k = 0; k < n; k++) {
+                        const count = dp[j][k];
+                        if (count > 0) {
+                            for (const direction of directions) {
+                                let j1 = j + direction[0],
+                                    k1 = k + direction[1];
+                                if (j1 >= 0 && j1 < m && k1 >= 0 && k1 < n) {
+                                    dpNew[j1][k1] = (dpNew[j1][k1] + count) % MOD;
+                                } else {
+                                    outCounts = (outCounts + count) % MOD;
+                                }
+                            }
+                        }
+                    }
+                }
+                dp = dpNew;
+            }
+            return outCounts;
+        };
+
+        // test
+        let m = 2,
+            n = 2,
+            maxMove = 2,
+            startRow = 0,
+            startColumn = 0;
+
+        console.log(findPaths(m, n, maxMove, startRow, startColumn))
+    </script>
+</body>
+
+</html>

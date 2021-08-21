@@ -1,47 +1,45 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
 </head>
+
 <body>
-<script>
-// Source : https://leetcode.com/problems/super-ugly-number/
-// Author : 悬笔e绝
-// Date   : 2020-03-27
+  <script>
+    // Source : https://leetcode.com/problems/super-ugly-number/
+    // Author : 悬笔e绝
+    // Date   : 2020-03-27
 
-/**
- * @param {number} n
- * @param {number[]} primes
- * @return {number}
- */
-var nthSuperUglyNumber = function(n, primes) {
-  var len = primes.length
-    , index = [];
+    // 超级丑数 是一个正整数，并满足其所有质因数都出现在质数数组 primes 中。
 
-  for (var i = 0; i < len; i++)
-    index[i] = 0;
+    // 方法1：动态规划
+    var nthSuperUglyNumber = function (n, primes) {
+      const dp = new Array(n + 1).fill(0);
+      dp[1] = 1;
+      const m = primes.length;
+      const pointers = new Array(m).fill(1);
+      for (let i = 2; i <= n; i++) {
+        const nums = new Array(m).fill(m);
+        let minNum = Number.MAX_SAFE_INTEGER;
+        for (let j = 0; j < m; j++) {
+          nums[j] = dp[pointers[j]] * primes[j];
+          minNum = Math.min(minNum, nums[j]);
+        }
+        dp[i] = minNum;
+        for (let j = 0; j < m; j++) {
+          if (minNum == nums[j]) {
+            pointers[j]++;
+          }
+        }
+      }
+      return dp[n];
+    };
 
-  var ans = [];
-  ans.push(1);
-
-  for (var i = 1; i < n; i++) {
-    var minNumber = Infinity;
-    for (var j = 0; j < len; j++) {
-      var item = index[j];
-      minNumber = Math.min(minNumber, primes[j] * ans[item]);
-    }
-    ans[i] = minNumber;
-    for (var j = 0; j < len; j++) {
-      var item = index[j];
-      if (minNumber === primes[j] * ans[item])
-        index[j]++;
-    }
-  }
-  return ans[n - 1];
-};
-
-</script>
+    // TODO:方法2：最小堆
+  </script>
 </body>
+
 </html>
