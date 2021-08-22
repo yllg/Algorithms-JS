@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 简化版吃豆人游戏
+        // 方法1：曼哈顿距离
+        // 时间复杂度O(n) 空间复杂度O(1)
+        var escapeGhosts = function (ghosts, target) {
+            const source = [0, 0];
+            const distance = manhattanDistance(source, target);
+            for (const ghost of ghosts) {
+                const ghostDistance = manhattanDistance(ghost, target);
+                if (ghostDistance <= distance) {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        const manhattanDistance = (point1, point2) => {
+            return Math.abs(point1[0] - point2[0]) + Math.abs(point1[1] - point2[1]);
+        }
+
+        // test
+        let ghosts = [
+                [1, 0],
+                [0, 3]
+            ],
+            target = [0, 1];
+        console.log(escapeGhosts(ghosts, target)) // true
+    </script>
+</body>
+
+</html>
