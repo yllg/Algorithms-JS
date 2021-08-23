@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法1：模拟
+        // 时间复杂度O(n^2) 空间复杂度O(n^2)
+        var unhappyFriends = function (n, preferences, pairs) {
+            const order = new Array(n).fill(0).map(() => new Array(n).fill(0));
+            for (let i = 0; i < n; i++) {
+                for (let j = 0; j < n - 1; j++) {
+                    order[i][preferences[i][j]] = j;
+                }
+            }
+            const match = new Array(n).fill(0);
+            for (const pair of pairs) {
+                let person0 = pair[0],
+                    person1 = pair[1];
+                match[person0] = person1;
+                match[person1] = person0;
+            }
+            let unhappyCount = 0;
+            for (let x = 0; x < n; x++) {
+                const y = match[x];
+                const index = order[x][y];
+                for (let i = 0; i < index; i++) {
+                    const u = preferences[x][i];
+                    const v = match[u];
+                    if (order[u][x] < order[u][v]) {
+                        unhappyCount++;
+                        break;
+                    }
+                }
+            }
+            return unhappyCount;
+        };
+
+        // test
+        let n = 4,
+            preferences = [
+                [1, 2, 3],
+                [3, 2, 0],
+                [3, 1, 0],
+                [1, 2, 0]
+            ],
+            pairs = [
+                [0, 1],
+                [2, 3]
+            ];
+
+        console.log(unhappyFriends(n, preferences, pairs))
+    </script>
+</body>
+
+</html>
