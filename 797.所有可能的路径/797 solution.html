@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 有向无环图 
+        // 方法1：深度优先搜索
+        /**
+         * @param {number[][]} graph
+         * @return {number[][]}
+         */
+        var allPathsSourceTarget = function (graph) {
+            let end = graph.length - 1,
+                res = []
+
+            function dfs(node, path) {
+                for (let n of node) {
+                    if (n === end) {
+                        res.push([...path, n])
+                    } else {
+                        dfs(graph[n], [...path, n])
+                    }
+                }
+            }
+            dfs(graph[0], [0])
+            return res
+        };
+
+        // test 
+        let graph = [
+            [1, 2],
+            [3],
+            [3],
+            []
+        ];
+        console.log(allPathsSourceTarget(graph))
+    </script>
+</body>
+
+</html>
