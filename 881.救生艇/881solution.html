@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 返回最小船数
+        // 方法1：贪心
+        // 时间复杂度：O(nlogn) , // 时间复杂度：O(logn)
+        var numRescueBoats = function (people, limit) {
+            let ans = 0;
+            people.sort((a, b) => a - b);
+            let light = 0,
+                heavy = people.length - 1;
+            while (light <= heavy) {
+                if (people[light] + people[heavy] <= limit) {
+                    ++light;
+                }
+                --heavy;
+                ++ans;
+            }
+            return ans;
+        };
+
+        // test
+        let people = [3, 2, 2, 1],
+            limit = 3
+        console.log(numRescueBoats(people, limit))
+    </script>
+</body>
+
+</html>
