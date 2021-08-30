@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法1：原地修改
+        // 时间复杂度O(n) 空间复杂度O(1)
+        var runningSum = function (nums) {
+            const n = nums.length;
+            for (let i = 1; i < n; i++) {
+                nums[i] += nums[i - 1];
+            }
+            return nums;
+        };
+
+        // test
+        let nums = [1, 2, 3, 4] // 输出：[1,3,6,10]
+        console.log(runningSum(nums))
+    </script>
+</body>
+
+</html>
