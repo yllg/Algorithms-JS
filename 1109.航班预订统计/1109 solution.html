@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法1：差分
+        // 时间复杂度：O(n+m) , // 时间复杂度：O(1)
+        var corpFlightBookings = function (bookings, n) {
+            const nums = new Array(n).fill(0);
+            for (const booking of bookings) {
+                nums[booking[0] - 1] += booking[2];
+                if (booking[1] < n) {
+                    nums[booking[1]] -= booking[2];
+                }
+            }
+            for (let i = 1; i < n; i++) {
+                nums[i] += nums[i - 1];
+            }
+            return nums;
+        };
+
+        // test
+        let bookings = [
+                [1, 2, 10],
+                [2, 3, 20],
+                [2, 5, 25]
+            ],
+            n = 5;
+        console.log(corpFlightBookings(bookings, n))
+    </script>
+</body>
+
+</html>
