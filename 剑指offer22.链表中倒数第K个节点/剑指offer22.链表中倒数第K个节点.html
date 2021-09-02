@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法1：顺序查找
+        // 时间复杂度：O(n) , // 时间复杂度：O(1)
+        var getKthFromEnd = function (head, k) {
+            let node = head,
+                n = 0;
+            while (node) {
+                node = node.next;
+                n++;
+            }
+            node = head;
+            for (let i = 0; i < n - k; i++) {
+                node = node.next;
+            }
+            return node;
+        };
+
+        // 方法2：双指针
+        // 时间复杂度：O(n) , // 时间复杂度：O(1)
+        var getKthFromEnd = function (head, k) {
+            let fast = head,
+                slow = head;
+
+            while (fast && k > 0) {
+                [fast, k] = [fast.next, k - 1];
+            }
+            while (fast) {
+                [fast, slow] = [fast.next, slow.next];
+            }
+            return slow;
+        };
+    </script>
+</body>
+
+</html>
