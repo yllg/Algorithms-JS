@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法1：优化的模拟
+        // 时间复杂度O(n) 空间复杂度O(1)
+        var chalkReplacer = function (chalk, k) {
+            const n = chalk.length;
+            let total = 0;
+            for (const num of chalk) {
+                total += num;
+            }
+            k %= total;
+            let res = -1;
+            for (let i = 0; i < n; ++i) {
+                if (chalk[i] > k) {
+                    res = i;
+                    break;
+                }
+                k -= chalk[i];
+            }
+            return res;
+        };
+
+        // 方法2：前缀和 + 二分查找
+        // 时间复杂度O(n) 空间复杂度O(1)
+        var chalkReplacer = function (chalk, k) {
+            const n = chalk.length;
+            if (chalk[0] > k) {
+                return 0;
+            }
+            for (let i = 1; i < n; ++i) {
+                chalk[i] += chalk[i - 1];
+                if (chalk[i] > k) {
+                    return i;
+                }
+            }
+
+            k %= chalk[n - 1];
+            return binarySearch(chalk, k);
+        };
+
+        const binarySearch = (arr, target) => {
+            let low = 0,
+                high = arr.length - 1;
+            while (low < high) {
+                const mid = Math.floor((high - low) / 2) + low;
+                if (arr[mid] <= target) {
+                    low = mid + 1;
+                } else {
+                    high = mid;
+                }
+            }
+            return low;
+        }
+
+        // test
+        let chalk = [5, 1, 5],
+            k = 22;
+        console.log(chalkReplacer(chalk, k))
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法1：贪心
+        var balancedStringSplit = function (s) {
+            let ans = 0,
+                d = 0;
+            for (let i = 0; i < s.length; ++i) {
+                const ch = s[i];
+                if (ch === 'L') {
+                    ++d;
+                } else {
+                    --d;
+                }
+                if (d === 0) {
+                    ++ans;
+                }
+            }
+            return ans;
+        };
+
+        // test
+        let s = "RLRRLLRLRL";
+        console.log(balancedStringSplit(s))
+    </script>
+</body>
+
+</html>

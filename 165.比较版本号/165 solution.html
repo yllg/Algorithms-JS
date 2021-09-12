@@ -10,33 +10,61 @@
 
 <body>
   <script>
-    // Source : https://leetcode.com/problems/compare-version-numbers/
-    // Author : 悬笔e绝
-    // Date   : 2019-08-19
+    // 忽略任何前导零后的整数值
 
-    /**
-     * @param {string} version1
-     * @param {string} version2
-     * @return {number}
-     */
+    // 方法1：字符串分割
+    // 时间复杂度：O(n+m) , // 时间复杂度：O(n+m)
     var compareVersion = function (version1, version2) {
-      var a = version1.split('.');
-      var b = version2.split('.');
-
-      var len1 = a.length;
-      var len2 = b.length;
-      for (var i = 0, len = Math.max(len1, len2); i < len; i++) {
-        var item1 = i < len1 ? +a[i] : 0;
-        var item2 = i < len2 ? +b[i] : 0;
-
-        if (item1 > item2)
+      const v1 = version1.split('.');
+      const v2 = version2.split('.');
+      for (let i = 0; i < v1.length || i < v2.length; ++i) {
+        let x = 0,
+          y = 0;
+        if (i < v1.length) {
+          x = parseInt(v1[i]);
+        }
+        if (i < v2.length) {
+          y = parseInt(v2[i]);
+        }
+        if (x > y) {
           return 1;
-
-        if (item1 < item2)
+        }
+        if (x < y) {
           return -1;
+        }
       }
-      return 0; 
+      return 0;
     };
+
+    // 方法2：双指针
+    // 时间复杂度：O(n+m) , // 时间复杂度：O(1)
+    var compareVersion = function (version1, version2) {
+      const n = version1.length,
+        m = version2.length;
+      let i = 0,
+        j = 0;
+      while (i < n || j < m) {
+        let x = 0;
+        for (; i < n && version1[i] !== '.'; ++i) {
+          x = x * 10 + version1[i].charCodeAt() - '0'.charCodeAt();
+        }
+        ++i; // 跳过点号
+        let y = 0;
+        for (; j < m && version2.charAt(j) !== '.'; ++j) {
+          y = y * 10 + version2[j].charCodeAt() - '0'.charCodeAt();
+        }
+        ++j; // 跳过点号
+        if (x !== y) {
+          return x > y ? 1 : -1;
+        }
+      }
+      return 0;
+    };
+
+    // test
+    let version1 = "1.01",
+      version2 = "1.001";
+    console.log(compareVersion(version1, version2)) // 0
   </script>
 </body>
 
