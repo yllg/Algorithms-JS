@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法1：双指针
+        // 时间复杂度：O(d×(m+n))，其中 d 表示 dictionary 的长度，m 表示 s 的长度，n 表示 dictionary 中字符串的平均长度。
+        // 空间复杂度 O(1)
+        var findLongestWord = function (s, dictionary) {
+            let res = "";
+            for (const t of dictionary) {
+                let i = 0,
+                    j = 0;
+                while (i < t.length && j < s.length) {
+                    if (t[i] === s[j]) {
+                        ++i;
+                    }
+                    ++j;
+                }
+                if (i === t.length) {
+                    if (t.length > res.length || (t.length === res.length && t < res)) {
+                        res = t;
+                    }
+                }
+            }
+            return res;
+        };
+
+        // 方法2：排序
+        // 时间复杂度：O(d×m×logd+d×(m+n)) 其中 d 表示 dictionary 的长度，m 表示 s 的长度，n 表示 dictionary 中字符串的平均长度。
+        // 空间复杂度：O(d×m)
+        var findLongestWord = function (s, dictionary) {
+            dictionary.sort((word1, word2) => {
+                if (word1.length !== word2.length) {
+                    return word2.length - word1.length;
+                } else {
+                    return word1.localeCompare(word2);
+                }
+            });
+            console.log(dictionary)
+
+            for (const t of dictionary) {
+                let i = 0,
+                    j = 0;
+                while (i < t.length && j < s.length) {
+                    if (t[i] === s[j]) {
+                        ++i;
+                    }
+                    ++j;
+                }
+                if (i === t.length) {
+                    return t;
+                }
+            }
+            return "";
+        };
+
+        // 方法3：动态规划
+        // 时间复杂度：O(m×∣Σ∣+d×n)
+        // 空间复杂度：O(m×∣Σ∣)
+        var findLongestWord = function (s, dictionary) {
+            const m = s.length;
+            const f = new Array(m + 1).fill(0).map(() => new Array(26).fill(m));
+
+            for (let i = m - 1; i >= 0; --i) {
+                for (let j = 0; j < 26; ++j) {
+                    if (s[i] === String.fromCharCode('a'.charCodeAt() + j)) {
+                        f[i][j] = i;
+                    } else {
+                        f[i][j] = f[i + 1][j];
+                    }
+                }
+            }
+            let res = "";
+            for (const t of dictionary) {
+                let match = true;
+                let j = 0;
+                for (let i = 0; i < t.length; ++i) {
+                    if (f[j][t[i].charCodeAt() - 'a'.charCodeAt()] === m) {
+                        match = false;
+                        break;
+                    }
+                    j = f[j][t[i].charCodeAt() - 'a'.charCodeAt()] + 1;
+                }
+                if (match) {
+                    if (t.length > res.length || (t.length === res.length && t.localeCompare(res) < 0)) {
+                        res = t;
+                    }
+                }
+            }
+            return res;
+        };
+    </script>
+</body>
+
+</html>
