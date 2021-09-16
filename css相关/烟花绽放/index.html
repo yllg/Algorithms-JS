@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<style>
+    body {
+        background: #000;
+        overflow: hidden;
+    }
+
+    .fireworks {
+        position: absolute;
+        width: 150px;
+        height: 150px;
+        background: #FFEFAD;
+        /*     padding-bottom: 100px; */
+        -webkit-mask: url('./烟花雪碧图.png') right top no-repeat;
+        -webkit-mask-size: auto 150px;
+        animation: fireworks 2s steps(24) infinite, random 8s steps(1) infinite, random_color 1s infinite;
+    }
+
+    @keyframes fireworks {
+        0% {
+            -webkit-mask-position: 0%;
+        }
+
+        50%,
+        100% {
+            -webkit-mask-position: 100% 100%;
+        }
+    }
+
+    @keyframes random {
+        0% {
+            transform: translate(0, 0);
+        }
+
+        25% {
+            transform: translate(200%, 50%) scale(0.8);
+        }
+
+        50% {
+            transform: translate(80%, 80%) scale(1.2);
+        }
+
+        75% {
+            transform: translate(20%, 60%) scale(0.65);
+        }
+    }
+
+    @keyframes random_color {
+        0% {
+            background-color: #FFEFAD;
+        }
+
+        25% {
+            background-color: #ffadad;
+        }
+
+        50% {
+            background-color: #aeadff;
+        }
+
+        75% {
+            background-color: #adffd9;
+        }
+    }
+
+    @media screen and (prefers-reduced-motion) {
+
+        /* 禁用不必要的动画 */
+        .fireworks {
+            animation: none;
+        }
+    }
+</style>
+
+<body>
+    <div class="fireworks" style="left: 15%; top: 5%;"></div>
+    <div class="fireworks" style="right: 30%; top: 13%; animation-delay: -0.4s;"></div>
+    <div class="fireworks" style="left: 5%; top: 23%; animation-delay: -1.7s;"></div>
+    <div class="fireworks" style="right: 45%; top: 8%; animation-delay: -3.1s;"></div>
+</body>
+
+</html>
