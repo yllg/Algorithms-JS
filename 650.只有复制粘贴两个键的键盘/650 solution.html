@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法1：动态规划
+        /**
+         * @param {number} n
+         * @return {number}
+         */
+        // stepMap 用来缓存结果，如果在tempMap可取得值，则直接返回
+        let stepMap = {}
+        var minSteps = function (n) {
+            if (n === 1) return 0
+            if (stepMap[n]) return stepMap[n]
+            let factors = [],
+                counts = []
+            // 判断是否为 质数
+            for (let i = 1; i < Math.ceil(n / 2); i++) {
+                if (n % i === 0) {
+                    factors.push([i, n / i])
+                }
+            }
+            // 质数
+            const l = factors.length
+            if (l === 1) {
+                stepMap[n] = n
+                return n;
+            } else {
+                let minCount = n
+                for (let i = 1; i < l; i++) {
+                    const [a, b] = factors[i]
+                    // 由规律可知，n 的每一对因数（a,b）都有如下规律：
+                    // n 的最小操作次数 = a的最小操作次数 + b 或
+                    // n 的最小操作次数 = b的最小操作次数 + a
+                    minCount = Math.min(minSteps(a) + b, minSteps(b) + a, minCount)
+                }
+                stepMap[n] = minCount
+                return minCount
+            }
+        };
+
+        // 方法2：分解质因素
+        const minSteps = n => {
+            let res = 0;
+            for (let i = 2; i <= n; i++) {
+                while (!(n % i)) {
+                    res += i;
+                    n /= i;
+                }
+            }
+            return res;
+        };
+
+        // 方法3：递归
+        /**
+         * @param {number} n
+         * @return {number}
+         */
+        var minSteps = function (n) {
+            if (n === 1) return 0
+            let i = n - 1
+            for (; i > 1; i--) {
+                if (n % i === 0) return n / i + minSteps(i)
+            }
+            if (i === 1) return n
+        };
+    </script>
+</body>
+
+</html>
