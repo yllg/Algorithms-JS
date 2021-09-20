@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法1：动态规划
+        // 时间复杂度O(n^2) 空间复杂度O(n)
+        var findNumberOfLIS = function (nums) {
+            let n = nums.length,
+                maxLen = 0,
+                ans = 0;
+            const dp = new Array(n).fill(0);
+            const cnt = new Array(n).fill(0);
+            for (let i = 0; i < n; ++i) {
+                dp[i] = 1;
+                cnt[i] = 1;
+                for (let j = 0; j < i; ++j) {
+                    if (nums[i] > nums[j]) {
+                        if (dp[j] + 1 > dp[i]) {
+                            dp[i] = dp[j] + 1;
+                            cnt[i] = cnt[j]; // 重置计数
+                        } else if (dp[j] + 1 === dp[i]) {
+                            cnt[i] += cnt[j];
+                        }
+                    }
+                }
+                if (dp[i] > maxLen) {
+                    maxLen = dp[i];
+                    ans = cnt[i]; // 重置计数
+                } else if (dp[i] === maxLen) {
+                    ans += cnt[i];
+                }
+            }
+            return ans;
+        };
+
+        // 方法2：贪心 + 前缀和 + 二分查找
+        // 时间复杂度O(nlogn) 空间复杂度O(n)
+        var findNumberOfLIS = function (nums) {
+            const d = [];
+            const cnt = [];
+            for (const v of nums) {
+                const i = binarySearch1(d.length, d, v);
+                let c = 1;
+                if (i > 0) {
+                    const k = binarySearch2(d[i - 1].length, d[i - 1], v);
+                    c = cnt[i - 1][cnt[i - 1].length - 1] - cnt[i - 1][k];
+
+                    // console.log(cnt, i)
+                }
+                if (i === d.length) {
+                    const dList = [];
+                    dList.push(v);
+                    d.push(dList);
+                    const cntList = [];
+                    cntList.push(0);
+                    cntList.push(c);
+                    cnt.push(cntList);
+                } else {
+                    d[i].push(v);
+                    const cntSize = cnt[i].length;
+                    cnt[i].push(cnt[i][cntSize - 1] + c);
+                }
+            }
+
+            const size1 = cnt.length,
+                size2 = cnt[size1 - 1].length;
+            return cnt[size1 - 1][size2 - 1];
+        }
+
+        const binarySearch1 = (n, d, target) => {
+            let l = 0,
+                r = n;
+            while (l < r) {
+                const mid = Math.floor((l + r) / 2);
+                const list = d[mid];
+                if (list[list.length - 1] >= target) {
+                    r = mid;
+                } else {
+                    l = mid + 1;
+                }
+            }
+            return l;
+        }
+
+        const binarySearch2 = (n, list, target) => {
+            let l = 0,
+                r = n;
+            while (l < r) {
+                const mid = Math.floor((l + r) / 2);
+                if (list[mid] < target) {
+                    r = mid;
+                } else {
+                    l = mid + 1;
+                }
+            }
+            return l;
+        }
+
+        // test
+        let nums = [1, 3, 5, 4, 7];
+        console.log(findNumberOfLIS(nums))
+    </script>
+</body>
+
+</html>
