@@ -10,32 +10,21 @@
 
 <body>
     <script>
-        // Source : https://leetcode.com/problems/length-of-last-word/
-        // Author : 悬笔e绝
-        // Date   : 2018-04-04
-
-        /**
-         * @param {string} s
-         * @return {number}
-         */
+        // 方法1：反向遍历
+        // 时间复杂度O(n) 空间复杂度O(1)
         var lengthOfLastWord = function (s) {
-            //去掉头尾空格
-            s = s.trim();
-            //去掉中间的空格符
-            var _str = s.replace(/\s/g, '');
-            if (!_str.length) return 0;
-
-            //从后往前循环
-            for (var i = s.length; i--;) {
-                //找到最后一个空格
-                if (s[i] === ' ')
-                    return s.length - i - 1;
-                //没有空格，整个就是一个单词
-                if (i === 0)
-                    return s.length - i;
+            let index = s.length - 1;
+            while (s[index] === ' ') {
+                index--;
             }
+            let wordLength = 0;
+            while (index >= 0 && s[index] !== ' ') {
+                wordLength++;
+                index--;
+            }
+            return wordLength;
         };
-        
+
         //测试
         var s1 = "Hello World";
         var s2 = "Hello World m";
@@ -45,7 +34,6 @@
         console.log(lengthOfLastWord(s2));
         console.log(lengthOfLastWord(s3));
         console.log(lengthOfLastWord(s4));
-
     </script>
 </body>
 
