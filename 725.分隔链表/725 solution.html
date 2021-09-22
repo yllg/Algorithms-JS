@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法1: 拆分链表
+        // 时间复杂度O(n) 空间复杂度O(1)
+        var splitListToParts = function (head, k) {
+            let n = 0;
+            let temp = head;
+            while (temp != null) {
+                n++;
+                temp = temp.next;
+            }
+            let quotient = Math.floor(n / k),
+                remainder = n % k;
+
+            const parts = new Array(k).fill(null);
+            let curr = head;
+            for (let i = 0; i < k && curr != null; i++) {
+                parts[i] = curr;
+                let partSize = quotient + (i < remainder ? 1 : 0);
+                for (let j = 1; j < partSize; j++) {
+                    curr = curr.next;
+                }
+                const next = curr.next;
+                curr.next = null;
+                curr = next;
+            }
+            return parts;
+        };
+    </script>
+</body>
+
+</html>
