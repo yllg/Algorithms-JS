@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法1：试除法
+        // 时间复杂度O(logn) 空间复杂度O(1)
+        var isPowerOfThree = function (n) {
+            while (n !== 0 && n % 3 === 0) {
+                n = Math.floor(n / 3);
+            }
+            return n === 1;
+        };
+
+        // 方法2：判断是否为最大 33 的幂的约数
+        // 时间复杂度O(1) 空间复杂度O(1)
+        var isPowerOfThree = function (n) {
+            return n > 0 && 1162261467 % n === 0;
+        };
+
+        // test
+        let n = 27;
+        console.log(isPowerOfThree(n))
+    </script>
+</body>
+
+</html>
