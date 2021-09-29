@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 调整让每个洗衣机的衣服数量一致
+
+        // 方法1：贪心
+        // 时间复杂度：O(n)
+        // 空间复杂度：O(1)
+        var findMinMoves = function (machines) {
+            const tot = eval(machines.join('+'));
+            const n = machines.length;
+            if (tot % n !== 0) {
+                return -1;
+            }
+            let avg = Math.floor(tot / n);
+            let ans = 0,
+                sum = 0;
+            for (let num of machines) {
+                num -= avg;
+                sum += num;
+                ans = Math.max(ans, Math.max(Math.abs(sum), num));
+            }
+            return ans;
+        };
+
+        // test
+        let machines = [1, 0, 5];
+        console.log(findMinMoves(machines))
+    </script>
+</body>
+
+</html>
