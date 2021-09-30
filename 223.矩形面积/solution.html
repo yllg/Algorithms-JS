@@ -1,46 +1,40 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
-</head>
-<body>
-<script>
-// Source : https://leetcode.com/problems/rectangle-area/
-// Author : 悬笔e绝
-// Date   : 2019-12-19
 
-/**
- * @param {number} A
- * @param {number} B
- * @param {number} C
- * @param {number} D
- * @param {number} E
- * @param {number} F
- * @param {number} G
- * @param {number} H
- * @return {number}
- */
-var computeArea = function(A, B, C, D, E, F, G, H) {
-  var width, height;
-  if (C <= E || G <= A || D <= F || H <= B)
-    width = height = 0;
-  else {
-    if (E > A) {
-      width = G < C ? G - E : C - E;
-    } else {
-      width = C < G ? C - A : G - A;
-    }
-    if (F > B) {
-      height = H < D ? H - F : D - F;
-    } else {
-      height = D < H ? D - B: H - B;
-    }
-  }
-  return (C - A) * (D - B) + (G - E) * (H - F) - width * height;
-};
-</script>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    // 计算两个矩形覆盖的总面积
+
+    // 方法1：计算重叠面积
+    // 时间复杂度：O(1)
+    // 空间复杂度：O(1)
+    var computeArea = function (ax1, ay1, ax2, ay2, bx1, by1, bx2, by2) {
+      const area1 = (ax2 - ax1) * (ay2 - ay1),
+        area2 = (bx2 - bx1) * (by2 - by1);
+      const overlapWidth = Math.min(ax2, bx2) - Math.max(ax1, bx1),
+        overlapHeight = Math.min(ay2, by2) - Math.max(ay1, by1);
+      const overlapArea = Math.max(overlapWidth, 0) * Math.max(overlapHeight, 0);
+      return area1 + area2 - overlapArea;
+    };
+
+    // test 
+    let ax1 = -3,
+      ay1 = 0,
+      ax2 = 3,
+      ay2 = 4,
+      bx1 = 0,
+      by1 = -1,
+      bx2 = 9,
+      by2 = 2;
+    console.log(computeArea(ax1, ay1, ax2, ay2, bx1, by1, bx2, by2))
+  </script>
 </body>
+
 </html>
