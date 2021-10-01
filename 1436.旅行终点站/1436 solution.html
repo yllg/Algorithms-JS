@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法1：哈希表
+        // 时间复杂度：O(nm) 其中 n 是数组 paths 的长度，m 是城市名称的最大长度
+        // 空间复杂度：O(nm)
+        var destCity = function (paths) {
+            const citiesA = new Set();
+            for (const path of paths) {
+                citiesA.add(path[0]);
+            }
+            for (const path of paths) {
+                if (!citiesA.has(path[1])) {
+                    return path[1];
+                }
+            }
+            return "";
+        };
+
+        // test
+        let paths = [
+            ["London", "New York"],
+            ["New York", "Lima"],
+            ["Lima", "Sao Paulo"]
+        ];
+        console.log(destCity(paths))
+    </script>
+</body>
+
+</html>
