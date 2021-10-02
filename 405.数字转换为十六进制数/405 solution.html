@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法1：位运算
+        // 时间复杂度：O(k) 其中 k 是整数的十六进制数的位数，这道题中 k=8 
+        // 空间复杂度：O(k) 其中 k 是整数的十六进制数的位数，这道题中 k=8 
+        var toHex = function (num) {
+            if (num === 0) {
+                return "0";
+            }
+            const sb = [];
+            for (let i = 7; i >= 0; i--) {
+                const val = (num >> (4 * i)) & 0xf;
+                if (sb.length > 0 || val > 0) {
+                    const digit = val < 10 ? String.fromCharCode('0'.charCodeAt() + val) : String.fromCharCode('a'
+                        .charCodeAt() + val - 10);
+                    sb.push(digit);
+                }
+            }
+            return sb.join('');
+        }
+
+        // test
+        let num = 26;
+        console.log(toHex(num))
+    </script>
+</body>
+
+</html>
