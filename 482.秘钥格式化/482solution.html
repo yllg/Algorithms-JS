@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法1：数学
+        // 时间复杂度：O(N)，其中 N 为字符串的长度
+        // 空间复杂度：O(N)，其中 N 为字符串的长度
+        var licenseKeyFormatting = function (s, k) {
+            const ans = [];
+            let cnt = 0;
+            for (let i = s.length - 1; i >= 0; i--) {
+                if (s[i] !== '-') {
+                    cnt++;
+                    ans.push(s[i].toUpperCase());
+                    if (cnt % k === 0) {
+                        ans.push("-");
+                    }
+                }
+            }
+            if (ans.length > 0 && ans[ans.length - 1] === '-') {
+                ans.pop();
+            }
+            return ans.reverse().join('');
+        };
+
+        // test
+        let S = "5F3Z-2e-9-w",
+            K = 4;
+        console.log(licenseKeyFormatting(S, K))
+    </script>
+</body>
+
+</html>
