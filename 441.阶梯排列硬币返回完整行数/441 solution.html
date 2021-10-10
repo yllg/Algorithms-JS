@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 摆成阶梯状，返回完整阶梯行的行数
+
+        // 方法1：二分查找
+        // 时间复杂度：O(logn)
+        // 空间复杂度：O(1)
+        var arrangeCoins = function (n) {
+            let left = 1,
+                right = n;
+            while (left < right) {
+                const mid = Math.floor((right - left + 1) / 2) + left;
+                if (mid * (mid + 1) <= 2 * n) {
+                    left = mid;
+                } else {
+                    right = mid - 1;
+                }
+            }
+            return left;
+        };
+
+        // 方法2：数学
+        var arrangeCoins = function (n) {
+            return Math.floor((Math.sqrt(8 * n + 1) - 1) / 2);
+        };
+
+        // test
+        let n = 8;
+        console.log(arrangeCoins(8))
+    </script>
+</body>
+
+</html>
