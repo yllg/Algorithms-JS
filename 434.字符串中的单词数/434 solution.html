@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法1：原地法
+        // 时间复杂度：O(n)
+        // 空间复杂度：O(1) 
+        var countSegments = function (s) {
+            let segmentCount = 0;
+
+            for (let i = 0; i < s.length; i++) {
+                if ((i === 0 || s[i - 1] === ' ') && s[i] !== ' ') {
+                    segmentCount++;
+                }
+            }
+
+            return segmentCount;
+        };
+
+        // test
+        let s = "Hello, my name is John";
+        console.log(countSegments(s))
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法1：深度优先搜索
+        // 时间复杂度：O(N^2)，其中 N 为该二叉树节点的个数。
+        // 空间复杂度：O(N)，其中 N 为该二叉树节点的个数。
+        var pathSum = function (root, targetSum) {
+            if (root == null) {
+                return 0;
+            }
+
+            let ret = rootSum(root, targetSum);
+            ret += pathSum(root.left, targetSum);
+            ret += pathSum(root.right, targetSum);
+            return ret;
+        };
+
+        const rootSum = (root, targetSum) => {
+            let ret = 0;
+
+            if (root == null) {
+                return 0;
+            }
+            const val = root.val;
+            if (val === targetSum) {
+                ret++;
+            }
+
+            ret += rootSum(root.left, targetSum - val);
+            ret += rootSum(root.right, targetSum - val);
+            return ret;
+        }
+
+        //  方法2：前缀和
+        // 时间复杂度：O(N)，其中 N 为该二叉树节点的个数。
+        // 空间复杂度：O(N)，其中 N 为该二叉树节点的个数。
+        var pathSum = function (root, targetSum) {
+            const prefix = new Map();
+            prefix.set(0, 1);
+            return dfs(root, prefix, 0, targetSum);
+        }
+
+        const dfs = (root, prefix, curr, targetSum) => {
+            if (root == null) {
+                return 0;
+            }
+
+            let ret = 0;
+            curr += root.val;
+
+            ret = prefix.get(curr - targetSum) || 0;
+            prefix.set(curr, (prefix.get(curr) || 0) + 1);
+            ret += dfs(root.left, prefix, curr, targetSum);
+            ret += dfs(root.right, prefix, curr, targetSum);
+            prefix.set(curr, (prefix.get(curr) || 0) - 1);
+
+            return ret;
+        }
+    </script>
+</body>
+
+</html>

@@ -1,51 +1,67 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
 </head>
+
 <body>
-<script>
-// Source : https://leetcode.com/problems/repeated-dna-sequences/
-// Author : 悬笔e绝
-// Date   : 2019-09-17
-
-/**
- * @param {string} s
- * @return {string[]}
- */
-var findRepeatedDnaSequences = function(s) {
-  var map = []
-    , hash = new Set()
-    , hash_ans = new Set()
-    , ans = [];
-
-  map['A'] = 0, map['C'] = 1, map['G'] = 2, map['T'] = 3;
-  
-  var tmp = 0;
-  for (var i = 0, len = s.length; i < len; i++) {
-    tmp = tmp << 2 | map[s[i]];
-    if (i < 9) continue;
-    if (i > 9) tmp = tmp & 0xfffff;
-
-    if (!hash.has(tmp)) 
-      hash.add(tmp);
-    else {
-      if (!hash_ans.has(tmp)) {
-        hash_ans.add(tmp);
-        ans.push(s.substring(i - 9, i + 1));
+  <script>
+    // 方法1：哈希表
+    // 时间复杂度：O(NL)，其中 N 是字符串 s 的长度，L=10 即目标子串的长度。
+    // 空间复杂度：O(NL)
+    var findRepeatedDnaSequences = function (s) {
+      const L = 10;
+      const ans = [];
+      const cnt = new Map();
+      const n = s.length;
+      for (let i = 0; i <= n - L; ++i) {
+        const sub = s.slice(i, i + L)
+        cnt.set(sub, (cnt.get(sub) || 0) + 1);
+        if (cnt.get(sub) === 2) {
+          ans.push(sub);
+        }
       }
-    }
-  }
+      return ans;
+    };
 
-  return ans;
-};
+    // 方法2：哈希表 + 滑动窗口 + 位运算
+    // 时间复杂度：O(N)，其中 N 是字符串 s 的长度
+    // 空间复杂度：O(N)，其中 N 是字符串 s 的长度
+    var findRepeatedDnaSequences = function (s) {
+      const L = 10;
+      const bin = new Map();
+      bin.set('A', 0);
+      bin.set('C', 1);
+      bin.set('G', 2);
+      bin.set('T', 3);
+      const ans = [];
+      const n = s.length;
+      if (n <= L) {
+        return ans;
+      }
+      let x = 0;
+      for (let i = 0; i < L - 1; ++i) {
+        x = (x << 2) | bin.get(s[i]);
+      }
+      const cnt = new Map();
+      for (let i = 0; i <= n - L; ++i) {
+        x = ((x << 2) | bin.get(s[i + L - 1])) & ((1 << (L * 2)) - 1);
+        cnt.set(x, (cnt.get(x) || 0) + 1);
+        if (cnt.get(x) === 2) {
+          ans.push(s.slice(i, i + L));
+        }
+      }
+      return ans;
+    };
 
-// 测试
-var s = "AAAAACCCCCAAAAACCCCCCAAAAAGGGTTT";
-console.log(findRepeatedDnaSequences(s));
-</script>
+    // 测试
+    var s = "AAAAACCCCCAAAAACCCCCCAAAAAGGGTTT";
+    console.log(findRepeatedDnaSequences(s));
+  </script>
 </body>
+
 </html>

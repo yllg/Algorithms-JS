@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法1：位运算
+        // 时间复杂度：O(log(max_int))，其中我们将执行位运算视作原子操作。
+        // 空间复杂度：O(1)
+        var getSum = function (a, b) {
+            while (b != 0) {
+                const carry = (a & b) << 1;
+                a = a ^ b;
+                b = carry;
+            }
+            return a;
+        };
+
+        // test
+        let a = 1,
+            b = 2;
+        console.log(getSum(a, b))
+    </script>
+</body>
+
+</html>

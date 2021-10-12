@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法1：排序
+        // 时间复杂度：O(nlogn)
+        // 空间复杂度：O(logn)
+        var thirdMax = function (nums) {
+            nums.sort((a, b) => a - b);
+            nums.reverse();
+            for (let i = 1, diff = 1; i < nums.length; ++i) {
+                if (nums[i] !== nums[i - 1] && ++diff === 3) { // 此时 nums[i] 就是第三大的数
+                    return nums[i];
+                }
+            }
+            return nums[0];
+        };
+
+        // 方法2：有序集合
+
+        // 方法3：一次遍历
+        // 时间复杂度：O(n)
+        // 空间复杂度：O(1)
+        var thirdMax = function (nums) {
+            let a = null,
+                b = null,
+                c = null;
+            for (const num of nums) {
+                if (a === null || num > a) {
+                    c = b;
+                    b = a;
+                    a = num;
+                } else if (a > num && (b === null || num > b)) {
+                    c = b;
+                    b = num;
+                } else if (b !== null && b > num && (c === null || num > c)) {
+                    c = num;
+                }
+            }
+            return c === null ? a : c;
+        };
+
+        // test
+        let nums = [2, 2, 3, 1];
+        console.log(thirdMax(nums))
+    </script>
+</body>
+
+</html>

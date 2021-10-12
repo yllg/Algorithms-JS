@@ -10,49 +10,49 @@
 
 <body>
   <script>
-    // Source : https://leetcode.com/problems/fraction-to-recurring-decimal/
-    // Author : 悬笔e绝
-    // Date   : 2019-08-21
+    // 给定两个整数，分别表示分数的分子 numerator 和分母 denominator，以 字符串形式返回小数 。
 
-    /**
-     * @param {number} numerator
-     * @param {number} denominator
-     * @return {string}
-     */
+    // 方法1：长除法
+    // 时间复杂度：O(l)，其中 l 是答案字符串的长度
     var fractionToDecimal = function (numerator, denominator) {
-      var isNegative = '';
-      if (numerator * denominator < 0) {
-        isNegative = '-';
+      if (numerator % denominator == 0) {
+        return '' + Math.floor(numerator / denominator);
       }
+      const sb = [];
+      if (numerator < 0 ^ denominator < 0) {
+        sb.push('-');
+      }
+      // 整数部分
       numerator = Math.abs(numerator);
       denominator = Math.abs(denominator);
-      var rem = numerator % denominator;
-      var ans = Math.floor(numerator / denominator);
-      // can be divided
-      if (!rem) {
-        return isNegative + ans;
+      const integerPart = Math.floor(numerator / denominator);
+      sb.push(integerPart);
+      sb.push('.');
+      // 小数部分
+      const fractionPart = [];
+      const remainderIndexDic = new Map();
+      let remainder = numerator % denominator;
+      let index = 0;
+      while (remainder !== 0 && !remainderIndexDic.has(remainder)) {
+        remainderIndexDic.set(remainder, index);
+        remainder *= 10;
+        fractionPart.push(Math.floor(remainder / denominator));
+        remainder %= denominator;
+        index++;
       }
-      // the answer string
-      var arr = [];
-      // 使用一个hash数组来判断小数部分是否有循环
-      var hash = [];
-      hash.push(rem);
-      while (rem) {
-        rem *= 10;
-        var num = Math.floor(rem / denominator);
-        rem %= denominator;
-        var pos = hash.indexOf(rem);
-        arr.push(num);
-        hash.push(rem);
-        if (pos === -1) {
-        } else {
-          arr.splice(pos, 0, '(');
-          arr.push(')');
-          break;
-        }
+      if (remainder !== 0) { // 有循环节
+        let insertIndex = remainderIndexDic.get(remainder);
+        fractionPart.splice(insertIndex, 0, '(');
+        fractionPart.push(')');
       }
-      return isNegative + ans + '.' + arr.join('');
-    };
+      sb.push(fractionPart.join(''));
+      return sb.join('');
+    }
+
+    // test
+    let numerator = 4,
+      denominator = 333;
+    console.log(fractionToDecimal(numerator, denominator))
   </script>
 </body>
 
