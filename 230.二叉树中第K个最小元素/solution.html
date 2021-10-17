@@ -1,57 +1,79 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
-</head>
-<body>
-<script>
-// Source : https://leetcode.com/problems/kth-smallest-element-in-a-bst/
-// Author : 悬笔e绝
-// Date   : 2019-01-16
 
-/**
- * Definition for a binary tree node.
- * function TreeNode(val) {
- *     this.val = val;
- *     this.left = this.right = null;
- * }
- */
-/**
- * @param {TreeNode} root
- * @param {number} k
- * @return {number}
- */
-var kthSmallest = function(root, k) {
-  var inorderTraversal = function(root) {
-    if (!root) return [];
-    var stack = [], ans = [];
-    stack.push(root);
-    while (stack.length) {
-      var elem = stack[stack.length - 1];
-      if (elem.left === 1) {
-        elem.left = 0;
-        ans.push(elem.val);
-      } else if (elem.left) {
-        stack.push(elem.left);
-        elem.left = 1;
-      } else if (elem.left === null) {
-        elem.left = 1;
-      } else if (elem.right) {
-        stack.push(elem.right);
-        elem.right = null;
-      } else {
-        stack.pop();
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    // 方法一：中序遍历
+    // 二叉搜索树的中序遍历是按照键增加的顺序进行的
+    var kthSmallest = function (root, k) {
+      const stack = [];
+      while (root != null || stack.length) {
+        while (root != null) {
+          stack.push(root);
+          root = root.left;
+        }
+        root = stack.pop();
+        --k;
+        if (k === 0) {
+          break;
+        }
+        root = root.right;
+      }
+      return root.val;
+    };
+
+    // 方法2：记录子树的结点数
+    var kthSmallest = function (root, k) {
+      const bst = new MyBst(root);
+      return bst.kthSmallest(k);
+    };
+
+    class MyBst {
+      constructor(root) {
+        this.root = root;
+        this.nodeNum = new Map();
+        this.countNodeNum(root);
+      }
+
+      // 返回二叉搜索树中第k小的元素
+      kthSmallest(k) {
+        let node = this.root;
+        while (node != null) {
+          const left = this.getNodeNum(node.left);
+          if (left < k - 1) {
+            node = node.right;
+            k -= left + 1;
+          } else if (left === k - 1) {
+            break;
+          } else {
+            node = node.left;
+          }
+        }
+        return node.val;
+      }
+
+      // 统计以node为根结点的子树的结点数
+      countNodeNum(node) {
+        if (node == null) {
+          return 0;
+        }
+        this.nodeNum.set(node, 1 + this.countNodeNum(node.left) + this.countNodeNum(node.right));
+        return this.nodeNum.get(node);
+      }
+
+      // 获取以node为根结点的子树的结点数
+      getNodeNum(node) {
+        return this.nodeNum.get(node) || 0;
       }
     }
-    return ans;
-  };
-  var ans = inorderTraversal(root);
-  return ans[k - 1];
-};
-
-</script>
+  </script>
 </body>
+
 </html>
