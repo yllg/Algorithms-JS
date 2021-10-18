@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法1：位运算
+        // 时间复杂度：O(lognum)。找出 num 二进制表示最高位的 1 需要的时间为 O(lognum)。
+        // 空间复杂度：O(1)。
+        var findComplement = function (num) {
+            let highbit = 0;
+            for (let i = 1; i <= 30; ++i) {
+                if (num >= 1 << i) {
+                    highbit = i;
+                } else {
+                    break;
+                }
+            }
+            const mask = highbit == 30 ? 0x7fffffff : (1 << (highbit + 1)) - 1;
+            return num ^ mask;
+        };
+
+        // test
+        let num = 5;
+        console.log(findComplement(num))
+    </script>
+</body>
+
+</html>
