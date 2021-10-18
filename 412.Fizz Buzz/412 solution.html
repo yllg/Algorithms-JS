@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 1. 如果 n 是3的倍数，输出“Fizz”；
+        // 2. 如果 n 是5的倍数， 输出“ Buzz”；
+        // 3. 如果 n 同时是3和5的倍数， 输出“ FizzBuzz”。
+
+        // 方法1：模拟 + 字符串拼接
+        // 时间复杂度O(n) 空间复杂度O(1)
+        var fizzBuzz = function (n) {
+            const answer = [];
+            for (let i = 1; i <= n; i++) {
+                const sb = [];
+                if (i % 3 === 0) {
+                    sb.push("Fizz");
+                }
+                if (i % 5 === 0) {
+                    sb.push("Buzz");
+                }
+                if (sb.length === 0) {
+                    sb.push(i);
+                }
+                answer.push(sb.join(''));
+            }
+            return answer;
+        };
+
+        // test
+        let n = 15;
+        console.log(fizzBuzz(n))
+    </script>
+</body>
+
+</html>
