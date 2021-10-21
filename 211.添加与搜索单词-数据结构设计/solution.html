@@ -1,93 +1,76 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
 </head>
+
 <body>
-<script>
-// Source : https://leetcode.com/problems/add-and-search-word-data-structure-design/
-// Author : 悬笔e绝
-// Date   : 2019-11-17
+  <script>
+    // 方法一：字典树
+    var WordDictionary = function () {
+      this.trieRoot = new TrieNode();
+    };
 
+    WordDictionary.prototype.addWord = function (word) {
+      this.trieRoot.insert(word);
+    };
 
-function Node() {
-  this.nodes = [];
-  this.endFlag = false;
-}
-
-/**
- * @constructor
- */
-var WordDictionary = function() {
-  this.startNode = new Node();
-  // 以该 node 结尾的单词存在
-  this.startNode.endFlag = true;
-};
-
-/**
- * @param {string} word
- * @return {void}
- * Adds a word into the data structure.
- */
-WordDictionary.prototype.addWord = function(word) {
-  var node = this.startNode;
-
-  for (var i = 0, len = word.length; i < len; i++) {
-    var item = word.charCodeAt(i) - 97;
-    if (!node.nodes[item]) {
-      node.nodes[item] = new Node();
-    }
-    node = node.nodes[item];
-  }
-
-  node.endFlag = true;
-};
-
-/**
- * @param {string} word
- * @return {boolean}
- * Returns if the word is in the data structure. A word could
- * contain the dot character '.' to represent any one letter.
- */
-WordDictionary.prototype.search = function(word) {
-  var node = this.startNode;
-  var isFound = false;
-
-  dfs(node, 0);
-
-  function dfs(node, index) {
-    if (isFound)
-      return;
-
-    if (index === word.length) {
-      isFound = node.endFlag;
-      return;
-    }
-
-    if (word[index] === '.') {
-      for (var i = 0; i < 26; i++) {
-        if (node.nodes[i])
-          dfs(node.nodes[i], index + 1);
+    WordDictionary.prototype.search = function (word) {
+      const dfs = (index, node) => {
+        if (index === word.length) {
+          return node.isEnd;
+        }
+        const ch = word[index];
+        if (ch !== '.') {
+          const child = node.children[ch.charCodeAt() - 'a'.charCodeAt()]
+          if (child && dfs(index + 1, child)) {
+            return true;
+          }
+        } else {
+          for (const child of node.children) {
+            if (child && dfs(index + 1, child)) {
+              return true;
+            }
+          }
+        }
+        return false;
       }
-    } else {
-      var item = word.charCodeAt(index) - 97;
-      if (node.nodes[item])
-        dfs(node.nodes[item], index + 1);
+
+      return dfs(0, this.trieRoot);
+    };
+
+    class TrieNode {
+      constructor() {
+        this.children = new Array(26).fill(0);
+        this.isEnd = false;
+      }
+
+      insert(word) {
+        let node = this;
+        for (let i = 0; i < word.length; i++) {
+          const ch = word[i];
+          const index = ch.charCodeAt() - 'a'.charCodeAt();
+          if (node.children[index] === 0) {
+            node.children[index] = new TrieNode();
+          }
+          node = node.children[index];
+        }
+        node.isEnd = true;
+      }
+
+      getChildren() {
+        return this.children;
+      }
+
+      isEnd() {
+        return this.isEnd;
+      }
     }
-  }
-
-  return isFound;
-};
-
-/**
- * Your WordDictionary object will be instantiated and called as such:
- * var wordDictionary = new WordDictionary();
- * wordDictionary.addWord("word");
- * wordDictionary.search("pattern");
- */
-</script>
+  </script>
 </body>
+
 </html>

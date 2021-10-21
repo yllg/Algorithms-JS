@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法1：数学
+        // 时间复杂度：O(n)
+        // 空间复杂度：O(1)。
+        var minMoves = function (nums) {
+            const minNum = Math.min(...nums);
+            let res = 0;
+            for (const num of nums) {
+                res += num - minNum;
+            }
+            return res;
+        };
+
+        // test
+        let nums = [1, 2, 3];
+        console.log(minMoves(nums))
+    </script>
+</body>
+
+</html>l
