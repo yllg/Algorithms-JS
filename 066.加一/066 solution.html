@@ -10,40 +10,29 @@
 
 <body>
     <script>
-        // Source : https://leetcode.com/problems/plus-one/
-        // Author : 悬笔e绝
-        // Date   : 2018-04-05
-
-        /**
-         * @param {number[]} digits
-         * @return {number[]}
-         */
-
+        // 方法一：找出最长的后缀 9
+        // 时间复杂度：O(n)
+        // 空间复杂度：O(1)。
         var plusOne = function (digits) {
-            var ans = [],
-                add = 0, //默认进位是0，不进位
-                len = digits.length;
-            //取最后一位，自加1
-            digits[len - 1]++;
-            //从末尾开始判断进位，并把余数存到一个新的ans数组中
-            for (var i = len - 1; i >= 0; i--) {
-                //每次加上 上一次的进位数
-                var sum = digits[i] + add;
-                //去余数，存到ans数组中
-                ans[i] = sum % 10;
-                //计算商取整当做进位
-                add = ~~(sum / 10);
+            const n = digits.length;
+            for (let i = n - 1; i >= 0; --i) {
+                if (digits[i] !== 9) {
+                    ++digits[i];
+                    for (let j = i + 1; j < n; ++j) {
+                        digits[j] = 0;
+                    }
+                    return digits;
+                }
             }
-            //如果最高位还有进位数1，unshift在数组最前面加一个1
-            if (add)
-                ans.unshift(add);
-
+            // digits 中所有的元素均为 9
+            const ans = new Array(n + 1).fill(0);
+            ans[0] = 1;
             return ans;
         };
 
         //测试
         //把数组当做一个整数46029，然后加一变成46030
-        var digits = [4,6,0,2,9];
+        var digits = [4, 6, 0, 2, 9];
         console.log(plusOne(digits));
     </script>
 </body>
