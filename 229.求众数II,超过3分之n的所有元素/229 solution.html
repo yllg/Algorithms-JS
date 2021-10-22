@@ -1,43 +1,90 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
 </head>
+
 <body>
-<script>
-// Source : https://leetcode.com/problems/majority-element-ii/
-// Author : 悬笔e绝
-// Date   : 2019-01-13
+  <script>
+    // 方法1：哈希统计 
+    // 时间复杂度：O(n)
+    // 空间复杂度：O(n)
+    var majorityElement = function (nums) {
+      const cnt = new Map();
 
-/**
- * @param {number[]} nums
- * @return {number[]}
- */
+      for (let i = 0; i < nums.length; i++) {
+        if (cnt.has(nums[i])) {
+          cnt.set(nums[i], cnt.get(nums[i]) + 1);
+        } else {
+          cnt.set(nums[i], 1);
+        }
+      }
+      const ans = [];
+      for (const x of cnt.keys()) {
+        if (cnt.get(x) > Math.floor(nums.length / 3)) {
+          ans.push(x);
+        }
+      }
 
-var majorityElement = function(nums) {
-  var hash_num = []
-    , len = nums.length
-    , ans = []
-    , hash_ans = [];
+      return ans;
+    };
 
-  nums.forEach(function(item, index, array) {
-    if (!hash_num[item])
-      hash_num[item] = 1;
-    else 
-      hash_num[item]++;
+    // 方法2：摩尔投票法
+    // 时间复杂度：O(n)
+    // 空间复杂度：O(1)
+    var majorityElement = function (nums) {
+      let element1 = 0;
+      let element2 = 0;
+      let vote1 = 0;
+      let vote2 = 0;
 
-    if (!hash_ans[item] && hash_num[item] > len / 3) {
-      hash_ans[item] = true;
-      ans.push(item);
-    }
-  });
+      for (const num of nums) {
+        if (vote1 > 0 && num === element1) { //如果该元素为第一个元素，则计数加1
+          vote1++;
+        } else if (vote2 > 0 && num === element2) { //如果该元素为第二个元素，则计数加1
+          vote2++;
+        } else if (vote1 === 0) { // 选择第一个元素
+          element1 = num;
+          vote1++;
+        } else if (vote2 === 0) { // 选择第二个元素
+          element2 = num;
+          vote2++;
+        } else { //如果三个元素均不相同，则相互抵消1次
+          vote1--;
+          vote2--;
+        }
+      }
 
-  return ans;
-};
+      let cnt1 = 0;
+      let cnt2 = 0;
+      for (const num of nums) {
+        if (vote1 > 0 && num === element1) {
+          cnt1++;
+        }
+        if (vote2 > 0 && num === element2) {
+          cnt2++;
+        }
+      }
+      // 检测元素出现的次数是否满足要求
+      const ans = [];
+      if (vote1 > 0 && cnt1 > Math.floor(nums.length / 3)) {
+        ans.push(element1);
+      }
+      if (vote2 > 0 && cnt2 > Math.floor(nums.length / 3)) {
+        ans.push(element2);
+      }
 
-</script>
+      return ans;
+    };
+
+    // test
+    let nums = [3, 2, 3];
+    console.log(majorityElement(nums))
+  </script>
 </body>
+
 </html>
