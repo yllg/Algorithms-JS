@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法1: 记忆化搜索
+        // 时间复杂度：O(n×k×m^n)，其中 k 表示大礼包的数量，m 表示每种物品的需求量的可能情况数（等于最大需求量加 1），n 表示物品数量。我们最多需要处理 m^n个状态，每个状态需要遍历 k 种大礼包的情况，每个大礼包需要遍历 n 种商品以检查大礼包是否可以购买。
+        // 空间复杂度：O(n×m^n)，用于存储记忆化搜索中 m^n 个状态的计算结果，每个状态需要存储 n 个商品的需求量。
+        var shoppingOffers = function (price, special, needs) {
+            const memo = new Map();
+            // 记忆化搜索计算满足购物清单所需花费的最低价格
+            const dfs = (price, special, curNeeds, filterSpecial, n) => {
+                if (!memo.has(curNeeds)) {
+                    let minPrice = 0;
+                    for (let i = 0; i < n; ++i) {
+                        minPrice += curNeeds[i] * price[i]; // 不购买任何大礼包，原价购买购物清单中的所有物品
+                    }
+                    for (const curSpecial of filterSpecial) {
+                        const specialPrice = curSpecial[n];
+                        const nxtNeeds = [];
+                        for (let i = 0; i < n; ++i) {
+                            if (curSpecial[i] > curNeeds[i]) { // 不能购买超出购物清单指定数量的物品
+                                break;
+                            }
+                            nxtNeeds.push(curNeeds[i] - curSpecial[i]);
+                        }
+                        if (nxtNeeds.length === n) { // 大礼包可以购买
+                            minPrice = Math.min(minPrice, dfs(price, special, nxtNeeds, filterSpecial, n) +
+                                specialPrice);
+                        }
+                    }
+                    memo.set(curNeeds, minPrice);
+                }
+                return memo.get(curNeeds);
+            }
+            const n = price.length;
+            // 过滤不需要计算的大礼包，只保留需要计算的大礼包
+            const filterSpecial = [];
+            for (const sp of special) {
+                let totalCount = 0,
+                    totalPrice = 0;
+                for (let i = 0; i < n; ++i) {
+                    totalCount += sp[i];
+                    totalPrice += sp[i] * price[i];
+                }
+                if (totalCount > 0 && totalPrice > sp[n]) {
+                    filterSpecial.push(sp);
+                }
+            }
+            return dfs(price, special, needs, filterSpecial, n);
+        };
+
+        let price = [2, 5],
+            special = [
+                [3, 0, 5],
+                [1, 2, 10]
+            ],
+            needs = [3, 2];
+        console.log(shoppingOffers(price, special, needs))
+    </script>
+</body>
+
+</html>
