@@ -1,27 +1,89 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
-<script>
-// Source : https://leetcode.com/problems/search-a-2d-matrix-ii/
-// Author : 悬笔e绝
-// Date   : 2020-02-12
 
-/**
- * @param {number[][]} matrix
- * @param {number} target
- * @return {boolean}
- */
-var searchMatrix = function(matrix, target) {
-  for (var i = 0; i < matrix.length; i++)
-    for (var j = 0; j < matrix[i].length; j++)
-      if (matrix[i][j] === target) return true;
-  return false;
-};
-</script>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    // 每行的元素从左到右升序排列。
+    // 每列的元素从上到下升序排列。
+
+    // 方法1：直接查找
+    // 时间复杂度：O(mn)
+    // 空间复杂度：O(1)
+    var searchMatrix = function (matrix, target) {
+      for (var i = 0; i < matrix.length; i++)
+        for (var j = 0; j < matrix[i].length; j++)
+          if (matrix[i][j] === target) return true;
+      return false;
+    };
+
+    // 方法2：二分查找
+    // 时间复杂度：O(mlogn)
+    // 空间复杂度：O(1)
+    var searchMatrix = function (matrix, target) {
+      for (const row of matrix) {
+        const index = search(row, target);
+        if (index >= 0) {
+          return true;
+        }
+      }
+      return false;
+    };
+
+    const search = (nums, target) => {
+      let low = 0,
+        high = nums.length - 1;
+      while (low <= high) {
+        const mid = Math.floor((high - low) / 2) + low;
+        const num = nums[mid];
+        if (num === target) {
+          return mid;
+        } else if (num > target) {
+          high = mid - 1;
+        } else {
+          low = mid + 1;
+        }
+      }
+      return -1;
+    }
+
+    // 方法3：Z 字形查找
+    // 时间复杂度：O(m+n)
+    // 空间复杂度：O(1)
+    var searchMatrix = function (matrix, target) {
+      const m = matrix.length,
+        n = matrix[0].length;
+      let x = 0,
+        y = n - 1;
+      while (x < m && y >= 0) {
+        if (matrix[x][y] === target) {
+          return true;
+        }
+        if (matrix[x][y] > target) {
+          --y;
+        } else {
+          ++x;
+        }
+      }
+      return false;
+    };
+
+    // test
+    let matrix = [
+        [1, 4, 7, 11, 15],
+        [2, 5, 8, 12, 19],
+        [3, 6, 9, 16, 22],
+        [10, 13, 14, 17, 24],
+        [18, 21, 23, 26, 30]
+      ],
+      target = 5;
+    console.log(searchMatrix(matrix, target))
+  </script>
 </body>
+
 </html>
