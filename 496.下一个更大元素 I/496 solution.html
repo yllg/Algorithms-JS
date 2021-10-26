@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法1：暴力
+        // 时间复杂度：O(mn)
+        // 空间复杂度：O(1)
+        var nextGreaterElement = function (nums1, nums2) {
+            const m = nums1.length,
+                n = nums2.length;
+            const res = new Array(m).fill(0);
+            for (let i = 0; i < m; ++i) {
+                let j = 0;
+                while (j < n && nums2[j] !== nums1[i]) {
+                    ++j;
+                }
+                let k = j + 1;
+                while (k < n && nums2[k] < nums2[j]) {
+                    ++k;
+                }
+                res[i] = k < n ? nums2[k] : -1;
+            }
+            return res;
+        };
+
+        // 方法二：单调栈 + 哈希表
+        // 时间复杂度：O(m+n)
+        // 空间复杂度：O(n)
+        var nextGreaterElement = function (nums1, nums2) {
+            const map = new Map();
+            const stack = [];
+            for (let i = nums2.length - 1; i >= 0; --i) {
+                const num = nums2[i];
+                while (stack.length && num >= stack[stack.length - 1]) {
+                    stack.pop();
+                }
+                map.set(num, stack.length ? stack[stack.length - 1] : -1);
+                stack.push(num);
+            }
+            const res = new Array(nums1.length).fill(0).map((_, i) => map.get(nums1[i]));
+            return res;
+        };
+
+        // test
+        let nums1 = [4, 1, 2],
+            nums2 = [1, 3, 4, 2];
+        console.log(nextGreaterElement(nums1, nums2))
+    </script>
+</body>
+
+</html>
