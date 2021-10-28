@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法一：搜索回溯 + 位运算
+        // 时间复杂度：O(m!)
+        // 空间复杂度：O(m)
+        var reorderedPowerOf2 = (n) => {
+            const backtrack = (nums, idx, num) => {
+                if (idx === nums.length) {
+                    return isPowerOfTwo(num);
+                }
+                for (let i = 0; i < nums.length; ++i) {
+                    // 不能有前导零
+                    if ((num === 0 && nums[i] === '0') || vis[i] || (i > 0 && !vis[i - 1] && nums[i] === nums[
+                            i - 1])) {
+                        continue;
+                    }
+                    vis[i] = true;
+                    if (backtrack(nums, idx + 1, num * 10 + nums[i].charCodeAt() - '0'.charCodeAt())) {
+                        return true;
+                    }
+                    vis[i] = false;
+                }
+                return false;
+            }
+
+            const nums = Array.from('' + n);
+            nums.sort();
+            const vis = new Array(nums.length).fill(false);
+            return backtrack(nums, 0, 0);
+        }
+
+        const isPowerOfTwo = (n) => {
+            return (n & (n - 1)) === 0;
+        }
+
+        // 方法二：预处理 + 哈希表
+        // 时间复杂度：O(logn)
+        // 时间复杂度：O(1)
+        const countDigits = (n) => {
+            const cnt = new Array(10).fill(0);
+            while (n) {
+                cnt[n % 10]++;
+                n = Math.floor(n / 10);
+            }
+            return cnt.join('');
+        }
+        var reorderedPowerOf2 = function (n) {
+            const powerOf2Digits = new Set();
+
+            for (let n = 1; n <= 1e9; n <<= 1) {
+                powerOf2Digits.add(countDigits(n));
+            }
+
+            return powerOf2Digits.has(countDigits(n));
+        };
+
+        // test
+        let n = 1;
+        console.log(reorderedPowerOf2(n))
+    </script>
+</body>
+
+</html>
