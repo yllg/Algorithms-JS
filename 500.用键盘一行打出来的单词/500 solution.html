@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 可以用键盘一行打出来的单词；
+
+        // 方法一：遍历
+        // 字母对应行数索引一个个列出来
+        // 时间复杂度：O(L)，其中 L 表示 words 中所有字符串的长度之和。
+        // 空间复杂度：O(C)，其中 C 表示英文字母的个数，在本题中英文字母的个数为 26。注意返回值不计入空间复杂度。
+        var findWords = function (words) {
+            const list = [];
+            const rowIdx = "12210111011122000010020202";
+            for (const word of words) {
+                let isValid = true;
+                const idx = rowIdx[word[0].toLowerCase().charCodeAt() - 'a'.charCodeAt()];
+                for (let i = 1; i < word.length; ++i) {
+                    if (rowIdx[word[i].toLowerCase().charCodeAt() - 'a'.charCodeAt()] !== idx) {
+                        isValid = false;
+                        break;
+                    }
+                }
+                if (isValid) {
+                    list.push(word);
+                }
+            }
+            return list;
+        };
+
+        // test
+        let words = ["Hello", "Alaska", "Dad", "Peace"];
+        console.log(findWords(words))
+    </script>
+</body>
+
+</html>
