@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法一：贪心
+        // 时间复杂度 O(n)
+        // 空间复杂度 O(n)
+        var distributeCandies = function (candyType) {
+            const set = new Set(candyType);
+            return Math.min(set.size, candyType.length / 2);
+        };
+
+        // test
+        let candyType = [1, 1, 2, 2, 3, 3];
+        console.log(distributeCandies(candyType))
+    </script>
+</body>
+
+</html>
