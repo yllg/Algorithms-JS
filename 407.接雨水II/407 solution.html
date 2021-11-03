@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // TODO: 方法1：最小堆
+
+        // 方法2：广度优先搜索
+        // 时间复杂度：O(M^2N^2)，其中 M 是矩阵的行数，N 是矩阵的列数。因此每次发现有水面高度需要调整时，可能需要调整整个矩阵，因此时间复杂度为 O(M^2N^2)
+        // 空间复杂度：O(MN)，其中 M 是矩阵的行数，N 是矩阵的列数。我们需要创建额外的空间对每个元素进行标记，因此空间复杂度度为 O(MN)
+        var trapRainWater = function (heightMap) {
+            const m = heightMap.length;
+            const n = heightMap[0].length;
+            const dirs = [-1, 0, 1, 0, -1];
+            let maxHeight = 0;
+
+            for (let i = 0; i < m; ++i) {
+                for (let j = 0; j < n; ++j) {
+                    maxHeight = Math.max(maxHeight, heightMap[i][j]);
+                }
+            }
+            const water = new Array(m).fill(0).map(() => new Array(n).fill(0));
+            for (let i = 0; i < m; ++i) {
+                for (let j = 0; j < n; ++j) {
+                    water[i][j] = maxHeight;
+                }
+            }
+            const qu = [];
+            for (let i = 0; i < m; ++i) {
+                for (let j = 0; j < n; ++j) {
+                    if (i == 0 || i == m - 1 || j == 0 || j == n - 1) {
+                        if (water[i][j] > heightMap[i][j]) {
+                            water[i][j] = heightMap[i][j];
+                            qu.push([i, j]);
+                        }
+                    }
+                }
+            }
+            while (qu.length) {
+                const curr = qu.shift();
+                const x = curr[0];
+                const y = curr[1];
+                for (let i = 0; i < 4; ++i) {
+                    const nx = x + dirs[i],
+                        ny = y + dirs[i + 1];
+                    if (nx < 0 || nx >= m || ny < 0 || ny >= n) {
+                        continue;
+                    }
+                    if (water[x][y] < water[nx][ny] && water[nx][ny] > heightMap[nx][ny]) {
+                        water[nx][ny] = Math.max(water[x][y], heightMap[nx][ny]);
+                        qu.push([nx, ny]);
+                    }
+                }
+            }
+
+            let res = 0;
+            for (let i = 0; i < m; ++i) {
+                for (let j = 0; j < n; ++j) {
+                    res += water[i][j] - heightMap[i][j];
+                }
+            }
+            return res;
+        };
+
+        // test
+        let heightMap = [
+            [1, 4, 3, 1, 3, 2],
+            [3, 2, 1, 3, 2, 4],
+            [2, 3, 3, 2, 3, 1]
+        ];
+        console.log(trapRainWater(heightMap))
+    </script>
+</body>
+
+</html>
