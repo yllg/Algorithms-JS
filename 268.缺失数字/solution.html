@@ -1,29 +1,75 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
-<script>
-// Source : https://leetcode.com/problems/missing-number/
-// Author : 悬笔e绝
-// Date   : 2020-02-29
 
-/**
- * @param {number[]} nums
- * @return {number}
- */
-var missingNumber = function(nums) {
-  var hash = [];
-  nums.forEach(function(item) {
-    hash[item] = true;
-  })
-  for (var i = 0; ; i++) 
-    if (!hash[i]) 
-      return i;
-};
-</script>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    // 方法一：排序
+    // 时间复杂度 O(nlogn)
+    // 空间复杂度 O(logn)
+    var missingNumber = function (nums) {
+      nums.sort((a, b) => a - b);
+      const n = nums.length;
+      for (let i = 0; i < n; i++) {
+        if (nums[i] !== i) {
+          return i;
+        }
+      }
+      return n;
+    };
+
+    // 方法2：哈希集合
+    // 时间复杂度 O(n)
+    // 空间复杂度 O(n)
+    var missingNumber = function (nums) {
+      const set = new Set();
+      const n = nums.length;
+      for (let i = 0; i < n; i++) {
+        set.add(nums[i]);
+      }
+      let missing = -1;
+      for (let i = 0; i <= n; i++) {
+        if (!set.has(i)) {
+          missing = i;
+          break;
+        }
+      }
+      return missing;
+    };
+
+    // 方法三：位运算
+    // 时间复杂度 O(n)
+    // 空间复杂度 O(1)
+    var missingNumber = function (nums) {
+      let xor = 0;
+      const n = nums.length;
+      for (let i = 0; i < nums.length; i++) {
+        xor ^= nums[i];
+      }
+      for (let i = 0; i <= n; i++) {
+        xor ^= i;
+      }
+      return xor;
+    };
+
+    // 方法四：数学
+    // 时间复杂度 O(n)
+    // 空间复杂度 O(1)
+    var missingNumber = function (nums) {
+      const n = nums.length;
+      let total = Math.floor(n * (n + 1) / 2);
+      let arrSum = 0;
+      for (let i = 0; i < n; i++) {
+        arrSum += nums[i];
+      }
+      return total - arrSum;
+    };
+  </script>
 </body>
+
 </html>

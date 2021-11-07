@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法一：使用内置的库函数
+        // pow 函数的时空复杂度与 CPU 支持的指令集相关
+        var isPerfectSquare = function (num) {
+            const x = Math.floor(Math.sqrt(num));
+            return x * x === num;
+        };
+
+        // 方法2：暴力
+        // 时间复杂度：O(sqrt{n})
+        // 时间复杂度：O(1)
+        var isPerfectSquare = function (num) {
+            let x = 1,
+                square = 1;
+            while (square <= num) {
+                if (square === num) {
+                    return true;
+                }
+                ++x;
+                square = x * x;
+            }
+            return false;
+        };
+
+        // 方法三：二分查找
+        // 时间复杂度：O(logn)
+        // 时间复杂度：O(1)
+        var isPerfectSquare = function (num) {
+            let left = 0,
+                right = num;
+            while (left <= right) {
+                const mid = Math.floor((right - left) / 2) + left;
+                const square = mid * mid;
+                if (square < num) {
+                    left = mid + 1;
+                } else if (square > num) {
+                    right = mid - 1;
+                } else {
+                    return true;
+                }
+            }
+            return false;
+        };
+
+        // 方法四：牛顿迭代法
+        // 时间复杂度：O(logn)
+        // 时间复杂度：O(1)
+        var isPerfectSquare = function (num) {
+            let x0 = num;
+            while (true) {
+                const x1 = Math.floor((x0 + num / x0) / 2);
+                if (x0 - x1 < 1e-6) {
+                    break;
+                }
+                x0 = x1;
+            }
+            x = x0;
+            return x * x === num;
+        };
+    </script>
+</body>
+
+</html>
