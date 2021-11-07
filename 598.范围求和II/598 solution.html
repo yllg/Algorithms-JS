@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法一：维护所有操作的交集
+        // 时间复杂度：O(k)，其中 k 是数组 ops 的长度
+        // 空间复杂度：O(1)
+        var maxCount = function (m, n, ops) {
+            let mina = m,
+                minb = n;
+            for (const op of ops) {
+                mina = Math.min(mina, op[0]);
+                minb = Math.min(minb, op[1]);
+            }
+            return mina * minb;
+        };
+
+        // test
+        let m = 3,
+            n = 3,
+            operations = [
+                [2, 2],
+                [3, 3]
+            ]
+
+        console.log(maxCount(m, n, operations))
+    </script>
+</body>
+
+</html>
