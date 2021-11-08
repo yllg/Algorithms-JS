@@ -1,49 +1,34 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
-<script>
-// Source : https://leetcode.com/problems/bulls-and-cows/
-// Author : 悬笔e绝
-// Date   : 2020-03-15
 
-/**
- * @param {string} secret
- * @param {string} guess
- * @return {string}
- */
-var getHint = function(secret, guess) {
-  var a = secret.split('');
-  var b = guess.split('');
-  var len = a.length;
-  var bullNum = 0;
-  var cowBum = 0;
-  var hash = {};
-  for (var i = len; i--; ) {
-    if (a[i] === b[i]) {
-      a.splice(i, 1);
-      b.splice(i, 1);
-      bullNum++;
-    } else {
-      if (!hash[a[i]])
-        hash[a[i]] = 1;
-      else 
-        hash[a[i]]++;
-    }
-  }
-  for (var i = 0; i < b.length; i++) {
-    var item = b[i];
-    if (hash[item]) {
-      cowBum++;
-      hash[item]--;
-    }
-  }
-  return bullNum + 'A' + cowBum + 'B';
-};
-</script>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    // 方法一：遍历
+    var getHint = function (secret, guess) {
+      let bulls = 0;
+      const cntS = new Array(10).fill(0);
+      const cntG = new Array(10).fill(0);
+      for (let i = 0; i < secret.length; ++i) {
+        if (secret[i] == guess[i]) {
+          ++bulls;
+        } else {
+          ++cntS[secret[i].charCodeAt() - '0'.charCodeAt()];
+          ++cntG[guess[i].charCodeAt() - '0'.charCodeAt()];
+        }
+      }
+      let cows = 0;
+      for (let i = 0; i < 10; ++i) {
+        cows += Math.min(cntS[i], cntG[i]);
+      }
+      return '' + bulls + "A" + '' + cows + "B";
+    };
+  </script>
 </body>
+
 </html>
