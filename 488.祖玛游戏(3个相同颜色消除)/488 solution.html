@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法1：记忆化递归
+        const combine = board => {
+            for (let slow = fast = 0; fast <= board.length; fast++) {
+                if (board[slow] === board[fast]) continue
+                if (fast - slow > 2) {
+                    board = board.substring(0, slow) + board.substring(fast)
+                    fast = 0
+                }
+                slow = fast
+            }
+            return board
+        }
+
+        var findMinStep = function (board, hand) {
+            const visited = new Set
+            let r = Number.MAX_SAFE_INTEGER
+            const d = (board, hand, count) => {
+                if (board.length === 0) return r = Math.min(r, count)
+                if (hand.length === 0 || visited.has(board + count)) return
+                visited.add(board + count)
+                for (let i = 0; i < board.length; i++)
+                    for (let j = 0; j < hand.length; j++)
+                        d(combine(board.substring(0, i) + hand[j] + board.substring(i)), hand.substring(0, j) +
+                            hand.substring(j + 1), count + 1)
+            }
+            d(board, hand, 0)
+            return r === Number.MAX_SAFE_INTEGER ? -1 : r
+        };
+
+        // test
+        let board = "WRRBBW",
+            hand = "RB";
+        console.log(findMinStep(board, hand))
+    </script>
+</body>
+
+</html>
