@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法一：单次扫描
+        // 时间复杂度 O(n)
+        // 空间复杂度 O(1)
+        var findPoisonedDuration = function (timeSeries, duration) {
+            let ans = 0;
+            let expired = 0;
+            for (let i = 0; i < timeSeries.length; ++i) {
+                if (timeSeries[i] >= expired) {
+                    ans += duration;
+                } else {
+                    ans += timeSeries[i] + duration - expired;
+                }
+                expired = timeSeries[i] + duration;
+            }
+            return ans;
+        };
+
+        // test 
+        let timeSeries = [1, 2],
+            duration = 2;
+        console.log(findPoisonedDuration(timeSeries, duration))
+    </script>
+</body>
+
+</html>
