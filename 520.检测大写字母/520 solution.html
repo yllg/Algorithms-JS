@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法一：根据题目要求实现
+        // 时间复杂度：O(n)
+        // 空间复杂度：O(1)
+        var detectCapitalUse = function (word) {
+            // 若第 1 个字母为小写，则需额外判断第 2 个字母是否为小写
+            if (word.length >= 2 && word[0] === word[0].toLowerCase() && word[1] === word[1].toUpperCase()) {
+                return false;
+            }
+
+            // 无论第 1 个字母是否大写，其他字母必须与第 2 个字母的大小写相同
+            for (let i = 2; i < word.length; ++i) {
+                if (word[i] === word[i].toLowerCase() ^ word[1] === word[1].toLowerCase()) {
+                    return false;
+                }
+            }
+            return true;
+        };
+
+        // test
+        let word = "FlaG";
+        console.log(detectCapitalUse(word))
+    </script>
+</body>
+
+</html>
