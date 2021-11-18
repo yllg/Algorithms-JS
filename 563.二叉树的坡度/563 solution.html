@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法一：深度优先搜索
+        // 时间复杂度：O(n)
+        // 空间复杂度：O(n)
+        var findTilt = function (root) {
+            let ans = 0;
+
+            const dfs = (node) => {
+                if (!node) {
+                    return 0;
+                }
+                const sumLeft = dfs(node.left);
+                const sumRight = dfs(node.right);
+                ans += Math.abs(sumLeft - sumRight);
+                return sumLeft + sumRight + node.val;
+            }
+            dfs(root);
+            return ans;
+        };
+    </script>
+</body>
+
+</html>
