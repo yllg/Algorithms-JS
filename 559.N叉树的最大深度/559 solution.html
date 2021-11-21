@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法一：深度优先搜索
+        // 时间复杂度：O(n)
+        // 空间复杂度：O(height) 其中 height 表示 N 叉树的高度
+        var maxDepth = function (root) {
+            if (!root) {
+                return 0;
+            }
+            let maxChildDepth = 0;
+            const children = root.children;
+            for (const child of children) {
+                const childDepth = maxDepth(child);
+                maxChildDepth = Math.max(maxChildDepth, childDepth);
+            }
+            return maxChildDepth + 1;
+        };
+
+        // 方法二：广度优先搜索
+        // 时间复杂度：O(n)
+        // 空间复杂度：此方法空间的消耗取决于队列存储的元素数量，其在最坏情况下会达到 O(n)
+        var maxDepth = function (root) {
+            if (!root) {
+                return 0;
+            }
+            const queue = [];
+            queue.push(root);
+            let ans = 0;
+            while (queue.length) {
+                let size = queue.length;
+                while (size > 0) {
+                    const node = queue.shift();
+                    const children = node.children;
+                    for (const child of children) {
+                        queue.push(child);
+                    }
+                    size--;
+                }
+                ans++;
+            }
+            return ans;
+        };
+    </script>
+</body>
+
+</html>
