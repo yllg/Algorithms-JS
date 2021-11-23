@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 两个字母互换可以得到 goal字符串 返回true
+
+        // 方法一：枚举
+        // 时间复杂度：O(N)，其中 N 为字符串的长度。我们至多遍历字符串两遍。
+        // 空间复杂度：O(C)。需要常数个空间保存字符串的字符统计次数，我们统计所有小写字母的个数，因此 C=26。
+        var buddyStrings = function (s, goal) {
+            if (s.length != goal.length) {
+                return false;
+            }
+
+            if (s === goal) {
+                const count = new Array(26).fill(0);
+                for (let i = 0; i < s.length; i++) {
+                    count[s[i].charCodeAt() - 'a'.charCodeAt()]++;
+                    if (count[s[i].charCodeAt() - 'a'.charCodeAt()] > 1) {
+                        return true;
+                    }
+                }
+                return false;
+            } else {
+                let first = -1,
+                    second = -1;
+                for (let i = 0; i < s.length; i++) {
+                    if (s[i] !== goal[i]) {
+                        if (first === -1)
+                            first = i;
+                        else if (second === -1)
+                            second = i;
+                        else
+                            return false;
+                    }
+                }
+
+                return (second !== -1 && s[first] === goal[second] && s[second] === goal[first]);
+            }
+        };
+    </script>
+</body>
+
+</html>
