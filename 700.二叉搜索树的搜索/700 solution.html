@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 给出一个值，返回以该节点为根的子树
+
+        // 方法一 递归
+        // 时间复杂度：O(N)，其中 N 是二叉搜索树的节点数
+        // 空间复杂度：O(N)，其中 N 是二叉搜索树的节点数
+        var searchBST = function (root, val) {
+            if (!root) {
+                return null;
+            }
+            if (val === root.val) {
+                return root;
+            }
+            return searchBST(val < root.val ? root.left : root.right, val);
+        };
+
+        // 方法2：迭代
+        // 时间复杂度：O(N)，其中 N 是二叉搜索树的节点数
+        // 时间复杂度：O(1)
+        var searchBST = function (root, val) {
+            while (root) {
+                if (val === root.val) {
+                    return root;
+                }
+                root = val < root.val ? root.left : root.right;
+            }
+            return null;
+        };
+    </script>
+</body>
+
+</html>
