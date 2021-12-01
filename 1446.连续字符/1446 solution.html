@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 一次遍历
+        // 时间复杂度：O(n)
+        // 空间复杂度：O(1)
+        var maxPower = function (s) {
+            let ans = 1,
+                cnt = 1;
+            for (let i = 1; i < s.length; ++i) {
+                if (s[i] == s[i - 1]) {
+                    ++cnt;
+                    ans = Math.max(ans, cnt);
+                } else {
+                    cnt = 1;
+                }
+            }
+            return ans;
+        };
+
+        // test
+        let s = "leetcode";
+        console.log(maxPower(s))
+    </script>
+</body>
+
+</html>
