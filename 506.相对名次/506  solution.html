@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法一：排序
+        // 时间复杂度：O(nlogn)
+        // 空间复杂度：O(n)
+        var findRelativeRanks = function (score) {
+            const n = score.length;
+            const desc = ["Gold Medal", "Silver Medal", "Bronze Medal"];
+            const arr = new Array(n).fill(0).map(() => new Array(2).fill(0));
+
+            for (let i = 0; i < n; ++i) {
+                arr[i][0] = score[i];
+                arr[i][1] = i;
+            }
+            arr.sort((a, b) => b[0] - a[0]);
+            const ans = new Array(n).fill(0);
+            for (let i = 0; i < n; ++i) {
+                if (i >= 3) {
+                    ans[arr[i][1]] = '' + (i + 1);
+                } else {
+                    ans[arr[i][1]] = desc[i];
+                }
+            }
+            return ans;
+        };
+
+        // test
+        let score = [5, 4, 3, 2, 1];
+        console.log(findRelativeRanks(score))
+    </script>
+</body>
+
+</html>
