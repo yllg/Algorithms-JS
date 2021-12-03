@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法一：数组映射
+        // 时间复杂度：flip() 操作的时间复杂度为 O(1)，reset() 操作的时间复杂度为 O(F)，其中 F 是在上一次 reset() 之后执行 flip() 的次数。
+        // 空间复杂度：O(F)，其中 F 代表执行函数 flip() 的次数
+        var Solution = function (m, n) {
+            this.m = m;
+            this.n = n;
+            this.total = m * n;
+            this.map = new Map();
+        };
+
+        Solution.prototype.flip = function () {
+            const x = Math.floor(Math.random() * this.total);
+            this.total--;
+            // 查找位置 x 对应的映射
+            const idx = this.map.get(x) || x;
+            // 将位置 x 对应的映射设置为位置 total 对应的映射
+            this.map.set(x, this.map.get(this.total) || this.total);
+            return [Math.floor(idx / this.n), idx % this.n];
+        };
+
+        Solution.prototype.reset = function () {
+            this.total = this.m * this.n;
+            this.map.clear();
+        };
+
+        // 方法二：分块
+        var Solution = function (m, n) {
+            this.m = m;
+            this.n = n;
+            this.total = m * n;
+            this.bucketSize = Math.floor(Math.sqrt(this.total));
+            this.buckets = [];
+            for (let i = 0; i < this.total; i += this.bucketSize) {
+                this.buckets.push(new Set());
+            }
+        };
+
+        Solution.prototype.flip = function () {
+            const x = Math.floor(Math.random() * this.total);
+            let sumZero = 0;
+            let curr = 0;
+            this.total--;
+
+            for (const bucket of this.buckets) {
+                if (sumZero + this.bucketSize - bucket.size > x) {
+                    for (let i = 0; i < this.bucketSize; ++i) {
+                        if (!bucket.has(curr + i)) {
+                            if (sumZero === x) {
+                                bucket.add(curr + i);
+                                return [Math.floor((curr + i) / this.n), (curr + i) % this.n];
+                            }
+                            sumZero++;
+                        }
+                    }
+                }
+                curr += this.bucketSize;
+                sumZero += this.bucketSize - bucket.size;
+            }
+            return undefined;
+        };
+
+        Solution.prototype.reset = function () {
+            this.total = this.m * this.n;
+            for (const bucket of this.buckets) {
+                bucket.clear();
+            }
+        };
+    </script>
+</body>
+
+</html>

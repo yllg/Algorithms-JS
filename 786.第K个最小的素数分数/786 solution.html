@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法一：自定义排序
+        // 时间复杂度：O(n^2 * log n)
+        // 空间复杂度：O(n^2)
+        var kthSmallestPrimeFraction = function (arr, k) {
+            const n = arr.length;
+            const frac = [];
+            for (let i = 0; i < n; ++i) {
+                for (let j = i + 1; j < n; ++j) {
+                    frac.push([arr[i], arr[j]]);
+                }
+            }
+            frac.sort((x, y) => x[0] * y[1] - y[0] * x[1]);
+            return frac[k - 1];
+        };
+
+        // TODO: 方法二：优先队列
+
+        // 方法三：二分查找 + 双指针
+        // 时间复杂度：O(nlogC) 其中 n 是数组 arr 的长度，C 是数组 arr 中元素的上界。
+        // 空间复杂度：O(1)
+        var kthSmallestPrimeFraction = function (arr, k) {
+            const n = arr.length;
+            let left = 0.0,
+                right = 1.0;
+            while (true) {
+                const mid = (left + right) / 2;
+                let i = -1,
+                    count = 0;
+                // 记录最大的分数
+                let x = 0,
+                    y = 1;
+
+                for (let j = 1; j < n; ++j) {
+                    while (arr[i + 1] / arr[j] < mid) {
+                        ++i;
+                        if (arr[i] * y > arr[j] * x) {
+                            x = arr[i];
+                            y = arr[j];
+                        }
+                    }
+                    count += i + 1;
+                }
+
+                if (count === k) {
+                    return [x, y];
+                }
+                if (count < k) {
+                    left = mid;
+                } else {
+                    right = mid;
+                }
+            }
+        };
+    </script>
+</body>
+
+</html>
