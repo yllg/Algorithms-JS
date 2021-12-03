@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 从杂志上搜索各个需要的字母，组成单词来表达意思。magazine 中的每个字符只能在 ransomNote 中使用一次。
+
+        // 方法一：字符统计
+        // 时间复杂度：O(m+n)，其中 m 是字符串 ransomNote 的长度，n 是字符串 magazine 的长度，我们只需要遍历两个字符一次即可。
+        // 空间复杂度：O(∣S∣)，S 是字符集，这道题中 S 为全部小写英语字母，因此 ∣S∣=26。
+        var canConstruct = function (ransomNote, magazine) {
+            if (ransomNote.length > magazine.length) {
+                return false;
+            }
+            const cnt = new Array(26).fill(0);
+            for (const c of magazine) {
+                cnt[c.charCodeAt() - 'a'.charCodeAt()]++;
+            }
+            for (const c of ransomNote) {
+                cnt[c.charCodeAt() - 'a'.charCodeAt()]--;
+                if (cnt[c.charCodeAt() - 'a'.charCodeAt()] < 0) {
+                    return false;
+                }
+            }
+            return true;
+        };
+
+        // test
+        let ransomNote = "aa",
+            magazine = "ab";
+        console.log(canConstruct(ransomNote, magazine))
+    </script>
+</body>
+
+</html>
