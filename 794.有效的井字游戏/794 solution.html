@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法一：分类讨论
+        // 时间复杂度：O(C)，由于此题给定的棋盘大小为常数 C=9，因此时间复杂度为常数
+        // 空间复杂度：O(1)。
+        var validTicTacToe = function (board) {
+            let xCount = 0,
+                oCount = 0;
+            for (const row of board) {
+                for (const c of row) {
+                    xCount = (c === 'X') ? (xCount + 1) : xCount;
+                    oCount = (c === 'O') ? (oCount + 1) : oCount;
+                }
+            }
+            if (oCount != xCount && oCount !== xCount - 1) {
+                return false;
+            }
+            if (win(board, 'X') && oCount !== xCount - 1) {
+                return false;
+            }
+            if (win(board, 'O') && oCount !== xCount) {
+                return false;
+            }
+            return true;
+        };
+
+        const win = (board, p) => {
+            for (let i = 0; i < 3; ++i) {
+                if (p === board[0][i] && p === board[1][i] && p === board[2][i]) {
+                    return true;
+                }
+                if (p === board[i][0] && p === board[i][1] && p === board[i][2]) {
+                    return true;
+                }
+            }
+            if (p === board[0][0] && p === board[1][1] && p === board[2][2]) {
+                return true;
+            }
+            if (p === board[0][2] && p === board[1][1] && p === board[2][0]) {
+                return true;
+            }
+            return false;
+        }
+
+        // test
+        let board = ["O  ", "   ", "   "];
+        console.log(validTicTacToe(board))
+    </script>
+</body>
+
+</html>
