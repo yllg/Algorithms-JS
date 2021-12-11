@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法一：预计算 + 二分查找
+        // 时间复杂度：预处理的时间复杂度为 O(N)，其中 N 为 persons 的长度。单次查询的时间复杂度为 O(logN)。
+        // 空间复杂度：O(N)
+        var TopVotedCandidate = function (persons, times) {
+            this.tops = [];
+            this.voteCounts = new Map();
+            this.voteCounts.set(-1, -1);
+            this.times = times;
+            let top = -1;
+            for (let i = 0; i < persons.length; ++i) {
+                const p = persons[i];
+                if (!this.voteCounts.has(p)) {
+                    this.voteCounts.set(p, 0);
+                } else {
+                    this.voteCounts.set(p, this.voteCounts.get(p) + 1);
+                }
+                if (this.voteCounts.get(p) >= this.voteCounts.get(top)) {
+                    top = p;
+                }
+                this.tops.push(top);
+            }
+        };
+
+        TopVotedCandidate.prototype.q = function (t) {
+            let l = 0,
+                r = this.times.length - 1;
+            // 找到满足 times[l] <= t 的最大的 l
+            while (l < r) {
+                const m = l + Math.floor((r - l + 1) / 2);
+                if (this.times[m] <= t) {
+                    l = m;
+                } else {
+                    r = m - 1;
+                }
+            }
+
+            return this.tops[l];
+        };
+    </script>
+</body>
+
+</html>
