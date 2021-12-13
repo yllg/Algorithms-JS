@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法一：从小到大修改每个负数
+        // 时间复杂度：O(n+C)，其中 n 是数组 nums 的长度，C 是数组 nums 中元素的范围，本题中 C=201。
+        // 空间复杂度：O(C)
+        var largestSumAfterKNegations = function (nums, k) {
+            const freq = new Map();
+            for (const num of nums) {
+                freq.set(num, (freq.get(num) || 0) + 1);
+            }
+            let ans = _.sum(nums);
+            for (let i = -100; i < 0; ++i) {
+                if (freq.has(i)) {
+                    const ops = Math.min(k, freq.get(i));
+                    ans += (-i) * ops * 2;
+                    freq.set(i, freq.get(i) - ops);
+                    freq.set(-i, (freq.get(-i) || 0) + ops);
+                    k -= ops;
+                    if (k === 0) {
+                        break;
+                    }
+                }
+            }
+            if (k > 0 && k % 2 === 1 && !freq.has(0)) {
+                for (let i = 1; i <= 100; ++i) {
+                    if (freq.has(i)) {
+                        ans -= i * 2;
+                        break;
+                    }
+                }
+            }
+            return ans;
+        };
+    </script>
+</body>
+
+</html>

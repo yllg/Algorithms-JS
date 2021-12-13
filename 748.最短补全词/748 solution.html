@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法一：统计字符出现次数
+        // 时间复杂度：O(N+L+M⋅∣Σ∣)，其中 N 是字符串 licensePlate 的长度，L 是 words 中的所有字符串的长度之和，M 是 words 数组的长度, ∣Σ∣ 为字符集合的大小，本题中有 26 个英文字母，即 ∣Σ∣=26
+        // 空间复杂度：O(∣Σ∣)
+        var shortestCompletingWord = function (licensePlate, words) {
+            const cnt = new Array(26).fill(0);
+            for (const ch of licensePlate) {
+                if (/^[a-zA-Z]+$/.test(ch)) {
+                    ++cnt[ch.toLowerCase().charCodeAt() - 'a'.charCodeAt()];
+                }
+            }
+            let idx = -1;
+            for (let i = 0; i < words.length; ++i) {
+                const c = Array(26).fill(0);
+                for (let j = 0; j < words[i].length; ++j) {
+                    const ch = words[i][j];
+                    ++c[ch.charCodeAt() - 'a'.charCodeAt()];
+                }
+                let ok = true;
+                for (let j = 0; j < 26; ++j) {
+                    if (c[j] < cnt[j]) {
+                        ok = false;
+                        break;
+                    }
+                }
+                if (ok && (idx < 0 || words[i].length < words[idx].length)) {
+                    idx = i;
+                }
+            }
+            return words[idx];
+        };
+
+        // test 
+        let licensePlate = "1s3 PSt",
+            words = ["step", "steps", "stripe", "stepple"];
+        console.log(shortestCompletingWord(licensePlate, words))
+    </script>
+</body>
+
+</html>
