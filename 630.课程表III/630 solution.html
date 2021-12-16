@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法1：DFS
+        function scheduleCourse(courses) {
+            const len = courses.length;
+            let max = 0;
+            const dfs = (n, times, count, used) => {
+                if (max === len) return;
+                if (used.has(n)) return;
+                used.add(n);
+                const nowTime = times + courses[n][0];
+                // 超时了
+                if (nowTime > courses[n][1]) {
+                    max = Math.max(max, count);
+                    return;
+                }
+                // 课修完了
+                if (used.size === len) {
+                    max = Math.max(max, count + 1); // 加上这次的
+                    return;
+                }
+                // 进入下一阶段遍历
+                for (let i = 0; i < len; i++) {
+                    dfs(i, nowTime, count + 1, new Set(used));
+                }
+            };
+            for (let i = 0; i < len; i++) {
+                // 每一门课当做第一门课的情况
+                dfs(i, 0, 0, new Set());
+            }
+            return max;
+        }
+
+        // 方法2：最优队列
+        /**
+         * @param {number[][]} courses
+         * @return {number}
+         */
+        var scheduleCourse = function (courses) {
+            let newCourses = courses.sort((a, b) => a[1] - b[1]);
+            let timeArr = [];
+            let totalTime = 0;
+            for (let i = 0; i < newCourses.length; i++) {
+                totalTime += newCourses[i][0];
+                // console.log("totalTime=" + totalTime + "; newCourses[i][1]=" + newCourses[i][1]);
+                if (totalTime <= newCourses[i][1]) {
+                    timeArr.push(newCourses[i][0]);
+                    timeArr.sort((a, b) => a - b);
+                } else if (timeArr[timeArr.length - 1] >= newCourses[i][0]) {
+                    totalTime -= timeArr[timeArr.length - 1];
+                    timeArr.splice(timeArr.length - 1, 1, newCourses[i][0]);
+                    timeArr.sort((a, b) => a - b);
+                } else {
+                    totalTime -= newCourses[i][0];
+                }
+            }
+            return timeArr.length;
+        }
+    </script>
+</body>
+
+</html>
