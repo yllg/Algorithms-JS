@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法一：计算各节点的入度和出度
+        // 时间复杂度：O(n+m)
+        // 空间复杂度：O(n)
+        var findJudge = function (n, trust) {
+            const inDegrees = new Array(n + 1).fill(0);
+            const outDegrees = new Array(n + 1).fill(0);
+            for (const edge of trust) {
+                const x = edge[0],
+                    y = edge[1];
+                ++inDegrees[y];
+                ++outDegrees[x];
+            }
+            for (let i = 1; i <= n; ++i) {
+                if (inDegrees[i] === n - 1 && outDegrees[i] === 0) {
+                    return i;
+                }
+            }
+            return -1;
+        };
+
+        // test
+        let n = 2,
+            trust = [
+                [1, 2]
+            ];
+        console.log(findJudge(n, trust))
+    </script>
+</body>
+
+</html>
