@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法一：滑动窗口
+        var longestDupSubstring = function (s) {
+            let maxStr = '',
+                curStr = '';
+            for (let i = 0, j = 0; i < s.length; i++) {
+                curStr = curStr.replace(s[i - 1], '');
+                while (curStr.length <= maxStr.length && j < s.length) {
+                    curStr += s[j], j++;
+                    if (curStr.length > maxStr.length && s.lastIndexOf(curStr) > i) maxStr = curStr;
+                }
+            }
+            return maxStr;
+        };
+    </script>
+</body>
+
+</html>
