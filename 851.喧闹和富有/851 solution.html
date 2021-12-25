@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法一：深度优先搜索
+        // 时间复杂度：O(n+m)，其中 n 是数组 quiet 的长度，m 是数组 richer 的长度
+        // 空间复杂度：O(n+m)
+        var loudAndRich = function (richer, quiet) {
+            const n = quiet.length;
+            const g = new Array(n).fill(0);
+            for (let i = 0; i < n; ++i) {
+                g[i] = [];
+            }
+            for (const r of richer) {
+                g[r[1]].push(r[0]);
+            }
+
+            const ans = new Array(n).fill(-1);
+            for (let i = 0; i < n; ++i) {
+                dfs(i, quiet, g, ans);
+            }
+            return ans;
+        };
+
+        const dfs = (x, quiet, g, ans) => {
+            if (ans[x] !== -1) {
+                return;
+            }
+            ans[x] = x;
+            for (const y of g[x]) {
+                dfs(y, quiet, g, ans);
+                if (quiet[ans[y]] < quiet[ans[x]]) {
+                    ans[x] = ans[y];
+                }
+            }
+        }
+
+        // 方法二：拓扑排序
+        // 时间复杂度：O(n+m)，其中 n 是数组 quiet 的长度，m 是数组 richer 的长度
+        // 空间复杂度：O(n+m)
+        var loudAndRich = function (richer, quiet) {
+            const n = quiet.length;
+            const g = new Array(n).fill(0);
+            for (let i = 0; i < n; ++i) {
+                g[i] = [];
+            }
+            const inDeg = new Array(n).fill(0);
+            for (const r of richer) {
+                g[r[0]].push(r[1]);
+                ++inDeg[r[1]];
+            }
+
+            const ans = new Array(n).fill(0);
+            for (let i = 0; i < n; ++i) {
+                ans[i] = i;
+            }
+            const q = [];
+            for (let i = 0; i < n; ++i) {
+                if (inDeg[i] === 0) {
+                    q.push(i);
+                }
+            }
+            while (q.length) {
+                const x = q.shift();
+                for (const y of g[x]) {
+                    if (quiet[ans[x]] < quiet[ans[y]]) {
+                        ans[y] = ans[x]; // 更新 x 的邻居的答案
+                    }
+                    if (--inDeg[y] === 0) {
+                        q.push(y);
+                    }
+                }
+            }
+            return ans;
+        };
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法一：模拟
+        var numWaterBottles = function (numBottles, numExchange) {
+            let bottle = numBottles,
+                ans = numBottles;
+            while (bottle >= numExchange) {
+                bottle -= numExchange;
+                ++ans;
+                ++bottle;
+            }
+            return ans;
+        };
+
+        // 方法2：数学
+        // 时间复杂度 O(1)
+        // 空间复杂度 O(1)
+        var numWaterBottles = function (numBottles, numExchange) {
+            return numBottles >= numExchange ? Math.floor((numBottles - numExchange) / (numExchange - 1)) + 1 +
+                numBottles : numBottles;
+        };
+    </script>
+</body>
+
+</html>

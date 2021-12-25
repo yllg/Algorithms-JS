@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法一：排序 + 二分查找
+        var findRadius = function (houses, heaters) {
+            let ans = 0;
+            heaters.sort((a, b) => a - b);
+            for (const house of houses) {
+                const i = binarySearch(heaters, house);
+                const j = i + 1;
+                const leftDistance = i < 0 ? Number.MAX_VALUE : house - heaters[i];
+                const rightDistance = j >= heaters.length ? Number.MAX_VALUE : heaters[j] - house;
+                const curDistance = Math.min(leftDistance, rightDistance);
+                ans = Math.max(ans, curDistance);
+            }
+            return ans;
+        };
+
+        const binarySearch = (nums, target) => {
+            let left = 0,
+                right = nums.length - 1;
+            if (nums[left] > target) {
+                return -1;
+            }
+            while (left < right) {
+                const mid = Math.floor((right - left + 1) / 2) + left;
+                if (nums[mid] > target) {
+                    right = mid - 1;
+                } else {
+                    left = mid;
+                }
+            }
+            return left;
+        }
+
+        // 方法2：排序 + 双指针
+        var findRadius = function (houses, heaters) {
+            houses.sort((a, b) => a - b);
+            heaters.sort((a, b) => a - b);
+            let ans = 0;
+            for (let i = 0, j = 0; i < houses.length; i++) {
+                let curDistance = Math.abs(houses[i] - heaters[j]);
+                while (j < heaters.length - 1 && Math.abs(houses[i] - heaters[j]) >= Math.abs(houses[i] - heaters[
+                        j + 1])) {
+                    j++;
+                    curDistance = Math.min(curDistance, Math.abs(houses[i] - heaters[j]));
+                }
+                ans = Math.max(ans, curDistance);
+            }
+            return ans;
+        };
+    </script>
+</body>
+
+</html>

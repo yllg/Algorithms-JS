@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法1：Rabin-Karp 算法
+        // 时间复杂度：O(n + m), 其中 n 为 a 的长度，m 为 b 的长度
+        // 空间复杂度：O(1)
+        const repeatedStringMatch = (a, b) => {
+            const an = a.length,
+                bn = b.length;
+            const index = strStr(a, b);
+            if (index === -1) {
+                return -1;
+            }
+            if (an - index >= bn) {
+                return 1;
+            }
+            return Math.floor((bn + index - an - 1) / an) + 2;
+        }
+
+        const strStr = (haystack, needle) => {
+            const n = haystack.length,
+                m = needle.length;
+            if (m === 0) {
+                return 0;
+            }
+            let k1 = 1000000009;
+            let k2 = 1337;
+            let kMod1 = Math.floor(Math.random() * k1) + k1;
+            let kMod2 = Math.floor(Math.random() * k2) + k2;
+            let hashNeedle = 0;
+            for (let i = 0; i < m; i++) {
+                const c = needle[i].charCodeAt();
+                hashNeedle = (hashNeedle * kMod2 + c) % kMod1;
+            }
+            let hashHaystack = 0,
+                extra = 1;
+            for (let i = 0; i < m - 1; i++) {
+                hashHaystack = (hashHaystack * kMod2 + haystack[i % n].charCodeAt()) % kMod1;
+                extra = (extra * kMod2) % kMod1;
+            }
+            for (let i = m - 1;
+                (i - m + 1) < n; i++) {
+                hashHaystack = (hashHaystack * kMod2 + haystack[i % n].charCodeAt()) % kMod1;
+                if (hashHaystack === hashNeedle) {
+                    return i - m + 1;
+                }
+                hashHaystack = (hashHaystack - extra * haystack[(i - m + 1) % n].charCodeAt()) % kMod1;
+                hashHaystack = (hashHaystack + kMod1) % kMod1;
+            }
+            return -1;
+        }
+
+        // 方法二：Knuth-Morris-Pratt 算法
+        // 时间复杂度：O(n + m), 其中 n 为 a 的长度，m 为 b 的长度
+        // 空间复杂度：O(m)
+        const repeatedStringMatch = (a, b) => {
+            const an = a.length,
+                bn = b.length;
+            const index = strStr(a, b);
+            if (index === -1) {
+                return -1;
+            }
+            if (an - index >= bn) {
+                return 1;
+            }
+            return Math.floor((bn + index - an - 1) / an) + 2;
+        }
+
+        const strStr = (haystack, needle) => {
+            const n = haystack.length,
+                m = needle.length;
+            if (m === 0) {
+                return 0;
+            }
+            const pi = new Array(m).fill(0);
+            for (let i = 1, j = 0; i < m; i++) {
+                while (j > 0 && needle[i] !== needle[j]) {
+                    j = pi[j - 1];
+                }
+                if (needle[i] === needle[j]) {
+                    j++;
+                }
+                pi[i] = j;
+            }
+            for (let i = 0, j = 0; i - j < n; i++) { // b 开始匹配的位置是否超过第一个叠加的 a
+                while (j > 0 && haystack[i % n] !== needle[j]) { // haystack 是循环叠加的字符串，所以取 i % n
+                    j = pi[j - 1];
+                }
+                if (haystack[i % n] == needle[j]) {
+                    j++;
+                }
+                if (j === m) {
+                    return i - m + 1;
+                }
+            }
+            return -1;
+        }
+    </script>
+</body>
+
+</html>

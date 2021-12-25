@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 题目：两艘战舰之间至少有一个水平或垂直的空位分隔 （即没有相邻的战舰）
+
+        // 方法一：遍历扫描
+        // 时间复杂度：O(m×n×max(m,n))，其中 m 是矩阵的行数，n 是矩阵的列数，我们对于矩阵的每个位置都会遍历一遍以该位置所在的行和列。
+        // 空间复杂度：O(1)
+        var countBattleships = function (board) {
+            const row = board.length;
+            const col = board[0].length;
+            let ans = 0;
+            for (let i = 0; i < row; ++i) {
+                for (let j = 0; j < col; ++j) {
+                    if (board[i][j] === 'X') {
+                        board[i][j] = '.';
+                        for (let k = j + 1; k < col && board[i][k] === 'X'; ++k) {
+                            board[i][k] = '.';
+                        }
+                        for (let k = i + 1; k < row && board[k][j] === 'X'; ++k) {
+                            board[k][j] = '.';
+                        }
+                        ans++;
+                    }
+                }
+            }
+            return ans;
+        };
+
+        // 方法二：枚举起点
+        // 时间复杂度：O(m×n)，其中 mm 是矩阵的行数，nn 是矩阵的列数，我们只需要遍历一遍矩阵中每个位置即可。
+        // 空间复杂度：O(1)
+        var countBattleships = function (board) {
+            const row = board.length;
+            const col = board[0].length;
+            let ans = 0;
+            for (let i = 0; i < row; ++i) {
+                for (let j = 0; j < col; ++j) {
+                    if (board[i][j] === 'X') {
+                        if (i > 0 && board[i - 1][j] === 'X') {
+                            continue;
+                        }
+                        if (j > 0 && board[i][j - 1] === 'X') {
+                            continue;
+                        }
+                        ans++;
+                    }
+                }
+            }
+            return ans;
+        };
+    </script>
+</body>
+
+</html>
