@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法一：排序 + 双指针
+        // 时间复杂度：O(nlogn)
+        // 空间复杂度：O(logn)
+        var numFriendRequests = function (ages) {
+            const n = ages.length;
+            ages.sort((a, b) => a - b);
+            let left = 0,
+                right = 0,
+                ans = 0;
+            for (const age of ages) {
+                if (age < 15) {
+                    continue;
+                }
+                while (ages[left] <= 0.5 * age + 7) {
+                    ++left;
+                }
+                while (right + 1 < n && ages[right + 1] <= age) {
+                    ++right;
+                }
+                ans += right - left;
+            }
+            return ans;
+        };
+
+        // 方法二：计数排序 + 前缀和
+        // 时间复杂度：O(n+C)，其中 C 是用户年龄的范围，本题中 C = 120
+        // 空间复杂度：O(C)
+        var numFriendRequests = function (ages) {
+            const cnt = new Array(121).fill(0);
+            for (const age of ages) {
+                ++cnt[age];
+            }
+            const pre = new Array(121).fill(0);
+            for (let i = 1; i <= 120; ++i) {
+                pre[i] = pre[i - 1] + cnt[i];
+            }
+            let ans = 0;
+            for (let i = 15; i <= 120; ++i) {
+                if (cnt[i] > 0) {
+                    const bound = Math.floor(i * 0.5 + 8);
+                    ans += cnt[i] * (pre[i] - pre[bound - 1] - 1);
+                }
+            }
+            return ans;
+        };
+    </script>
+</body>
+
+</html>
