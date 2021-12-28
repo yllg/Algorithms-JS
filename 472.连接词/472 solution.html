@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法1: 转化为背包问题中的组合背包问题
+        /**
+         * @param {string[]} words
+         * @return {string[]}
+         */
+        var findAllConcatenatedWordsInADict = function (words) {
+            words.sort((a, b) => a.length - b.length);
+            const wordSet = new Set();
+            const ans = [];
+            for (const word of words) {
+                if (exists(word, wordSet)) ans.push(word);
+                wordSet.add(word);
+            }
+            return ans;
+        };
+
+        function exists(target, nums) {
+            const dp = Array(target.length).fill(false);
+            for (let i = 0; i < target.length; i++) {
+                if (nums.has(target.slice(0, i + 1))) {
+                    dp[i] = true;
+                    continue;
+                }
+                for (let j = 0; j < i; j++) {
+                    if (dp[j] && nums.has(target.slice(j + 1, i + 1))) {
+                        dp[i] = true;
+                        break;
+                    }
+                }
+            }
+            return dp[target.length - 1];
+        };
+
+        // test
+        let words = ["cat", "cats", "catsdogcats", "dog", "dogcatsdog", "hippopotamuses", "rat", "ratcatdogcat"];
+
+        console.log(findAllConcatenatedWordsInADict(words));
+        // ["catsdogcats","dogcatsdog","ratcatdogcat"]
+    </script>
+</body>
+
+</html>
