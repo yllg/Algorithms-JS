@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法1：遍历
+        // 时间复杂度：O(N)，其中 N 为 text 的长度
+        // 空间复杂度：O(N)
+        var findOcurrences = function (text, first, second) {
+            const words = text.split(" ");
+            const list = [];
+            for (let i = 2; i < words.length; i++) {
+                if (words[i - 2] === first && words[i - 1] === second) {
+                    list.push(words[i]);
+                }
+            }
+            const size = list.length;
+            const ret = Array(size).fill('');
+            for (let i = 0; i < size; i++) {
+                ret[i] = list[i];
+            }
+            return ret;
+        };
+
+        // test
+        let text = "alice is a good girl she is a good student",
+            first = "a",
+            second = "good";
+        console.log(findOcurrences(text, first, second))
+    </script>
+</body>
+
+</html>
