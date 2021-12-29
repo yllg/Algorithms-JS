@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法一：两数之和
+        var countQuadruplets = function (nums) {
+            const cnts = new Map()
+            let ans = 0
+            for (let i = 1; i < nums.length - 2; i++) {
+                for (let j = 0; j < i; j++)
+                    if (cnts.has(nums[i] + nums[j]))
+                        cnts.set(nums[i] + nums[j], cnts.get(nums[i] + nums[j]) + 1)
+                else
+                    cnts.set(nums[i] + nums[j], 1)
+                for (let j = i + 2; j < nums.length; j++)
+                    if (cnts.has(nums[j] - nums[i + 1]))
+                        ans += cnts.get(nums[j] - nums[i + 1])
+            }
+            return ans
+        };
+
+        // 方法2：背包动态规划
+        /**
+         * @param {number[]} nums
+         * @return {number}
+         */
+        var countQuadruplets = function (nums) {
+            const dp = Array.from(new Array(4), () => new Array(101).fill(0))
+            dp[0][0] = 1
+            let ans = 0
+            for (const num of nums) {
+                ans += dp[3][num]
+                for (let i = dp.length - 1; i > 0; i--)
+                    for (let j = num; j < dp[0].length; j++)
+                        dp[i][j] += dp[i - 1][j - num]
+            }
+            return ans
+        };
+    </script>
+</body>
+
+</html>
