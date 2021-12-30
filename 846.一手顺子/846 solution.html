@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法一：贪心
+        // 时间复杂度：O(nlogn)，其中 n 是数组 hand 的长度。
+        // 空间复杂度：O(n)
+        var isNStraightHand = function (hand, groupSize) {
+            const n = hand.length;
+            if (n % groupSize !== 0) {
+                return false;
+            }
+            hand.sort((a, b) => a - b);
+            const cnt = new Map();
+            for (const x of hand) {
+                cnt.set(x, (cnt.get(x) || 0) + 1);
+            }
+            for (const x of hand) {
+                if (!cnt.has(x)) {
+                    continue;
+                }
+                for (let j = 0; j < groupSize; j++) {
+                    const num = x + j;
+                    if (!cnt.has(num)) {
+                        return false;
+                    }
+                    cnt.set(num, cnt.get(num) - 1);
+                    if (cnt.get(num) == 0) {
+                        cnt.delete(num);
+                    }
+                }
+            }
+            return true;
+        };
+
+        // test
+        let hand = [1, 2, 3, 6, 2, 3, 4, 7, 8],
+            groupSize = 3;
+        console.log(isNStraightHand(hand, groupSize));
+    </script>
+</body>
+
+</html>
