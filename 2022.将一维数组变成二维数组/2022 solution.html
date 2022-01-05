@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法一：模拟
+        // 时间复杂度：O(mn)
+        // 空间复杂度：O(1)
+        var construct2DArray = function (original, m, n) {
+            if (original.length !== m * n) {
+                return [];
+            }
+            const ans = new Array(m).fill(0).map(() => new Array(n).fill(0));
+            for (let i = 0; i < original.length; i += n) {
+                ans[Math.floor(i / n)].splice(0, n, ...original.slice(i, i + n))
+            }
+            return ans;
+        };
+
+        // test
+        let original = [1, 2, 3, 4],
+            m = 2,
+            n = 2;
+        console.log(construct2DArray(original, m, n))
+    </script>
+</body>
+
+</html>l
