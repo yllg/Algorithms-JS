@@ -10,17 +10,29 @@
 
 <body>
     <script>
-        // Source : https://leetcode.com/problems/gray-code/
-        // Author : 悬笔e绝
-        // Date   : 2018-12-05
-
+        // 方法一：对称生成
+        // 时间复杂度：O(2^n)，其中 n 为格雷码序列的位数
+        // 空间复杂度：O(1)
         var grayCode = function (n) {
-            var ans = [];
-            // 1<<n 左移n位 表示2的n次方
-            for (var i = 0; i < (1 << n); i++)
-                // >> 右移, ^ 按位异或
-                ans[i] = i ^ (i >> 1);
-            return ans;
+            const ret = [0];
+            for (let i = 1; i <= n; i++) {
+                const m = ret.length;
+                for (let j = m - 1; j >= 0; j--) {
+                    ret.push(ret[j] | (1 << (i - 1)));
+                }
+            }
+            return ret;
+        };
+
+        // 方法二：二进制数转格雷码
+        // 时间复杂度：O(2^n)，其中 n 为格雷码序列的位数
+        // 空间复杂度：O(1)
+        var grayCode = function (n) {
+            const ret = [];
+            for (let i = 0; i < 1 << n; i++) {
+                ret.push((i >> 1) ^ i);
+            }
+            return ret;
         };
     </script>
 </body>
