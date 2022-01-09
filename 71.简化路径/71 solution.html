@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法一：栈
+        // 时间复杂度：O(n)
+        // 空间复杂度：O(n)
+        var simplifyPath = function (path) {
+            const names = path.split("/");
+            const stack = [];
+            for (const name of names) {
+                if (name === "..") {
+                    if (stack.length) {
+                        stack.pop();
+                    }
+                } else if (name.length && name !== ".") {
+                    stack.push(name);
+                }
+            }
+            return "/" + stack.join("/");
+        };
+
+        // test
+        let path = "/../";
+        console.log(simplifyPath(path));
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法一：遍历扫描
+        // 时间复杂度:O(C×n)，其中 n 是字符串的长度，我们需要遍历一遍字符串，C 表示可替代字符的数量，在本题中 C=3。
+        // 空间复杂度：O(1)
+        var modifyString = function (s) {
+            const n = s.length;
+            const arr = [...s];
+            for (let i = 0; i < n; ++i) {
+                if (arr[i] === '?') {
+                    for (let j = 0; j < 3; ++j) {
+                        if ((i > 0 && arr[i - 1] === String.fromCharCode('a'.charCodeAt() + j)) || (i < n - 1 &&
+                                arr[i + 1] === String.fromCharCode('a'.charCodeAt() + j))) {
+                            continue;
+                        }
+                        arr[i] = String.fromCharCode('a'.charCodeAt() + j);
+                        break;
+                    }
+                }
+            }
+            return arr.join('');
+        };
+
+        // test
+        let s = "?zs";
+        console.log(modifyString(s))
+    </script>
+</body>
+
+</html>
