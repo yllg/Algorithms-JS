@@ -1,71 +1,131 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
 </head>
+
 <body>
-<script>
-// Source : https://leetcode.com/problems/additive-number/
-// Author : 悬笔e绝
-// Date   : 2020-03-22
+  <script>
+    // Source : https://leetcode.com/problems/additive-number/
+    // Author : 悬笔e绝
+    // Date   : 2020-03-22
 
-/**
- * @param {string} num
- * @return {boolean}
- */
+    // 方法1：深度优先搜索
+    var ans;
 
-// Depth-First-Search Algorithm
-
-var ans;
-
-function dfs(a, b, c, index, num) {
-  if (ans)
-    return;
-  if (index === num.length) {
-    if (a === -1 || b === -1 || c === -1)
-      return;
-    if ((+a) + (+b) === (+c))
-      ans = true;
-    return;
-  }
-  if (a === -1) {
-    dfs(num[index], b, c, index + 1, num);
-    return;
-  }
-  if (b === -1) {
-    if (a !== '0')
-      dfs(a + num[index], b, c, index + 1, num);
-    dfs(a, num[index], c, index + 1, num);
-    return;
-  }
-  if (c === -1) {
-    if (b !== '0')
-      dfs(a, b + num[index], c, index + 1, num);
-
-    dfs(a, b, num[index], index + 1, num);
-    return;
-  }
-  if (c !== '0') {
-    if ((+a) + (+b) === (+c)) {
-      dfs(b, c, -1, index, num);
-    } else {
-      if ((+a) + (+b) < (+c))
+    function dfs(a, b, c, index, num) {
+      if (ans)
         return;
-      dfs(a, b, c + num[index], index + 1, num);
-    }
-  } else {
-    if (a === '0' && b === '0')
-      dfs(b, c, -1, index, num);
-  }
-}
+      if (index === num.length) {
+        if (a === -1 || b === -1 || c === -1)
+          return;
+        if ((+a) + (+b) === (+c))
+          ans = true;
+        return;
+      }
+      if (a === -1) {
+        dfs(num[index], b, c, index + 1, num);
+        return;
+      }
+      if (b === -1) {
+        if (a !== '0')
+          dfs(a + num[index], b, c, index + 1, num);
+        dfs(a, num[index], c, index + 1, num);
+        return;
+      }
+      if (c === -1) {
+        if (b !== '0')
+          dfs(a, b + num[index], c, index + 1, num);
 
-var isAdditiveNumber = function(num) {
-  ans = false;
-  dfs(-1, -1, -1, 0, num);
-  return ans;
-};
-</script>
+        dfs(a, b, num[index], index + 1, num);
+        return;
+      }
+      if (c !== '0') {
+        if ((+a) + (+b) === (+c)) {
+          dfs(b, c, -1, index, num);
+        } else {
+          if ((+a) + (+b) < (+c))
+            return;
+          dfs(a, b, c + num[index], index + 1, num);
+        }
+      } else {
+        if (a === '0' && b === '0')
+          dfs(b, c, -1, index, num);
+      }
+    }
+
+    var isAdditiveNumber = function (num) {
+      ans = false;
+      dfs(-1, -1, -1, 0, num);
+      return ans;
+    };
+
+    // 方法2:穷举累加序列第一个数字和第二个数字的所有可能性
+    var isAdditiveNumber = function (num) {
+      const n = num.length;
+      for (let secondStart = 1; secondStart < n - 1; ++secondStart) {
+        if (num[0] === '0' && secondStart !== 1) {
+          break;
+        }
+        for (let secondEnd = secondStart; secondEnd < n - 1; ++secondEnd) {
+          if (num[secondStart] === '0' && secondStart !== secondEnd) {
+            break;
+          }
+          if (valid(secondStart, secondEnd, num)) {
+            return true;
+          }
+        }
+      }
+      return false;
+    };
+
+    const valid = (secondStart, secondEnd, num) => {
+      const n = num.length;
+      let firstStart = 0,
+        firstEnd = secondStart - 1;
+      while (secondEnd <= n - 1) {
+        const third = stringAdd(num, firstStart, firstEnd, secondStart, secondEnd);
+        const thirdStart = secondEnd + 1;
+        const thirdEnd = secondEnd + third.length;
+        if (thirdEnd >= n || num.slice(thirdStart, thirdEnd + 1) !== third) {
+          break;
+        }
+        if (thirdEnd === n - 1) {
+          return true;
+        }
+        firstStart = secondStart;
+        firstEnd = secondEnd;
+        secondStart = thirdStart;
+        secondEnd = thirdEnd;
+      }
+      return false;
+    }
+
+    const stringAdd = (s, firstStart, firstEnd, secondStart, secondEnd) => {
+      const third = [];
+      let carry = 0,
+        cur = 0;
+      while (firstEnd >= firstStart || secondEnd >= secondStart || carry !== 0) {
+        cur = carry;
+        if (firstEnd >= firstStart) {
+          cur += s[firstEnd].charCodeAt() - '0'.charCodeAt();
+          --firstEnd;
+        }
+        if (secondEnd >= secondStart) {
+          cur += s[secondEnd].charCodeAt() - '0'.charCodeAt();
+          --secondEnd;
+        }
+        carry = Math.floor(cur / 10);
+        cur %= 10;
+        third.push(String.fromCharCode(cur + '0'.charCodeAt()));
+      }
+      third.reverse();
+      return third.join('');
+    }
+  </script>
 </body>
+
 </html>
