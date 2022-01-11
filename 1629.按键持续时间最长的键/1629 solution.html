@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法一：一次遍历
+        // 时间复杂度：O(n)，其中 n 是数组 releaseTimes 和字符串 keysPressed 的长度。需要同时遍历数组和字符串一次。
+        // 空间复杂度：O(1)
+        var slowestKey = function (releaseTimes, keysPressed) {
+            const n = releaseTimes.length;
+            let ans = keysPressed[0];
+            let maxTime = releaseTimes[0];
+            for (let i = 1; i < n; i++) {
+                const key = keysPressed[i];
+                const time = releaseTimes[i] - releaseTimes[i - 1];
+                if (time > maxTime || (time === maxTime && key > ans)) {
+                    ans = key;
+                    maxTime = time;
+                }
+            }
+            return ans;
+        };
+
+        // test
+        let releaseTimes = [9, 29, 49, 50],
+            keysPressed = "cbcd";
+        console.log(slowestKey(releaseTimes, keysPressed));
+    </script>
+</body>
+
+</html>l
