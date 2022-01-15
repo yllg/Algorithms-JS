@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 比上周同一天多一元
+
+        // 方法一：暴力计算
+        // 时间复杂度：O(n)。需要遍历一次 n 得到答案。
+        // 空间复杂度：O(1)。只需要用到常数空间
+        var totalMoney = function (n) {
+            let week = 1,
+                day = 1;
+            let res = 0;
+            for (let i = 0; i < n; ++i) {
+                res += week + day - 1;
+                ++day;
+                if (day === 8) {
+                    day = 1;
+                    ++week;
+                }
+            }
+            return res;
+        };
+
+        // 方法二：等差数列求和进行优化
+        // 时间复杂度：O(1)
+        // 空间复杂度：O(1)
+        var totalMoney = function (n) {
+            // 所有完整的周存的钱
+            const weekNumber = Math.floor(n / 7);
+            const firstWeekMoney = Math.floor((1 + 7) * 7 / 2);
+            const lastWeekMoney = firstWeekMoney + 7 * (weekNumber - 1);
+            const weekMoney = Math.floor((firstWeekMoney + lastWeekMoney) * weekNumber / 2);
+            // 剩下的不能构成一个完整的周的天数里存的钱
+            const dayNumber = n % 7;
+            const firstDayMoney = 1 + weekNumber;
+            const lastDayMoney = firstDayMoney + dayNumber - 1;
+            const dayMoney = Math.floor((firstDayMoney + lastDayMoney) * dayNumber / 2);
+            return weekMoney + dayMoney;
+        };
+    </script>
+</body>
+
+</html>
