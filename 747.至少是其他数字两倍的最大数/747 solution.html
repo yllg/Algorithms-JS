@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法一：遍历
+        // 时间复杂度：O(N)，其中 N 是数组的长度。遍历整个数组需要 O(N)。
+        // 空间复杂度：O(1)
+        var dominantIndex = function (nums) {
+            let m1 = -1,
+                m2 = -1;
+            let index = -1;
+            for (let i = 0; i < nums.length; i++) {
+                if (nums[i] > m1) {
+                    m2 = m1;
+                    m1 = nums[i];
+                    index = i;
+                } else if (nums[i] > m2) {
+                    m2 = nums[i];
+                }
+            }
+            return m1 >= m2 * 2 ? index : -1;
+        };
+
+        // test
+        let nums = [3, 6, 1, 0];
+        console.log(dominantIndex(nums))
+    </script>
+</body>
+
+</html>
