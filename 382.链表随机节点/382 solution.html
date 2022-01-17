@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 每个节点 被选中的概率一样 
+
+        // 方法一：记录所有链表元素
+        // 时间复杂度：初始化为 O(n)，随机选择为 O(1)，其中 n 是链表的元素个数。
+        // 空间复杂度：O(n)。我们需要 O(n) 的空间存储链表中的所有元素
+        var Solution = function (head) {
+            this.list = [];
+            while (head != null) {
+                this.list.push(head.val);
+                head = head.next;
+            }
+        };
+        Solution.prototype.getRandom = function () {
+            return this.list[Math.floor(Math.random() * this.list.length)];
+        };
+
+        // 方法二：水塘抽样
+        // 时间复杂度：初始化为 O(1)
+        // 空间复杂度：初始化为 O(1)
+        var Solution = function (head) {
+            this.head = head;
+        };
+        Solution.prototype.getRandom = function () {
+            let i = 1,
+                ans = 0;
+            for (let node = this.head; node != null; node = node.next) {
+                if (Math.floor(Math.random() * i) === 0) { // 1/i 的概率选中（替换为答案）
+                    ans = node.val;
+                }
+                ++i;
+            }
+            return ans;
+        };
+    </script>
+</body>
+
+</html>
