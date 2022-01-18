@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 给定一个 24 小时制（小时:分钟 "HH:MM"）的时间列表，找出列表中任意两个时间的最小时间差并以分钟数表示。
+
+        // 方法一：排序
+        // 时间复杂度：O(nlogn)，其中 n 是数组 timePoints 的长度。排序需要 O(nlogn) 的时间。
+        // 空间复杂度：O(logn)。排序需要 O(logn) 的栈空间。
+        var findMinDifference = function (timePoints) {
+            timePoints.sort();
+            let ans = Number.MAX_VALUE;
+            let t0Minutes = getMinutes(timePoints[0]);
+            let preMinutes = t0Minutes;
+            for (let i = 1; i < timePoints.length; ++i) {
+                const minutes = getMinutes(timePoints[i]);
+                ans = Math.min(ans, minutes - preMinutes); // 相邻时间的时间差
+                preMinutes = minutes;
+            }
+            ans = Math.min(ans, t0Minutes + 1440 - preMinutes); // 首尾时间的时间差
+            return ans;
+        };
+
+        var getMinutes = (t) => {
+            return ((t[0].charCodeAt() - '0'.charCodeAt()) * 10 + (t[1].charCodeAt() - '0'.charCodeAt())) * 60 + (t[
+                3].charCodeAt() - '0'.charCodeAt()) * 10 + (t[4].charCodeAt() - '0'.charCodeAt());
+        }
+
+        // 方法二：鸽巢原理
+        // 时间复杂度：O(min(n,C)logmin(n,C))，其中 n 是数组 timePoints 的长度，C=24×60=1440。由于当 n>C 时直接返回 0，排序时的 n 不会超过 C，因此排序需要 O(min(n,C)logmin(n,C)) 的时间。
+        // 空间复杂度：O(logmin(n,C))。排序需要 O(logmin(n,C)) 的栈空间。
+        var findMinDifference = function (timePoints) {
+            const n = timePoints.length;
+            if (n > 1440) {
+                return 0;
+            }
+            timePoints.sort();
+            let ans = Number.MAX_VALUE;
+            let t0Minutes = getMinutes(timePoints[0]);
+            let preMinutes = t0Minutes;
+            for (let i = 1; i < n; ++i) {
+                const minutes = getMinutes(timePoints[i]);
+                ans = Math.min(ans, minutes - preMinutes); // 相邻时间的时间差
+                preMinutes = minutes;
+            }
+            ans = Math.min(ans, t0Minutes + 1440 - preMinutes); // 首尾时间的时间差
+            return ans;
+        };
+
+        var getMinutes = (t) => {
+            return ((t[0].charCodeAt() - '0'.charCodeAt()) * 10 + (t[1].charCodeAt() - '0'.charCodeAt())) * 60 + (t[
+                3].charCodeAt() - '0'.charCodeAt()) * 10 + (t[4].charCodeAt() - '0'.charCodeAt());
+        }
+
+        // test
+        let timePoints = ["00:00", "23:59", "00:00"];
+        console.log(findMinDifference(timePoints))
+    </script>
+</body>
+
+</html>
