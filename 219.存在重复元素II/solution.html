@@ -1,38 +1,59 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
 </head>
+
 <body>
-<script>
-// Source : https://leetcode.com/problems/contains-duplicate-ii/
-// Author : 悬笔e绝
-// Date   : 2019-12-08
+  <script>
+    // Source : https://leetcode.com/problems/contains-duplicate-ii/
+    // Author : 悬笔e绝
+    // Date   : 2019-12-08
 
-/**
- * @param {number[]} nums
- * @param {number} k
- * @return {boolean}
- */
+    // 存在相同的元素，且索引距离小于k
+    // 方法一：哈希表
+    // 时间复杂度：O(n)，其中 n 是数组 nums 的长度。
+    // 空间复杂度：O(n)，其中 n 是数组 nums 的长度
+    var containsNearbyDuplicate = function (nums, k) {
+      const map = new Map();
+      const length = nums.length;
+      for (let i = 0; i < length; i++) {
+        const num = nums[i];
+        if (map.has(num) && i - map.get(num) <= k) {
+          return true;
+        }
+        map.set(num, i);
+      }
+      return false;
+    };
 
-var containsNearbyDuplicate = function(nums, k) {
-  var pos = [];
-  for(var i = 0, len = nums.length; i < len; i++) {
-    if (pos[nums[i]] === undefined) 
-      pos[nums[i]] = i;
-    else {
-      if (i - pos[nums[i]] <= k) 
-        return true;
-      pos[nums[i]] = i;
-    }
-  }
+    // 方法二：滑动窗口
+    // 时间复杂度：O(n)，其中 n 是数组 nums 的长度。
+    // 空间复杂度：O(k)，其中 k 是判断重复元素时允许的下标差的绝对值的最大值
+    var containsNearbyDuplicate = function (nums, k) {
+      const set = new Set();
+      const length = nums.length;
+      for (let i = 0; i < length; i++) {
+        if (i > k) {
+          set.delete(nums[i - k - 1]);
+        }
+        if (set.has(nums[i])) {
+          return true;
+        }
+        set.add(nums[i])
+      }
+      return false;
+    };
 
-  return false;
-};
-
-</script>
+    // test
+    let nums = [1, 2, 3, 1, 2, 3],
+      k = 2;
+    console.log(containsNearbyDuplicate(nums, k))
+  </script>
 </body>
+
 </html>
