@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法一：广度优先搜索 BFS
+        /**
+         * @param {number[]} arr
+         * @return {number}
+         */
+        var minJumps = function (arr) {
+            const idxMap = new Map(),
+                explored = new Set()
+            for (let i = 0; i < arr.length; i++) {
+                if (idxMap.has(arr[i]))
+                    idxMap.get(arr[i]).push(i)
+                else
+                    idxMap.set(arr[i], [i])
+            }
+            let nodes = [0],
+                step = 0
+            explored.add(0)
+            while (nodes.length > 0) {
+                const nxt = new Array()
+                for (const cur of nodes) {
+                    if (cur == arr.length - 1)
+                        return step
+                    if (idxMap.has(arr[cur])) {
+                        for (const other of idxMap.get(arr[cur])) {
+                            if (!explored.has(other)) {
+                                explored.add(other)
+                                nxt.push(other)
+                            }
+                        }
+                        idxMap.delete(arr[cur])
+                    }
+                    if (!explored.has(cur + 1)) {
+                        explored.add(cur + 1)
+                        nxt.push(cur + 1)
+                    }
+                    if (cur > 0 && !explored.has(cur - 1)) {
+                        explored.add(cur - 1)
+                        nxt.push(cur - 1)
+                    }
+                }
+                nodes = nxt
+                step++
+            }
+            return arr.length - 1
+        };
+
+        // 方法2：动态规划+收敛
+        /**
+         * @param {number[]} arr
+         * @return {number}
+         */
+        var minJumps = function (arr) {
+            if (arr.length === 0) return 0;
+            // number : [index1, index2...]
+            let map = new Map();
+            for (let i = 0; i < arr.length; i++) {
+                if (i !== 0 && i !== arr.length - 1 && arr[i] === arr[i + 1] && arr[i] === arr[i - 1]) continue;
+                if (map.has(arr[i])) map.get(arr[i]).push(i);
+                else map.set(arr[i], [i]);
+            }
+
+            let dp = new Array(arr.length).fill(Infinity);
+            dp[0] = 0;
+            let tag = '';
+
+            function calDp(dp) {
+                for (let i = 1; i < dp.length; i++) {
+                    let min = Infinity;
+                    let a = dp[i - 1] + 1;
+                    let b = i + 1 < arr.length ? dp[i + 1] + 1 : Infinity;
+                    let others = map.get(arr[i]);
+                    for (let other of others) {
+                        if (other !== i) min = Math.min(min, dp[other] + 1);
+                    }
+                    min = Math.min(a, b, min);
+                    dp[i] = min;
+                }
+                return dp.join('-');
+            }
+
+            let curTag = calDp(dp);
+            while (curTag !== tag) {
+                tag = curTag;
+                curTag = calDp(dp);
+            }
+
+            return dp[arr.length - 1];
+        };
+    </script>
+</body>
+
+</html>
