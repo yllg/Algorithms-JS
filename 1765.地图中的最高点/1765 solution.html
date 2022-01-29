@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // TODO: 方法一：多源广度优先搜索
+
+        //  方法二：动态规划
+        /**
+         * @param {number[][]} isWater
+         * @return {number[][]}
+         */
+        var highestPeak = function (isWater) {
+            let m = isWater.length,
+                n = isWater[0].length;
+            // 初始化dp
+            const dp = Array.from(Array(m), () => Array(n).fill(0));
+            // 定一个最大值
+            const max = m * n;
+            // 先去使用左上到右下的DP
+            for (let i = 0; i < m; i++) {
+                for (let j = 0; j < n; j++) {
+                    if (isWater[i][j] === 1) {
+                        continue;
+                    }
+                    // 如果值为0的话，则先去计算它到左上的最小值
+                    let min = max;
+                    // 计算上位置的最小值
+                    if (i > 0) {
+                        min = Math.min(min, dp[i - 1][j] + 1);
+                    }
+                    // 计算左侧位置的最小值
+                    if (j > 0) {
+                        min = Math.min(min, dp[i][j - 1] + 1);
+                    }
+                    dp[i][j] = min;
+                }
+            }
+
+            // 从右下到左上的DP
+            for (let i = m - 1; i >= 0; i--) {
+                for (let j = n - 1; j >= 0; j--) {
+                    if (i < m - 1) {
+                        dp[i][j] = Math.min(dp[i][j], dp[i + 1][j] + 1);
+                    }
+                    if (j < n - 1) {
+                        dp[i][j] = Math.min(dp[i][j], dp[i][j + 1] + 1);
+                    }
+                }
+            }
+            return dp;
+        };
+    </script>
+</body>
+
+</html>
