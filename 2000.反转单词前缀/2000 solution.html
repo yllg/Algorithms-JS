@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法一：直接反转
+        // 时间复杂度：O(n)
+        // 空间复杂度：O(1)
+        var reversePrefix = function (word, ch) {
+            const index = word.indexOf(ch);
+            if (index >= 0) {
+                const arr = [...word];
+                let left = 0,
+                    right = index;
+                while (left < right) {
+                    const temp = arr[left];
+                    arr[left] = arr[right];
+                    arr[right] = temp;
+                    left++;
+                    right--;
+                }
+                word = arr.join('');
+            }
+            return word;
+        };
+
+        // test
+        let word = "abcdefd",
+            ch = "d";
+        console.log(reversePrefix(word, ch))
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法一：记录每个元素的出现次数
+        // 时间复杂度：O(n)，其中 n 是数组 nums 的长度。
+        // 空间复杂度：O(n)。哈希表需要 O(n) 的空间
+        var sumOfUnique = function (nums) {
+            const cnt = new Map();
+            for (const num of nums) {
+                cnt.set(num, (cnt.get(num) || 0) + 1);
+            }
+            let ans = 0;
+            for (const [num, c] of cnt.entries()) {
+                if (c === 1) {
+                    ans += num;
+                }
+            }
+            return ans;
+        };
+
+        // 方法二：记录每个元素的状态 + 一次遍历
+        // 时间复杂度：O(n)
+        // 空间复杂度：O(n)
+        var sumOfUnique = function (nums) {
+            let ans = 0;
+            const state = new Map();
+            for (const num of nums) {
+                if (!state.has(num)) {
+                    ans += num;
+                    state.set(num, 1);
+                } else if (state.get(num) === 1) {
+                    ans -= num;
+                    state.set(num, 2);
+                }
+            }
+            return ans;
+        };
+
+        // test
+        let nums = [1, 2, 3, 2];
+        console.log(sumOfUnique(nums))
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法一：贪心
+        // 时间复杂度：O(logk)，其中 k 为给定的整数
+        // 空间复杂度：O(logk)，其中 k 为给定的整数
+        var findMinFibonacciNumbers = function (k) {
+            const f = [1];
+            let a = 1,
+                b = 1;
+            while (a + b <= k) {
+                let c = a + b;
+                f.push(c);
+                a = b;
+                b = c;
+            }
+            let ans = 0;
+            for (let i = f.length - 1; i >= 0 && k > 0; i--) {
+                const num = f[i];
+                if (k >= num) {
+                    k -= num;
+                    ans++;
+                }
+            }
+            return ans;
+        };
+
+        // test
+        let k = 7;
+        console.log(findMinFibonacciNumbers(k))
+    </script>
+</body>
+
+</html>
