@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法一：遍历
+        // 时间复杂度：O(n)， 其中 n 是句子的长度。 切分整个句子， 并处理单词需要 O(n)。
+        // 空间复杂度：O(1)。 只需要常数空间保存变量。
+        var countValidWords = function (sentence) {
+            const n = sentence.length;
+            let l = 0,
+                r = 0;
+            let ret = 0;
+            while (true) {
+                while (l < n && sentence[l] === ' ') {
+                    l++;
+                }
+                if (l >= n) {
+                    break;
+                }
+                r = l + 1;
+                while (r < n && sentence[r] != ' ') {
+                    r++;
+                }
+                if (isValid(sentence.slice(l, r))) { // 判断根据空格分解出来的 token 是否有效
+                    ret++;
+                }
+                l = r + 1;
+            }
+            return ret;
+        };
+
+        const isValid = (word) => {
+            const n = word.length;
+            let hasHyphens = false;
+            for (let i = 0; i < n; i++) {
+                if (word[i] >= '0' && word[i] <= '9') {
+                    return false;
+                } else if (word[i] === '-') {
+                    if (hasHyphens === true || i === 0 || i === n - 1 || !isLetter(word[i - 1]) || !isLetter(word[
+                            i + 1])) {
+                        return false;
+                    }
+                    hasHyphens = true;
+                } else if (word[i] === '!' || word[i] === '.' || word[i] === ',') {
+                    if (i !== n - 1) {
+                        return false;
+                    }
+                }
+            }
+            return true;
+        }
+
+        const isLetter = (ch) => {
+            if (ch >= 'a' && ch <= 'z' || ch >= 'A' && ch <= 'Z') {
+                return true;
+            }
+            return false;
+        }
+
+        // TODO: 方法2：正则表达式
+    </script>
+</body>
+
+</html>

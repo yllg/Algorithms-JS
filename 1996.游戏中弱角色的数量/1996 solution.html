@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 如果存在一个其他角色的攻击和防御等级 都严格高于 该角色的攻击和防御等级，则认为该角色为 弱角色 
+
+        // 方法一：排序
+        // 时间复杂度：O(nlogn)
+        // 空间复杂度：O(logn)
+        var numberOfWeakCharacters = function (properties) {
+            properties.sort((o1, o2) => {
+                return o1[0] === o2[0] ? (o1[1] - o2[1]) : (o2[0] - o1[0]);
+            });
+            let maxDef = 0;
+            let ans = 0;
+            for (const p of properties) {
+                if (p[1] < maxDef) {
+                    ans++;
+                } else {
+                    maxDef = p[1];
+                }
+            }
+            return ans;
+        };
+
+        // 方法2：单调栈
+        // 时间复杂度：O(nlogn)
+        // 空间复杂度：O(n)
+        var numberOfWeakCharacters = function (properties) {
+            properties.sort((o1, o2) => {
+                return o1[0] === o2[0] ? (o2[1] - o1[1]) : (o1[0] - o2[0]);
+            });
+            let ans = 0;
+            const st = [];
+            for (const p of properties) {
+                while (st.length && st[st.length - 1] < p[1]) {
+                    st.pop();
+                    ans++;
+                }
+                st.push(p[1]);
+            }
+            return ans;
+        };
+
+        // test
+        let properties = [
+            [1, 5],
+            [10, 4],
+            [4, 3]
+        ];
+        console.log(numberOfWeakCharacters(properties))
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法一：模拟
+        // 时间复杂度：O(logn)
+        // 空间复杂度：O(1)
+        var numberOfMatches = function (n) {
+            let ans = 0;
+            while (n > 1) {
+                if (n % 2 === 0) {
+                    ans += Math.floor(n / 2);
+                    n /= 2;
+                } else {
+                    ans += Math.floor((n - 1) / 2);
+                    n = Math.floor((n - 1) / 2) + 1;
+                }
+            }
+            return ans;
+        };
+
+        // 方法二：数学
+        // 时间复杂度：O(1)
+        // 空间复杂度：O(1)
+        var numberOfMatches = function (n) {
+            return n - 1
+        };
+
+        // test
+        let n = 14;
+        console.log(numberOfMatches(n))
+    </script>
+</body>
+
+</html>
