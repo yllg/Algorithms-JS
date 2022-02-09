@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法一：暴力
+        // 时间复杂度：O(n^2)
+        // 空间复杂度：O(1)
+        var countKDifference = function (nums, k) {
+            let res = 0,
+                n = nums.length;
+            for (let i = 0; i < n; ++i) {
+                for (let j = i + 1; j < n; ++j) {
+                    if (Math.abs(nums[i] - nums[j]) == k) {
+                        ++res;
+                    }
+                }
+            }
+            return res;
+        };
+
+        // 方法二：哈希表 + 一次遍历
+        // 时间复杂度：O(n)
+        // 空间复杂度：O(n)
+        var countKDifference = function (nums, k) {
+            let res = 0,
+                n = nums.length;
+            const cnt = new Map();
+            for (let j = 0; j < n; ++j) {
+                res += (cnt.get(nums[j] - k) || 0) + (cnt.get(nums[j] + k) || 0);
+                cnt.set(nums[j], (cnt.get(nums[j]) || 0) + 1);
+            }
+            return res;
+        };
+
+        // test
+        let nums = [1, 2, 2, 1],
+            k = 1;
+        console.log(countKDifference(nums, k))
+    </script>
+</body>
+
+</html>
