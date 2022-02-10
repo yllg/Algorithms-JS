@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法一：数学
+        // 时间复杂度：O(n^2 * log n)
+        // 空间复杂度：O(1)
+        var simplifiedFractions = function (n) {
+            const ans = [];
+            for (let denominator = 2; denominator <= n; ++denominator) {
+                for (let numerator = 1; numerator < denominator; ++numerator) {
+                    if (gcd(numerator, denominator) == 1) {
+                        ans.push(numerator + "/" + denominator);
+                    }
+                }
+            }
+            return ans;
+        };
+
+        const gcd = (a, b) => {
+            if (b === 0) {
+                return a;
+            }
+            return gcd(b, a % b);
+        }
+
+        // test
+        let n = 2;
+        console.log(simplifiedFractions(n))
+    </script>
+</body>
+
+</html>
