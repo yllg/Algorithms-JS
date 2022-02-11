@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法一：排序
+        // 时间复杂度：O(nlogn)
+        // 空间复杂度：O(logn)
+        var minimumDifference = function (nums, k) {
+            const n = nums.length;
+            nums.sort((a, b) => a - b);
+            let ans = Number.MAX_SAFE_INTEGER;
+            for (let i = 0; i < n - k + 1; i++) {
+                ans = Math.min(ans, nums[i + k - 1] - nums[i]);
+            }
+            return ans;
+        };
+
+        // test
+        let nums = [9, 4, 1, 7],
+            k = 2;
+        console.log(minimumDifference(nums, k))
+    </script>
+</body>
+
+</html>
