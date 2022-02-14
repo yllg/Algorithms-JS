@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法一：全数组的二分查找
+        // 时间复杂度：O(logn)，其中 n 是数组 nums 的长度
+        // 空间复杂度：O(1)
+        var singleNonDuplicate = function (nums) {
+            let low = 0,
+                high = nums.length - 1;
+            while (low < high) {
+                const mid = Math.floor((high - low) / 2) + low;
+                if (nums[mid] === nums[mid ^ 1]) {
+                    low = mid + 1;
+                } else {
+                    high = mid;
+                }
+            }
+            return nums[low];
+        };
+
+        // 方法二：偶数下标的二分查找
+        // 时间复杂度：O(logn)，其中 n 是数组 nums 的长度
+        // 空间复杂度：O(1)
+        var singleNonDuplicate = function (nums) {
+            let low = 0,
+                high = nums.length - 1;
+            while (low < high) {
+                let mid = Math.floor((high - low) / 2) + low;
+                mid -= mid & 1;
+                if (nums[mid] === nums[mid + 1]) {
+                    low = mid + 2;
+                } else {
+                    high = mid;
+                }
+            }
+            return nums[low];
+        };
+
+        // test
+        let nums = [1, 1, 2, 3, 3, 4, 4, 8, 8];
+        console.log(singleNonDuplicate(nums))
+    </script>
+</body>
+
+</html>
