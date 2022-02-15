@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 幸运数是 同行的最小，同列的最大
+
+        // 方法一：模拟
+        // 时间复杂度：O(mn×(m+n))，其中 m 和 n 分别是矩阵 matrix 的行数和列数。
+        var luckyNumbers = function (matrix) {
+            const m = matrix.length,
+                n = matrix[0].length;
+            const ret = [];
+            for (let i = 0; i < m; i++) {
+                for (let j = 0; j < n; j++) {
+                    let isMin = true,
+                        isMax = true;
+                    for (let k = 0; k < n; k++) {
+                        if (matrix[i][k] < matrix[i][j]) {
+                            isMin = false;
+                            break;
+                        }
+                    }
+                    if (!isMin) {
+                        continue;
+                    }
+                    for (let k = 0; k < m; k++) {
+                        if (matrix[k][j] > matrix[i][j]) {
+                            isMax = false;
+                            break;
+                        }
+                    }
+                    if (isMax) {
+                        ret.push(matrix[i][j]);
+                    }
+                }
+            }
+            return ret;
+        };
+
+        // 方法二：预处理
+        // 时间复杂度：O(mn)
+        // 空间复杂度：O(m+n)
+        var luckyNumbers = function (matrix) {
+            const m = matrix.length,
+                n = matrix[0].length;
+            const minRow = new Array(m).fill(Number.MAX_SAFE_INTEGER);
+            const maxCol = new Array(n).fill(0);
+            for (let i = 0; i < m; i++) {
+                for (let j = 0; j < n; j++) {
+                    minRow[i] = Math.min(minRow[i], matrix[i][j]);
+                    maxCol[j] = Math.max(maxCol[j], matrix[i][j]);
+                }
+            }
+            const ret = [];
+            for (let i = 0; i < m; i++) {
+                for (let j = 0; j < n; j++) {
+                    if (matrix[i][j] === minRow[i] && matrix[i][j] === maxCol[j]) {
+                        ret.push(matrix[i][j]);
+                    }
+                }
+            }
+            return ret;
+        };
+
+        // test
+        let matrix = [
+            [3, 7, 8],
+            [9, 11, 13],
+            [15, 16, 17]
+        ];
+        console.log(luckyNumbers(matrix))
+    </script>
+</body>
+
+</html>
