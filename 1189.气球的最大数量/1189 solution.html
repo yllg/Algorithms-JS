@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 用字母来拼凑尽可能多的单词 "balloon"（气球）。
+
+        // 方法一：统计
+        // 时间复杂度：O(n+C)，其中 n 为字符串的长度，C 表示单词中字符的种类数，在本题中 C=5。需要遍历一遍字符串，并求出单词中字符的最小数目。
+        // 空间复杂度：O(C)
+        var maxNumberOfBalloons = function (text) {
+            const cnt = new Array(5).fill(0);
+            for (const ch of text) {
+                if (ch === 'b') {
+                    cnt[0]++;
+                } else if (ch === 'a') {
+                    cnt[1]++;
+                } else if (ch === 'l') {
+                    cnt[2]++;
+                } else if (ch === 'o') {
+                    cnt[3]++;
+                } else if (ch === 'n') {
+                    cnt[4]++;
+                }
+            }
+            cnt[2] = Math.floor(cnt[2] / 2);
+            cnt[3] = Math.floor(cnt[3] / 2);
+            return _.min(cnt);
+        };
+    </script>
+</body>
+
+</html>

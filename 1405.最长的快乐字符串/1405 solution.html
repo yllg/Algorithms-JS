@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法1：贪心
+        // 时间复杂度：O((a+b+c)×ClogC)，其中 a,b,c 为给定的整数，C 表示字母的种类
+        // 空间复杂度：O(C)
+        var longestDiverseString = function (a, b, c) {
+            const res = [];
+            const arr = [
+                [a, 'a'],
+                [b, 'b'],
+                [c, 'c']
+            ];
+            while (true) {
+                arr.sort((a, b) => b[0] - a[0]);
+                let hasNext = false;
+                for (const [i, [c, ch]] of arr.entries()) {
+                    if (c <= 0) {
+                        break;
+                    }
+                    const m = res.length;
+                    if (m >= 2 && res[m - 2] === ch && res[m - 1] === ch) {
+                        continue;
+                    }
+                    hasNext = true;
+                    res.push(ch);
+                    arr[i][0]--;
+                    break;
+                }
+                if (!hasNext) {
+                    break;
+                }
+            }
+
+            return res.join('');
+        };
+
+        // test
+        let a = 1,
+            b = 1,
+            c = 7;
+        console.log(longestDiverseString(a, b, c));
+    </script>
+</body>
+
+</html>
