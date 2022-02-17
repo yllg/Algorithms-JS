@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法一：动态规划
+        // 时间复杂度：O(k * n ^ 2)
+        // 空间复杂度：O(k * n ^ 2)
+        const dirs = [
+            [-2, -1],
+            [-2, 1],
+            [2, -1],
+            [2, 1],
+            [-1, -2],
+            [-1, 2],
+            [1, -2],
+            [1, 2]
+        ];
+        var knightProbability = function (n, k, row, column) {
+            const dp = new Array(k + 1).fill(0).map(() => new Array(n).fill(0).map(() => new Array(n).fill(0)));
+            for (let step = 0; step <= k; step++) {
+                for (let i = 0; i < n; i++) {
+                    for (let j = 0; j < n; j++) {
+                        if (step === 0) {
+                            dp[step][i][j] = 1;
+                        } else {
+                            for (const dir of dirs) {
+                                const ni = i + dir[0],
+                                    nj = j + dir[1];
+                                if (ni >= 0 && ni < n && nj >= 0 && nj < n) {
+                                    dp[step][i][j] += dp[step - 1][ni][nj] / 8;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            return dp[k][row][column];
+        };
+
+        // test
+        let n = 3,
+            k = 2,
+            row = 0,
+            column = 0;
+        console.log(knightProbability(n, k, row, column))
+    </script>
+</body>
+
+</html>
