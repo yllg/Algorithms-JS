@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法一：计算每个节点的度
+        // 时间复杂度：O(n)
+        // 空间复杂度：O(n)
+        var findCenter = function (edges) {
+            const n = edges.length + 1;
+            const degrees = new Array(n + 1).fill(0);
+            for (const edge of edges) {
+                degrees[edge[0]]++;
+                degrees[edge[1]]++;
+            }
+            for (let i = 1; i <= n; i++) {
+                if (degrees[i] === n - 1) {
+                    return i;
+                }
+            }
+            return 0;
+        };
+
+        // 方法二：寻找出现在两条边中的节点
+        // 时间复杂度：O(1)
+        // 空间复杂度：O(1)
+        var findCenter = function (edges) {
+            return edges[0][0] === edges[1][0] || edges[0][0] === edges[1][1] ? edges[0][0] : edges[0][1];
+        };
+
+        // test
+        let edges = [
+            [1, 2],
+            [2, 3],
+            [4, 2]
+        ];
+        console.log(findCenter(edges))
+    </script>
+</body>
+
+</html>
