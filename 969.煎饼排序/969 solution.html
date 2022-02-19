@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 煎饼翻转多次后得到从小到大的有序排列，输出k的结果
+
+        // 方法一：类选择排序
+        // 时间复杂度：O(n^2)
+        // 空间复杂度：O(1)
+        var pancakeSort = function (arr) {
+            const ret = [];
+            for (let n = arr.length; n > 1; n--) {
+                let index = 0;
+                for (let i = 1; i < n; i++) {
+                    if (arr[i] >= arr[index]) {
+                        index = i;
+                    }
+                }
+                if (index === n - 1) {
+                    continue;
+                }
+                reverse(arr, index);
+                reverse(arr, n - 1);
+                ret.push(index + 1);
+                ret.push(n);
+            }
+            return ret;
+        }
+
+        const reverse = (arr, end) => {
+            for (let i = 0, j = end; i < j; i++, j--) {
+                let temp = arr[i];
+                arr[i] = arr[j];
+                arr[j] = temp;
+            }
+        };
+
+        // test
+        let arr = [3, 2, 4, 1];
+        console.log(pancakeSort(arr))
+    </script>
+</body>
+
+</html>
