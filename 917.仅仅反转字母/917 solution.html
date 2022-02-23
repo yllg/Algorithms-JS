@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法一：双指针
+        // 时间复杂度：O(n) n是字符串长度
+        var reverseOnlyLetters = function (s) {
+            const n = s.length;
+            const arr = [...s];
+            let left = 0,
+                right = n - 1;
+            while (true) {
+                while (left < right && !(/^[a-zA-Z]+$/.test(s[left]))) { // 判断左边是否扫描到字母
+                    left++;
+                }
+                while (right > left && !(/^[a-zA-Z]+$/.test(s[right]))) { // 判断右边是否扫描到字母
+                    right--;
+                }
+                if (left >= right) {
+                    break;
+                }
+                swap(arr, left, right);
+                left++;
+                right--;
+            }
+            return arr.join('');
+        };
+
+        const swap = (arr, left, right) => {
+            const temp = arr[left];
+            arr[left] = arr[right];
+            arr[right] = temp;
+        }
+
+        // test
+        let s = "Test1ng-Leet=code-Q!";
+        console.log(reverseOnlyLetters(s));
+    </script>
+</body>
+
+</html>
