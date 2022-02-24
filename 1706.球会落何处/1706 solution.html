@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法一：模拟
+        // 时间复杂度：O(mn)
+        // 空间复杂度：O(1)
+        var findBall = function (grid) {
+            const n = grid[0].length;
+            const ans = new Array(n).fill(-1);
+            for (let j = 0; j < n; j++) {
+                let col = j; // 球的初始列
+                for (const row of grid) {
+                    const dir = row[col];
+                    col += dir; // 移动球
+                    if (col < 0 || col === n || row[col] !== dir) { // 到达侧边或 V 形
+                        col = -1;
+                        break;
+                    }
+                }
+                if (col >= 0) { // 成功到达底部
+                    ans[j] = col;
+                }
+            }
+            return ans;
+        };
+
+        // test
+        let grid = [
+            [1, 1, 1, -1, -1],
+            [1, 1, 1, -1, -1],
+            [-1, -1, -1, 1, 1],
+            [1, 1, 1, 1, -1],
+            [-1, -1, -1, -1, -1]
+        ];
+
+        console.log(findBall(grid))
+    </script>
+</body>
+
+</html>
