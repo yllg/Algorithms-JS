@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法一：前缀最小值
+        // 时间复杂度：O(n)
+        // 空间复杂度：O(1)
+        var maximumDifference = function (nums) {
+            const n = nums.length;
+            let ans = -1,
+                premin = nums[0];
+            for (let i = 1; i < n; ++i) {
+                if (nums[i] > premin) {
+                    ans = Math.max(ans, nums[i] - premin);
+                } else {
+                    premin = nums[i];
+                }
+            }
+            return ans;
+        };
+
+        // test
+        let nums = [7, 1, 5, 4];
+        console.log(maximumDifference(nums))
+    </script>
+</body>
+
+</html>
