@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 加括号 保证从左到右除法的结果最大
+
+        // 方法一：动态规划
+        // 时间复杂度：O(n ^ 3)
+        // 空间复杂度：O(n ^ 3)
+        var optimalDivision = function (nums) {
+            const n = nums.length;
+            const dp = new Array(n).fill(0).map(() => new Array(n).fill(0));
+            for (let i = 0; i < n; i++) {
+                for (let j = i; j < n; j++) {
+                    dp[i][j] = new Node();
+                }
+            }
+
+            for (let i = 0; i < n; i++) {
+                dp[i][i].minVal = nums[i];
+                dp[i][i].maxVal = nums[i];
+                dp[i][i].minStr = '' + nums[i];
+                dp[i][i].maxStr = '' + nums[i];
+            }
+            for (let i = 1; i < n; i++) {
+                for (let j = 0; j + i < n; j++) {
+                    for (let k = j; k < j + i; k++) {
+                        if (dp[j][j + i].maxVal < dp[j][k].maxVal / dp[k + 1][j + i].minVal) {
+                            dp[j][j + i].maxVal = dp[j][k].maxVal / dp[k + 1][j + i].minVal;
+                            if (k + 1 === j + i) {
+                                dp[j][j + i].maxStr = dp[j][k].maxStr + "/" + dp[k + 1][j + i].minStr;
+                            } else {
+                                dp[j][j + i].maxStr = dp[j][k].maxStr + "/(" + dp[k + 1][j + i].minStr + ")";
+                            }
+                        }
+                        if (dp[j][j + i].minVal > dp[j][k].minVal / dp[k + 1][j + i].maxVal) {
+                            dp[j][j + i].minVal = dp[j][k].minVal / dp[k + 1][j + i].maxVal;
+                            if (k + 1 === j + i) {
+                                dp[j][j + i].minStr = dp[j][k].minStr + "/" + dp[k + 1][j + i].maxStr;
+                            } else {
+                                dp[j][j + i].minStr = dp[j][k].minStr + "/(" + dp[k + 1][j + i].maxStr + ")";
+                            }
+                        }
+                    }
+                }
+            }
+            return dp[0][n - 1].maxStr;
+        };
+
+        class Node {
+            constructor() {
+                this.maxStr;
+                this.minStr;
+                this.minVal = 10000.0;
+                this.maxVal = 0.0;
+            }
+        }
+
+        // 方法二: 数学
+        // 时间复杂度：O(n)
+        // 空间复杂度：O(1)
+        var optimalDivision = function (nums) {
+            const n = nums.length;
+            if (n === 1) {
+                return '' + nums[0];
+            }
+            if (n === 2) {
+                return '' + nums[0] + "/" + '' + nums[1];
+            }
+            const res = [];
+            res.push(nums[0]);
+            res.push("/(");
+            res.push(nums[1]);
+            for (let i = 2; i < n; i++) {
+                res.push("/");
+                res.push(nums[i]);
+            }
+            res.push(")");
+            return res.join('');
+        };
+
+        // test
+        let nums = [1000, 100, 10, 2];
+        console.log(optimalDivision(nums))
+    </script>
+</body>
+
+</html>
