@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法一：回溯 + 枚举
+        // 时间复杂度：O(2^m)，其中 m 是数组 requests 的长度
+        // 空间复杂度：O(m+n)
+        var maximumRequests = function (n, requests) {
+            const delta = new Array(n).fill(0);
+            let zero = n,
+                ans = 0,
+                cnt = 0;
+            const dfs = (requests, pos) => {
+                if (pos === requests.length) {
+                    if (zero === n) {
+                        ans = Math.max(ans, cnt);
+                    }
+                    return;
+                }
+
+                // 不选 requests[pos]
+                dfs(requests, pos + 1);
+
+                // 选 requests[pos]
+                let z = zero;
+                ++cnt;
+                const r = requests[pos];
+                let x = r[0],
+                    y = r[1];
+                zero -= delta[x] == 0 ? 1 : 0;
+                --delta[x];
+                zero += delta[x] == 0 ? 1 : 0;
+                zero -= delta[y] == 0 ? 1 : 0;
+                ++delta[y];
+                zero += delta[y] == 0 ? 1 : 0;
+                dfs(requests, pos + 1);
+                --delta[y];
+                ++delta[x];
+                --cnt;
+                zero = z;
+            }
+            dfs(requests, 0);
+            return ans;
+        };
+
+        // 方法二：二进制枚举
+        // 时间复杂度：O(2^m * n)
+        // 空间复杂度：O(n)
+        var maximumRequests = function (n, requests) {
+            const delta = new Array(n).fill(0);
+            let ans = 0,
+                m = requests.length;
+            for (let mask = 0; mask < (1 << m); ++mask) {
+                let cnt = mask.toString(2).split('0').join('').length;
+                if (cnt <= ans) {
+                    continue;
+                }
+                delta.fill(0);
+                for (let i = 0; i < m; ++i) {
+                    if ((mask & (1 << i)) !== 0) {
+                        ++delta[requests[i][0]];
+                        --delta[requests[i][1]];
+                    }
+                }
+                let flag = true;
+                for (const x of delta) {
+                    if (x !== 0) {
+                        flag = false;
+                        break;
+                    }
+                }
+                if (flag) {
+                    ans = cnt;
+                }
+            }
+            return ans;
+        };
+    </script>
+</body>
+
+</html>
