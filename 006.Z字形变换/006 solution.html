@@ -1,37 +1,104 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
-  </head>
-  <body>
-    <script>
-      var convert = function (s, numRows) {
-        if (numRows == 1) return s;
 
-        const len = Math.min(s.length, numRows);
-        const rows = [];
-        for (let i = 0; i < len; i++) rows[i] = "";
-        let loc = 0;
-        let down = false;
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Document</title>
+</head>
 
-        for (const c of s) {
-          rows[loc] += c;
-          if (loc == 0 || loc == numRows - 1) down = !down;
-          loc += down ? 1 : -1;
+<body>
+  <script>
+    // 倒Z字形变换
+
+    // 方法一：利用二维矩阵模拟
+    // 时间复杂度：O(r⋅n)，其中 r=numRows，n 为字符串 s 的长度
+    // 空间复杂度：O(r⋅n)，其中 r=numRows，n 为字符串 s 的长度
+    var convert = function (s, numRows) {
+      const n = s.length,
+        r = numRows;
+      if (r === 1 || r >= n) {
+        return s;
+      }
+      const t = r * 2 - 2;
+      const c = Math.floor((n + t - 1) / t) * (r - 1);
+      const mat = new Array(r).fill(0).map(() => new Array(c).fill(0));
+      for (let i = 0, x = 0, y = 0; i < n; ++i) {
+        mat[x][y] = s[i];
+        if (i % t < r - 1) {
+          ++x; // 向下移动
+        } else {
+          --x;
+          ++y; // 向右上移动
         }
-
-        let ans = "";
-        for (const row of rows) {
-          ans += row;
+      }
+      const ans = [];
+      for (const row of mat) {
+        for (const ch of row) {
+          if (ch !== 0) {
+            ans.push(ch);
+          }
         }
-        return ans;
-      };
+      }
+      return ans.join('');
+    };
 
-      // test
-      var s = "LEETCODEISHIRING", numRows = 4;
-      console.log(convert(s, numRows));
-    </script>
-  </body>
+    // 方法二：压缩矩阵空间
+    // 时间复杂度：O(n)
+    // 空间复杂度：O(n)
+    var convert = function (s, numRows) {
+      const n = s.length,
+        r = numRows;
+      if (r === 1 || r >= n) {
+        return s;
+      }
+      const mat = new Array(r).fill(0);
+      for (let i = 0; i < r; ++i) {
+        mat[i] = [];
+      }
+      for (let i = 0, x = 0, t = r * 2 - 2; i < n; ++i) {
+        mat[x].push(s[i]);
+        if (i % t < r - 1) {
+          ++x;
+        } else {
+          --x;
+        }
+      }
+      const ans = [];
+      for (const row of mat) {
+        ans.push(row.join(''));
+      }
+      return ans.join('');
+    };
+
+    // 方法三:直接构造
+    // 时间复杂度：O(n)
+    // 空间复杂度：O(1)
+    var convert = function (s, numRows) {
+      const n = s.length,
+        r = numRows;
+      if (r === 1 || r >= n) {
+        return s;
+      }
+      const t = r * 2 - 2;
+      const ans = [];
+      for (let i = 0; i < r; i++) { // 枚举矩阵的行
+        for (let j = 0; j < n - i; j += t) { // 枚举每个周期的起始下标
+          ans.push(s[j + i]); // 当前周期的第一个字符
+          if (0 < i && i < r - 1 & j + t - i < n) {
+            ans.push(s[j + t - i]); // 当前周期的第二个字符
+          }
+        }
+      }
+      return ans.join('');
+    };
+
+
+    // test
+    var s = "PAYPALISHIRING",
+      numRows = 3;
+    console.log(convert(s, numRows));
+  </script>
+</body>
+
 </html>
