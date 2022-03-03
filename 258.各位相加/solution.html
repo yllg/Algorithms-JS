@@ -1,32 +1,40 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
 </head>
+
 <body>
-<script>
-// Source : https://leetcode.com/problems/add-digits/
-// Author : 悬笔e绝
-// Date   : 2020-02-21
+  <script>
+    // 方法一：模拟
+    // 时间复杂度：O(lognum)，其中 num 是给定的整数
+    // 空间复杂度：O(1)
+    var addDigits = function (num) {
+      while (num >= 10) {
+        let sum = 0;
+        while (num > 0) {
+          sum += num % 10;
+          num = Math.floor(num / 10);
+        }
+        num = sum;
+      }
+      return num;
+    };
 
-/**
- * @param {number} num
- * @return {number}
- */
-var addDigits = function(num) {
-  while(num.toString().length !== 1) {
-    var sum = 0;
-    while (num) {
-      sum += num % 10;
-      num = ~~(num / 10);
-    }
-    num = sum;
-  }
-  return num;
-};
+    // 方法二：数学
+    // 时间复杂度：O(1)
+    // 空间复杂度：O(1)
+    var addDigits = function (num) {
+      return (num - 1) % 9 + 1;
+    };
 
-</script>
+    // test
+    let num = 38;
+    console.log(addDigits(num))
+  </script>
 </body>
+
 </html>
