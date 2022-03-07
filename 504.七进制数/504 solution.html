@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法一：倒推 + 迭代
+        // 时间复杂度：O(log∣num∣)
+        // 空间复杂度：O(log∣num∣)
+        var convertToBase7 = function (num) {
+            if (num === 0) {
+                return "0";
+            }
+            let negative = num < 0;
+            num = Math.abs(num);
+            const digits = [];
+            while (num > 0) {
+                digits.push(num % 7);
+                num = Math.floor(num / 7);
+            }
+            if (negative) {
+                digits.push('-');
+            }
+            return digits.reverse().join('');
+        };
+
+        // test
+        let num = 100;
+        console.log(convertToBase7(num))
+    </script>
+</body>
+
+</html>
