@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法一：递归
+        // 时间复杂度：O(m)
+        // 空间复杂度：O(m)
+        var postorder = function (root) {
+            const res = [];
+            helper(root, res);
+            return res;
+        }
+
+        const helper = (root, res) => {
+            if (root == null) {
+                return;
+            }
+            for (const ch of root.children) {
+                helper(ch, res);
+            }
+            res.push(root.val);
+        };
+
+        // 方法二：迭代
+        // 时间复杂度：O(m)
+        // 空间复杂度：O(m)
+        var postorder = function (root) {
+            const res = [];
+            if (root == null) {
+                return res;
+            }
+            const map = new Map();
+            const stack = [];
+            let node = root;
+            while (stack.length || node) {
+                while (node) {
+                    stack.push(node);
+                    const children = node.children;
+                    if (children && children.length > 0) {
+                        map.set(node, 0);
+                        node = children[0];
+                    } else {
+                        node = null;
+                    }
+                }
+                node = stack[stack.length - 1];
+                const index = (map.get(node) || 0) + 1;
+                const children = node.children;
+                if (children && children.length > index) {
+                    map.set(node, index);
+                    node = children[index];
+                } else {
+                    res.push(node.val);
+                    stack.pop();
+                    map.delete(node);
+                    node = null;
+                }
+            }
+            return res;
+        };
+
+        // 方法三：迭代优化
+        // 时间复杂度：O(m)
+        // 空间复杂度：O(m)
+        var postorder = function (root) {
+            const res = [];
+            if (root == null) {
+                return res;
+            }
+
+            const stack = [];
+            const visited = new Set();
+            stack.push(root);
+            while (stack.length) {
+                const node = stack[stack.length - 1];
+                /* 如果当前节点为叶子节点或者当前节点的子节点已经遍历过 */
+                if (node.children.length === 0 || visited.has(node)) {
+                    stack.pop();
+                    res.push(node.val);
+                    continue;
+                }
+                for (let i = node.children.length - 1; i >= 0; --i) {
+                    stack.push(node.children[i]);
+                }
+                visited.add(node);
+            }
+            return res;
+        };
+
+        // 方法四：利用前序遍历反转
+        // 时间复杂度：O(m)
+        // 空间复杂度：O(m)
+        var postorder = function (root) {
+            const res = [];
+            if (root == null) {
+                return res;
+            }
+
+            const stack = [];
+            stack.push(root);
+            while (stack.length) {
+                const node = stack.pop();
+                res.push(node.val);
+                for (const item of node.children) {
+                    stack.push(item);
+                }
+            }
+            res.reverse();
+            return res;
+        };
+    </script>
+</body>
+
+</html>
