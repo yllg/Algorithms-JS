@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法一：遍历 + 位运算
+        // 时间复杂度：O(m) 其中 m 是数组 data 的长度
+        // 空间复杂度：O(1)
+        const MASK1 = 1 << 7;
+        const MASK2 = (1 << 7) + (1 << 6);
+
+        var validUtf8 = function (data) {
+            const m = data.length;
+            let index = 0;
+            while (index < m) {
+                const num = data[index];
+                const n = getBytes(num);
+                if (n < 0 || index + n > m) {
+                    return false;
+                }
+                for (let i = 1; i < n; i++) {
+                    if (!isValid(data[index + i])) {
+                        return false;
+                    }
+                }
+                index += n;
+            }
+            return true;
+        };
+
+        const getBytes = (num) => {
+            if ((num & MASK1) === 0) {
+                return 1;
+            }
+            let n = 0;
+            let mask = MASK1;
+            while ((num & mask) !== 0) {
+                n++;
+                if (n > 4) {
+                    return -1;
+                }
+                mask >>= 1;
+            }
+            return n >= 2 ? n : -1;
+        }
+
+        const isValid = (num) => {
+            return (num & MASK2) === MASK1;
+        }
+
+        // test
+        let data = [197, 130, 1];
+        console.log(validUtf8(data))
+    </script>
+</body>
+
+</html>
