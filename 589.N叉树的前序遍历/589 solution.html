@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法1：递归
+        // 时间复杂度：O(m)
+        // 空间复杂度：O(m)
+        var preorder = function (root) {
+            const res = [];
+            helper(root, res);
+            return res;
+        }
+
+        const helper = (root, res) => {
+            if (root === null) {
+                return;
+            }
+            res.push(root.val);
+            for (const ch of root.children) {
+                helper(ch, res);
+            }
+        };
+
+        // 方法二：迭代
+        // 时间复杂度：O(m)
+        // 空间复杂度：O(m)
+        var preorder = function (root) {
+            if (root == null) {
+                return [];
+            }
+            const ans = [];
+            const st = [];
+            const nextIndex = new Map();
+            let node = root;
+            while (st.length || node) {
+                while (node) {
+                    ans.push(node.val);
+                    st.push(node);
+                    if (!node.children) {
+                        break;
+                    }
+                    nextIndex.set(node, 1);
+                    node = node.children[0];
+                }
+                node = st[st.length - 1];
+                const i = nextIndex.get(node);
+                if (i < node.children.length) {
+                    nextIndex.set(node, i + 1);
+                    node = node.children[i];
+                } else {
+                    st.pop();
+                    nextIndex.delete(node);
+                    node = null;
+                }
+            }
+            return ans;
+        };
+
+        // 方法三：迭代优化
+        // 时间复杂度：O(m)
+        // 空间复杂度：O(m)
+        var preorder = function (root) {
+            const res = [];
+            if (root == null) {
+                return res;
+            }
+
+            const stack = [];
+            stack.push(root);
+            while (stack.length) {
+                const node = stack.pop();
+                res.push(node.val);
+                for (let i = node.children.length - 1; i >= 0; --i) {
+                    stack.push(node.children[i]);
+                }
+            }
+            return res;
+        };
+    </script>
+</body>
+
+</html>l
