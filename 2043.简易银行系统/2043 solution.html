@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法1：模拟
+        // 时间复杂度：
+        // transfer：O(1)；
+        // eposit：O(1)；
+        // withdraw：O(1)。
+
+        // 空间复杂度：
+        // 初始化：O(n)，其中 n 为已有的帐号数目。
+        // transfer：O(1)；
+        // eposit：O(1)；
+        // withdraw：O(1)。
+
+        var Bank = function (balance) {
+            this.balance = balance;
+        };
+
+        Bank.prototype.transfer = function (account1, account2, money) {
+            if (account1 > this.balance.length || account2 > this.balance.length || this.balance[account1 - 1] <
+                money) {
+                return false;
+            }
+            this.balance[account1 - 1] -= money;
+            this.balance[account2 - 1] += money;
+            return true;
+        };
+
+        Bank.prototype.deposit = function (account, money) {
+            if (account > this.balance.length) {
+                return false;
+            }
+            this.balance[account - 1] += money;
+            return true;
+        };
+
+        Bank.prototype.withdraw = function (account, money) {
+            if (account > this.balance.length || this.balance[account - 1] < money) {
+                return false;
+            }
+            this.balance[account - 1] -= money;
+            return true;
+        };
+
+    </script>
+</body>
+
+</html>
