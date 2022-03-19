@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法一：递归
+        // 时间复杂度：O(n)
+        // 空间复杂度：O(n)
+        var tree2str = function (root) {
+            if (!root) {
+                return "";
+            }
+            if (!root.left && !root.right) {
+                return '' + root.val;
+            }
+            if (!root.right) {
+                return root.val + '(' + tree2str(root.left) + ')';
+            }
+            return root.val + '(' + tree2str(root.left) + ')(' + tree2str(root.right) + ')';
+        };
+
+        // 方法二：迭代
+        // 时间复杂度：O(n)
+        // 空间复杂度：O(n)
+        var tree2str = function (root) {
+            let ans = '';
+            const st = [root];
+            const vis = new Set();
+            while (st.length) {
+                const node = st[st.length - 1];
+                if (vis.has(node)) {
+                    if (node !== root) {
+                        ans += ')';
+                    }
+                    st.pop();
+                } else {
+                    vis.add(node);
+                    if (node !== root) {
+                        ans += '(';
+                    }
+                    ans += '' + node.val;
+                    if (!node.left && node.right) {
+                        ans += '()';
+                    }
+                    if (node.right) {
+                        st.push(node.right);
+                    }
+                    if (node.left) {
+                        st.push(node.left);
+                    }
+                }
+            }
+            return ans;
+        };
+    </script>
+</body>
+
+</html>
