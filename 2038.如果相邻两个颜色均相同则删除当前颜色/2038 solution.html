@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法一：贪心
+        // 时间复杂度O(n)
+        // 空间复杂度O(1)
+        var winnerOfGame = function (colors) {
+            const freq = [0, 0];
+            let cur = 'C';
+            let cnt = 0;
+            for (let i = 0; i < colors.length; i++) {
+                const c = colors[i];
+                if (c !== cur) {
+                    cur = c;
+                    cnt = 1;
+                } else {
+                    cnt += 1;
+                    if (cnt >= 3) {
+                        freq[cur.charCodeAt() - 'A'.charCodeAt()] += 1;
+                    }
+                }
+            }
+            return freq[0] > freq[1];
+        };
+
+        // test
+        let colors = "AAABABB";
+        console.log(winnerOfGame(colors))
+    </script>
+</body>
+
+</html>
