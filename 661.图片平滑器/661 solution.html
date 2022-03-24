@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法一：遍历
+        // 时间复杂度：O(mnC^2)
+        // 空间复杂度：O(1)
+        var imageSmoother = function (img) {
+            const m = img.length,
+                n = img[0].length;
+            const ret = new Array(m).fill(0).map(() => new Array(n).fill(0));
+            for (let i = 0; i < m; i++) {
+                for (let j = 0; j < n; j++) {
+                    let num = 0,
+                        sum = 0;
+                    for (let x = i - 1; x <= i + 1; x++) {
+                        for (let y = j - 1; y <= j + 1; y++) {
+                            if (x >= 0 && x < m && y >= 0 && y < n) {
+                                num++;
+                                sum += img[x][y];
+                            }
+                        }
+                    }
+                    ret[i][j] = Math.floor(sum / num);
+                }
+            }
+            return ret;
+        };
+
+        // test 
+        let img = [
+            [100, 200, 100],
+            [200, 50, 200],
+            [100, 200, 100]
+        ];
+        console.log(imageSmoother(img))
+    </script>
+</body>
+
+</html>
