@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法一：模拟
+        // 时间复杂度：O(n)
+        // 空间复杂度：O(n)
+        var calPoints = function (ops) {
+            let ret = 0;
+            const points = [];
+            for (const op of ops) {
+                const n = points.length;
+                switch (op[0]) {
+                    case '+':
+                        ret += points[n - 1] + points[n - 2];
+                        points.push(points[n - 1] + points[n - 2]);
+                        break;
+                    case 'D':
+                        ret += 2 * points[n - 1];
+                        points.push(2 * points[n - 1]);
+                        break;
+                    case 'C':
+                        ret -= points[n - 1];
+                        points.pop();
+                        break;
+                    default:
+                        ret += parseInt(op);
+                        points.push(parseInt(op));
+                        break;
+                }
+            }
+            return ret;
+        };
+
+        // test
+        let ops = ["5", "-2", "4", "C", "D", "9", "+", "+"];
+        console.log(calPoints(ops))
+    </script>
+</body>
+
+</html>
