@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 自除数 是指可以被它包含的每一位数整除的数。
+
+        // 方法一：直接判断
+        // 时间复杂度：O(nlog(right))，其中 n 是范围内的整数个数，right 是范围内的最大整数
+        // 空间复杂度：O(1)
+        var selfDividingNumbers = function (left, right) {
+            const ans = [];
+            for (let i = left; i <= right; i++) {
+                if (isSelfDividing(i)) {
+                    ans.push(i);
+                }
+            }
+            return ans;
+        }
+
+        const isSelfDividing = (num) => {
+            let temp = num;
+            while (temp > 0) {
+                const digit = temp % 10;
+                if (digit === 0 || num % digit !== 0) {
+                    return false;
+                }
+                temp = Math.floor(temp / 10);
+            }
+            return true;
+        };
+
+        // test
+        let left = 1,
+            right = 22;
+        console.log(selfDividingNumbers(left, right))
+    </script>
+</body>
+
+</html>
