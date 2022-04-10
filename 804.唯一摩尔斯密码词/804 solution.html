@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法一：哈希表
+        // 时间复杂度：O(S)
+        // 空间复杂度：O(S)
+        const MORSE = [".-", "-...", "-.-.", "-..", ".", "..-.", "--.", "....", "..", ".---", "-.-", ".-..", "--", "-.",
+            "---", ".--.", "--.-", ".-.", "...", "-", "..-", "...-", ".--", "-..-", "-.--", "--.."
+        ];
+        var uniqueMorseRepresentations = function (words) {
+            const seen = new Set();
+            for (const word of words) {
+                let code = '';
+                for (const ch of word) {
+                    code += (MORSE[ch.charCodeAt() - 'a'.charCodeAt()]);
+                }
+                seen.add(code);
+            }
+            return seen.size;
+        }
+
+        // test
+        let words = ["gin", "zen", "gig", "msg"];
+        console.log(uniqueMorseRepresentations(words))
+    </script>
+</body>
+
+</html>
