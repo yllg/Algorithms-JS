@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法一：排列组合
+        // 时间复杂度：O(n)
+        // 空间复杂度：O(1)
+        var countNumbersWithUniqueDigits = function (n) {
+            if (n === 0) {
+                return 1;
+            }
+            if (n === 1) {
+                return 10;
+            }
+            let res = 10,
+                cur = 9;
+            for (let i = 0; i < n - 1; i++) {
+                cur *= 9 - i;
+                res += cur;
+            }
+            return res;
+        };
+
+        // test
+        let n = 2;
+        console.log(countNumbersWithUniqueDigits(n))
+    </script>
+</body>
+
+</html>
