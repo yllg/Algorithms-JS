@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法一：哈希表 + 计数
+        // 时间复杂度：O(n+m)，其中 n 是段落 paragraph 的长度，m 是禁用单词列表 banned 的长度
+        var mostCommonWord = function (paragraph, banned) {
+            const bannedSet = new Set();
+            for (const word of banned) {
+                bannedSet.add(word);
+            }
+            let maxFrequency = 0;
+            const frequencies = new Map();
+            let sb = '';
+            const length = paragraph.length;
+            for (let i = 0; i <= length; i++) {
+                if (i < length && isLetter(paragraph[i])) {
+                    sb = sb + paragraph[i].toLowerCase();
+                } else if (sb.length > 0) {
+                    if (!bannedSet.has(sb)) {
+                        const frequency = (frequencies.get(sb) || 0) + 1;
+                        frequencies.set(sb, frequency);
+                        maxFrequency = Math.max(maxFrequency, frequency);
+                    }
+                    sb = '';
+                }
+            }
+            let mostCommon = "";
+            for (const [word, frequency] of frequencies.entries()) {
+                if (frequency === maxFrequency) {
+                    mostCommon = word;
+                    break;
+                }
+            }
+            return mostCommon;
+        };
+
+        const isLetter = (ch) => {
+            return (ch >= 'a' && ch <= 'z') || (ch >= 'A' && ch <= 'Z');
+        }
+
+        // test
+        let paragraph = "Bob hit a ball, the hit BALL flew far after it was hit.",
+            banned = ["hit"];
+
+        console.log(mostCommonWord(paragraph, banned))
+    </script>
+</body>
+
+</html>
