@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法一：两次遍历
+        // 时间复杂度：O(n)
+        // 空间复杂度：O(1)
+        var shortestToChar = function (s, c) {
+            const n = s.length;
+            const ans = new Array(n).fill(0);
+
+            for (let i = 0, idx = -n; i < n; ++i) {
+                if (s[i] === c) {
+                    idx = i;
+                }
+                ans[i] = i - idx;
+            }
+
+            for (let i = n - 1, idx = 2 * n; i >= 0; --i) {
+                if (s[i] == c) {
+                    idx = i;
+                }
+                ans[i] = Math.min(ans[i], idx - i);
+            }
+            return ans;
+        };
+
+        // test
+        let s = "loveleetcode",
+            c = "e";
+        console.log(shortestToChar(s, c))
+    </script>
+</body>
+
+</html>
