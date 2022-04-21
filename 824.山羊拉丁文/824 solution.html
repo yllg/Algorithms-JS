@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法一：找到每一个单词 + 模拟
+        // 时间复杂度：O(n^2)
+        // 空间复杂度：O(n)
+        var toGoatLatin = function (sentence) {
+            const vowels = new Set();
+            vowels.add('a');
+            vowels.add('e');
+            vowels.add('i');
+            vowels.add('o');
+            vowels.add('u');
+            vowels.add('A');
+            vowels.add('E');
+            vowels.add('I');
+            vowels.add('O');
+            vowels.add('U');
+
+            const n = sentence.length;
+            let i = 0,
+                cnt = 1;
+            ans = '';
+
+            while (i < n) {
+                let j = i;
+                while (j < n && sentence[j] !== ' ') {
+                    ++j;
+                }
+
+                ++cnt;
+                if (cnt !== 2) {
+                    ans += ' ';
+                }
+                if (vowels.has(sentence[i])) {
+                    ans += sentence.substring(i, j);
+                } else {
+                    ans += sentence.slice(i + 1, j);
+                    ans += sentence[i];
+                }
+                ans += 'm';
+                for (let k = 0; k < cnt; ++k) {
+                    ans += 'a';
+                }
+
+                i = j + 1;
+            }
+
+            return ans;
+        };
+
+        // test
+        let sentence = "I speak Goat Latin";
+        console.log(toGoatLatin(sentence))
+    </script>
+</body>
+
+</html>
