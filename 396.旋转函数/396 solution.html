@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 返回旋转后的最大值
+
+        // 方法一：迭代
+        // 时间复杂度：O(n)
+        // 空间复杂度：O(1)
+        var maxRotateFunction = function (nums) {
+            let f = 0,
+                n = nums.length,
+                numSum = _.sum(nums);
+            for (let i = 0; i < n; i++) {
+                f += i * nums[i];
+            }
+            let res = f;
+            for (let i = n - 1; i > 0; i--) {
+                f += numSum - n * nums[i];
+                res = Math.max(res, f);
+            }
+            return res;
+        };
+    </script>
+</body>
+
+</html>
