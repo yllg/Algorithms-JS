@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法一: Jarvis 算法
+        // 时间复杂度：O(n^2)
+        // 空间复杂度：O(n)
+        var outerTrees = function (trees) {
+            const n = trees.length;
+            if (n < 4) {
+                return trees;
+            }
+            let leftMost = 0;
+            for (let i = 0; i < n; i++) {
+                if (trees[i][0] < trees[leftMost][0]) {
+                    leftMost = i;
+                }
+            }
+
+            const res = [];
+            const visit = new Array(n).fill(0);
+            let p = leftMost;
+            do {
+                let q = (p + 1) % n;
+                for (let r = 0; r < n; r++) {
+                    /* 如果 r 在 pq 的右侧，则 q = r */
+                    if (cross(trees[p], trees[q], trees[r]) < 0) {
+                        q = r;
+                    }
+                }
+                /* 是否存在点 i, 使得 p 、q 、i 在同一条直线上 */
+                for (let i = 0; i < n; i++) {
+                    if (visit[i] || i === p || i === q) {
+                        continue;
+                    }
+                    if (cross(trees[p], trees[q], trees[i]) === 0) {
+                        res.push(trees[i]);
+                        visit[i] = true;
+                    }
+                }
+                if (!visit[q]) {
+                    res.push(trees[q]);
+                    visit[q] = true;
+                }
+                p = q;
+            } while (p !== leftMost);
+            return res;
+        }
+
+        var cross = (p, q, r) => {
+            return (q[0] - p[0]) * (r[1] - q[1]) - (q[1] - p[1]) * (r[0] - q[0]);
+        };
+
+        // 方法二: Graham 算法
+        // 时间复杂度：O(nlogn)
+        // 空间复杂度：O(n)
+        var outerTrees = function (trees) {
+            const n = trees.length;
+            if (n < 4) {
+                return trees;
+            }
+            let bottom = 0;
+            /* 找到 y 最小的点 bottom*/
+            for (let i = 0; i < n; i++) {
+                if (trees[i][1] < trees[bottom][1]) {
+                    bottom = i;
+                }
+            }
+            trees = swap(trees, bottom, 0);
+            /* 以 bottom 原点，按照极坐标的角度大小进行排序 */
+            trees.sort((a, b) => {
+                let diff = cross(trees[0], a, b) - cross(trees[0], b, a);
+                return diff === 0 ? distance(trees[0], a) - distance(trees[0], b) : diff > 0 ? 1 : -1;
+            });
+            /* 对于凸包最后且在同一条直线的元素按照距离从小到大进行排序 */
+            let r = n - 1;
+            while (r >= 0 && cross(trees[0], trees[n - 1], trees[r]) === 0) {
+                r--;
+            }
+            for (let l = r + 1, h = n - 1; l < h; l++, h--) {
+                trees = swap(trees, l, h);
+            }
+            const stack = [trees[0], trees[1]];
+            for (let i = 2; i < n; i++) {
+                let top = stack.pop();
+                /* 如果当前元素与栈顶的两个元素构成的向量顺时针旋转，则弹出栈顶元素 */
+                while (cross(stack[stack.length - 1], top, trees[i]) > 0) {
+                    top = stack.pop();
+                }
+                stack.push(top);
+                stack.push(trees[i]);
+            }
+            return stack;
+        }
+
+        var cross = (p, q, r) => {
+            return (q[1] - p[1]) * (r[0] - q[0]) - (q[0] - p[0]) * (r[1] - q[1]);
+        }
+
+        var distance = (p, q) => {
+            return (p[0] - q[0]) * (p[0] - q[0]) + (p[1] - q[1]) * (p[1] - q[1]);
+        }
+
+        var swap = (trees, i, j) => {
+            let temp0 = trees[i][0],
+                temp1 = trees[i][1];
+            trees[i][0] = trees[j][0];
+            trees[i][1] = trees[j][1];
+            trees[j][0] = temp0;
+            trees[j][1] = temp1;
+            return trees;
+        }
+
+        // 方法三: Andrew 算法
+        // 时间复杂度：O(nlogn)
+        // 空间复杂度：O(n)
+        var outerTrees = function (trees) {
+            const n = trees.length;
+            if (n < 4) {
+                return trees;
+            }
+            /* 按照 x 大小进行排序，如果 x 相同，则按照 y 的大小进行排序 */
+            trees.sort((a, b) => {
+                if (a[0] === b[0]) {
+                    return a[1] - b[1];
+                }
+                return a[0] - b[0];
+            });
+            const hull = [];
+            const used = new Array(n).fill(0);
+            /* hull[0] 需要入栈两次，不进行标记 */
+            hull.push(0);
+            /* 求出凸包的下半部分 */
+            for (let i = 1; i < n; i++) {
+                while (hull.length > 1 && cross(trees[hull[hull.length - 2]], trees[hull[hull.length - 1]], trees[
+                        i]) < 0) {
+                    used[hull[hull.length - 1]] = false;
+                    hull.pop();
+                }
+                used[i] = true;
+                hull.push(i);
+            }
+            const m = hull.length;
+            /* 求出凸包的上半部分 */
+            for (let i = n - 2; i >= 0; i--) {
+                if (!used[i]) {
+                    while (hull.length > m && cross(trees[hull[hull.length - 2]], trees[hull[hull.length - 1]],
+                            trees[i]) < 0) {
+                        used[hull[hull.length - 1]] = false;
+                        hull.pop();
+                    }
+                    used[i] = true;
+                    hull.push(i);
+                }
+            }
+            /* hull[0] 同时参与凸包的上半部分检测，因此需去掉重复的 hull[0] */
+            hull.pop();
+            const size = hull.length;
+            const res = new Array(size).fill(0).map(() => new Array(2).fill(0));
+            for (let i = 0; i < size; i++) {
+                res[i] = trees[hull[i]];
+            }
+            return res;
+        }
+
+        var cross = (p, q, r) => {
+            return (q[0] - p[0]) * (r[1] - q[1]) - (q[1] - p[1]) * (r[0] - q[0]);
+        }
+
+        // test
+        let trees = [
+            [1, 1],
+            [2, 2],
+            [2, 0],
+            [2, 4],
+            [3, 3],
+            [4, 2]
+        ];
+        console.log(outerTrees(trees))
+    </script>
+</body>
+
+</html>
