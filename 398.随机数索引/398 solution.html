@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法一：哈希表
+        // 时间复杂度：O(n)
+        // 空间复杂度：O(n)
+        var Solution = function (nums) {
+            this.pos = new Map();
+            for (let i = 0; i < nums.length; ++i) {
+                if (!this.pos.has(nums[i])) {
+                    this.pos.set(nums[i], []);
+                }
+
+                this.pos.get(nums[i]).push(i);
+            }
+        };
+
+        Solution.prototype.pick = function (target) {
+            const indices = this.pos.get(target);
+            return indices[Math.floor(Math.random() * indices.length)];
+        };
+
+        // 方法二：水塘抽样
+        // 时间复杂度：初始化为 O(1)
+        // 时间复杂度：初始化为 O(1)
+        var Solution = function (nums) {
+            this.nums = nums;
+        };
+
+        Solution.prototype.pick = function (target) {
+            let ans = 0;
+            for (let i = 0, cnt = 0; i < this.nums.length; ++i) {
+                if (this.nums[i] == target) {
+                    ++cnt; // 第 cnt 次遇到 target
+                    if (Math.floor(Math.random() * cnt) === 0) {
+                        ans = i;
+                    }
+                }
+            }
+            return ans;
+        };
+    </script>
+</body>
+
+</html>
