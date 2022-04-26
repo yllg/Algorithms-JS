@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 三个投影的总面积
+
+        // 方法一：数学
+        // 时间复杂度：O(n^2)
+        // 空间复杂度：O(1)
+        var projectionArea = function (grid) {
+            const n = grid.length;
+            let xyArea = 0,
+                yzArea = 0,
+                zxArea = 0;
+            for (let i = 0; i < n; i++) {
+                let yzHeight = 0,
+                    zxHeight = 0;
+                for (let j = 0; j < n; j++) {
+                    xyArea += grid[i][j] > 0 ? 1 : 0;
+                    yzHeight = Math.max(yzHeight, grid[j][i]);
+                    zxHeight = Math.max(zxHeight, grid[i][j]);
+                }
+                yzArea += yzHeight;
+                zxArea += zxHeight;
+            }
+            return xyArea + yzArea + zxArea;
+        };
+
+        // test
+        let grid = [
+            [1, 2],
+            [3, 4]
+        ];
+        console.log(projectionArea(grid))
+    </script>
+</body>
+
+</html>
