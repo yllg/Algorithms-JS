@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 最大化 连续相同的结果
+
+        // 方法一：滑动窗口
+        // 时间复杂度：O(n)
+        // 空间复杂度：O(1)
+        var maxConsecutiveAnswers = function (answerKey, k) {
+            return Math.max(maxConsecutiveChar(answerKey, k, 'T'), maxConsecutiveChar(answerKey, k, 'F'));
+        }
+
+        const maxConsecutiveChar = (answerKey, k, ch) => {
+            const n = answerKey.length;
+            let ans = 0;
+            for (let left = 0, right = 0, sum = 0; right < n; right++) {
+                sum += answerKey.charAt(right) !== ch ? 1 : 0;
+                while (sum > k) {
+                    sum -= answerKey[left++] !== ch ? 1 : 0;
+                }
+                ans = Math.max(ans, right - left + 1);
+            }
+            return ans;
+        };
+
+        // test
+        let answerKey = "TFFT",
+            k = 1;
+        console.log(maxConsecutiveAnswers(answerKey, k))
+    </script>
+</body>
+
+</html>

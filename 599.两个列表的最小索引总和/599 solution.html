@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法一：哈希表
+        // O(∑1 + ∑2)，其中 ∑1 和 ∑2 分别表示list1 和 list2 中的字符串长度之和
+        var findRestaurant = function (list1, list2) {
+            const index = new Map();
+            for (let i = 0; i < list1.length; i++) {
+                index.set(list1[i], i);
+            }
+
+            const ret = [];
+            let indexSum = Number.MAX_VALUE;
+            for (let i = 0; i < list2.length; i++) {
+                if (index.has(list2[i])) {
+                    const j = index.get(list2[i]);
+                    if (i + j < indexSum) {
+                        ret.length = 0;
+                        ret.push(list2[i]);
+                        indexSum = i + j;
+                    } else if (i + j == indexSum) {
+                        ret.push(list2[i]);
+                    }
+                }
+            }
+            return ret;
+        };
+
+        // test
+        let list1 = ["Shogun", "Tapioca Express", "Burger King", "KFC"],
+            list2 = ["Piatti", "The Grill at Torrey Pines",
+                "Hungry Hunter Steakhouse", "Shogun"
+            ]
+
+        console.log(findRestaurant(list1, list2))
+    </script>
+</body>
+
+</html>

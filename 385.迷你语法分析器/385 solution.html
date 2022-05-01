@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法一：深度优先搜索
+        // 时间复杂度：O(n)
+        // 空间复杂度：O(n)
+        var deserialize = function (s) {
+            let index = 0;
+            const dfs = (s) => {
+                if (s[index] === '[') {
+                    index++;
+                    const ni = new NestedInteger();
+                    while (s[index] !== ']') {
+                        ni.add(dfs(s));
+                        if (s[index] === ',') {
+                            index++;
+                        }
+                    }
+                    index++;
+                    return ni;
+                } else {
+                    let negative = false;
+                    if (s[index] === '-') {
+                        negative = true;
+                        index++;
+                    }
+                    let num = 0;
+                    while (index < s.length && isDigit(s[index])) {
+                        num = num * 10 + s[index].charCodeAt() - '0'.charCodeAt();
+                        index++;
+                    }
+                    if (negative) {
+                        num *= -1;
+                    }
+                    return new NestedInteger(num);
+                }
+            }
+            return dfs(s);
+        };
+
+        var isDigit = (ch) => {
+            return parseFloat(ch).toString() === "NaN" ? false : true;
+        }
+
+        // 方法二：栈
+        // 时间复杂度：O(n)
+        // 空间复杂度：O(n)
+        var deserialize = function (s) {
+            if (s[0] !== '[') {
+                return new NestedInteger(parseInt(s));
+            }
+            const stack = [];
+            let num = 0;
+            let negative = false;
+            for (let i = 0; i < s.length; i++) {
+                const c = s[i];
+                if (c === '-') {
+                    negative = true;
+                } else if (isDigit(c)) {
+                    num = num * 10 + c.charCodeAt() - '0'.charCodeAt();
+                } else if (c === '[') {
+                    stack.push(new NestedInteger());
+                } else if (c === ',' || c === ']') {
+                    if (isDigit(s[i - 1])) {
+                        if (negative) {
+                            num *= -1;
+                        }
+                        stack[stack.length - 1].add(new NestedInteger(num));
+                    }
+                    num = 0;
+                    negative = false;
+                    if (c === ']' && stack.length > 1) {
+                        const ni = stack.pop();
+                        stack[stack.length - 1].add(ni);
+                    }
+                }
+            }
+            return stack.pop();
+        };
+
+        var isDigit = (ch) => {
+            return parseFloat(ch).toString() === "NaN" ? false : true;
+        }
+    </script>
+</body>
+
+</html>

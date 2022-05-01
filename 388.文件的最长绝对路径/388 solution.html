@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法一：栈
+        // 时间复杂度：O(n)
+        // 空间复杂度：O(n)
+        var lengthLongestPath = function (input) {
+            const n = input.length;
+            let pos = 0;
+            let ans = 0;
+            const stack = [];
+
+            while (pos < n) {
+                /* 检测当前文件的深度 */
+                let depth = 1;
+                while (pos < n && input[pos] === '\t') {
+                    pos++;
+                    depth++;
+                }
+                /* 统计当前文件名的长度 */
+                let isFile = false;
+                let len = 0;
+                while (pos < n && input[pos] !== '\n') {
+                    if (input[pos] === '.') {
+                        isFile = true;
+                    }
+                    len++;
+                    pos++;
+                }
+                /* 跳过当前的换行符 */
+                pos++;
+
+                while (stack.length >= depth) {
+                    stack.pop();
+                }
+                if (stack.length) {
+                    len += stack[stack.length - 1] + 1;
+                }
+                if (isFile) {
+                    ans = Math.max(ans, len);
+                } else {
+                    stack.push(len);
+                }
+            }
+            return ans;
+        };
+
+        // 方法二：遍历
+        // 时间复杂度：O(n)
+        // 空间复杂度：O(n)
+        var lengthLongestPath = function (input) {
+            const n = input.length;
+            let pos = 0;
+            let ans = 0;
+            const level = new Array(n + 1).fill(0);
+
+            while (pos < n) {
+                /* 检测当前文件的深度 */
+                let depth = 1;
+                while (pos < n && input[pos] === '\t') {
+                    pos++;
+                    depth++;
+                }
+                /* 统计当前文件名的长度 */
+                let len = 0;
+                let isFile = false;
+                while (pos < n && input[pos] !== '\n') {
+                    if (input[pos] === '.') {
+                        isFile = true;
+                    }
+                    len++;
+                    pos++;
+                }
+                /* 跳过换行符 */
+                pos++;
+
+                if (depth > 1) {
+                    len += level[depth - 1] + 1;
+                }
+                if (isFile) {
+                    ans = Math.max(ans, len);
+                } else {
+                    level[depth] = len;
+                }
+            }
+            return ans;
+        }
+
+        // test
+        let input = "dir\n\tsubdir1\n\tsubdir2\n\t\tfile.ext";
+        console.log(lengthLongestPath(input))
+    </script>
+</body>
+
+</html>

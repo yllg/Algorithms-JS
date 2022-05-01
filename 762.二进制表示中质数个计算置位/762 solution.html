@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法一：数学 + 位运算
+        var countPrimeSetBits = function (left, right) {
+            let ans = 0;
+            for (let x = left; x <= right; ++x) {
+                if (isPrime(bitCount(x))) {
+                    ++ans;
+                }
+            }
+            return ans;
+        };
+
+        const isPrime = (x) => {
+            if (x < 2) {
+                return false;
+            }
+            for (let i = 2; i * i <= x; ++i) {
+                if (x % i === 0) {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        var bitCount = (x) => {
+            return x.toString(2).split('0').join('').length;
+        }
+
+        // 方法二：判断质数优化
+        // 时间复杂度：O(right−left)
+        // 空间复杂度：O(1)
+        var countPrimeSetBits = function (left, right) {
+            let ans = 0;
+            for (let x = left; x <= right; ++x) {
+                if (((1 << bitCount(x)) & 665772) != 0) {
+                    ++ans;
+                }
+            }
+            return ans;
+        };
+
+        var bitCount = (x) => {
+            return x.toString(2).split('0').join('').length;
+        }
+
+        // test
+        let left = 6,
+            right = 10;
+        console.log(countPrimeSetBits(left, right))
+    </script>
+</body>
+
+</html>

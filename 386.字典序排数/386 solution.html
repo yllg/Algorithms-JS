@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法一：深度优先搜索
+        // 时间复杂度：O(n)
+        // 空间复杂度：O(1)
+        var lexicalOrder = function (n) {
+            const ret = [];
+            let number = 1;
+            for (let i = 0; i < n; i++) {
+                ret.push(number);
+                if (number * 10 <= n) {
+                    number *= 10;
+                } else {
+                    while (number % 10 === 9 || number + 1 > n) {
+                        number = Math.floor(number / 10);
+                    }
+                    number++;
+                }
+            }
+            return ret;
+        };
+
+        // test
+        let n = 13;
+        console.log(lexicalOrder(n))
+    </script>
+</body>
+
+</html>

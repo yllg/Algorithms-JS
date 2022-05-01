@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法一：遍历
+        // 时间复杂度：O(mn)，其中 m 和 n 分别是网格 accounts 的行数和列数。
+        // 空间复杂度：O(1)。
+        var maximumWealth = function (accounts) {
+            let maxWealth = -Number.MAX_VALUE;
+            for (const account of accounts) {
+                maxWealth = Math.max(maxWealth, account.reduce((a, b) => a + b));
+            }
+            return maxWealth;
+        };
+
+        // test
+        let accounts = [
+            [1, 2, 3],
+            [3, 2, 1]
+        ];
+        console.log(maximumWealth(accounts))
+    </script>
+</body>
+
+</html>

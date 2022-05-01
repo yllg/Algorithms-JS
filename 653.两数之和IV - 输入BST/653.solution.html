@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 二叉搜索树，两元素和等于目标元素
+
+        // 方法一：深度优先搜索 + 哈希表
+        // 时间复杂度O(n)
+        // 空间复杂度O(n)
+        var findTarget = function (root, k) {
+            const set = new Set();
+            const helper = (root, k) => {
+                if (!root) {
+                    return false;
+                }
+                if (set.has(k - root.val)) {
+                    return true;
+                }
+                set.add(root.val);
+                return helper(root.left, k) || helper(root.right, k);
+            }
+            return helper(root, k);
+        };
+
+
+        // 方法二：广度优先搜索 + 哈希表
+        // 时间复杂度O(n)
+        // 空间复杂度O(n)
+        var findTarget = function (root, k) {
+            const set = new Set();
+            const queue = [];
+            queue.push(root);
+            while (queue.length) {
+                const node = queue.shift();
+                if (set.has(k - node.val)) {
+                    return true;
+                }
+                set.add(node.val);
+                if (node.left) {
+                    queue.push(node.left);
+                }
+                if (node.right) {
+                    queue.push(node.right);
+                }
+            }
+            return false;
+        };
+
+        // 方法三：深度优先搜索 + 中序遍历 + 双指针
+        // 时间复杂度O(n)
+        // 空间复杂度O(n)
+        var findTarget = function (root, k) {
+            const list = [];
+            const inorderTraversal = (node) => {
+                if (!node) {
+                    return;
+                }
+                inorderTraversal(node.left);
+                list.push(node.val);
+                inorderTraversal(node.right);
+            }
+            inorderTraversal(root);
+            let left = 0,
+                right = list.length - 1;
+            while (left < right) {
+                if (list[left] + list[right] === k) {
+                    return true;
+                }
+                if (list[left] + list[right] < k) {
+                    left++;
+                } else {
+                    right--;
+                }
+            }
+            return false;
+        };
+
+        // 方法四：迭代 + 中序遍历 + 双指针
+        // 时间复杂度O(n)
+        // 空间复杂度O(n)
+        var findTarget = function (root, k) {
+            const getLeft = (stack) => {
+                const root = stack.pop();
+                let node = root.right;
+                while (node) {
+                    stack.push(node);
+                    node = node.left;
+                }
+                return root;
+            }
+
+            const getRight = (stack) => {
+                const root = stack.pop();
+                let node = root.left;
+                while (node) {
+                    stack.push(node);
+                    node = node.right;
+                }
+                return root;
+            };
+
+            let left = root,
+                right = root;
+            const leftStack = [];
+            const rightStack = [];
+            leftStack.push(left);
+            while (left.left) {
+                leftStack.push(left.left);
+                left = left.left;
+            }
+            rightStack.push(right);
+            while (right.right) {
+                rightStack.push(right.right);
+                right = right.right;
+            }
+            while (left !== right) {
+                if (left.val + right.val === k) {
+                    return true;
+                }
+                if (left.val + right.val < k) {
+                    left = getLeft(leftStack);
+                } else {
+                    right = getRight(rightStack);
+                }
+            }
+            return false;
+        }
+    </script>
+</body>
+
+</html>

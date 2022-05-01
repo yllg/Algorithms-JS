@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 二进制表示中相邻两位的数字是否永不相同
+
+        // 方法一：模拟
+        // 时间复杂度：O(logn)
+        // 空间复杂度：O(1)
+        var hasAlternatingBits = function (n) {
+            let prev = 2;
+            while (n !== 0) {
+                const cur = n % 2;
+                if (cur === prev) {
+                    return false;
+                }
+                prev = cur;
+                n = Math.floor(n / 2);
+            }
+            return true;
+        };
+
+        // 方法二：位运算
+        // 时间复杂度：O(1)
+        // 空间复杂度：O(1)
+        var hasAlternatingBits = function (n) {
+            const a = n ^ (n >> 1);
+            return (a & (a + 1)) === 0;
+        };
+
+        // test
+        let n = 5;
+        console.log(hasAlternatingBits(n))
+    </script>
+</body>
+
+</html>

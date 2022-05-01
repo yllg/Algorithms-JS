@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法一：广度优先搜索
+        // 时间复杂度：O(n)
+        // 空间复杂度：O(n)
+        var levelOrder = function (root) {
+            if (!root) {
+                return [];
+            }
+            const ans = [];
+            const queue = [root];
+            while (queue.length) {
+                const cnt = queue.length;
+                const level = [];
+                for (let i = 0; i < cnt; ++i) {
+                    const cur = queue.shift();
+                    level.push(cur.val);
+                    for (const child of cur.children) {
+                        queue.push(child);
+                    }
+                }
+                ans.push(level);
+            }
+            return ans;
+        };
+    </script>
+</body>
+
+</html>

@@ -1,64 +1,155 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
 </head>
+
 <body>
-<script>
-// Source : https://leetcode.com/problems/range-sum-query-mutable/
-// Author : 悬笔e绝
-// Date   : 2020-03-23
+  <script>
+    // 方法一：分块处理
+    // 时间复杂度：n开根号；
+    // 空间复杂度：n开根号；
+    var NumArray = function (nums) {
+      this.nums = nums;
+      const n = nums.length;
+      size = Math.floor(Math.sqrt(n));
+      this.sum = new Array(Math.floor((n + size - 1) / size)).fill(0); // n/size 向上取整
+      for (let i = 0; i < n; i++) {
+        this.sum[Math.floor(i / size)] += nums[i];
+      }
+    };
 
-/**
- * @constructor
- * @param {number[]} nums
- */
+    NumArray.prototype.update = function (index, val) {
+      this.sum[Math.floor(index / size)] += val - this.nums[index];
+      this.nums[index] = val;
+    };
 
-// use Binary Indexed Tree
-function lowbit(x) {return x & (-x)};
+    NumArray.prototype.sumRange = function (left, right) {
+      const b1 = Math.floor(left / size),
+        i1 = left % size,
+        b2 = Math.floor(right / size),
+        i2 = right % size;
+      if (b1 === b2) { // 区间 [left, right] 在同一块中
+        let sum = 0;
+        for (let j = i1; j <= i2; j++) {
+          sum += this.nums[b1 * size + j];
+        }
+        return sum;
+      }
+      let sum1 = 0;
+      for (let j = i1; j < size; j++) {
+        sum1 += this.nums[b1 * size + j];
+      }
+      let sum2 = 0;
+      for (let j = 0; j <= i2; j++) {
+        sum2 += this.nums[b2 * size + j];
+      }
+      let sum3 = 0;
+      for (let j = b1 + 1; j < b2; j++) {
+        sum3 += this.sum[j];
+      }
+      return sum1 + sum2 + sum3;
+    };
 
-var NumArray = function(nums) {
-  this.len = nums.length;
-  this.sum = [];
-  this.nums = [];
-  for (var i = 0; i <= this.len; i++)
-    this.sum[i] = this.nums[i] = 0;
+    // 方法二：线段树
+    // 时间复杂度：O(n)
+    // 时间复杂度：O(n)
+    var NumArray = function (nums) {
+      n = nums.length;
+      this.segmentTree = new Array(nums.length * 4).fill(0);
+      this.build(0, 0, n - 1, nums);
+    };
 
-  for (var i = 0; i < this.len; i++) 
-    this.update(i, nums[i]);
-};
+    NumArray.prototype.update = function (index, val) {
+      this.change(index, val, 0, 0, n - 1);
+    };
 
-/**
- * @param {number} index
- * @param {number} val
- * @return {void}
- */
-NumArray.prototype.update = function(index, val) {
-  // 改变到 add（跟原数比的增量） 的形式，回归到最原始的树状数组改点求段
-  var add = val - this.nums[index];
-  this.nums[index] = val;
-  // 树状数组 nums[] 数组 index 从 1 开始
-  for (var i = index + 1; i <= this.len; i += lowbit(i))
-    this.sum[i] += add;
-};
+    NumArray.prototype.sumRange = function (left, right) {
+      return this.range(left, right, 0, 0, n - 1);
+    };
 
-/**
- * @param {number} i
- * @param {number} j
- * @return {number}
- */
-NumArray.prototype.sumRange = function(i, j) {
-  var that = this;
-  function getSum(index) {
-    var ans = 0;
-    for (var i = index; i; i -= lowbit(i))
-      ans += that.sum[i];
-    return ans;
-  }
-  return getSum(j + 1) - getSum(i + 1 - 1);
-};
-</script>
+    NumArray.prototype.build = function (node, s, e, nums) {
+      if (s === e) {
+        this.segmentTree[node] = nums[s];
+        return;
+      }
+      const m = s + Math.floor((e - s) / 2);
+      this.build(node * 2 + 1, s, m, nums);
+      this.build(node * 2 + 2, m + 1, e, nums);
+      this.segmentTree[node] = this.segmentTree[node * 2 + 1] + this.segmentTree[node * 2 + 2];
+    }
+
+    NumArray.prototype.change = function (index, val, node, s, e) {
+      if (s === e) {
+        this.segmentTree[node] = val;
+        return;
+      }
+      const m = s + Math.floor((e - s) / 2);
+      if (index <= m) {
+        this.change(index, val, node * 2 + 1, s, m);
+      } else {
+        this.change(index, val, node * 2 + 2, m + 1, e);
+      }
+      this.segmentTree[node] = this.segmentTree[node * 2 + 1] + this.segmentTree[node * 2 + 2];
+    }
+
+    NumArray.prototype.range = function (left, right, node, s, e) {
+      if (left === s && right === e) {
+        return this.segmentTree[node];
+      }
+      const m = s + Math.floor((e - s) / 2);
+      if (right <= m) {
+        return this.range(left, right, node * 2 + 1, s, m);
+      } else if (left > m) {
+        return this.range(left, right, node * 2 + 2, m + 1, e);
+      } else {
+        return this.range(left, m, node * 2 + 1, s, m) + this.range(m + 1, right, node * 2 + 2, m + 1, e);
+      }
+    }
+
+    //方法三：树状数组
+    // 时间复杂度：O(logn)
+    // 空间复杂度：O(n)
+    var NumArray = function (nums) {
+      this.tree = new Array(nums.length + 1).fill(0);
+      this.nums = nums;
+      for (let i = 0; i < nums.length; i++) {
+        this.add(i + 1, nums[i]);
+      }
+    };
+
+    NumArray.prototype.update = function (index, val) {
+      this.add(index + 1, val - this.nums[index]);
+      this.nums[index] = val;
+    };
+
+    NumArray.prototype.sumRange = function (left, right) {
+      return this.prefixSum(right + 1) - this.prefixSum(left);
+    };
+
+    NumArray.prototype.lowBit = function (x) {
+      return x & -x;
+    }
+
+    NumArray.prototype.add = function (index, val) {
+      while (index < this.tree.length) {
+        this.tree[index] += val;
+        index += this.lowBit(index);
+      }
+    }
+
+    NumArray.prototype.prefixSum = function (index) {
+      let sum = 0;
+      while (index > 0) {
+        sum += this.tree[index];
+        index -= this.lowBit(index);
+      }
+      return sum;
+    }
+  </script>
 </body>
+
 </html>

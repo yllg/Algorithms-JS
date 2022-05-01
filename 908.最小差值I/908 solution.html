@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.21/lodash.min.js"></script>
+    <script>
+        // 方法一：数学
+        // 时间复杂度： O(n)
+        // 时间复杂度： O(1)
+        var smallestRangeI = function (nums, k) {
+            const minNum = _.min(nums);
+            const maxNum = _.max(nums);
+            return maxNum - minNum <= 2 * k ? 0 : maxNum - minNum - 2 * k;
+        };
+
+        // test
+        let nums = [0, 10],
+            k = 2;
+        console.log(smallestRangeI(nums, k))
+    </script>
+</body>
+
+</html>

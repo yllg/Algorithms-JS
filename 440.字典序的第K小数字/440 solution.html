@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法一：字典树思想
+        // 时间复杂度：O(log^2 n)
+        // 空间复杂度：O(1)
+        var findKthNumber = function (n, k) {
+            let curr = 1;
+            k--;
+            while (k > 0) {
+                const steps = getSteps(curr, n);
+                if (steps <= k) {
+                    k -= steps;
+                    curr++;
+                } else {
+                    curr = curr * 10;
+                    k--;
+                }
+            }
+            return curr;
+        }
+
+        const getSteps = (curr, n) => {
+            let steps = 0;
+            let first = curr;
+            let last = curr;
+            while (first <= n) {
+                steps += Math.min(last, n) - first + 1;
+                first = first * 10;
+                last = last * 10 + 9;
+            }
+            return steps;
+        };
+
+        // test
+        let n = 13,
+            k = 2;
+        console.log(findKthNumber(n, k))
+    </script>
+</body>
+
+</html>

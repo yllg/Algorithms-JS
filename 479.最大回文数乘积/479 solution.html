@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法一：枚举
+        // 时间复杂度：O(10^{2n})
+        // 空间复杂度：O(1)
+        var largestPalindrome = function (n) {
+            if (n === 1) {
+                return 9;
+            }
+            const upper = 10 ** n - 1;
+            for (let left = upper; left > upper / 10; left--) {
+                let right = String(left).split('').reverse().join('');
+                let p = BigInt(String(left) + right) //得到回文数
+                let x = BigInt(upper);
+                while (x * x >= p) {
+                    if (p % x === BigInt(0)) { // x 是 p 的因子
+                        return p % BigInt(1337);
+                    }
+                    x--;
+                }
+            }
+        };
+
+        // test
+        let n = 2;
+        console.log(largestPalindrome(n))
+    </script>
+</body>
+
+</html>

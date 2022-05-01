@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 二进制表示中，两个1的间距，返回最大值
+
+        // 方法一：位运算
+        // 时间复杂度：O(logn)
+        // 时间复杂度：O(1)
+        var binaryGap = function (n) {
+            let last = -1,
+                ans = 0;
+            for (let i = 0; n != 0; ++i) {
+                if ((n & 1) === 1) {
+                    if (last !== -1) {
+                        ans = Math.max(ans, i - last);
+                    }
+                    last = i;
+                }
+                n >>= 1;
+            }
+            return ans;
+        };
+
+        // test
+        let n = 22;
+        console.log(binaryGap(n))
+    </script>
+</body>
+
+</html>

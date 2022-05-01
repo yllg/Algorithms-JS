@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 转换的方式：从点 (x, y) 可以转换到 (x, x+y)  或者 (x+y, y)。
+
+        // 方法一：反向计算
+        // 时间复杂度：O(logmax(tx,ty))
+        // 空间复杂度：O(1)
+        var reachingPoints = function (sx, sy, tx, ty) {
+            while (tx > sx && ty > sy && tx != ty) {
+                if (tx > ty) {
+                    tx %= ty;
+                } else {
+                    ty %= tx;
+                }
+            }
+            if (tx === sx && ty === sy) {
+                return true;
+            } else if (tx === sx) {
+                return ty > sy && (ty - sy) % tx === 0;
+            } else if (ty === sy) {
+                return tx > sx && (tx - sx) % ty === 0;
+            } else {
+                return false;
+            }
+        };
+
+        // test
+        let sx = 1,
+            sy = 1,
+            tx = 3,
+            ty = 5;
+        console.log(reachingPoints(sx, sy, tx, ty))
+    </script>
+</body>
+
+</html>

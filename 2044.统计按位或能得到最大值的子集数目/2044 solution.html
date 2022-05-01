@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法一：位运算
+        // 时间复杂度：O(2^n * n)
+        // 空间复杂度：O(1)
+        var countMaxOrSubsets = function (nums) {
+            let maxOr = 0,
+                cnt = 0;
+            for (let i = 0; i < 1 << nums.length; i++) {
+                let orVal = 0;
+                for (let j = 0; j < nums.length; j++) {
+                    if (((i >> j) & 1) === 1) {
+                        orVal |= nums[j];
+                    }
+                }
+                if (orVal > maxOr) {
+                    maxOr = orVal;
+                    cnt = 1;
+                } else if (orVal === maxOr) {
+                    cnt++;
+                }
+            }
+            return cnt;
+        };
+
+        // 方法二：回溯
+        // 时间复杂度：O(2^n)
+        // 空间复杂度：O(n)
+        var countMaxOrSubsets = function (nums) {
+            this.nums = nums;
+            this.maxOr = 0;
+            this.cnt = 0;
+            dfs(0, 0);
+            return cnt;
+        };
+
+        const dfs = (pos, orVal) => {
+            if (pos === nums.length) {
+                if (orVal > maxOr) {
+                    maxOr = orVal;
+                    cnt = 1;
+                } else if (orVal === maxOr) {
+                    cnt++;
+                }
+                return;
+            }
+            dfs(pos + 1, orVal | nums[pos]);
+            dfs(pos + 1, orVal);
+        }
+
+        // test
+        let nums = [3, 1];
+        console.log(countMaxOrSubsets(nums))
+    </script>
+</body>
+
+</html>

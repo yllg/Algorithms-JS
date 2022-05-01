@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法一：递归
+        // 时间复杂度：O(n^2 * log n)
+        // 空间复杂度：O(logn)
+        var construct = function (grid) {
+            return dfs(grid, 0, 0, grid.length, grid.length);
+        };
+
+        const dfs = (grid, r0, c0, r1, c1) => {
+            let same = true;
+            for (let i = r0; i < r1; ++i) {
+                for (let j = c0; j < c1; ++j) {
+                    if (grid[i][j] !== grid[r0][c0]) {
+                        same = false;
+                        break;
+                    }
+                }
+                if (!same) {
+                    break;
+                }
+            }
+
+            if (same) {
+                return new Node(grid[r0][c0] === 1, true);
+            }
+
+            const ret = new Node(
+                true,
+                false,
+                dfs(grid, r0, c0, Math.floor((r0 + r1) / 2), Math.floor((c0 + c1) / 2)),
+                dfs(grid, r0, Math.floor((c0 + c1) / 2), Math.floor((r0 + r1) / 2), c1),
+                dfs(grid, Math.floor((r0 + r1) / 2), c0, r1, Math.floor((c0 + c1) / 2)),
+                dfs(grid, Math.floor((r0 + r1) / 2), Math.floor((c0 + c1) / 2), r1, c1)
+            );
+            return ret;
+        }
+
+        // 方法二：递归 + 二维前缀和优化
+        // 时间复杂度：O(n^2)
+        // 空间复杂度：O(n^2)
+        var construct = function (grid) {
+            const n = grid.length;
+            const pre = new Array(n + 1).fill(0).map(() => new Array(n + 1).fill(0));
+            for (let i = 1; i <= n; ++i) {
+                for (let j = 1; j <= n; ++j) {
+                    pre[i][j] = pre[i - 1][j] + pre[i][j - 1] - pre[i - 1][j - 1] + grid[i - 1][j - 1];
+                }
+            }
+            return dfs(grid, pre, 0, 0, n, n);
+        };
+
+        const dfs = (grid, pre, r0, c0, r1, c1) => {
+            const total = getSum(pre, r0, c0, r1, c1);
+            if (total === 0) {
+                return new Node(false, true);
+            } else if (total === (r1 - r0) * (c1 - c0)) {
+                return new Node(true, true);
+            }
+
+            const ret = new Node(
+                true,
+                false,
+                dfs(grid, pre, r0, c0, Math.floor((r0 + r1) / 2), Math.floor((c0 + c1) / 2)),
+                dfs(grid, pre, r0, Math.floor((c0 + c1) / 2), Math.floor((r0 + r1) / 2), c1),
+                dfs(grid, pre, Math.floor((r0 + r1) / 2), c0, r1, Math.floor((c0 + c1) / 2)),
+                dfs(grid, pre, Math.floor((r0 + r1) / 2), Math.floor((c0 + c1) / 2), r1, c1)
+            );
+            return ret;
+        }
+
+        const getSum = (pre, r0, c0, r1, c1) => {
+            return pre[r1][c1] - pre[r1][c0] - pre[r0][c1] + pre[r0][c0];
+        }
+    </script>
+</body>
+
+</html>
