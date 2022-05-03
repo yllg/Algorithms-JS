@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法一：自定义排序
+        // 时间复杂度：O(nlogn)
+        // 空间复杂度：O(n)
+        var reorderLogFiles = function (logs) {
+            const length = logs.length;
+            const arr = new Array(length).fill(0);
+            for (let i = 0; i < length; i++) {
+                arr[i] = [logs[i], i];
+            }
+            arr.sort((a, b) => logCompare(a, b));
+            const reordered = new Array(length).fill(0);
+            for (let i = 0; i < length; i++) {
+                reordered[i] = arr[i][0];
+            }
+            return reordered;
+        }
+
+        const logCompare = (log1, log2) => {
+            const split1 = split(log1[0], " ");
+            const split2 = split(log2[0], " ");
+            const isDigit1 = isDigit(split1[1][0]);
+            const isDigit2 = isDigit(split2[1][0]);
+            if (isDigit1 && isDigit2) {
+                return log1[1] - log2[1];
+            }
+            if (!isDigit1 && !isDigit2) {
+                const sc = compareTo(split1[1], split2[1]);
+                if (sc !== 0) {
+                    return sc;
+                }
+                return compareTo(split1[0], split2[0]);
+            }
+            return isDigit1 ? 1 : -1;
+        };
+
+        const isDigit = (ch) => {
+            return parseFloat(ch).toString() === "NaN" ? false : true;
+        }
+
+        const compareTo = (left, right) => {
+            for (let i = 0; i < Math.min(left.length, right.length); i++) {
+                if (left[i].charCodeAt() < right[i].charCodeAt()) {
+                    return -1;
+                }
+                if (left[i].charCodeAt() > right[i].charCodeAt()) {
+                    return 1;
+                }
+            }
+            if (left.length === right.length) {
+                return 0;
+            }
+            if (left.length > right.length) {
+                return 1;
+            }
+            return -1;
+        }
+
+        const split = (str, separator) => {
+            const firstItem = str.split(separator)[0];
+            const ret = [firstItem];
+            const index = str.indexOf(" ");
+            ret.push(str.slice(index + 1, str.length));
+            return ret;
+        }
+
+        // test
+        let logs = ["dig1 8 1 5 1", "let1 art can", "dig2 3 6", "let2 own kit dig", "let3 art zero"];
+        console.log(reorderLogFiles(logs))
+    </script>
+</body>
+
+</html>
