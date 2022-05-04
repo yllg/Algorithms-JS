@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法一：模拟 + 队列
+        // 时间复杂度：O(nk)
+        // 空间复杂度：O(n)
+        var findTheWinner = function (n, k) {
+            const queue = [];
+            for (let i = 1; i <= n; i++) {
+                queue.push(i);
+            }
+            while (queue.length > 1) {
+                for (let i = 1; i < k; i++) {
+                    queue.push(queue.shift());
+                }
+                queue.shift();
+            }
+            return queue[0];
+        };
+
+        // 方法二：数学 + 递归
+        // 时间复杂度：O(n)
+        // 空间复杂度：O(n)
+        var findTheWinner = function (n, k) {
+            if (n === 1) {
+                return 1;
+            }
+            return (k + findTheWinner(n - 1, k) - 1) % n + 1;
+        };
+
+        // 方法三：数学 + 迭代
+        // 时间复杂度：O(n)
+        // 空间复杂度：O(1)
+        var findTheWinner = function (n, k) {
+            let winner = 1;
+            for (let i = 2; i <= n; i++) {
+                winner = (k + winner - 1) % i + 1;
+            }
+            return winner;
+        };
+
+        let n = 5,
+            k = 2;
+        console.log(findTheWinner(n, k))
+    </script>
+</body>
+
+</html>
