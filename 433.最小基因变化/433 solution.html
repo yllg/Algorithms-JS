@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法一：广度优先搜索
+        // 时间复杂度：O(C×n×m)，其中 n 为基因序列的长度，m 为数组 bank 的长度
+        // 空间复杂度：O(n×m)
+        var minMutation = function (start, end, bank) {
+            const cnt = new Set();
+            const visited = new Set();
+            const keys = ['A', 'C', 'G', 'T'];
+            for (const w of bank) {
+                cnt.add(w);
+            }
+            if (start === end) {
+                return 0;
+            }
+            if (!cnt.has(end)) {
+                return -1;
+            }
+            const queue = [start];
+            visited.add(start);
+            let step = 1;
+            while (queue.length) {
+                const sz = queue.length;
+                for (let i = 0; i < sz; i++) {
+                    const curr = queue.shift();
+                    for (let j = 0; j < 8; j++) {
+                        for (let k = 0; k < 4; k++) {
+                            if (keys[k] !== curr[j]) {
+                                const sb = [...curr];
+                                sb[j] = keys[k];
+                                const next = sb.join('');
+                                if (!visited.has(next) && cnt.has(next)) {
+                                    if (next === end) {
+                                        return step;
+                                    }
+                                    queue.push(next);
+                                    visited.add(next);
+                                }
+                            }
+                        }
+                    }
+                }
+                step++;
+            }
+            return -1;
+        };
+
+        // 方法二：预处理优化
+        //时间复杂度：O(n * m ^ 2)
+        // 空间复杂度：O(m^2)
+        var minMutation = function (start, end, bank) {
+            const m = start.length;
+            const n = bank.length;
+            const adj = new Array(n).fill(0).map(() => new Array());
+            let endIndex = -1;
+            for (let i = 0; i < n; i++) {
+                if (end === bank[i]) {
+                    endIndex = i;
+                }
+                for (let j = i + 1; j < n; j++) {
+                    let mutations = 0;
+                    for (let k = 0; k < m; k++) {
+                        if (bank[i][k] !== bank[j][k]) {
+                            mutations++;
+                        }
+                        if (mutations > 1) {
+                            break;
+                        }
+                    }
+                    if (mutations === 1) {
+                        adj[i].push(j);
+                        adj[j].push(i);
+                    }
+                }
+            }
+            if (endIndex === -1) {
+                return -1;
+            }
+
+            const queue = [];
+            const visited = new Array(n).fill(0);
+            let step = 1;
+            for (let i = 0; i < n; i++) {
+                let mutations = 0;
+                for (let k = 0; k < m; k++) {
+                    if (start[k] != bank[i][k]) {
+                        mutations++;
+                    }
+                    if (mutations > 1) {
+                        break;
+                    }
+                }
+                if (mutations == 1) {
+                    queue.push(i);
+                    visited[i] = true;
+                }
+            }
+            while (queue.length) {
+                const sz = queue.length;
+                for (let i = 0; i < sz; i++) {
+                    const curr = queue.shift();
+                    if (curr === endIndex) {
+                        return step;
+                    }
+                    for (const next of adj[curr]) {
+                        if (visited[next]) {
+                            continue;
+                        }
+                        visited[next] = true;
+                        queue.push(next);
+                    }
+                }
+                step++;
+            }
+            return -1;
+        };
+
+        // test
+        let start = "AACCGGTT",
+            end = "AACCGGTA",
+            bank = ["AACCGGTA"];
+        console.log(minMutation(start, end, bank))
+    </script>
+</body>
+
+</html>
