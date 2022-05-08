@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 数组元素最多出现一次或者两次，找到所有出现两次的数
+
+        // 方法一：将元素交换到对应的位置
+        // 时间复杂度：O(n)
+        // 空间复杂度：O(1)
+        var findDuplicates = function (nums) {
+            const swap = (nums, index1, index2) => {
+                const temp = nums[index1];
+                nums[index1] = nums[index2];
+                nums[index2] = temp;
+            };
+            const n = nums.length;
+            for (let i = 0; i < n; ++i) {
+                while (nums[i] != nums[nums[i] - 1]) {
+                    swap(nums, i, nums[i] - 1);
+                }
+            }
+            const ans = [];
+            for (let i = 0; i < n; ++i) {
+                if (nums[i] - 1 !== i) {
+                    ans.push(nums[i]);
+                }
+            }
+            return ans;
+        }
+
+        // 方法二：使用正负号作为标记
+        // 时间复杂度：O(n)
+        // 空间复杂度：O(1)
+        var findDuplicates = function (nums) {
+            const n = nums.length;
+            const ans = [];
+            for (let i = 0; i < n; ++i) {
+                const x = Math.abs(nums[i]);
+                if (nums[x - 1] > 0) {
+                    nums[x - 1] = -nums[x - 1];
+                } else {
+                    ans.push(x);
+                }
+            }
+            return ans;
+        }
+
+        let nums = [4, 3, 2, 7, 8, 2, 3, 1];
+        console.log(findDuplicates(nums))
+    </script>
+</body>
+
+</html>
