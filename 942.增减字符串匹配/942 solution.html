@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法一：贪心
+        // 时间复杂度： O(n)
+        // 时间复杂度： O(1)
+        var diStringMatch = function (s) {
+            let n = s.length,
+                lo = 0,
+                hi = n;
+            const perm = new Array(n + 1).fill(0);
+            for (let i = 0; i < n; ++i) {
+                perm[i] = s[i] === 'I' ? lo++ : hi--;
+            }
+            perm[n] = lo; // 最后剩下一个数，此时 lo == hi
+            return perm;
+        };
+
+        // test
+        let s = "IDID";
+        console.log(diStringMatch(s))
+    </script>
+</body>
+
+</html>
