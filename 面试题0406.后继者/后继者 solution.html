@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 找到中序遍历的下一个节点
+
+        // 方法一：中序遍历
+        // 时间复杂度：O(n)
+        // 空间复杂度：O(n)
+        var inorderSuccessor = function (root, p) {
+            const stack = [];
+            let prev = null,
+                curr = root;
+            while (stack.length || curr) {
+                while (curr) {
+                    stack.push(curr);
+                    curr = curr.left;
+                }
+                curr = stack.pop();
+                if (prev === p) {
+                    return curr;
+                }
+                prev = curr;
+                curr = curr.right;
+            }
+            return null;
+        };
+
+        // 方法二：利用二叉搜索树的性质
+        // 时间复杂度：O(n)
+        // 空间复杂度：O(1)
+        var inorderSuccessor = function (root, p) {
+            let successor = null;
+            if (p.right) {
+                successor = p.right;
+                while (successor.left) {
+                    successor = successor.left;
+                }
+                return successor;
+            }
+            let node = root;
+            while (node) {
+                if (node.val > p.val) {
+                    successor = node;
+                    node = node.left;
+                } else {
+                    node = node.right;
+                }
+            }
+            return successor;
+        };
+    </script>
+</body>
+
+</html>
