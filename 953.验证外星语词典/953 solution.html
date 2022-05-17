@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 验证外星语中 是否按字典序排序
+
+        // 方法一：直接遍历
+        // 时间复杂度：O(m×n)
+        // 空间复杂度：O(C)。其中 C 表示字母表的长度 26
+        var isAlienSorted = function (words, order) {
+            const index = new Array(26).fill(0);
+            for (let i = 0; i < order.length; ++i) {
+                index[order[i].charCodeAt() - 'a'.charCodeAt()] = i;
+            }
+            for (let i = 1; i < words.length; i++) {
+                let valid = false;
+                for (let j = 0; j < words[i - 1].length && j < words[i].length; j++) {
+                    let prev = index[words[i - 1][j].charCodeAt() - 'a'.charCodeAt()];
+                    let curr = index[words[i][j].charCodeAt() - 'a'.charCodeAt()];
+                    if (prev < curr) {
+                        valid = true;
+                        break;
+                    } else if (prev > curr) {
+                        return false;
+                    }
+                }
+                if (!valid) {
+                    /* 比较两个字符串的长度 */
+                    if (words[i - 1].length > words[i].length) {
+                        return false;
+                    }
+                }
+            }
+            return true;
+        };
+
+        // test
+        let words = ["hello", "leetcode"],
+            order = "hlabcdefgijkmnopqrstuvwxyz";
+        console.log(isAlienSorted(words, order))
+    </script>
+</body>
+
+</html>
