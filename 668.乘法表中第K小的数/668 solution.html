@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法一：二分查找
+        // 时间复杂度：O(mlogmn)
+        // 空间复杂度：O(1)
+        var findKthNumber = function (m, n, k) {
+            let left = 1,
+                right = m * n;
+            while (left < right) {
+                const x = left + Math.floor((right - left) / 2);
+                let count = Math.floor(x / n) * n;
+                for (let i = Math.floor(x / n) + 1; i <= m; ++i) {
+                    count += Math.floor(x / i);
+                }
+                if (count >= k) {
+                    right = x;
+                } else {
+                    left = x + 1;
+                }
+            }
+            return left;
+        };
+
+        // test
+        let m = 3,
+            n = 3,
+            k = 5;
+        console.log(findKthNumber(m, n, k))
+    </script>
+</body>
+
+</html>
