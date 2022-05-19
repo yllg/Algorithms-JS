@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 在一步操作中，你可以使数组中的一个元素加 1 或者减 1 。
+
+        // 方法一：排序
+        // 时间复杂度：O(nlogn)
+        // 空间复杂度：O(logn)
+        var minMoves2 = function (nums) {
+            nums.sort((a, b) => a - b);
+            let n = nums.length,
+                ret = 0,
+                x = nums[Math.floor(n / 2)];
+            for (let i = 0; i < n; i++) {
+                ret += Math.abs(nums[i] - x);
+            }
+            return ret;
+        };
+
+        // 方法二：快速选择
+        // 时间复杂度：O(n)
+        // 空间复杂度：O(logn)
+        var minMoves2 = function (nums) {
+            let n = nums.length,
+                x = quickSelect(nums, 0, n - 1, Math.floor(n / 2)),
+                ret = 0;
+            for (let i = 0; i < n; ++i) {
+                ret += Math.abs(nums[i] - x);
+            }
+            return ret;
+        }
+
+        const quickSelect = (nums, left, right, index) => {
+            const q = randomPartition(nums, left, right);
+            if (q === index) {
+                return nums[q];
+            } else {
+                return q < index ? quickSelect(nums, q + 1, right, index) : quickSelect(nums, left, q - 1, index);
+            }
+        }
+
+        const randomPartition = (nums, left, right) => {
+            const i = Math.floor(Math.random() * (right - left + 1)) + left;
+            swap(nums, i, right);
+            return partition(nums, left, right);
+        }
+
+        const partition = (nums, left, right) => {
+            let x = nums[right],
+                i = left - 1;
+            for (let j = left; j < right; ++j) {
+                if (nums[j] <= x) {
+                    ++i;
+                    swap(nums, i, j);
+                }
+            }
+            swap(nums, i + 1, right);
+            return i + 1;
+        }
+
+        const swap = (nums, index1, index2) => {
+            const temp = nums[index1];
+            nums[index1] = nums[index2];
+            nums[index2] = temp;
+        }
+
+        // test
+        let nums = [1, 2, 3];
+        console.log(minMoves2(nums))
+    </script>
+</body>
+
+</html>
