@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法一：哈希表
+        // 时间复杂度：O(n)
+        // 空间复杂度：O(n)
+        var repeatedNTimes = function (nums) {
+            const found = new Set();
+            for (const num of nums) {
+                if (found.has(num)) {
+                    return num;
+                }
+                found.add(num);
+            }
+            // 不可能的情况
+            return -1;
+        };
+
+        // 方法二：数学
+        // 时间复杂度：O(n)
+        // 空间复杂度：O(1)
+        var repeatedNTimes = function (nums) {
+            const n = nums.length;
+            for (let gap = 1; gap <= 3; ++gap) {
+                for (let i = 0; i + gap < n; ++i) {
+                    if (nums[i] === nums[i + gap]) {
+                        return nums[i];
+                    }
+                }
+            }
+            // 不可能的情况
+            return -1;
+        };
+
+        // 方法三：随机选择
+        // 时间复杂度：O(1)
+        // 空间复杂度：O(1)
+        var repeatedNTimes = function (nums) {
+            const n = nums.length;
+
+            while (true) {
+                const x = Math.floor(Math.random() * n),
+                    y = Math.floor(Math.random() * n);
+                if (x !== y && nums[x] === nums[y]) {
+                    return nums[x];
+                }
+            }
+        };
+
+        // test
+        let nums = [1, 2, 3, 3];
+        console.log(repeatedNTimes(nums))
+    </script>
+</body>
+
+</html>
