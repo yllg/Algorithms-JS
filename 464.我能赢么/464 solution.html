@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法一：记忆化搜索 + 状态压缩
+        // 时间复杂度：O(2 ^ n * n)
+        // 空间复杂度：O(2 ^ n)
+        var canIWin = function (maxChoosableInteger, desiredTotal) {
+            const memo = new Map();
+            const dfs = (maxChoosableInteger, usedNumbers, desiredTotal, currentTotal) => {
+                if (!memo.has(usedNumbers)) {
+                    let res = false;
+                    for (let i = 0; i < maxChoosableInteger; i++) {
+                        if (((usedNumbers >> i) & 1) === 0) {
+                            if (i + 1 + currentTotal >= desiredTotal) {
+                                res = true;
+                                break;
+                            }
+                            if (!dfs(maxChoosableInteger, usedNumbers | (1 << i), desiredTotal, currentTotal +
+                                    i + 1)) {
+                                res = true;
+                                break;
+                            }
+                        }
+                    }
+                    memo.set(usedNumbers, res);
+                }
+                return memo.get(usedNumbers);
+            }
+            if ((1 + maxChoosableInteger) * (maxChoosableInteger) / 2 < desiredTotal) {
+                return false;
+            }
+            return dfs(maxChoosableInteger, 0, desiredTotal, 0);
+        };
+
+        // test
+        let maxChoosableInteger = 10,
+            desiredTotal = 11;
+        console.log(canIWin(maxChoosableInteger, desiredTotal))
+    </script>
+</body>
+
+</html>
