@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法一：深度优先搜索
+        // 时间复杂度：O(n)
+        // 空间复杂度：O(n)
+        var isUnivalTree = function (root) {
+            if (!root) {
+                return true;
+            }
+            if (root.left) {
+                if (root.val !== root.left.val || !isUnivalTree(root.left)) {
+                    return false;
+                }
+            }
+            if (root.right) {
+                if (root.val !== root.right.val || !isUnivalTree(root.right)) {
+                    return false;
+                }
+            }
+            return true;
+        };
+    </script>
+</body>
+
+</html>
