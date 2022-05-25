@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.21/lodash.min.js"></script>
+    <script>
+        // 方法一：动态规划
+        // 时间复杂度：O(n)
+        // 空间复杂度：O(∣Σ∣)，其中 ∣Σ∣ 为字符集合的大小，本题中字符均为小写字母，故 ∣Σ∣=26
+        var findSubstringInWraproundString = function (p) {
+            const dp = new Array(26).fill(0);
+            let k = 0;
+            for (let i = 0; i < p.length; ++i) {
+                if (i > 0 && (p[i].charCodeAt() - p[i - 1].charCodeAt() + 26) % 26 === 1) { // 字符之差为 1 或 -25
+                    ++k;
+                } else {
+                    k = 1;
+                }
+                dp[p[i].charCodeAt() - 'a'.charCodeAt()] = Math.max(dp[p[i].charCodeAt() - 'a'.charCodeAt()], k);
+            }
+            return _.sum(dp);
+        };
+
+        // test
+        let p = "zab";
+        console.log(findSubstringInWraproundString(p))
+    </script>
+</body>
+
+</html>
