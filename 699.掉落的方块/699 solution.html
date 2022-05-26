@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法一：暴力枚举
+        // 时间复杂度：O(n^2)
+        // 时间复杂度：O(1)
+        var fallingSquares = function (positions) {
+            const n = positions.length;
+            const heights = [];
+            for (let i = 0; i < n; i++) {
+                let left1 = positions[i][0],
+                    right1 = positions[i][0] + positions[i][1] - 1;
+                let height = positions[i][1];
+                for (let j = 0; j < i; j++) {
+                    let left2 = positions[j][0],
+                        right2 = positions[j][0] + positions[j][1] - 1;
+                    if (right1 >= left2 && right2 >= left1) {
+                        height = Math.max(height, heights[j] + positions[i][1]);
+                    }
+                }
+                heights.push(height);
+            }
+            for (let i = 1; i < n; i++) {
+                heights.splice(i, 1, Math.max(heights[i], heights[i - 1]));
+            }
+            return heights;
+        };
+
+        // TODO:方法二：有序集合
+
+        // test
+        let positions = [
+            [1, 2],
+            [2, 3],
+            [6, 1]
+        ];
+        console.log(fallingSquares(positions))
+    </script>
+</body>
+
+</html>
