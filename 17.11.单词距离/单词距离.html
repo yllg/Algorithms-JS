@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法一：一次遍历
+        // 时间复杂度：O(n)
+        // 空间复杂度：O(1)
+        var findClosest = function (words, word1, word2) {
+            const length = words.length;
+            let ans = length;
+            let index1 = -1,
+                index2 = -1;
+            for (let i = 0; i < length; i++) {
+                const word = words[i];
+                if (word === word1) {
+                    index1 = i;
+                } else if (word === word2) {
+                    index2 = i;
+                }
+                if (index1 >= 0 && index2 >= 0) {
+                    ans = Math.min(ans, Math.abs(index1 - index2));
+                }
+            }
+            return ans;
+        };
+
+        // 进阶问题：
+        // 如果寻找过程在这个文件中会重复多次，而每次寻找的单词不同，则可以维护一个哈希表记录每个单词的下标列表。遍历一次文件，按照下标递增顺序得到每个单词在文件中出现的所有下标。在寻找单词时，只要得到两个单词的下标列表，使用双指针遍历两个下标链表，即可得到两个单词的最短距离。
+
+        // test
+        let words = ["I", "am", "a", "student", "from", "a", "university", "in", "a", "city"],
+            word1 = "a",
+            word2 = "student";
+
+        console.log(findClosest(words, word1, word2))
+    </script>
+</body>
+
+</html>
