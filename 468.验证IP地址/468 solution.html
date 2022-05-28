@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法一：依次判断
+        // 时间复杂度：O(n)
+        // 空间复杂度：O(1)
+        var validIPAddress = function (queryIP) {
+            if (queryIP.indexOf('.') >= 0) {
+                // IPv4
+                let last = -1;
+                for (let i = 0; i < 4; ++i) {
+                    const cur = (i === 3 ? queryIP.length : queryIP.indexOf('.', last + 1));
+                    if (cur < 0) {
+                        return "Neither";
+                    }
+                    if (cur - last - 1 < 1 || cur - last - 1 > 3) {
+                        return "Neither";
+                    }
+                    let addr = 0;
+                    for (let j = last + 1; j < cur; ++j) {
+                        if (!isDigit(queryIP[j])) {
+                            return "Neither";
+                        }
+                        addr = addr * 10 + (queryIP[j].charCodeAt() - '0'.charCodeAt());
+                    }
+                    if (addr > 255) {
+                        return "Neither";
+                    }
+                    if (addr > 0 && queryIP[last + 1].charCodeAt() === '0'.charCodeAt()) {
+                        return "Neither";
+                    }
+                    if (addr === 0 && cur - last - 1 > 1) {
+                        return "Neither";
+                    }
+                    last = cur;
+                }
+                return "IPv4";
+            } else {
+                // IPv6
+                let last = -1;
+                for (let i = 0; i < 8; ++i) {
+                    const cur = (i === 7 ? queryIP.length : queryIP.indexOf(':', last + 1));
+                    if (cur < 0) {
+                        return "Neither";
+                    }
+                    if (cur - last - 1 < 1 || cur - last - 1 > 4) {
+                        return "Neither";
+                    }
+                    for (let j = last + 1; j < cur; ++j) {
+                        if (!isDigit(queryIP[j]) && !('a' <= queryIP[j].toLowerCase() && queryIP[j].toLowerCase() <=
+                                'f')) {
+                            return "Neither";
+                        }
+                    }
+                    last = cur;
+                }
+                return "IPv6";
+            }
+        };
+
+        const isDigit = (ch) => {
+            return parseFloat(ch).toString() === "NaN" ? false : true;
+        }
+
+        // test
+        let queryIP = "172.16.254.1";
+        console.log(validIPAddress(queryIP))
+    </script>
+</body>
+
+</html>
