@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.21/lodash.min.js"></script>
+    <script>
+        // 方法一：回溯
+        // 时间复杂度：O(4^n)
+        // 空间复杂度：O(n)
+        var makesquare = function (matchsticks) {
+            const totalLen = _.sum(matchsticks);
+            if (totalLen % 4 !== 0) {
+                return false;
+            }
+            matchsticks.sort((a, b) => a - b);
+            for (let i = 0, j = matchsticks.length - 1; i < j; i++, j--) {
+                const temp = matchsticks[i];
+                matchsticks[i] = matchsticks[j];
+                matchsticks[j] = temp;
+            }
+
+            const edges = new Array(4).fill(0);
+            return dfs(0, matchsticks, edges, Math.floor(totalLen / 4));
+        }
+
+        const dfs = (index, matchsticks, edges, len) => {
+            if (index === matchsticks.length) {
+                return true;
+            }
+            for (let i = 0; i < edges.length; i++) {
+                edges[i] += matchsticks[index];
+                if (edges[i] <= len && dfs(index + 1, matchsticks, edges, len)) {
+                    return true;
+                }
+                edges[i] -= matchsticks[index];
+            }
+            return false;
+        };
+
+        // 方法二：状态压缩 + 动态规划
+        // 时间复杂度：O(n * 2^n)
+        // 空间复杂度：O(2^n)
+        var makesquare = function (matchsticks) {
+            const totalLen = _.sum(matchsticks);
+            if (totalLen % 4 !== 0) {
+                return false;
+            }
+            const len = Math.floor(totalLen / 4),
+                n = matchsticks.length;
+            const dp = new Array(1 << n).fill(-1);
+            dp[0] = 0;
+            for (let s = 1; s < (1 << n); s++) {
+                for (let k = 0; k < n; k++) {
+                    if ((s & (1 << k)) === 0) {
+                        continue;
+                    }
+                    const s1 = s & ~(1 << k);
+                    if (dp[s1] >= 0 && dp[s1] + matchsticks[k] <= len) {
+                        dp[s] = (dp[s1] + matchsticks[k]) % len;
+                        break;
+                    }
+                }
+            }
+            return dp[(1 << n) - 1] === 0;
+        }
+
+        // test
+        let matchsticks = [1, 1, 2, 2, 2];
+        console.log(makesquare(matchsticks))
+    </script>
+</body>
+
+</html>
