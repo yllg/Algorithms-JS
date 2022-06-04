@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法一：哈希表
+        // 时间复杂度：O(L)，其中 L 是 emails 中字符串的长度之和
+        // 空间复杂度：O(L)。哈希表需要 O(L) 的空间。
+        var numUniqueEmails = function (emails) {
+            const emailSet = new Set();
+            for (const email of emails) {
+                const i = email.indexOf('@');
+                let local = email.slice(0, i).split("+")[0]; // 去掉本地名第一个加号之后的部分
+                local = local.replaceAll(".", ""); // 去掉本地名中所有的句点
+                emailSet.add(local + email.slice(i));
+            }
+            return emailSet.size;
+        };
+
+        // test
+        let emails = ["test.email+alex@leetcode.com", "test.e.mail+bob.cathy@leetcode.com",
+            "testemail+david@lee.tcode.com"
+        ]
+        console.log(numUniqueEmails(emails))
+    </script>
+</body>
+
+</html>
