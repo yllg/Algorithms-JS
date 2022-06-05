@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法一：拒绝采样
+        // 时间复杂度：期望时间复杂度为 O(1)
+        // 空间复杂度：O(1)
+        var Solution = function (radius, x_center, y_center) {
+            this.xc = x_center;
+            this.yc = y_center;
+            this.r = radius;
+        };
+
+        Solution.prototype.randPoint = function () {
+            while (true) {
+                const x = Math.random() * (2 * this.r) - this.r;
+                const y = Math.random() * (2 * this.r) - this.r;
+                if (x * x + y * y <= this.r * this.r) {
+                    return [this.xc + x, this.yc + y];
+                }
+            }
+        };
+
+        // 方法二：计算分布函数
+        // 时间复杂度：O(1)
+        // 空间复杂度：O(1)
+        var Solution = function (radius, x_center, y_center) {
+            this.xc = x_center;
+            this.yc = y_center;
+            this.r = radius;
+        };
+
+        Solution.prototype.randPoint = function () {
+            const u = Math.random();
+            const theta = Math.random() * 2 * Math.PI;
+            const r = Math.sqrt(u);
+            return [this.xc + r * Math.cos(theta) * this.r, this.yc + r * Math.sin(theta) * this.r];
+        };
+    </script>
+</body>
+
+</html>
