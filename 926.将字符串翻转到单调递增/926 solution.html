@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    // 方法一：动态规划
+    // 时间复杂度：O(n)
+    // 空间复杂度：O(1)
+    var minFlipsMonoIncr = function (s) {
+      const n = s.length;
+      let dp0 = 0,
+        dp1 = 0;
+      for (let i = 0; i < n; i++) {
+        const c = s[i];
+        let dp0New = dp0,
+          dp1New = Math.min(dp0, dp1);
+        if (c === '1') {
+          dp0New++;
+        } else {
+          dp1New++;
+        }
+        dp0 = dp0New;
+        dp1 = dp1New;
+      }
+      return Math.min(dp0, dp1);
+    };
+
+    // test
+    let s = "00011000";
+    console.log(minFlipsMonoIncr(s))
+  </script>
+</body>
+
+</html>
