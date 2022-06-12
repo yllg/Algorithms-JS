@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    // 方法一：构造双射
+    // 时间复杂度：O(nm)
+    // 空间复杂度：O(m)
+    var findAndReplacePattern = function (words, pattern) {
+      const ans = [];
+      for (const word of words) {
+        if (match(word, pattern) && match(pattern, word)) {
+          ans.push(word);
+        }
+      }
+      return ans;
+    };
+
+    const match = (word, pattern) => {
+      const map = new Map();
+      for (let i = 0; i < word.length; ++i) {
+        const x = word[i],
+          y = pattern[i];
+        if (!map.has(x)) {
+          map.set(x, y);
+        } else if (map.get(x) !== y) { // word 中的同一字母必须映射到 pattern 中的同一字母上
+          return false;
+        }
+      }
+      return true;
+    }
+
+    // test
+    let words = ["abc", "deq", "mee", "aqq", "dkd", "ccc"],
+      pattern = "abb";
+    console.log(findAndReplacePattern(words, pattern))
+  </script>
+</body>
+
+</html>
