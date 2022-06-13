@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.21/lodash.min.js"></script>
+  <script>
+    // 方法一：基于比较的排序
+    // 时间复杂度：O(nlogn)
+    // 空间复杂度：O(n)
+    var heightChecker = function (heights) {
+      let n = heights.length,
+        ans = 0;
+      const expected = new Array(n).fill(0);
+      expected.splice(0, n, ...heights);
+      expected.sort((a, b) => a - b);
+      for (let i = 0; i < n; ++i) {
+        if (heights[i] !== expected[i]) {
+          ++ans;
+        }
+      }
+      return ans;
+    };
+
+    // 方法二：计数排序
+    // 时间复杂度：O(n+C)，其中 n 是数组 heights 的长度，C 是数组 heights 中的最大值
+    // 空间复杂度：O(C)
+    var heightChecker = function (heights) {
+      const m = parseInt(_.max(heights));
+      const cnt = new Array(m + 1).fill(0);
+      for (const h of heights) {
+        ++cnt[h];
+      }
+
+      let idx = 0,
+        ans = 0;
+      for (let i = 1; i <= m; ++i) {
+        for (let j = 1; j <= cnt[i]; ++j) {
+          if (heights[idx] !== i) {
+            ++ans;
+          }
+          ++idx;
+        }
+      }
+      return ans;
+    };
+
+    // test
+    let heights = [1, 1, 4, 2, 1, 3];
+    console.log(heightChecker(heights))
+  </script>
+</body>
+
+</html>
