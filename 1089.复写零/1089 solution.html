@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    // 碰到0就往右边再写一个零，其他右移
+
+    // 方法一：双指针
+    // 时间复杂度：O(n)
+    // 空间复杂度：O(1)
+    var duplicateZeros = function (arr) {
+      const n = arr.length;
+      let top = 0;
+      let i = -1;
+      while (top < n) {
+        i++;
+        if (arr[i] !== 0) {
+          top++;
+        } else {
+          top += 2;
+        }
+      }
+      let j = n - 1;
+      if (top === n + 1) {
+        arr[j] = 0;
+        j--;
+        i--;
+      }
+      while (j >= 0) {
+        arr[j] = arr[i];
+        j--;
+        if (arr[i] === 0) {
+          arr[j] = arr[i];
+          j--;
+        }
+        i--;
+      }
+    };
+
+    // test
+    let arr = [1, 0, 2, 3, 0, 4, 5, 0];
+    duplicateZeros(arr)
+    console.log(arr)
+  </script>
+</body>
+
+</html>
