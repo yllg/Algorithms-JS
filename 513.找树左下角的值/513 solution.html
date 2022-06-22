@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    // 找到最底层最左边的值
+
+    // 方法一：深度优先搜索
+    // 时间复杂度：O(n)
+    // 空间复杂度：O(n)
+    var findBottomLeftValue = function (root) {
+      const dfs = (root, height) => {
+        if (!root) {
+          return;
+        }
+        height++;
+        dfs(root.left, height);
+        dfs(root.right, height);
+        if (height > curHeight) {
+          curHeight = height;
+          curVal = root.val;
+        }
+      }
+
+      let curHeight = 0;
+      dfs(root, 0);
+      return curVal;
+    };
+
+    // 方法二：广度优先搜索
+    // 时间复杂度：O(n)
+    // 空间复杂度：O(n)
+    var findBottomLeftValue = function (root) {
+      let ret = 0;
+      const queue = [root];
+      while (queue.length) {
+        const p = queue.shift();
+        if (p.right) {
+          queue.push(p.right);
+        }
+        if (p.left) {
+          queue.push(p.left);
+        }
+        ret = p.val;
+      }
+      return ret;
+    };
+  </script>
+</body>
+
+</html>
