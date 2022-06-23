@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    // 方法一：滑动窗口
+    // 时间复杂度：O(ls×n)，其中 ls 是输入 s 的长度，n 是 words 中每个单词的长度
+    // 空间复杂度： O(m× n)， 其中 m 是 words 的单词数， n 是 words 中每个单词的长度。
+    var findSubstring = function (s, words) {
+      const res = [];
+      const m = words.length,
+        n = words[0].length,
+        ls = s.length;
+      for (let i = 0; i < n; i++) {
+        if (i + m * n > ls) {
+          break;
+        }
+        const differ = new Map();
+        for (let j = 0; j < m; j++) {
+          const word = s.substring(i + j * n, i + (j + 1) * n);
+          differ.set(word, (differ.get(word) || 0) + 1);
+        }
+        for (const word of words) {
+          differ.set(word, (differ.get(word) || 0) - 1);
+          if (differ.get(word) === 0) {
+            differ.delete(word);
+          }
+        }
+        for (let start = i; start < ls - m * n + 1; start += n) {
+          if (start !== i) {
+            let word = s.substring(start + (m - 1) * n, start + m * n);
+            differ.set(word, (differ.get(word) || 0) + 1);
+            if (differ.get(word) === 0) {
+              differ.delete(word);
+            }
+            word = s.substring(start - n, start);
+            differ.set(word, (differ.get(word) || 0) - 1);
+            if (differ.get(word) === 0) {
+              differ.delete(word);
+            }
+          }
+          if (differ.size === 0) {
+            res.push(start);
+          }
+        }
+      }
+      return res;
+    };
+
+    // test
+    let s = "barfoothefoobarman",
+      words = ["foo", "bar"];
+    console.log(findSubstring(s, words))
+  </script>
+</body>
+
+</html>
