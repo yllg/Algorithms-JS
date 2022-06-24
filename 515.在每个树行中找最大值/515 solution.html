@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    // 找到二叉树每一层的最大值
+
+    // 方法一：深度优先搜索
+    // 时间复杂度：O(n)
+    // 空间复杂度：O(height)。其中 height 表示二叉树的高度
+    var largestValues = function (root) {
+      if (!root) {
+        return [];
+      }
+      const res = [];
+      const dfs = (res, root, curHeight) => {
+        if (curHeight === res.length) {
+          res.push(root.val);
+        } else {
+          res.splice(curHeight, 1, Math.max(res[curHeight], root.val));
+        }
+        if (root.left) {
+          dfs(res, root.left, curHeight + 1);
+        }
+        if (root.right) {
+          dfs(res, root.right, curHeight + 1);
+        }
+      }
+      dfs(res, root, 0);
+      return res;
+    };
+
+    // 方法二：广度优先搜索
+    // 时间复杂度：O(n)
+    // 空间复杂度：O(n)
+    var largestValues = function (root) {
+      if (!root) {
+        return [];
+      }
+      const res = [];
+      const queue = [root];
+      while (queue.length) {
+        let len = queue.length;
+        let maxVal = -Number.MAX_VALUE;
+        while (len > 0) {
+          len--;
+          const t = queue.shift();
+          maxVal = Math.max(maxVal, t.val);
+          if (t.left) {
+            queue.push(t.left);
+          }
+          if (t.right) {
+            queue.push(t.right);
+          }
+        }
+        res.push(maxVal);
+      }
+      return res;
+    };
+  </script>
+</body>
+
+</html>
