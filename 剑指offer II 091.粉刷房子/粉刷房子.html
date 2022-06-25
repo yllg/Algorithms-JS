@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.21/lodash.min.js"></script>
+  <script>
+    // 方法一：动态规划
+    // 时间复杂度：O(n)
+    // 空间复杂度：O(1)
+    var minCost = function (costs) {
+      const n = costs.length;
+      let dp = new Array(3).fill(0);
+      for (let j = 0; j < 3; j++) {
+        dp[j] = costs[0][j];
+      }
+      for (let i = 1; i < n; i++) {
+        const dpNew = new Array(3).fill(0);
+        for (let j = 0; j < 3; j++) {
+          dpNew[j] = Math.min(dp[(j + 1) % 3], dp[(j + 2) % 3]) + costs[i][j];
+        }
+        dp = dpNew;
+      }
+      return parseInt(_.min(dp));
+    };
+
+    // test
+    let costs = [
+      [17, 2, 17],
+      [16, 16, 5],
+      [14, 3, 19]
+    ]
+    console.log(minCost(costs))
+  </script>
+</body>
+
+</html>
