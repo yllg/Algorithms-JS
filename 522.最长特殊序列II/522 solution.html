@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    // 每个字符都是自己的子序列，特殊序列又只能是一个字符的子序列，也就是特殊字符只能是自己的子序列。
+    // 说人话就是，特殊字符没爹。
+    // 题目实际就是找数组中，最长的孤儿。
+
+    // 方法一：枚举每个字符串
+    // 时间复杂度：O(n^2 * l)，其中 n 是数组 strs 的长度，l 是字符串的平均长度。
+    // 空间复杂度：O(1)
+    var findLUSlength = function (strs) {
+      const n = strs.length;
+      let ans = -1;
+      for (let i = 0; i < n; ++i) {
+        let check = true;
+        for (let j = 0; j < n; ++j) {
+          if (i !== j && isSubseq(strs[i], strs[j])) {
+            check = false;
+            break;
+          }
+        }
+        if (check) {
+          ans = Math.max(ans, strs[i].length);
+        }
+      }
+      return ans;
+    };
+
+    const isSubseq = (s, t) => {
+      let ptS = 0,
+        ptT = 0;
+      while (ptS < s.length && ptT < t.length) {
+        if (s[ptS] === t[ptT]) {
+          ++ptS;
+        }
+        ++ptT;
+      }
+      return ptS === s.length;
+    }
+
+    // test
+    let strs = ["aba", "cdc", "eae"];
+    console.log(findLUSlength(strs))
+  </script>
+</body>
+
+</html>
