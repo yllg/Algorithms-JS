@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    // 方法一：排序
+    // 时间复杂度：O(nlogn)，其中 n 为数组的长度
+    // 空间复杂度：O(n)
+    var wiggleSort = function (nums) {
+      const arr = nums.slice();
+      arr.sort((a, b) => a - b);
+      const n = nums.length;
+      const x = Math.floor((n + 1) / 2);
+      for (let i = 0, j = x - 1, k = n - 1; i < n; i += 2, j--, k--) {
+        nums[i] = arr[j];
+        if (i + 1 < n) {
+          nums[i + 1] = arr[k];
+        }
+      }
+    };
+
+    // TODO:方法二：三向切分
+    // TODO:方法三：索引转换
+    // TODO:方法四：递归优化
+
+    // test
+    let nums = [1, 5, 1, 1, 6, 4];
+    wiggleSort(nums);
+    console.log(nums)
+  </script>
+</body>
+
+</html>
