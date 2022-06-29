@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    // 设计一个短链接的加密和解密算法
+
+    // 方法一：自增
+    // 时间复杂度：Encode 函数：O(n)，Decode 函数：O(1)
+    // 空间复杂度: Encode 函数：O(n)，Decode 函数：O(1)
+    var encode = function (longUrl) {
+      this.dataBase = new Map();
+      this.id = 0;
+      this.id++;
+      this.dataBase.set(this.id, longUrl);
+      return "http://tinyurl.com/" + this.id;
+    };
+
+    var decode = function (shortUrl) {
+      const p = shortUrl.lastIndexOf('/') + 1;
+      const key = parseInt(shortUrl.substring(p));
+      return this.dataBase.get(key);
+    };
+
+    // 方法二：哈希生成
+    // 时间复杂度：Encode 函数：O(n)，Decode 函数：O(1)
+    // 空间复杂度: Encode 函数：O(n)，Decode 函数：O(1)
+    var encode = function (longUrl) {
+      const K1 = 1117;
+      const K2 = 1000000007;
+      this.dataBase = new Map();
+      this.urlToKey = new Map();
+
+      if (this.urlToKey.has(longUrl)) {
+        return "http://tinyurl.com/" + this.urlToKey.get(longUrl);
+      }
+      let key = 0;
+      let base = 1;
+      for (let i = 0; i < longUrl.length; i++) {
+        const c = longUrl[i];
+        key = (key + c * base) % K2;
+        base = (base * K1) % K2;
+      }
+      while (dataBase.has(key)) {
+        key = (key + 1) % K2;
+      }
+      dataBase.set(key, longUrl);
+      urlToKey.set(longUrl, key);
+      return "http://tinyurl.com/" + key;
+    };
+
+    var decode = function (shortUrl) {
+      const p = shortUrl.lastIndexOf('/') + 1;
+      const key = parseInt(shortUrl.substring(p));
+      return this.dataBase.get(key);
+    };
+
+    // 方法三：随机生成
+    // 时间复杂度：Encode 函数：O(n)，Decode 函数：O(1)
+    // 空间复杂度: Encode 函数：O(n)，Decode 函数：O(1)
+    var encode = function (longUrl) {
+      this.dataBase = new Map();
+      let key;
+      while (true) {
+        key = Math.floor(Math.random() * (Number.MAX_SAFE_INTEGER));
+        if (!dataBase.has(key)) {
+          break;
+        }
+      }
+      this.dataBase.set(key, longUrl);
+      return "http://tinyurl.com/" + key;
+    };
+
+    var decode = function (shortUrl) {
+      const p = shortUrl.lastIndexOf('/') + 1;
+      const key = parseInt(shortUrl.substring(p));
+      return this.dataBase.get(key);
+    };
+  </script>
+</body>
+
+</html>
