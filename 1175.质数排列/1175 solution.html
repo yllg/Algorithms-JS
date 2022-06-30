@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    // 使得所有的「质数」都应该被放在「质数索引」（索引从 1 开始）上；你需要返回可能的方案总数
+
+    // 方法一：质数判断 + 组合数学
+    // 时间复杂度：O(n^{3/2})
+    // 空间复杂度：空间复杂度：O(1)
+    const MOD = 1000000007;
+    var numPrimeArrangements = function (n) {
+      let numPrimes = 0;
+      for (let i = 2; i <= n; i++) {
+        if (isPrime(i)) {
+          numPrimes++;
+        }
+      }
+      let res = 1;
+      let m = n - numPrimes;
+      while (numPrimes > 0) {
+        res = res % MOD;
+        res *= numPrimes;
+        numPrimes--;
+      }
+      while (m > 0) {
+        res = res % MOD;
+        res *= m;
+        m--;
+      }
+      return res;
+    };
+
+    const isPrime = (n) => {
+      if (n === 1) {
+        return false;
+      }
+      for (let i = 2; i * i <= n; i++) {
+        if (n % i === 0) {
+          return false;
+        }
+      }
+      return true;
+    }
+
+    // test
+    let n = 5;
+    console.log(numPrimeArrangements(n))
+  </script>
+</body>
+
+</html>
