@@ -1,38 +1,148 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
-<script>
-// Source : https://leetcode.com/problems/different-ways-to-add-parentheses/
-// Author : 悬笔e绝
-// Date   : 2020-02-14
 
-/**
- * @param {string} input
- * @return {number[]}
- */
-var diffWaysToCompute = function(input) {
-  // save the possible values from the string input
-  var ans = [];
-  for (var i = 0, len = input.length; i < len; i++) {
-    var item = input[i];
-    if (~'+-*'.indexOf(item)) {
-      var left = diffWaysToCompute(input.substring(0, i));
-      var right = diffWaysToCompute(input.substring(i + 1));
-      left.forEach(function(a) {
-        right.forEach(function(b) {
-          ans.push(eval('(' + a + ')' + item + '(' + b + ')'));
-        });
-      });
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    // 方法一：记忆化搜索
+    // 时间复杂度：O(2^n)
+    // 空间复杂度：O(2^n)
+    const ADDITION = -1;
+    const SUBTRACTION = -2;
+    const MULTIPLICATION = -3;
+
+    var diffWaysToCompute = function (expression) {
+      const ops = [];
+      for (let i = 0; i < expression.length;) {
+        if (!isDigit(expression[i])) {
+          if (expression[i] === '+') {
+            ops.push(ADDITION);
+          } else if (expression[i] === '-') {
+            ops.push(SUBTRACTION);
+          } else {
+            ops.push(MULTIPLICATION);
+          }
+          i++;
+        } else {
+          let t = 0;
+          while (i < expression.length && isDigit(expression[i])) {
+            t = t * 10 + expression[i].charCodeAt() - '0'.charCodeAt();
+            i++;
+          }
+          ops.push(t);
+        }
+      }
+      const dp = new Array(ops.length).fill(0).map(() => new Array(ops.length).fill(0));
+      for (let i = 0; i < ops.length; i++) {
+        for (let j = 0; j < ops.length; j++) {
+          dp[i][j] = [];
+        }
+      }
+      return dfs(dp, 0, ops.length - 1, ops);
+    };
+
+    const dfs = (dp, l, r, ops) => {
+      if (dp[l][r].length === 0) {
+        if (l == r) {
+          dp[l][r].push(ops[l]);
+        } else {
+          for (let i = l; i < r; i += 2) {
+            const left = dfs(dp, l, i, ops);
+            const right = dfs(dp, i + 2, r, ops);
+            for (const lv of left) {
+              for (const rv of right) {
+                if (ops[i + 1] === ADDITION) {
+                  dp[l][r].push(lv + rv);
+                } else if (ops[i + 1] === SUBTRACTION) {
+                  dp[l][r].push(lv - rv);
+                } else {
+                  dp[l][r].push(lv * rv);
+                }
+              }
+            }
+          }
+        }
+      }
+      return dp[l][r];
     }
-  }
-  !ans.length && ans.push(+input);
-  return ans;
-};
-</script>
+
+    var isDigit = (ch) => {
+      return parseFloat(ch).toString() === "NaN" ? false : true;
+    }
+
+    // 方法二：动态规划
+    // 时间复杂度：O(2^n)
+    // 空间复杂度：O(2^n)
+    var diffWaysToCompute = function (expression) {
+      const ADDITION = -1;
+      const SUBTRACTION = -2;
+      const MULTIPLICATION = -3;
+      const ops = [];
+      for (let i = 0; i < expression.length;) {
+        if (!isDigit(expression[i])) {
+          if (expression[i] === '+') {
+            ops.push(ADDITION);
+          } else if (expression[i] === '-') {
+            ops.push(SUBTRACTION);
+          } else {
+            ops.push(MULTIPLICATION);
+          }
+          i++;
+        } else {
+          let t = 0;
+          while (i < expression.length && isDigit(expression[i])) {
+            t = t * 10 + expression[i].charCodeAt() - '0'.charCodeAt();
+            i++;
+          }
+          ops.push(t);
+        }
+      }
+      const dp = new Array(ops.length).fill(0).map(() => new Array(ops.length).fill(0));
+      for (let i = 0; i < ops.length; i++) {
+        for (let j = 0; j < ops.length; j++) {
+          dp[i][j] = [];
+        }
+      }
+      for (let i = 0; i < ops.length; i += 2) {
+        dp[i][i].push(ops[i]);
+      }
+      for (let i = 3; i <= ops.length; i++) {
+        for (let j = 0; j + i <= ops.length; j += 2) {
+          let l = j;
+          let r = j + i - 1;
+          for (let k = j + 1; k < r; k += 2) {
+            const left = dp[l][k - 1];
+            const right = dp[k + 1][r];
+            for (const num1 of left) {
+              for (const num2 of right) {
+                if (ops[k] === ADDITION) {
+                  dp[l][r].push(num1 + num2);
+                } else if (ops[k] === SUBTRACTION) {
+                  dp[l][r].push(num1 - num2);
+                } else if (ops[k] === MULTIPLICATION) {
+                  dp[l][r].push(num1 * num2);
+                }
+              }
+            }
+          }
+        }
+      }
+      return dp[0][ops.length - 1];
+    };
+
+    var isDigit = (ch) => {
+      return parseFloat(ch).toString() === "NaN" ? false : true;
+    }
+
+    // test
+    let expression = "2-1-1";
+    console.log(diffWaysToCompute(expression))
+  </script>
 </body>
+
 </html>
