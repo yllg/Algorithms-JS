@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    // 方法一：动态规划
+    // 时间复杂度：O(n^2)
+    // 空间复杂度：O(n)
+    var minRefuelStops = function (target, startFuel, stations) {
+      const n = stations.length;
+      const dp = new Array(n + 1).fill(0);
+      dp[0] = startFuel;
+      for (let i = 0; i < n; i++) {
+        for (let j = i; j >= 0; j--) {
+          if (dp[j] >= stations[i][0]) {
+            dp[j + 1] = Math.max(dp[j + 1], dp[j] + stations[i][1]);
+          }
+        }
+      }
+      for (let i = 0; i <= n; i++) {
+        if (dp[i] >= target) {
+          return i;
+        }
+      }
+      return -1;
+    };
+
+    // TODO:方法二：贪心
+
+    // test
+    let target = 1,
+      startFuel = 1,
+      stations = [];
+    console.log(minRefuelStops(target, startFuel, stations))
+  </script>
+</body>
+
+</html>
