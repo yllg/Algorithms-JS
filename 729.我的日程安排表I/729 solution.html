@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    // 方法一：直接遍历
+    // 时间复杂度：O(n^2)
+    // 空间复杂度：O(n)
+    var MyCalendar = function () {
+      this.booked = [];
+    };
+
+    MyCalendar.prototype.book = function (start, end) {
+      for (const arr of this.booked) {
+        let l = arr[0],
+          r = arr[1];
+        if (l < end && start < r) {
+          return false;
+        }
+      }
+      this.booked.push([start, end]);
+      return true;
+    };
+
+    // TODO:方法二：二分查找
+
+    // 方法三: 线段树
+    var MyCalendar = function () {
+      this.tree = new Set();
+      this.lazy = new Set();
+    };
+
+    MyCalendar.prototype.book = function (start, end) {
+      if (this.query(start, end - 1, 0, 1000000000, 1)) {
+        return false;
+      }
+      this.update(start, end - 1, 0, 1000000000, 1);
+      return true;
+    };
+
+    MyCalendar.prototype.query = function (start, end, l, r, idx) {
+      if (start > r || end < l) {
+        return false;
+      }
+      /* 如果该区间已被预订，则直接返回 */
+      if (this.lazy.has(idx)) {
+        return true;
+      }
+      if (start <= l && r <= end) {
+        return this.tree.has(idx);
+      } else {
+        const mid = (l + r) >> 1;
+        if (end <= mid) {
+          return this.query(start, end, l, mid, 2 * idx);
+        } else if (start > mid) {
+          return this.query(start, end, mid + 1, r, 2 * idx + 1);
+        } else {
+          return this.query(start, end, l, mid, 2 * idx) | this.query(start, end, mid + 1, r, 2 * idx + 1);
+        }
+      }
+    }
+
+    MyCalendar.prototype.update = function (start, end, l, r, idx) {
+      if (r < start || end < l) {
+        return;
+      }
+      if (start <= l && r <= end) {
+        this.tree.add(idx);
+        this.lazy.add(idx);
+      } else {
+        const mid = (l + r) >> 1;
+        this.update(start, end, l, mid, 2 * idx);
+        this.update(start, end, mid + 1, r, 2 * idx + 1);
+        this.tree.add(idx);
+      }
+    }
+  </script>
+</body>
+
+</html>
