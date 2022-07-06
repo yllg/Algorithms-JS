@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    // 方法一相当于编译原理里的 LL(1) 分析，使用递归下降法实现；方法二相当于 LR(1) 分析，使用自动机实现。
+
+    // 方法一：递归解析
+    // 时间复杂度：O(n)
+    // 空间复杂度：O(n)
+    var evaluate = function (expression) {
+      const scope = new Map();
+      let start = 0;
+
+      const innerEvaluate = (expression) => {
+        if (expression[start] !== '(') { // 非表达式，可能为：整数或变量
+          if (isLowerCase(expression[start])) {
+            const v = parseVar(expression); // 变量
+            const n = scope.get(v).length;
+            return scope.get(v)[n - 1];
+          } else { // 整数
+            return parseInt(expression);
+          }
+        }
+        let ret;
+        start++; // 移除左括号
+        if (expression[start] === 'l') { // "let" 表达式
+          start += 4; // 移除 "let "
+          const vars = [];
+          while (true) {
+            if (!isLowerCase(expression[start])) {
+              ret = innerEvaluate(expression); // let 表达式的最后一个 expr 表达式的值
+              break;
+            }
+            const v = parseVar(expression);
+            if (expression[start] === ')') {
+              const n = scope.get(v).length;
+              ret = scope.get(v)[n - 1]; // let 表达式的最后一个 expr 表达式的值
+              break;
+            }
+            vars.push(v);
+            start++; // 移除空格
+            const e = innerEvaluate(expression);
+            if (!scope.has(v)) {
+              scope.set(v, []);
+            }
+            scope.get(v).push(e);
+            start++; // 移除空格
+          }
+          for (const v of vars) {
+            scope.get(v).pop(); // 清除当前作用域的变量
+          }
+        } else if (expression[start] === 'a') { // "add" 表达式
+          start += 4; // 移除 "add "
+          const e1 = innerEvaluate(expression);
+          start++; // 移除空格
+          const e2 = innerEvaluate(expression);
+          ret = e1 + e2;
+        } else { // "mult" 表达式
+          start += 5; // 移除 "mult "
+          const e1 = innerEvaluate(expression);
+          start++; // 移除空格
+          const e2 = innerEvaluate(expression);
+          ret = e1 * e2;
+        }
+        start++; // 移除右括号
+        return ret;
+      }
+
+      const parseInt = (expression) => { // 解析整数
+        const n = expression.length;
+        let ret = 0,
+          sign = 1;
+        if (expression[start] === '-') {
+          sign = -1;
+          start++;
+        }
+        while (start < n && isDigit(expression[start])) {
+          ret = ret * 10 + (expression.charAt(start) - '0');
+          start++;
+        }
+        return sign * ret;
+      }
+
+      const parseVar = (expression) => { // 解析变量
+        const n = expression.length;
+        let ret = '';
+        while (start < n && expression[start] !== ' ' && expression[start] !== ')') {
+          ret += expression[start];
+          start++;
+        }
+        return ret;
+      }
+
+      return innerEvaluate(expression, start);
+    };
+
+    const isDigit = (ch) => {
+      return parseFloat(ch).toString() === "NaN" ? false : true;
+    }
+
+    const isLowerCase = (ch) => {
+      return ch >= 'a' && ch <= 'z';
+    }
+
+    //  方法二：状态机
+    // 时间复杂度：O(n)
+    // 空间复杂度：O(n)
+    var evaluate = function (expression) {
+      const scope = new Map();
+      let vars = [];
+      let start = 0,
+        n = expression.length;
+      const stack = [];
+      let cur = new Expr(ExprStatus.VALUE);
+
+      while (start < n) {
+        if (expression[start] === ' ') {
+          start++; // 去掉空格
+          continue;
+        }
+        if (expression[start] === '(') {
+          start++; // 去掉左括号
+          stack.push(cur);
+          cur = new Expr(ExprStatus.NONE);
+          continue;
+        }
+        let sb = '';
+        if (expression[start] === ')') { // 本质上是把表达式转成一个 token
+          start++; // 去掉右括号
+          if (cur.status == ExprStatus.LET2) {
+            sb = cur.value;
+            for (const v of vars[vars.length - 1]) { // 清除作用域
+              scope.get(v).pop();
+            }
+            vars.pop();
+          } else if (cur.status === ExprStatus.ADD2) {
+            sb = cur.e1 + cur.e2;
+          } else {
+            sb = cur.e1 * cur.e2;
+          }
+          cur = stack.pop(); // 获取上层状态
+        } else {
+          while (start < n && expression[start] !== ' ' && expression[start] !== ')') {
+            sb += expression[start];
+            start++;
+          }
+        }
+        let token = sb;
+        switch (cur.status) {
+          case "VALUE":
+            cur.value = parseInt(token);
+            cur.status = ExprStatus.DONE;
+            break;
+          case "NONE":
+            if ("let" === token) {
+              cur.status = ExprStatus.LET;
+              vars.push([]); // 记录该层作用域的所有变量, 方便后续的清除
+            } else if ("add" === token) {
+              cur.status = ExprStatus.ADD;
+            } else if ("mult" === token) {
+              cur.status = ExprStatus.MULT;
+            }
+            break;
+          case "LET":
+            if (expression[start] === ')') { // let 表达式的最后一个 expr 表达式
+              cur.value = calculateToken(scope, token);
+              cur.status = ExprStatus.LET2;
+            } else {
+              cur.v = token;
+              vars[vars.length - 1].push(token); // 记录该层作用域的所有变量, 方便后续的清除
+              cur.status = ExprStatus.LET1;
+            }
+            break;
+          case "LET1":
+            if (!scope.has(cur.v)) {
+              scope.set(cur.v, []);
+            }
+            scope.get(cur.v).push(calculateToken(scope, token));
+            cur.status = ExprStatus.LET;
+            break;
+          case "ADD":
+            cur.e1 = calculateToken(scope, token);
+            cur.status = ExprStatus.ADD1;
+            break;
+          case "ADD1":
+            cur.e2 = calculateToken(scope, token);
+            cur.status = ExprStatus.ADD2;
+            break;
+          case "MULT":
+            cur.e1 = calculateToken(scope, token);
+            cur.status = ExprStatus.MULT1;
+            break;
+          case "MULT1":
+            cur.e2 = calculateToken(scope, token);
+            cur.status = ExprStatus.MULT2;
+            break;
+        }
+      }
+      return cur.value;
+    }
+
+    const calculateToken = (scope, token) => {
+      if (token[0] >= 'a' && token[0] <= 'z') {
+        const n = scope.get(token).length;
+        return scope.get(token)[n - 1];
+      } else {
+        return parseInt(token);
+      }
+    };
+
+    var ExprStatus = {
+      VALUE: 'VALUE', // 初始状态
+      NONE: 'NONE', // 表达式类型未知
+      LET: 'LET', // let 表达式
+      LET1: 'LET1', // let 表达式已经解析了 vi 变量
+      LET2: 'LET2', // let 表达式已经解析了最后一个表达式 expr
+      ADD: 'ADD', // add 表达式
+      ADD1: 'ADD1', // add 表达式已经解析了 e1 表达式
+      ADD2: 'ADD2', // add 表达式已经解析了 e2 表达式
+      MULT: 'MULT', // mult 表达式
+      MULT1: 'MULT1', // mult 表达式已经解析了 e1 表达式
+      MULT2: 'MULT2', // mult 表达式已经解析了 e2 表达式
+      DONE: 'DONE' // 解析完成
+    }
+
+    class Expr {
+      constructor(s) {
+        this.status = s;
+        this.v = ''; // let 的变量 vi
+        this.value = 0; // VALUE 状态的数值，或者 LET2 状态最后一个表达式的数值
+        this.e1 = 0; // add 或 mult 表达式的两个表达式 e1 和 e2 的数值
+        this.e2 = 0;
+      }
+    }
+  </script>
+</body>
+
+</html>
