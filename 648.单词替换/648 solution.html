@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    // 方法一：哈希集合
+    var replaceWords = function (dictionary, sentence) {
+      const dictionarySet = new Set();
+      for (const root of dictionary) {
+        dictionarySet.add(root);
+      }
+      const words = sentence.split(" ");
+      for (let i = 0; i < words.length; i++) {
+        const word = words[i];
+        for (let j = 0; j < word.length; j++) {
+          if (dictionarySet.has(word.substring(0, 1 + j))) {
+            words[i] = word.substring(0, 1 + j);
+            break;
+          }
+        }
+      }
+      return words.join(' ');
+    };
+
+    // 方法二：字典树
+    // 时间复杂度：O(d+s)。其中 d 是 dictionary 的字符数，s 是 sentence 的字符数
+    // 空间复杂度：O(d+s)。其中 d 是 dictionary 的字符数，s 是 sentence 的字符数
+    var replaceWords = function (dictionary, sentence) {
+      const trie = new Trie();
+      for (const word of dictionary) {
+        let cur = trie;
+        for (let i = 0; i < word.length; i++) {
+          const c = word[i];
+          if (!cur.children.has(c)) {
+            cur.children.set(c, new Trie());
+          }
+          cur = cur.children.get(c);
+        }
+        cur.children.set('#', new Trie());
+      }
+      const words = sentence.split(" ");
+      for (let i = 0; i < words.length; i++) {
+        words[i] = findRoot(words[i], trie);
+      }
+      return words.join(" ");
+    };
+
+    const findRoot = (word, trie) => {
+      let root = '';
+      let cur = trie;
+      for (let i = 0; i < word.length; i++) {
+        const c = word[i];
+        if (cur.children.has('#')) {
+          return root;
+        }
+        if (!cur.children.has(c)) {
+          return word;
+        }
+        root += c;
+        cur = cur.children.get(c);
+      }
+      return root;
+    }
+
+    class Trie {
+      constructor() {
+        this.children = new Map();
+      }
+    }
+  </script>
+</body>
+
+</html>
