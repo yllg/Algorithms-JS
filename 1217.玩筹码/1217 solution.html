@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    // +-2 代价是0； +-1代价是1; 求最小代价
+
+    // 方法一：贪心
+    // 时间复杂度：O(n)
+    // 空间复杂度：O(1）
+    var minCostToMoveChips = function (position) {
+      let even = 0,
+        odd = 0;
+      for (const pos of position) {
+        if ((pos & 1) !== 0) {
+          odd++;
+        } else {
+          even++;
+        }
+      }
+      return Math.min(odd, even);
+    };
+
+    // test
+    let position = [1, 2, 3];
+    console.log(minCostToMoveChips(position))
+  </script>
+</body>
+
+</html>
