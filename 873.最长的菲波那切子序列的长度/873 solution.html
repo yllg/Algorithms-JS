@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    // 方法一：动态规划
+    // 时间复杂度：O(n^2)
+    // 空间复杂度：O(n^2)
+    var lenLongestFibSubseq = function (arr) {
+      const indices = new Map();
+      const n = arr.length;
+      for (let i = 0; i < n; i++) {
+        indices.set(arr[i], i);
+      }
+      const dp = new Array(n).fill(0).map(() => new Array(n).fill(0));
+      let ans = 0;
+      for (let i = 0; i < n; i++) {
+        for (let j = n - 1; j >= 0; j--) {
+          if (arr[j] * 2 <= arr[i]) {
+            break;
+          }
+          if (indices.has(arr[i] - arr[j])) {
+            const k = indices.get(arr[i] - arr[j]);
+            dp[j][i] = Math.max(dp[k][j] + 1, 3);
+            ans = Math.max(ans, dp[j][i]);
+          }
+        }
+      }
+      return ans;
+    };
+
+    // test
+    let arr = [1, 2, 3, 4, 5, 6, 7, 8];
+    console.log(lenLongestFibSubseq(arr))
+  </script>
+</body>
+
+</html>
