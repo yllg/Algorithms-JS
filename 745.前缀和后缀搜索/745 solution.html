@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    // 方法一：计算每个单词的前缀后缀组合可能性
+    var WordFilter = function (words) {
+      this.dictionary = new Map();
+      for (let i = 0; i < words.length; i++) {
+        const word = words[i];
+        const m = word.length;
+        for (let prefixLength = 1; prefixLength <= m; prefixLength++) {
+          for (let suffixLength = 1; suffixLength <= m; suffixLength++) {
+            this.dictionary.set(word.substring(0, prefixLength) + "#" + word.substring(m - suffixLength), i);
+          }
+        }
+      }
+    };
+
+    WordFilter.prototype.f = function (pref, suff) {
+      if (this.dictionary.has(pref + "#" + suff)) {
+        return this.dictionary.get(pref + "#" + suff);
+      }
+      return -1;
+    };
+
+    // TODO: 方法二：字典树
+  </script>
+</body>
+
+</html>
