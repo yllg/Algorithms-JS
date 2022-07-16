@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    // 方法一：队列
+    // 时间复杂度: O(1)
+    // 空间复杂度：O(size)，其中 size 是滑动窗口的大小
+    var MovingAverage = function (size) {
+      this.queue = [];
+      this.size = size;
+      this.sum = 0;
+    };
+
+    MovingAverage.prototype.next = function (val) {
+      if (this.queue.length === this.size) {
+        this.sum -= this.queue.shift();
+      }
+      this.queue.push(val);
+      this.sum += val;
+      return this.sum / this.queue.length;
+    };
+  </script>
+</body>
+
+</html>
