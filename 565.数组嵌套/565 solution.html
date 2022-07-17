@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    // 方法一：图
+    // 时间复杂度：O(n)
+    // 空间复杂度：O(n)
+    var arrayNesting = function (nums) {
+      let ans = 0,
+        n = nums.length;
+      const vis = new Array(n).fill(0);
+      for (let i = 0; i < n; ++i) {
+        let cnt = 0;
+        while (!vis[i]) {
+          vis[i] = true;
+          i = nums[i];
+          ++cnt;
+        }
+        ans = Math.max(ans, cnt);
+      }
+      return ans;
+    };
+
+    // 方法二：原地标记
+    // 时间复杂度：O(n)
+    // 空间复杂度：O(1)
+    var arrayNesting = function (nums) {
+      let ans = 0,
+        n = nums.length;
+      for (let i = 0; i < n; ++i) {
+        let cnt = 0;
+        while (nums[i] < n) {
+          const num = nums[i];
+          nums[i] = n;
+          i = num;
+          ++cnt;
+        }
+        ans = Math.max(ans, cnt);
+      }
+      return ans;
+    };
+
+    // test
+    let A = [5, 4, 0, 3, 1, 6, 2];
+    console.log(arrayNesting(A))
+  </script>
+</body>
+
+</html>
