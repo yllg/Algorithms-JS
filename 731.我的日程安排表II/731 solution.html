@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    // 方法一：直接遍历
+    // 时间复杂度：O(n^2)
+    // 空间复杂度：O(n)
+    var MyCalendarTwo = function () {
+      this.booked = [];
+      this.overlaps = [];
+    };
+
+    MyCalendarTwo.prototype.book = function (start, end) {
+      for (const arr of this.overlaps) {
+        let l = arr[0],
+          r = arr[1];
+        if (l < end && start < r) {
+          return false;
+        }
+      }
+      for (const arr of this.booked) {
+        let l = arr[0],
+          r = arr[1];
+        if (l < end && start < r) {
+          this.overlaps.push([Math.max(l, start), Math.min(r, end)]);
+        }
+      }
+      this.booked.push([start, end]);
+      return true;
+    };
+
+    // TODO:方法二：差分数组
+
+    // 方法三：线段树
+    // 时间复杂度：O(nlogC)
+    // 空间复杂度：O(nlogC)
+    var MyCalendarTwo = function () {
+      this.tree = new Map();
+    };
+
+    MyCalendarTwo.prototype.book = function (start, end) {
+      const update = (start, end, val, l, r, idx) => {
+        if (r < start || end < l) {
+          return;
+        }
+        if (!this.tree.has(idx)) {
+          this.tree.set(idx, [0, 0]);
+        }
+        if (start <= l && r <= end) {
+          this.tree.get(idx)[0] += val;
+          this.tree.get(idx)[1] += val;
+        } else {
+          const mid = (l + r) >> 1;
+          update(start, end, val, l, mid, 2 * idx);
+          update(start, end, val, mid + 1, r, 2 * idx + 1);
+          if (!this.tree.has(2 * idx)) {
+            this.tree.set(2 * idx, [0, 0]);
+          }
+          if (!this.tree.has(2 * idx + 1)) {
+            this.tree.set(2 * idx + 1, [0, 0]);
+          }
+          this.tree.get(idx)[0] = this.tree.get(idx)[1] + Math.max(this.tree.get(2 * idx)[0], this.tree.get(2 *
+            idx + 1)[0]);
+        }
+      }
+      update(start, end - 1, 1, 0, 1000000000, 1);
+      if (!this.tree.has(1)) {
+        this.tree.set(1, [0, 0])
+      }
+      if (this.tree.get(1)[0] > 2) {
+        update(start, end - 1, -1, 0, 1000000000, 1);
+        return false;
+      }
+      return true;
+    };
+  </script>
+</body>
+
+</html>
