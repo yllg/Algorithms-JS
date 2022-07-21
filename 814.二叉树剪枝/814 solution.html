@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    // 移除所有不包含1的子树的原二叉树
+
+    // 方法一：递归
+    // 时间复杂度：O(n)
+    // 空间复杂度：O(n)
+    var pruneTree = function (root) {
+      if (!root) {
+        return null;
+      }
+      root.left = pruneTree(root.left);
+      root.right = pruneTree(root.right);
+      if (!root.left && !root.right && root.val === 0) {
+        return null;
+      }
+      return root;
+    };
+  </script>
+</body>
+
+</html>
