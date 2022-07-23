@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    // 其实就是看有没有从第一个节点到最后一个节点的路
+
+    // 方法一：拓扑排序
+    // 时间复杂度：O(n+m)
+    // 空间复杂度：O(n+m)
+    var sequenceReconstruction = function (nums, sequences) {
+      const n = nums.length;
+      const indegrees = new Array(n + 1).fill(0);
+      const graph = new Array(n + 1).fill(0).map(() => new Set());
+      for (const sequence of sequences) {
+        const size = sequence.length;
+        for (let i = 1; i < size; i++) {
+          const prev = sequence[i - 1],
+            next = sequence[i];
+          if (graph[prev].add(next)) {
+            indegrees[next]++;
+          }
+        }
+      }
+      const queue = [];
+      for (let i = 1; i <= n; i++) {
+        if (indegrees[i] === 0) {
+          queue.push(i);
+        }
+      }
+      while (queue.length) {
+        if (queue.length > 1) {
+          return false;
+        }
+        const num = queue.shift();
+        const set = graph[num];
+        for (const next of set) {
+          indegrees[next]--;
+          if (indegrees[next] === 0) {
+            queue.push(next);
+          }
+        }
+      }
+      return true;
+    };
+
+    // test
+    let nums = [1, 2, 3],
+      sequences = [
+        [1, 2],
+        [1, 3]
+      ];
+    console.log(sequenceReconstruction(nums, sequences))
+  </script>
+</body>
+
+</html>
