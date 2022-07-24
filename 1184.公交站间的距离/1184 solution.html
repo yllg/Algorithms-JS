@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    // 方法一：一次遍历
+    // 时间复杂度：O(n)
+    // 空间复杂度：O(1)
+    var distanceBetweenBusStops = function (distance, start, destination) {
+      if (start > destination) {
+        const temp = start;
+        start = destination;
+        destination = temp;
+      }
+      let sum1 = 0,
+        sum2 = 0;
+      for (let i = 0; i < distance.length; i++) {
+        if (i >= start && i < destination) {
+          sum1 += distance[i];
+        } else {
+          sum2 += distance[i];
+        }
+      }
+      return Math.min(sum1, sum2);
+    };
+
+    // test
+    let distance = [1, 2, 3, 4],
+      start = 0,
+      destination = 1;
+    console.log(distanceBetweenBusStops(distance, start, destination))
+  </script>
+</body>
+
+</html>
