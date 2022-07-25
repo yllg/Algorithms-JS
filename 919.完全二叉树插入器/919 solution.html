@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    // 方法一：队列
+    var CBTInserter = function (root) {
+      this.candidate = [];
+      this.root = root;
+
+      const queue = [];
+      queue.push(root);
+
+      while (queue.length) {
+        const node = queue.shift();
+        if (node.left) {
+          queue.push(node.left);
+        }
+        if (node.right) {
+          queue.push(node.right);
+        }
+        if (!(node.left && node.right)) {
+          this.candidate.push(node);
+        }
+      }
+    };
+
+    CBTInserter.prototype.insert = function (val) {
+      const child = new TreeNode(val);
+      const node = this.candidate[0];
+      let ret = node.val;
+      if (!node.left) {
+        node.left = child;
+      } else {
+        node.right = child;
+        this.candidate.shift();
+      }
+      this.candidate.push(child);
+      return ret;
+    };
+
+    CBTInserter.prototype.get_root = function () {
+      return this.root;
+    };
+
+    // 方法二：二进制表示
+    var CBTInserter = function (root) {
+      this.cnt = 0;
+      this.root = root;
+
+      const queue = [];
+      queue.push(root);
+
+      while (queue.length) {
+        ++this.cnt;
+        const node = queue.shift();
+        if (node.left) {
+          queue.push(node.left);
+        }
+        if (node.right) {
+          queue.push(node.right);
+        }
+      }
+    };
+
+    CBTInserter.prototype.insert = function (val) {
+      ++this.cnt;
+      const child = new TreeNode(val);
+      let node = this.root;
+      const highbit = ('' + this.cnt.toString(2)).length - 1;
+      for (let i = highbit - 1; i >= 1; --i) {
+        if ((this.cnt & (1 << i)) !== 0) {
+          node = node.right;
+        } else {
+          node = node.left;
+        }
+      }
+      if ((this.cnt & 1) !== 0) {
+        node.right = child;
+      } else {
+        node.left = child;
+      }
+      return node.val;
+    };
+
+    CBTInserter.prototype.get_root = function () {
+      return this.root;
+    };
+  </script>
+</body>
+
+</html>
