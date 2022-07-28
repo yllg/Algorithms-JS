@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    // 数组中的每个元素替换为它们排序后的序号
+
+    // 方法一：排序 + 哈希表
+    // 时间复杂度：O(n×logn), n是数组长度
+    // 空间复杂度：O(n)
+    var arrayRankTransform = function (arr) {
+      const sortedArr = new Array(arr.length).fill(0);
+      sortedArr.splice(0, arr.length, ...arr);
+      sortedArr.sort((a, b) => a - b);
+      const ranks = new Map();
+      const ans = new Array(arr.length).fill(0);
+      for (const a of sortedArr) {
+        if (!ranks.has(a)) {
+          ranks.set(a, ranks.size + 1);
+        }
+      }
+      for (let i = 0; i < arr.length; i++) {
+        ans[i] = ranks.get(arr[i]);
+      }
+      return ans;
+    };
+
+    // test
+    let arr = [40, 10, 20, 30];
+    console.log(arrayRankTransform(arr))
+  </script>
+</body>
+
+</html>
