@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    // 方法一：分类讨论
+    // 时间复杂度：O(n)
+    // 空间复杂度：O(1)
+    var generateTheString = function (n) {
+      const sb = '';
+      if (n % 2 === 1) {
+        return sb + 'a'.repeat(n);;
+      }
+      return sb + 'a'.repeat(n - 1) + 'b';
+    };
+
+    // test
+    console.log(generateTheString(4))
+  </script>
+</body>
+
+</html>
