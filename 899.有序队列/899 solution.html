@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    // 从 s 的前 k 个字母中选择一个，并把它加到字符串的末尾。返回 字典最小的字符串
+    // 方法一：分情况讨论
+    // 时间复杂度：O(n^2)
+    // 空间复杂度：O(n)
+    var orderlyQueue = function (s, k) {
+      if (k === 1) {
+        let ans = s;
+        for (let i = 0; i < s.length - 1; ++i) {
+          const n = s.length;
+          s = s.substring(1, n) + s[0];
+          ans = ans < s ? ans : s;
+        }
+        return ans;
+      }
+      return [...s].sort().join('');
+    };
+
+    // test
+    let s = "cba",
+      k = 1;
+    console.log(orderlyQueue(s, k))
+  </script>
+</body>
+
+</html>
