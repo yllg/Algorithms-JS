@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    // 方法一：深度优先搜索
+    // 时间复杂度：O(n)
+    // 空间复杂度：O(n)
+    var addOneRow = function (root, val, depth) {
+      if (!root) {
+        return null;
+      }
+      if (depth === 1) {
+        return new TreeNode(val, root, null);
+      }
+      if (depth === 2) {
+        root.left = new TreeNode(val, root.left, null);
+        root.right = new TreeNode(val, null, root.right);
+      } else {
+        root.left = addOneRow(root.left, val, depth - 1);
+        root.right = addOneRow(root.right, val, depth - 1);
+      }
+      return root;
+    };
+
+    // 方法二：广度优先搜索
+    // 时间复杂度：O(n)
+    // 空间复杂度：O(n)
+    var addOneRow = function (root, val, depth) {
+      if (depth === 1) {
+        return new TreeNode(val, root, null);
+      }
+      let curLevel = [];
+      curLevel.push(root);
+      for (let i = 1; i < depth - 1; i++) {
+        const tmp = [];
+        for (const node of curLevel) {
+          if (node.left) {
+            tmp.push(node.left);
+          }
+          if (node.right) {
+            tmp.push(node.right);
+          }
+        }
+        curLevel = tmp;
+      }
+      for (const node of curLevel) {
+        node.left = new TreeNode(val, node.left, null);
+        node.right = new TreeNode(val, null, node.right);
+      }
+      return root;
+    };
+  </script>
+</body>
+
+</html>
