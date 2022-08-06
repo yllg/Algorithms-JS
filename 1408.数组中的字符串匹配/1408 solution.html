@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    // 方法一：暴力枚举
+    // 时间复杂度：O(n^2 * L^2)，其中 n 是字符串数组的长度，L 是字符串数组中最长字符串的长度。
+    // 空间复杂度：O(1)
+    var stringMatching = function (words) {
+      const ret = [];
+      for (let i = 0; i < words.length; i++) {
+        for (let j = 0; j < words.length; j++) {
+          if (i !== j && words[j].search(words[i]) !== -1) {
+            ret.push(words[i]);
+            break;
+          }
+        }
+      }
+      return ret;
+    };
+
+    // test
+    let words = ["mass", "as", "hero", "superhero"];
+    console.log(stringMatching(words))
+  </script>
+</body>
+
+</html>
