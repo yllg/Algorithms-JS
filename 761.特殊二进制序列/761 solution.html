@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    // 子串交换，得到最大的字典序
+
+    // 方法一：分治
+    //  时间复杂度：O(n^2)
+    //  空间复杂度：O(n)
+    var makeLargestSpecial = function (s) {
+      if (s.length <= 2) {
+        return s;
+      }
+      let cnt = 0,
+        left = 0;
+      const subs = [];
+      for (let i = 0; i < s.length; ++i) {
+        if (s[i] === '1') {
+          ++cnt;
+        } else {
+          --cnt;
+          if (cnt === 0) {
+            subs.push("1" + makeLargestSpecial(s.substring(left + 1, i)) + '0');
+            left = i + 1;
+          }
+        }
+      }
+      subs.sort().reverse();
+      return subs.join('');
+    };
+
+    // test
+    let S = "11011000";
+    console.log(makeLargestSpecial(S))
+  </script>
+</body>
+
+</html>
