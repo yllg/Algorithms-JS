@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.21/lodash.min.js"></script>
+  <script>
+    // 方法一：贪心
+    // 时间复杂度：O(n)
+    // 空间复杂度：O(1)
+    var minStartValue = function (nums) {
+      let accSum = 0,
+        accSumMin = 0;
+      for (const num of nums) {
+        accSum += num;
+        accSumMin = Math.min(accSumMin, accSum);
+      }
+      return -accSumMin + 1;
+    };
+
+    // 方法二：二分查找
+    // 时间复杂度：O(n×log(mn))
+    // 空间复杂度：O(1)
+    var minStartValue = function (nums) {
+      const m = _.min(nums);
+      if (m >= 0) {
+        return 1;
+      }
+      let left = 1,
+        right = -m * nums.length + 1;
+      while (left < right) {
+        const medium = Math.floor((left + right) / 2);
+        if (valid(medium, nums)) {
+          right = medium;
+        } else {
+          left = medium + 1;
+        }
+      }
+      return left;
+    };
+    const valid = (startValue, nums) => {
+      for (const num of nums) {
+        startValue += num;
+        if (startValue <= 0) {
+          return false;
+        }
+      }
+      return true;
+    }
+
+    // test
+    let nums = [-3, 2, -3, 4, 2];
+    console.log(minStartValue(nums))
+  </script>
+</body>
+
+</html>
