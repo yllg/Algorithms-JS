@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    // 重新格式化：字母数字混着的
+
+    // 方法一：双指针
+    // 时间复杂度：O(n)
+    // 空间复杂度：对于字符串可变的语言为 O(1)，仅使用常量空间。而对于字符串不可变的语言需要新建一个和 s 等长的字符串，所以空间复杂度是 O(n)。
+    var reformat = function (s) {
+      let sumDigit = 0;
+      for (let i = 0; i < s.length; i++) {
+        const c = s[i];
+        if (isDigit(c)) {
+          sumDigit++;
+        }
+      }
+      let sumAlpha = s.length - sumDigit;
+      if (Math.abs(sumDigit - sumAlpha) > 1) {
+        return "";
+      }
+      let flag = sumDigit > sumAlpha;
+      const arr = [...s];
+      for (let i = 0, j = 1; i < s.length; i += 2) {
+        if (isDigit(arr[i]) !== flag) {
+          while (isDigit(arr[j]) !== flag) {
+            j += 2;
+          }
+          [arr[i], arr[j]] = [arr[j], arr[i]];
+        }
+      }
+      return arr.join('');
+    }
+
+    const isDigit = (ch) => {
+      return parseFloat(ch).toString() === "NaN" ? false : true;
+    }
+
+    // test
+    let s = "a0b1c2";
+    console.log(reformat(s))
+  </script>
+</body>
+
+</html>
