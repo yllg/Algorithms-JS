@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    // 方法一：排序 + 哈希表
+    // 时间复杂度：O(nlogn)
+    // 空间复杂度：O(n)
+    var maxChunksToSorted = function (arr) {
+      const cnt = new Map();
+      let res = 0;
+      const sortedArr = new Array(arr.length).fill(0);
+      sortedArr.splice(0, arr.length, ...arr);
+      sortedArr.sort((a, b) => a - b);
+      for (let i = 0; i < sortedArr.length; i++) {
+        const x = arr[i],
+          y = sortedArr[i];
+        cnt.set(x, (cnt.get(x) || 0) + 1);
+        if (cnt.get(x) === 0) {
+          cnt.delete(x);
+        }
+        cnt.set(y, (cnt.get(y) || 0) - 1);
+        if (cnt.get(y) === 0) {
+          cnt.delete(y);
+        }
+        if (cnt.size === 0) {
+          res++;
+        }
+      }
+      return res;
+    };
+
+    // 方法二：单调栈
+    // 时间复杂度：O(n)
+    // 空间复杂度：O(n)
+    var maxChunksToSorted = function (arr) {
+      const stack = [];
+      for (const num of arr) {
+        if (stack.length === 0 || num >= stack[stack.length - 1]) {
+          stack.push(num);
+        } else {
+          const mx = stack.pop();
+          while (stack.length && stack[stack.length - 1] > num) {
+            stack.pop();
+          }
+          stack.push(mx);
+        }
+      }
+      return stack.length;
+    };
+
+    // test
+    let arr = [5, 4, 3, 2, 1];
+    console.log(maxChunksToSorted(arr))
+  </script>
+</body>
+
+</html>
