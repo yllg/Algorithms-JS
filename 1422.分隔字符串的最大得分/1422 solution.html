@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    // 「分割字符串的得分」为 左 子字符串中 0 的数量加上 右 子字符串中 1 的数量。
+
+    // 方法一：枚举每个分割点
+    // 时间复杂度：O(n^2)
+    // 空间复杂度：O(1)
+    var maxScore = function (s) {
+      let ans = 0;
+      const n = s.length;
+      for (let i = 1; i < n; i++) {
+        let score = 0;
+        for (let j = 0; j < i; j++) {
+          if (s[j] === '0') {
+            score++;
+          }
+        }
+        for (let j = i; j < n; j++) {
+          if (s[j] === '1') {
+            score++;
+          }
+        }
+        ans = Math.max(ans, score);
+      }
+      return ans;
+    };
+
+    // 方法二：两次遍历
+    // 时间复杂度：O(n)
+    // 空间复杂度：O(1)
+    var maxScore = function (s) {
+      let score = 0;
+      const n = s.length;
+      if (s[0] === '0') {
+        score++;
+      }
+      for (let i = 1; i < n; i++) {
+        if (s[i] === '1') {
+          score++;
+        }
+      }
+      let ans = score;
+      for (let i = 1; i < n - 1; i++) {
+        if (s[i] == '0') {
+          score++;
+        } else {
+          score--;
+        }
+        ans = Math.max(ans, score);
+      }
+      return ans;
+    };
+
+    // test
+    let s = "011101";
+    console.log(maxScore(s))
+  </script>
+</body>
+
+</html>
