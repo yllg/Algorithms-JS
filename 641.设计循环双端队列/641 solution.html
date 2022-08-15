@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    // 方法一：数组
+    // 时间复杂度：初始化和每项操作的时间复杂度均为 O(1)
+    // 空间复杂度：O(k)，其中 k 为给定的队列元素数目。
+    var MyCircularDeque = function (k) {
+      this.capacity = k + 1;
+      this.rear = this.front = 0;
+      this.elements = new Array(k + 1).fill(0);
+    };
+
+    MyCircularDeque.prototype.insertFront = function (value) {
+      if (this.isFull()) {
+        return false;
+      }
+      this.front = (this.front - 1 + this.capacity) % this.capacity;
+      this.elements[this.front] = value;
+      return true;
+    };
+
+    MyCircularDeque.prototype.insertLast = function (value) {
+      if (this.isFull()) {
+        return false;
+      }
+      this.elements[this.rear] = value;
+      this.rear = (this.rear + 1) % this.capacity;
+      return true;
+    };
+
+    MyCircularDeque.prototype.deleteFront = function () {
+      if (this.isEmpty()) {
+        return false;
+      }
+      this.front = (this.front + 1) % this.capacity;
+      return true;
+    };
+
+    MyCircularDeque.prototype.deleteLast = function () {
+      if (this.isEmpty()) {
+        return false;
+      }
+      this.rear = (this.rear - 1 + this.capacity) % this.capacity;
+      return true;
+    };
+
+    MyCircularDeque.prototype.getFront = function () {
+      if (this.isEmpty()) {
+        return -1;
+      }
+      return this.elements[this.front];
+    };
+
+    MyCircularDeque.prototype.getRear = function () {
+      if (this.isEmpty()) {
+        return -1;
+      }
+      return this.elements[(this.rear - 1 + this.capacity) % this.capacity];
+    };
+
+    MyCircularDeque.prototype.isEmpty = function () {
+      return this.rear == this.front;
+    };
+
+    MyCircularDeque.prototype.isFull = function () {
+      return (this.rear + 1) % this.capacity == this.front;
+    };
+
+    // TODO 方法二：链表
+  </script>
+</body>
+
+</html>
