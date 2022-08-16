@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    /**
+     * @param {number} n
+     */
+    var OrderedStream = function (n) {
+      this.ptr = 1;
+      this.mStream = [];
+    };
+
+    /** 
+     * @param {number} id 
+     * @param {string} value
+     * @return {string[]}
+     */
+    OrderedStream.prototype.insert = function (id, value) {
+      this.mStream[id] = value;
+      var res = [];
+      //只有当前插入得id等于ptr才可能返回有序流，否则不会返回
+      if (id === this.ptr) {
+        //ptr依次往后走，直到在数组中找不到这个key为止
+        while (this.ptr in this.mStream) {
+          res.push(this.mStream[this.ptr++]);
+        }
+      }
+      return res;
+    };
+
+    /**
+     * Your OrderedStream object will be instantiated and called as such:
+     * var obj = new OrderedStream(n)
+     * var param_1 = obj.insert(id,value)
+     */
+  </script>
+</body>
+
+</html>
