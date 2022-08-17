@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    // 方法一：深度优先搜索
+    // 时间复杂度：O(n)
+    // 空间复杂度：O(n)
+    var deepestLeavesSum = function (root) {
+      let maxLevel = -1;
+      let sum = 0;
+      const dfs = (node, level) => {
+        if (!node) {
+          return;
+        }
+        if (level > maxLevel) {
+          maxLevel = level;
+          sum = node.val;
+        } else if (level === maxLevel) {
+          sum += node.val;
+        }
+        dfs(node.left, level + 1);
+        dfs(node.right, level + 1);
+      }
+      dfs(root, 0);
+      return sum;
+    };
+
+    // 方法二：广度优先搜索
+    // 时间复杂度：O(n)
+    // 空间复杂度：O(n)
+    var deepestLeavesSum = function (root) {
+      let sum = 0;
+      const queue = [];
+      queue.push(root);
+      while (queue.length) {
+        sum = 0;
+        const size = queue.length;
+        for (let i = 0; i < size; i++) {
+          const node = queue.shift();
+          sum += node.val;
+          if (node.left) {
+            queue.push(node.left);
+          }
+          if (node.right) {
+            queue.push(node.right);
+          }
+        }
+      }
+      return sum;
+    };
+  </script>
+</body>
+
+</html>
