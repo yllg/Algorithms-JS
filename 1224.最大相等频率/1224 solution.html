@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    // 从前缀中 恰好删除一个 元素后，剩下每个数字的出现次数都相同。
+
+    // 方法一：哈希表
+    // 时间复杂度：O(n)
+    // 空间复杂度：O(n)
+    var maxEqualFreq = function (nums) {
+      const freq = new Map();
+      const count = new Map();
+      let res = 0,
+        maxFreq = 0;
+      for (let i = 0; i < nums.length; i++) {
+        if (!count.has(nums[i])) {
+          count.set(nums[i], 0);
+        }
+        if (count.get(nums[i]) > 0) {
+          freq.set(count.get(nums[i]), freq.get(count.get(nums[i])) - 1);
+        }
+        count.set(nums[i], count.get(nums[i]) + 1);
+        maxFreq = Math.max(maxFreq, count.get(nums[i]));
+        if (!freq.has(count.get(nums[i]))) {
+          freq.set(count.get(nums[i]), 0);
+        }
+        freq.set(count.get(nums[i]), freq.get(count.get(nums[i])) + 1);
+        const ok = maxFreq === 1 ||
+          freq.get(maxFreq) * maxFreq + freq.get(maxFreq - 1) * (maxFreq - 1) === i + 1 && freq.get(maxFreq) === 1 ||
+          freq.get(maxFreq) * maxFreq + 1 === i + 1 && freq.get(1) === 1;
+        if (ok) {
+          res = Math.max(res, i + 1);
+        }
+      }
+      return res;
+    };
+
+    // test
+    let nums = [2, 2, 1, 1, 5, 3, 3, 5]
+    console.log(maxEqualFreq(nums))
+  </script>
+</body>
+
+</html>
