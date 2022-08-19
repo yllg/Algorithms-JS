@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    // 方法一：枚举
+    // 时间复杂度：O(n)
+    // 空间复杂度：O(1)
+    var busyStudent = function (startTime, endTime, queryTime) {
+      const n = startTime.length;
+      let ans = 0;
+      for (let i = 0; i < n; i++) {
+        if (startTime[i] <= queryTime && endTime[i] >= queryTime) {
+          ans++;
+        }
+      }
+      return ans;
+    };
+
+    // 方法二：差分数组
+    // 时间复杂度：O(n+queryTime)，其中 nn 为数组的长度，queryTime 为给定的查找时间。
+    // 空间复杂度：O(max(endTime))
+    var busyStudent = function (startTime, endTime, queryTime) {
+      const n = startTime.length;
+      const maxEndTime = _.max(endTime);
+      if (queryTime > maxEndTime) {
+        return 0;
+      }
+      const cnt = new Array(maxEndTime + 2).fill(0);
+      for (let i = 0; i < n; i++) {
+        cnt[startTime[i]]++;
+        cnt[endTime[i] + 1]--;
+      }
+      let ans = 0;
+      for (let i = 0; i <= queryTime; i++) {
+        ans += cnt[i];
+      }
+      return ans;
+    };
+
+    // 方法三：二分查找
+    // 时间复杂度：O(nlogn)
+    // 空间复杂度：O(logn)
+    var busyStudent = function (startTime, endTime, queryTime) {
+      startTime.sort((a, b) => a - b);
+      endTime.sort((a, b) => a - b);
+      const lessStart = upperbound(startTime, 0, startTime.length - 1, queryTime);
+      const lessEnd = lowerbound(endTime, 0, endTime.length - 1, queryTime);
+      return lessStart - lessEnd;
+    }
+
+    const upperbound = (arr, l, r, target) => {
+      let ans = r + 1;
+      while (l <= r) {
+        const mid = l + ((r - l) >> 1);
+        if (arr[mid] > target) {
+          ans = mid;
+          r = mid - 1;
+        } else {
+          l = mid + 1;
+        }
+      }
+      return ans;
+    }
+
+    const lowerbound = (arr, l, r, target) => {
+      let ans = r + 1;
+      while (l <= r) {
+        let mid = l + ((r - l) >> 1);
+        if (arr[mid] >= target) {
+          ans = mid;
+          r = mid - 1;
+        } else {
+          l = mid + 1;
+        }
+      }
+      return ans;
+    };
+
+    // test
+    let startTime = [1, 2, 3],
+      endTime = [3, 2, 7],
+      queryTime = 4;
+    console.log(busyStudent(startTime, endTime, queryTime))
+  </script>
+</body>
+
+</html>
