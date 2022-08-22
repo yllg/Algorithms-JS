@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    // 方法一：深度优先搜索
+    var printTree = function (root) {
+      const calDepth = (root) => {
+        let h = 0;
+        if (root.left) {
+          h = Math.max(h, calDepth(root.left) + 1);
+        }
+        if (root.right) {
+          h = Math.max(h, calDepth(root.right) + 1);
+        }
+        return h;
+      }
+
+      const dfs = (res, root, r, c, height) => {
+        res[r][c] = root.val.toString();
+        if (root.left) {
+          dfs(res, root.left, r + 1, c - (1 << (height - r - 1)), height);
+        }
+        if (root.right) {
+          dfs(res, root.right, r + 1, c + (1 << (height - r - 1)), height);
+        }
+      }
+
+      const height = calDepth(root);
+      const m = height + 1;
+      const n = (1 << (height + 1)) - 1;
+      const res = new Array(m).fill(0).map(() => new Array(n).fill(''));
+      dfs(res, root, 0, Math.floor((n - 1) / 2), height);
+      return res;
+    };
+
+    // 方法二：广度优先搜索
+    var printTree = function (root) {
+      const height = CalDepth(root);
+      const m = height + 1;
+      const n = (1 << (height + 1)) - 1;
+      const res = new Array(m).fill(0).map(() => new Array(n).fill(''));
+      const queue = [];
+      queue.push([root, 0, Math.floor((n - 1) / 2)]);
+      while (queue.length > 0) {
+        const t = queue.shift();
+        const node = t[0];
+        let r = t[1],
+          c = t[2];
+        res[r][c] = node.val.toString();
+        if (node.left) {
+          queue.push([node.left, r + 1, c - (1 << (height - r - 1))]);
+        }
+        if (node.right) {
+          queue.push([node.right, r + 1, c + (1 << (height - r - 1))]);
+        }
+      }
+      return res;
+    };
+
+    const CalDepth = (root) => {
+      let res = -1;
+      const queue = [root];
+      while (queue.length > 0) {
+        let len = queue.length;
+        res++;
+        while (len > 0) {
+          len--;
+          const t = queue.shift();
+          if (t.left) {
+            queue.push(t.left);
+          }
+          if (t.right) {
+            queue.push(t.right);
+          }
+        }
+      }
+      return res;
+    }
+  </script>
+</body>
+
+</html>
