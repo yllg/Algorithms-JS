@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    // 方法一：哈希表判断数组元素是否相同
+    // 时间复杂度：O(n)
+    // 空间复杂度：O(n)
+    var canBeEqual = function (target, arr) {
+      const counts1 = new Map();
+      const counts2 = new Map();
+      for (const num of target) {
+        counts1.set(num, (counts1.get(num) || 0) + 1);
+      }
+      for (const num of arr) {
+        counts2.set(num, (counts2.get(num) || 0) + 1);
+      }
+      if (counts1.size !== counts2.size) {
+        return false;
+      }
+      for (const [key, value] of counts1.entries()) {
+        if (!counts2.has(key) || counts2.get(key) !== value) {
+          return false;
+        }
+      }
+      return true;
+    };
+
+    // 方法二：排序判断数组元素是否相同
+    // 时间复杂度：O(n×logn)
+    // 空间复杂度：O(logn)
+    var canBeEqual = function (target, arr) {
+      target.sort((a, b) => a - b);
+      arr.sort((a, b) => a - b);
+      return target.toString() === arr.toString();
+    };
+
+    // test
+    let target = [1, 2, 3, 4],
+      arr = [2, 4, 1, 3];
+    console.log(canBeEqual(target, arr))
+  </script>
+</body>
+
+</html>
