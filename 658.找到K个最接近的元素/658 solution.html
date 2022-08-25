@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    // 方法一：排序
+    // 时间复杂度：O(nlogn)
+    // 空间复杂度：O(logn)
+    var findClosestElements = function (arr, k, x) {
+      const list = [...arr];
+      list.sort((a, b) => {
+        if (Math.abs(a - x) !== Math.abs(b - x)) {
+          return Math.abs(a - x) - Math.abs(b - x);
+        } else {
+          return a - b;
+        }
+      });
+      const ans = list.slice(0, k);
+      ans.sort((a, b) => a - b);
+      return ans;
+    };
+
+    // 方法二：二分查找 + 双指针
+    // 时间复杂度：O(logn+k)
+    // 空间复杂度：O(1)
+    var findClosestElements = function (arr, k, x) {
+      let right = binarySearch(arr, x);
+      let left = right - 1;
+      while (k-- > 0) {
+        if (left < 0) {
+          right++;
+        } else if (right >= arr.length) {
+          left--;
+        } else if (x - arr[left] <= arr[right] - x) {
+          left--;
+        } else {
+          right++;
+        }
+      }
+      const ans = [];
+      for (let i = left + 1; i < right; i++) {
+        ans.push(arr[i]);
+      }
+      return ans;
+    }
+
+    const binarySearch = (arr, x) => {
+      let low = 0,
+        high = arr.length - 1;
+      while (low < high) {
+        const mid = low + Math.floor((high - low) / 2);
+        if (arr[mid] >= x) {
+          high = mid;
+        } else {
+          low = mid + 1;
+        }
+      }
+      return low;
+    }
+  </script>
+</body>
+
+</html>
