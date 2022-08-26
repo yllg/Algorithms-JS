@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    // 方法一：排序
+    // 时间复杂度：O(nlogn)
+    // 空间复杂度：O(1)
+    var maxProduct = function (nums) {
+      nums.sort((a, b) => a - b);
+      console.log(nums)
+      return (nums[nums.length - 1] - 1) * (nums[nums.length - 2] - 1);
+    };
+
+    // 方法二：一次遍历，维护最大和次大值
+    // 时间复杂度：O(n)
+    // 空间复杂度：O(1)
+    var maxProduct = function (nums) {
+      let a = nums[0],
+        b = nums[1];
+      if (a < b) {
+        const temp = a;
+        a = b;
+        b = temp;
+      }
+      for (let i = 2; i < nums.length; i++) {
+        if (nums[i] > a) {
+          b = a;
+          a = nums[i];
+        } else if (nums[i] > b) {
+          b = nums[i];
+        }
+      }
+      return (a - 1) * (b - 1);
+    };
+
+    // test
+    let nums = [3, 4, 5, 2];
+    console.log(maxProduct(nums))
+  </script>
+</body>
+
+</html>
