@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    // 方法一: 层序遍历
+    var widthOfBinaryTree = function (root) {
+      let queue = [];
+      let width = BigInt(0);
+      if (root) {
+        width = BigInt(1);
+        queue.push(root);
+        root.val = BigInt(1); // 从 1 开始编号
+      }
+      while (queue.length > 0) {
+        let size = queue.length;
+        while (size > 0) {
+          let node = queue.shift();
+          if (node) {
+            let val = node.val;
+            if (node.left) {
+              node.left.val = BigInt(2) * val;
+              queue.push(node.left);
+            }
+            if (node.right) {
+              node.right.val = BigInt(2) * val + BigInt(1);
+              queue.push(node.right);
+            }
+          }
+          size--;
+        }
+        if (queue.length > 0) {
+          let currentWidth = queue[queue.length - 1].val - queue[0].val + BigInt(1);
+          if (currentWidth > width) {
+            width = currentWidth;
+          }
+        }
+      }
+      return width;
+    };
+  </script>
+</body>
+
+</html>
