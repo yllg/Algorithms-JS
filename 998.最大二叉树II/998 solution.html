@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    // 输出最大二叉树：其中每个节点的值都大于其子树中的任何其他值。
+
+    // 方法一：遍历右子节点
+    // 时间复杂度：O(n)
+    // 空间复杂度：O(1)
+    var insertIntoMaxTree = function (root, val) {
+      let parent = null;
+      let cur = root;
+      while (cur) {
+        if (val > cur.val) {
+          if (!parent) {
+            return new TreeNode(val, root, null);
+          }
+          let node = new TreeNode(val, cur, null);
+          parent.right = node;
+          return root;
+        } else {
+          parent = cur;
+          cur = cur.right;
+        }
+      }
+      parent.right = new TreeNode(val);
+      return root;
+    };
+  </script>
+</body>
+
+</html>
