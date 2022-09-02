@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    // 方法一：深度优先搜索
+    // 时间复杂度：O(n)
+    // 空间复杂度：O(n)
+    var longestUnivaluePath = function (root) {
+      let res = 0;
+      const dfs = (root) => {
+        if (!root) {
+          return 0;
+        }
+        let left = dfs(root.left),
+          right = dfs(root.right);
+        let left1 = 0,
+          right1 = 0;
+        if (root.left && root.left.val === root.val) {
+          left1 = left + 1;
+        }
+        if (root.right && root.right.val === root.val) {
+          right1 = right + 1;
+        }
+        res = Math.max(res, left1 + right1);
+        return Math.max(left1, right1);
+      }
+      dfs(root);
+      return res;
+    };
+  </script>
+</body>
+
+</html>
