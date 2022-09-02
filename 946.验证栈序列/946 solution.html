@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法一：栈模拟
+        // 时间复杂度：O(n)
+        // 空间复杂度：O(n)
+        var validateStackSequences = function (pushed, popped) {
+            const stack = [];
+            const n = pushed.length;
+            for (let i = 0, j = 0; i < n; i++) {
+                stack.push(pushed[i]);
+                while (stack.length && stack[stack.length - 1] == popped[j]) {
+                    stack.pop();
+                    j++;
+                }
+            }
+            return stack.length === 0;
+        };
+
+        // test
+        let pushed = [1, 2, 3, 4, 5],
+            popped = [4, 5, 3, 2, 1];
+        console.log(validateStackSequences(pushed, popped))
+    </script>
+</body>
+
+</html>
