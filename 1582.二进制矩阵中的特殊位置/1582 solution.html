@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    // 特殊位置 定义：如果 mat[i][j] == 1 并且第 i 行和第 j 列中的所有其他元素均为 0（行和列的下标均 从 0 开始 ），则位置 (i, j) 被称为特殊位置。
+
+    // 方法一：模拟
+    // 时间复杂度：O(m×n)
+    // 空间复杂度：O(m+n)
+    var numSpecial = function (mat) {
+      const m = mat.length,
+        n = mat[0].length;
+      const rowsSum = new Array(m).fill(0);
+      const colsSum = new Array(n).fill(0);
+      for (let i = 0; i < m; i++) {
+        for (let j = 0; j < n; j++) {
+          rowsSum[i] += mat[i][j];
+          colsSum[j] += mat[i][j];
+        }
+      }
+      let res = 0;
+      for (let i = 0; i < m; i++) {
+        for (let j = 0; j < n; j++) {
+          if (mat[i][j] === 1 && rowsSum[i] === 1 && colsSum[j] === 1) {
+            res++;
+          }
+        }
+      }
+      return res;
+    };
+
+    // 方法二：列的标记值
+    // 时间复杂度：O(m×n)
+    // 空间复杂度：O(1)
+    var numSpecial = function (mat) {
+      const m = mat.length,
+        n = mat[0].length;
+      for (let i = 0; i < m; i++) {
+        let cnt1 = 0;
+        for (let j = 0; j < n; j++) {
+          if (mat[i][j] === 1) {
+            cnt1++;
+          }
+        }
+        if (i === 0) {
+          cnt1--;
+        }
+        if (cnt1 > 0) {
+          for (let j = 0; j < n; j++) {
+            if (mat[i][j] === 1) {
+              mat[0][j] += cnt1;
+            }
+          }
+        }
+      }
+      let sum = 0;
+      for (const num of mat[0]) {
+        if (num === 1) {
+          sum++;
+        }
+      }
+      return sum;
+    };
+
+    // test
+    let mat = [
+      [1, 0, 0],
+      [0, 0, 1],
+      [1, 0, 0]
+    ];
+    console.log(numSpecial(mat))
+  </script>
+</body>
+
+</html>
