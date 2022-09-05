@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    // 方法一：使用序列化进行唯一表示
+    // 时间复杂度：O(n^2)
+    // 空间复杂度：O(n^2)
+    var findDuplicateSubtrees = function (root) {
+      const seen = new Map();
+      const repeat = new Set();
+      const dfs = (node) => {
+        if (!node) {
+          return "";
+        }
+        let sb = '';
+        sb += node.val;
+        sb += "(";
+        sb += dfs(node.left);
+        sb += ")(";
+        sb += dfs(node.right);
+        sb += ")";
+        if (seen.has(sb)) {
+          repeat.add(seen.get(sb));
+        } else {
+          seen.set(sb, node);
+        }
+        return sb;
+      }
+      dfs(root);
+      return [...repeat];
+    };
+
+    // 方法二：使用三元组进行唯一表示
+    // 时间复杂度：O(n)
+    // 空间复杂度：O(n)
+    var findDuplicateSubtrees = function (root) {
+      const seen = new Map();
+      const repeat = new Set();
+      let idx = 0;
+      const dfs = (node) => {
+        if (!node) {
+          return 0;
+        }
+        const tri = [node.val, dfs(node.left), dfs(node.right)];
+        const hash = tri.toString();
+        if (seen.has(hash)) {
+          const pair = seen.get(hash);
+          repeat.add(pair[0]);
+          return pair[1];
+        } else {
+          seen.set(hash, [node, ++idx]);
+          return idx;
+        }
+      }
+      dfs(root);
+      return [...repeat];
+    };
+  </script>
+</body>
+
+</html>
