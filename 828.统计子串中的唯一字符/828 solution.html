@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    // 方法一：分别计算每个字符的贡献
+    // 时间复杂度：O(n)
+    // 空间复杂度：O(n)
+    var uniqueLetterString = function (s) {
+      const index = new Map();
+      for (let i = 0; i < s.length; i++) {
+        const c = s[i];
+        if (!index.has(c)) {
+          index.set(c, []);
+          index.get(c).push(-1);
+        }
+        index.get(c).push(i);
+      }
+      let res = 0;
+      for (const [_, arr] of index.entries()) {
+        arr.push(s.length);
+        for (let i = 1; i < arr.length - 1; i++) {
+          res += (arr[i] - arr[i - 1]) * (arr[i + 1] - arr[i]);
+        }
+      }
+      return res;
+    };
+
+    // test
+    let s = "ABC";
+    console.log(uniqueLetterString(s))
+  </script>
+</body>
+
+</html>
