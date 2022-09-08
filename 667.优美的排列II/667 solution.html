@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    // 方法一：从特殊情况到一般情况
+    // 时间复杂度：O(n)
+    // 空间复杂度：O(1)
+    var constructArray = function (n, k) {
+      const answer = new Array(n).fill(0);
+      let idx = 0;
+      for (let i = 1; i < n - k; ++i) {
+        answer[idx] = i;
+        ++idx;
+      }
+      for (let i = n - k, j = n; i <= j; ++i, --j) {
+        answer[idx] = i;
+        ++idx;
+        if (i !== j) {
+          answer[idx] = j;
+          ++idx;
+        }
+      }
+      return answer;
+    };
+
+    // test
+    let n = 3,
+      k = 1;
+    console.log(constructArray(n, k))
+  </script>
+</body>
+
+</html>
