@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    // 方法一：直接模拟
+    // 时间复杂度：O(n)
+    // 空间复杂度：O(1)
+    var minOperations = function (logs) {
+      let depth = 0;
+      for (const log of logs) {
+        if ('./' === log) {
+          continue;
+        } else if ('../' === log) {
+          if (depth > 0) {
+            depth--;
+          }
+        } else {
+          depth++;
+        }
+      }
+      return depth;
+    };
+
+    // test
+    let logs = ["d1/", "d2/", "../", "d21/", "./"];
+    console.log(minOperations(logs))
+  </script>
+</body>
+
+</html>
