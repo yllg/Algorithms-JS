@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    // 方法一：递归
+    // 时间复杂度：O(n）
+    // 空间复杂度：O(n)
+    var trimBST = function (root, low, high) {
+      if (!root) {
+        return null;
+      }
+      if (root.val < low) {
+        return trimBST(root.right, low, high);
+      } else if (root.val > high) {
+        return trimBST(root.left, low, high);
+      } else {
+        root.left = trimBST(root.left, low, high);
+        root.right = trimBST(root.right, low, high);
+        return root;
+      }
+    };
+
+    // 方法二：迭代
+    // 时间复杂度：O(n）
+    // 空间复杂度：O(1)
+    var trimBST = function (root, low, high) {
+      while (root && (root.val < low || root.val > high)) {
+        if (root.val < low) {
+          root = root.right;
+        } else {
+          root = root.left;
+        }
+      }
+      if (!root) {
+        return null;
+      }
+      for (let node = root; node.left;) {
+        if (node.left.val < low) {
+          node.left = node.left.right;
+        } else {
+          node = node.left;
+        }
+      }
+      for (let node = root; node.right;) {
+        if (node.right.val > high) {
+          node.right = node.right.left;
+        } else {
+          node = node.right;
+        }
+      }
+      return root;
+    };
+  </script>
+</body>
+
+</html>
