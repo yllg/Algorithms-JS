@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    // 如果存在一个数 x ，使得 nums 中恰好有 x 个元素 大于或者等于 x ，那么就称 nums 是一个 特殊数组 ，而 x 是该数组的 特征值
+
+    // 方法一：降序排序 + 一次遍历
+    // 时间复杂度：O(nlogn)
+    // 空间复杂度：O(logn)
+    var specialArray = function (nums) {
+      nums.sort((a, b) => a - b);
+      const n = nums.length;
+      for (let i = 0, j = n - 1; i < j; i++, j--) {
+        const temp = nums[i];
+        nums[i] = nums[j];
+        nums[j] = temp;
+      }
+      for (let i = 1; i <= n; ++i) {
+        if (nums[i - 1] >= i && (i === n || nums[i] < i)) {
+          return i;
+        }
+      }
+      return -1;
+    };
+
+    // test 
+    let nums = [3, 5];
+    console.log(specialArray(nums))
+  </script>
+</body>
+
+</html>
