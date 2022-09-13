@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    // 至多可以交换一次数字中的任意两位。返回你能得到的最大值。
+
+    // 方法一：直接遍历
+    // 时间复杂度：O(log^3 * num)
+    // 空间复杂度：O(log num)
+    var maximumSwap = function (num) {
+      const charArray = [...'' + num];
+      const n = charArray.length;
+      let maxNum = num;
+      for (let i = 0; i < n; i++) {
+        for (let j = i + 1; j < n; j++) {
+          swap(charArray, i, j);
+          maxNum = Math.max(maxNum, parseInt(charArray.join('')));
+          swap(charArray, i, j);
+        }
+      }
+      return maxNum;
+    }
+
+    var swap = (charArray, i, j) => {
+      const temp = charArray[i];
+      charArray[i] = charArray[j];
+      charArray[j] = temp;
+    };
+
+    // 方法二: 贪心
+    // 时间复杂度：O(log num)
+    // 空间复杂度：O(log num)
+    var maximumSwap = function (num) {
+      const charArray = [...'' + num];
+      const n = charArray.length;
+      let maxIdx = n - 1;
+      let idx1 = -1,
+        idx2 = -1;
+      for (let i = n - 1; i >= 0; i--) {
+        if (charArray[i] > charArray[maxIdx]) {
+          maxIdx = i;
+        } else if (charArray[i] < charArray[maxIdx]) {
+          idx1 = i;
+          idx2 = maxIdx;
+        }
+      }
+      if (idx1 >= 0) {
+        swap(charArray, idx1, idx2);
+        return parseInt(charArray.join(''));
+      } else {
+        return num;
+      }
+    }
+
+    var swap = (charArray, i, j) => {
+      const temp = charArray[i];
+      charArray[i] = charArray[j];
+      charArray[j] = temp;
+    };
+
+    // test
+    let num = 2736;
+    console.log(maximumSwap(num))
+  </script>
+</body>
+
+</html>
