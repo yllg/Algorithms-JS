@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.21/lodash.min.js"></script>
+  <script>
+    // 方法一：降低搜索空间
+    // 时间复杂度：O(1)
+    // 空间复杂度：O(1)
+    var flipLights = function (n, presses) {
+      const seen = new Set();
+      for (let i = 0; i < 1 << 4; i++) {
+        const pressArr = new Array(4).fill(0);
+        for (let j = 0; j < 4; j++) {
+          pressArr[j] = (i >> j) & 1;
+        }
+        const sum = _.sum(pressArr);
+        if (sum % 2 === presses % 2 && sum <= presses) {
+          let status = pressArr[0] ^ pressArr[1] ^ pressArr[3];
+          if (n >= 2) {
+            status |= (pressArr[0] ^ pressArr[1]) << 1;
+          }
+          if (n >= 3) {
+            status |= (pressArr[0] ^ pressArr[2]) << 2;
+          }
+          if (n >= 4) {
+            status |= (pressArr[0] ^ pressArr[1] ^ pressArr[3]) << 3;
+          }
+          seen.add(status);
+        }
+      }
+      return seen.size;
+    };
+
+    // test
+    let n = 1,
+      presses = 1;
+    console.log(flipLights(n, presses))
+  </script>
+</body>
+
+</html>
