@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    // 方法一：扫描线
+    // 时间复杂度：O(n^2)，其中 n 是矩形的个数。
+    // 空间复杂度：O(n)，即为扫描线需要使用的空间。
+    var rectangleArea = function (rectangles) {
+      const sides = [];
+      for (const [x1, y1, x2, y2] of rectangles) {
+        const segment = [y1, y2];
+        sides.push({
+          isLeft: true,
+          x: x1,
+          segment
+        });
+        sides.push({
+          isLeft: false,
+          x: x2,
+          segment
+        });
+      }
+      sides.sort((s1, s2) => s1.x - s2.x);
+
+      const segments = [];
+      let area = 0n;
+      let prevX = 0;
+      for (const {
+          isLeft,
+          x,
+          segment
+        } of sides) {
+        if (x != prevX) {
+          area += calcPartArea(x);
+          prevX = x;
+        }
+        if (isLeft) {
+          insertSegment(segment);
+        } else {
+          removeSegment(segment);
+        }
+      }
+
+      return area % 1000000007n;
+
+      function insertSegment(segment) {
+        const [start, end] = segment;
+        const i = segments.findIndex(segment => start < segment[0] || (start == segment[0] && end > segment[1]));
+        if (i == -1) {
+          segments.push(segment);
+        } else {
+          segments.splice(i, 0, segment);
+        }
+      }
+
+      function removeSegment(segment) {
+        const i = segments.indexOf(segment);
+        if (i != -1) {
+          segments.splice(i, 1);
+        }
+      }
+
+      function calcPartArea(x) {
+        const combinedSegments = [];
+        for (const segment of segments) {
+          if (combinedSegments.length == 0) {
+            combinedSegments.push(segment.slice());
+          } else {
+            const prevSegment = combinedSegments[combinedSegments.length - 1];
+            const end1 = prevSegment[1];
+            const [start2, end2] = segment;
+            switch (true) {
+              case start2 < end1:
+                prevSegment[1] = Math.max(end1, end2);
+                break;
+              case start2 == end1:
+                prevSegment[1] = end2;
+                break;
+              case start2 > end1:
+                combinedSegments.push(segment.slice());
+                break;
+            }
+          }
+        }
+        const width = BigInt(x - prevX);
+        return combinedSegments
+          .map(([start, end]) => BigInt(end - start))
+          .reduce((area, height) => area + width * height, 0n);
+      }
+    };
+  </script>
+</body>
+
+</html>
