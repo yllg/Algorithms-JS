@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    // 方法一：模拟
+    // 时间复杂度：O(nlogn)
+    // 空间复杂度：O(n)
+    var frequencySort = function (nums) {
+      const cnt = new Map();
+      for (const num of nums) {
+        cnt.set(num, (cnt.get(num) || 0) + 1);
+      }
+      const list = [...nums];
+      list.sort((a, b) => {
+        const cnt1 = cnt.get(a),
+          cnt2 = cnt.get(b);
+        return cnt1 !== cnt2 ? cnt1 - cnt2 : b - a;
+      });
+      const length = nums.length;
+      for (let i = 0; i < length; i++) {
+        nums[i] = list[i];
+      }
+      return nums;
+    };
+
+    // test
+    let nums = [1, 1, 2, 2, 2, 3];
+    console.log(frequencySort(nums))
+  </script>
+</body>
+
+</html>
