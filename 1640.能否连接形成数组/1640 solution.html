@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    // 方法一：哈希表
+    // 时间复杂度：O(n)
+    // 空间复杂度：O(n)
+    var canFormArray = function (arr, pieces) {
+      const n = arr.length,
+        m = pieces.length;
+      const index = new Map();
+      for (let i = 0; i < m; i++) {
+        index.set(pieces[i][0], i);
+      }
+      for (let i = 0; i < n;) {
+        if (!index.has(arr[i])) {
+          return false;
+        }
+        const j = index.get(arr[i]),
+          len = pieces[j].length;
+        for (let k = 0; k < len; k++) {
+          if (arr[i + k] != pieces[j][k]) {
+            return false;
+          }
+        }
+        i = i + len;
+      }
+      return true;
+    };
+
+    // test
+    let arr = [15, 88],
+      pieces = [
+        [88],
+        [15]
+      ];
+    console.log(canFormArray(arr, pieces))
+  </script>
+</body>
+
+</html>
