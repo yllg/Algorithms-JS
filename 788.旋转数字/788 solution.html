@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.21/lodash.min.js"></script>
+  <script>
+    // 方法一：枚举每一个数
+    // 时间复杂度：O(nlogn)
+    // 空间复杂度：O(logn)
+    const check = [0, 0, 1, -1, -1, 1, 1, -1, 0, 1];
+    var rotatedDigits = function (n) {
+      let ans = 0;
+      for (let i = 1; i <= n; ++i) {
+        const num = '' + i;
+        let valid = true,
+          diff = false;
+        for (let j = 0; j < num.length; ++j) {
+          const ch = num[j];
+          if (check[ch.charCodeAt() - '0'.charCodeAt()] === -1) {
+            valid = false;
+          } else if (check[ch.charCodeAt() - '0'.charCodeAt()] === 1) {
+            diff = true;
+          }
+        }
+        if (valid && diff) {
+          ++ans;
+        }
+      }
+      return ans;
+    };
+
+    // 方法二：数位动态规划
+    // 时间复杂度：O(logn)
+    // 空间复杂度：O(logn)
+    var rotatedDigits = function (n) {
+      const check = [0, 0, 1, -1, -1, 1, 1, -1, 0, 1];
+      const memo = new Array(5).fill(0).map(() => new Array(2).fill(0).map(() => new Array(2).fill(-1)));
+      let digits = [];
+
+      const dfs = (pos, bound, diff) => {
+        if (pos === digits.length) {
+          return diff;
+        }
+        if (memo[pos][bound][diff] !== -1) {
+          return memo[pos][bound][diff];
+        }
+
+        let ret = 0;
+        for (let i = 0; i <= (bound !== 0 ? digits[pos] : 9); ++i) {
+          if (check[i] != -1) {
+            ret += dfs(
+              pos + 1,
+              bound !== 0 && i === digits[pos] ? 1 : 0,
+              diff !== 0 || check[i] === 1 ? 1 : 0
+            );
+          }
+        }
+        return memo[pos][bound][diff] = ret;
+      }
+
+      while (n !== 0) {
+        digits.push(n % 10);
+        n = Math.floor(n / 10);
+      }
+      digits = _.reverse(digits);
+
+      const ans = dfs(0, 1, 0);
+      return ans;
+    };
+
+    // test
+    let n = 10;
+    console.log(rotatedDigits(n))
+  </script>
+</body>
+
+</html>
