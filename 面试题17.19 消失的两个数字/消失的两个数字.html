@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    // 方法一：位运算
+    // 时间复杂度：O(n)
+    // 空间复杂度：O(1)
+    var missingTwo = function (nums) {
+      let xorsum = 0;
+      let n = nums.length + 2;
+      for (const num of nums) {
+        xorsum ^= num;
+      }
+      for (let i = 1; i <= n; i++) {
+        xorsum ^= i;
+      }
+      let type1 = 0,
+        type2 = 0;
+      const lsb = xorsum & (-xorsum);
+      for (const num of nums) {
+        if (num & lsb) {
+          type1 ^= num;
+        } else {
+          type2 ^= num;
+        }
+      }
+      for (let i = 1; i <= n; i++) {
+        if (i & lsb) {
+          type1 ^= i;
+        } else {
+          type2 ^= i;
+        }
+      }
+      return [type1, type2];
+    };
+
+    // test
+    let nums = [2, 3];
+    console.log(missingTwo(nums))
+  </script>
+</body>
+
+</html>
