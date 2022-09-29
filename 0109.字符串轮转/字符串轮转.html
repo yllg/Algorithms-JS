@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    // 方法一：模拟
+    // 时间复杂度：O(n^2)
+    // 空间复杂度：O(1)
+    var isFlipedString = function (s1, s2) {
+      const m = s1.length,
+        n = s2.length;
+      if (m !== n) {
+        return false;
+      }
+      if (n === 0) {
+        return true;
+      }
+      for (let i = 0; i < n; i++) {
+        let flag = true;
+        for (let j = 0; j < n; j++) {
+          if (s1[(i + j) % n] !== s2[j]) {
+            flag = false;
+            break;
+          }
+        }
+        if (flag) {
+          return true;
+        }
+      }
+      return false;
+    };
+
+    // 方法二：搜索子字符串
+    // 时间复杂度：O(n)
+    // 空间复杂度：O(n)
+    var isFlipedString = function (s1, s2) {
+      return s1.length === s2.length && (s1 + s1).indexOf(s2) !== -1;
+    };
+
+    // test
+    let s1 = "waterbottle",
+      s2 = "erbottlewat";
+    console.log(isFlipedString(s1, s2))
+  </script>
+</body>
+
+</html>
