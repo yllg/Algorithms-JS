@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    // 方法一：寻找 0101 串
+    // 时间复杂度：O(n)
+    // 空间复杂度：O(1)
+    var checkOnesSegment = function (s) {
+      return s.indexOf('01') === -1;
+    };
+
+    // test
+    let s = "1001";
+    console.log(checkOnesSegment(s))
+  </script>
+</body>
+
+</html>
