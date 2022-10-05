@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    // 方法一：哈希表
+    // 时间复杂度：O(L)，其中 L 是数组 cpdomains 中的所有字符串长度之和
+    // 空间复杂度：O(L)，其中 L 是数组 cpdomains 中的所有字符串长度之和
+    var subdomainVisits = function (cpdomains) {
+      const ans = [];
+      const counts = new Map();
+      for (const cpdomain of cpdomains) {
+        const space = cpdomain.indexOf(' ');
+        const count = parseInt(cpdomain.slice(0, space));
+        const domain = cpdomain.slice(space + 1);
+        counts.set(domain, (counts.get(domain) || 0) + count);
+        for (let i = 0; i < domain.length; i++) {
+          if (domain[i] === '.') {
+            const subdomain = domain.slice(i + 1);
+            counts.set(subdomain, (counts.get(subdomain) || 0) + count);
+          }
+        }
+      }
+      for (const [subdomain, count] of counts.entries()) {
+        ans.push(count + " " + subdomain);
+      }
+      return ans;
+    };
+
+    // test
+    let cpdomains = ["9001 discuss.leetcode.com"];
+    console.log(subdomainVisits(cpdomains))
+  </script>
+</body>
+
+</html>
