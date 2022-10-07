@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    // 方法一：动态规划
+    // 时间复杂度：O(n)
+    // 空间复杂度：O(1)
+    var maxAscendingSum = function (nums) {
+      let res = 0;
+      let l = 0;
+      while (l < nums.length) {
+        let cursum = nums[l++];
+        while (l < nums.length && nums[l] > nums[l - 1]) {
+          cursum += nums[l++];
+        }
+        res = Math.max(res, cursum);
+      }
+      return res;
+    };
+
+    // test
+    let nums = [10, 20, 30, 5, 10, 50];
+    console.log(maxAscendingSum(nums))
+  </script>
+</body>
+
+</html>
