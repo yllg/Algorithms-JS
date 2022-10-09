@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    // 方法一：分治
+    // 时间复杂度：O(n^2)
+    // 空间复杂度：O(n^2)
+    var scoreOfParentheses = function (s) {
+      if (s.length === 2) {
+        return 1;
+      }
+      let bal = 0,
+        n = s.length,
+        len = 0;
+      for (let i = 0; i < n; i++) {
+        bal += (s[i] === '(' ? 1 : -1);
+        if (bal === 0) {
+          len = i + 1;
+          break;
+        }
+      }
+      if (len === n) {
+        return 2 * scoreOfParentheses(s.slice(1, n - 1));
+      } else {
+        return scoreOfParentheses(s.slice(0, len)) + scoreOfParentheses(s.slice(len));
+      }
+    };
+
+    // 方法二：栈
+    // 时间复杂度：O(n)
+    // 空间复杂度：O(n)
+    var scoreOfParentheses = function (s) {
+      const st = [0];
+      for (let i = 0; i < s.length; i++) {
+        if (s[i] === '(') {
+          st.push(0);
+        } else {
+          let v = st.pop();
+          let top = st.pop() + Math.max(2 * v, 1);
+          st.push(top);
+        }
+      }
+      return st[0];
+    };
+
+    // 方法三：计算最终分数和
+    // 时间复杂度：O(n)
+    // 空间复杂度：O(1)
+    var scoreOfParentheses = function (s) {
+      let bal = 0,
+        n = s.length,
+        res = 0;
+      for (let i = 0; i < n; i++) {
+        bal += (s[i] == '(' ? 1 : -1);
+        if (s[i] == ')' && s[i - 1] === '(') {
+          res += 1 << bal;
+        }
+      }
+      return res;
+    };
+
+    // test
+    let s = "()";
+    console.log(scoreOfParentheses(s));
+  </script>
+</body>
+
+</html>
