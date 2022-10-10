@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    // 方法一：动态规划
+    // 时间复杂度：O(n)
+    // 空间复杂度：O(1)
+    var minSwap = function (nums1, nums2) {
+      const n = nums1.length;
+      let a = 0,
+        b = 1;
+      for (let i = 1; i < n; i++) {
+        let at = a,
+          bt = b;
+        a = b = n;
+        if (nums1[i] > nums1[i - 1] && nums2[i] > nums2[i - 1]) {
+          a = Math.min(a, at);
+          b = Math.min(b, bt + 1);
+        }
+        if (nums1[i] > nums2[i - 1] && nums2[i] > nums1[i - 1]) {
+          a = Math.min(a, bt);
+          b = Math.min(b, at + 1);
+        }
+      }
+      return Math.min(a, b);
+    };
+
+    // test
+    let nums1 = [1, 3, 5, 4],
+      nums2 = [1, 2, 3, 7];
+    console.log(minSwap(nums1, nums2))
+  </script>
+</body>
+
+</html>
