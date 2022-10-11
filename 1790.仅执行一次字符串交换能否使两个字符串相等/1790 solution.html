@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    // 方法一：计数统计
+    // 时间复杂度：O(n)
+    // 空间复杂度：O(C) 由于两个字符串中字符不同的数目大于 2 即可返回，因此最多只需要保存 C = 2 个不同位置的索引即可。
+    var areAlmostEqual = function (s1, s2) {
+      const n = s1.length;
+      const diff = [];
+      for (let i = 0; i < n; ++i) {
+        if (s1[i] !== s2[i]) {
+          if (diff.length >= 2) {
+            return false;
+          }
+          diff.push(i);
+        }
+      }
+      if (diff.length === 0) {
+        return true;
+      }
+      if (diff.length !== 2) {
+        return false;
+      }
+      return s1[diff[0]] === s2[diff[1]] && s1[diff[1]] === s2[diff[0]];
+    };
+
+    // test
+    let s1 = "bank",
+      s2 = "kanb";
+    console.log(areAlmostEqual(s1, s2))
+  </script>
+</body>
+
+</html>
