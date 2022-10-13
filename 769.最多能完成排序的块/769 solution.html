@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    // 方法一：贪心
+    // 时间复杂度：O(n)
+    // 时间复杂度：O(1)
+    var maxChunksToSorted = function (arr) {
+      let m = 0,
+        res = 0;
+      for (let i = 0; i < arr.length; i++) {
+        m = Math.max(m, arr[i]);
+        if (m === i) {
+          res++;
+        }
+      }
+      return res;
+    };
+
+    // test
+    let arr = [4, 3, 2, 1, 0];
+    console.log(maxChunksToSorted(arr))
+  </script>
+</body>
+
+</html>
