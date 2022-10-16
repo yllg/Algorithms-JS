@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    // 方法一：深度优先搜索
+    // 时间复杂度：O(n + m)
+    // 空间复杂度：O(n + m)
+    var possibleBipartition = function (n, dislikes) {
+      const dfs = (curnode, nowcolor, color, g) => {
+        color[curnode] = nowcolor;
+        for (const nextnode of g[curnode]) {
+          if (color[nextnode] !== 0 && color[nextnode] === color[curnode]) {
+            return false;
+          }
+          if (color[nextnode] === 0 && !dfs(nextnode, 3 ^ nowcolor, color, g)) {
+            return false;
+          }
+        }
+        return true;
+      }
+      const color = new Array(n + 1).fill(0);
+      const g = new Array(n + 1).fill(0);
+      for (let i = 0; i <= n; ++i) {
+        g[i] = [];
+      }
+      for (const p of dislikes) {
+        g[p[0]].push(p[1]);
+        g[p[1]].push(p[0]);
+      }
+      for (let i = 1; i <= n; ++i) {
+        if (color[i] === 0 && !dfs(i, 1, color, g)) {
+          return false;
+        }
+      }
+      return true;
+    };
+
+    // 方法二：广度优先搜索
+    // 时间复杂度：O(n + m)
+    // 空间复杂度：O(n + m)
+    var possibleBipartition = function (n, dislikes) {
+      const color = new Array(n + 1).fill(0);
+      const g = new Array(n + 1).fill(0);
+      for (let i = 0; i <= n; ++i) {
+        g[i] = [];
+      }
+      for (const p of dislikes) {
+        g[p[0]].push(p[1]);
+        g[p[1]].push(p[0]);
+      }
+      for (let i = 1; i <= n; ++i) {
+        if (color[i] === 0) {
+          const queue = [i];
+          color[i] = 1;
+          while (queue.length !== 0) {
+            const t = queue.shift();
+            for (const next of g[t]) {
+              if (color[next] > 0 && color[next] === color[t]) {
+                return false;
+              }
+              if (color[next] === 0) {
+                color[next] = 3 ^ color[t];
+                queue.push(next);
+              }
+            }
+          }
+        }
+      }
+      return true;
+    };
+
+    // 方法三：并查集
+    // 时间复杂度：O(n+mα(n))
+    // 空间复杂度：O(n+m)
+    var possibleBipartition = function (n, dislikes) {
+      const fa = new Array(n + 1).fill(-1);
+      const g = new Array(n + 1).fill(0);
+      for (let i = 0; i <= n; ++i) {
+        g[i] = [];
+      }
+      for (const p of dislikes) {
+        g[p[0]].push(p[1]);
+        g[p[1]].push(p[0]);
+      }
+      for (let i = 1; i <= n; ++i) {
+        for (let j = 0; j < g[i].length; ++j) {
+          unit(g[i][0], g[i][j], fa);
+          if (isconnect(i, g[i][j], fa)) {
+            return false;
+          }
+        }
+      }
+      return true;
+    }
+
+    const unit = (x, y, fa) => {
+      x = findFa(x, fa);
+      y = findFa(y, fa);
+      if (x === y) {
+        return;
+      }
+      if (fa[x] < fa[y]) {
+        const temp = x;
+        x = y;
+        y = temp;
+      }
+      fa[x] += fa[y];
+      fa[y] = x;
+    }
+
+    const isconnect = (x, y, fa) => {
+      x = findFa(x, fa);
+      y = findFa(y, fa);
+      return x === y;
+    }
+
+    const findFa = (x, fa) => {
+      return fa[x] < 0 ? x : (fa[x] = findFa(fa[x], fa));
+    }
+
+    // test
+    let n = 4,
+      dislikes = [
+        [1, 2],
+        [1, 3],
+        [2, 4]
+      ];
+    console.log(possibleBipartition(n, dislikes))
+  </script>
+</body>
+
+</html>
