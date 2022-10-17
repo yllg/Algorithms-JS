@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    // 这道题目可以理解为求只包含两种元素的最长连续子序列
+
+    // 方法一：滑动窗口
+    // 时间复杂度：O(n)
+    // 空间复杂度：O(1)
+    var totalFruit = function (fruits) {
+      const n = fruits.length;
+      const cnt = new Map();
+
+      let left = 0,
+        ans = 0;
+      for (let right = 0; right < n; ++right) {
+        cnt.set(fruits[right], (cnt.get(fruits[right]) || 0) + 1);
+        while (cnt.size > 2) {
+          cnt.set(fruits[left], cnt.get(fruits[left]) - 1);
+          if (cnt.get(fruits[left]) == 0) {
+            cnt.delete(fruits[left]);
+          }
+          ++left;
+        }
+        ans = Math.max(ans, right - left + 1);
+      }
+      return ans;
+    };
+
+    // test
+    let fruits = [1, 2, 1];
+    console.log(totalFruit(fruits))
+  </script>
+</body>
+
+</html>
