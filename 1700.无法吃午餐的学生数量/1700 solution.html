@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.21/lodash.min.js"></script>
+  <script>
+    // 方法一：模拟
+    // 时间复杂度：O(n)
+    // 空间复杂度：O(1)
+    var countStudents = function (students, sandwiches) {
+      let s1 = _.sum(students);
+      let s0 = students.length - s1;
+      for (let i = 0; i < sandwiches.length; i++) {
+        if (sandwiches[i] === 0 && s0 > 0) {
+          s0--;
+        } else if (sandwiches[i] === 1 && s1 > 0) {
+          s1--;
+        } else {
+          break;
+        }
+      }
+      return s0 + s1;
+    };
+
+    // test
+    let students = [1, 1, 0, 0],
+      sandwiches = [0, 1, 0, 1];
+    console.log(countStudents(students, sandwiches))
+  </script>
+</body>
+
+</html>
