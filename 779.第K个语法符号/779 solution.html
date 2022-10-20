@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    // 首先在第一行我们写上一个 0。接下来的每一行，将前一行中的0替换为01，1替换为10
+
+    // 方法一：递归
+    // 时间复杂度：O(n)
+    // 空间复杂度：O(n)
+    var kthGrammar = function (n, k) {
+      if (n === 1) {
+        return 0;
+      }
+      return (k & 1) ^ 1 ^ kthGrammar(n - 1, (k + 1) / 2);
+    };
+
+    // 方法二：找规律 + 递归
+    var kthGrammar = function (n, k) {
+      if (k === 1) {
+        return 0;
+      }
+      if (k > (1 << (n - 2))) {
+        return 1 ^ kthGrammar(n - 1, k - (1 << (n - 2)));
+      }
+      return kthGrammar(n - 1, k);
+    };
+
+    // test
+    let n = 1,
+      k = 1;
+    console.log(kthGrammar(n, k))
+  </script>
+</body>
+
+</html>
