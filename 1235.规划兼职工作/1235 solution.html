@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    // 方法一：动态规划 + 二分查找
+    /**
+     * @param {number[]} startTime
+     * @param {number[]} endTime
+     * @param {number[]} profit
+     * @return {number}
+     */
+    // 时间复杂度：O(nlogn)
+    // 空间复杂度：O(n)
+    var jobScheduling = function (startTime, endTime, profit) {
+      const n = startTime.length;
+      const jobs = new Array(n).fill(0).map((_, i) => [startTime[i], endTime[i], profit[i]]);
+      jobs.sort((a, b) => a[1] - b[1]);
+      const dp = new Array(n + 1).fill(0);
+      for (let i = 1; i <= n; i++) {
+        const k = binarySearch(jobs, i - 1, jobs[i - 1][0]);
+        dp[i] = Math.max(dp[i - 1], dp[k] + jobs[i - 1][2]);
+      }
+      return dp[n];
+    }
+
+    const binarySearch = (jobs, right, target) => {
+      let left = 0;
+      while (left < right) {
+        const mid = left + Math.floor((right - left) / 2);
+        if (jobs[mid][1] > target) {
+          right = mid;
+        } else {
+          left = mid + 1;
+        }
+      }
+      return left;
+    };
+
+    // test
+    let startTime = [1, 2, 3, 3],
+      endTime = [3, 4, 5, 6],
+      profit = [50, 10, 40, 70];
+    console.log(jobScheduling(startTime, endTime, profit))
+  </script>
+</body>
+
+</html>
