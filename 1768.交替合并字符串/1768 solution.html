@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    // 方法一：双指针
+    // 时间复杂度：O(m+n)
+    // 空间复杂度：O(1) 或 O(m+n)。如果使用的语言支持可修改的字符串，那么空间复杂度为 O(1)，否则为 O(m+n)
+    var mergeAlternately = function (word1, word2) {
+      const m = word1.length,
+        n = word2.length;
+      let i = 0,
+        j = 0;
+
+      const ans = [];
+      while (i < m || j < n) {
+        if (i < m) {
+          ans.push(word1[i]);
+          ++i;
+        }
+        if (j < n) {
+          ans.push(word2[j]);
+          ++j;
+        }
+      }
+      return ans.join('');
+    };
+
+    // test
+    let word1 = "abc",
+      word2 = "pqr";
+    console.log(mergeAlternately(word1, word2))
+  </script>
+</body>
+
+</html>
