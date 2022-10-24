@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    // 方法一：两次遍历
+    // 时间复杂度：O(n)
+    // 空间复杂度：O(n)
+    var partitionDisjoint = function (nums) {
+      const n = nums.length;
+      const minRight = new Array(n).fill(0);
+      minRight[n - 1] = nums[n - 1];
+      for (let i = n - 2; i >= 0; i--) {
+        minRight[i] = Math.min(nums[i], minRight[i + 1]);
+      }
+
+      let maxLeft = 0;
+      for (let i = 0; i < n - 1; i++) {
+        maxLeft = Math.max(maxLeft, nums[i]);
+        if (maxLeft <= minRight[i + 1]) {
+          return i + 1;
+        }
+      }
+      return n - 1;
+    };
+
+    // 方法二：一次遍历
+    // 时间复杂度：O(n)
+    // 空间复杂度：O(1)
+    var partitionDisjoint = function (nums) {
+      const n = nums.length;
+      let leftMax = nums[0],
+        leftPos = 0,
+        curMax = nums[0];
+      for (let i = 1; i < n - 1; i++) {
+        curMax = Math.max(curMax, nums[i]);
+        if (nums[i] < leftMax) {
+          leftMax = curMax;
+          leftPos = i;
+        }
+      }
+      return leftPos + 1;
+    };
+
+    // test
+    let nums = [5, 0, 3, 8, 6];
+    console.log(partitionDisjoint(nums))
+  </script>
+</body>
+
+</html>
