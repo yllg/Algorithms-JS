@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    // 其中 1 表示陆地，0 表示水域, 返回必须翻转的 0 的最小数目
+
+    // 方法一：广度优先搜索
+    // 时间复杂度：O(n^2)
+    // 空间复杂度：O(n^2)
+    var shortestBridge = function (grid) {
+      const n = grid.length;
+      const dirs = [
+        [-1, 0],
+        [1, 0],
+        [0, 1],
+        [0, -1]
+      ];
+      const island = [];
+      const queue = [];
+
+      for (let i = 0; i < n; i++) {
+        for (let j = 0; j < n; j++) {
+          if (grid[i][j] === 1) {
+            queue.push([i, j]);
+            grid[i][j] = -1;
+            while (queue.length !== 0) {
+              const cell = queue.shift();
+              let x = cell[0],
+                y = cell[1];
+              island.push(cell);
+              for (let k = 0; k < 4; k++) {
+                let nx = x + dirs[k][0];
+                let ny = y + dirs[k][1];
+                if (nx >= 0 && ny >= 0 && nx < n && ny < n && grid[nx][ny] == 1) {
+                  queue.push([nx, ny]);
+                  grid[nx][ny] = -1;
+                }
+              }
+            }
+            for (const cell of island) {
+              queue.push(cell);
+            }
+            let step = 0;
+            while (queue.length !== 0) {
+              const sz = queue.length;
+              for (let k = 0; k < sz; k++) {
+                const cell = queue.shift();
+                let x = cell[0],
+                  y = cell[1];
+                for (let d = 0; d < 4; d++) {
+                  let nx = x + dirs[d][0];
+                  let ny = y + dirs[d][1];
+                  if (nx >= 0 && ny >= 0 && nx < n && ny < n) {
+                    if (grid[nx][ny] === 0) {
+                      queue.push([nx, ny]);
+                      grid[nx][ny] = -1;
+                    } else if (grid[nx][ny] === 1) {
+                      return step;
+                    }
+                  }
+                }
+              }
+              step++;
+            }
+          }
+        }
+      }
+      return 0;
+    };
+
+    // 方法二：深度优先搜索 + 广度优先搜索
+    // 时间复杂度：O(n^2)
+    // 空间复杂度：O(n^2)
+    var shortestBridge = function (grid) {
+      const n = grid.length;
+      const dirs = [
+        [-1, 0],
+        [1, 0],
+        [0, 1],
+        [0, -1]
+      ];
+
+      for (let i = 0; i < n; i++) {
+        for (let j = 0; j < n; j++) {
+          if (grid[i][j] === 1) {
+            const queue = [];
+            dfs(i, j, grid, queue);
+            let step = 0;
+            while (queue.length !== 0) {
+              const sz = queue.length;
+              for (let k = 0; k < sz; k++) {
+                const cell = queue.shift();
+                let x = cell[0],
+                  y = cell[1];
+                for (let d = 0; d < 4; d++) {
+                  let nx = x + dirs[d][0];
+                  let ny = y + dirs[d][1];
+                  if (nx >= 0 && ny >= 0 && nx < n && ny < n) {
+                    if (grid[nx][ny] === 0) {
+                      queue.push([nx, ny]);
+                      grid[nx][ny] = -1;
+                    } else if (grid[nx][ny] === 1) {
+                      return step;
+                    }
+                  }
+                }
+              }
+              step++;
+            }
+          }
+        }
+      }
+      return 0;
+    }
+
+    const dfs = (x, y, grid, queue) => {
+      if (x < 0 || y < 0 || x >= grid.length || y >= grid[0].length || grid[x][y] !== 1) {
+        return;
+      }
+      queue.push([x, y]);
+      grid[x][y] = -1;
+      dfs(x - 1, y, grid, queue);
+      dfs(x + 1, y, grid, queue);
+      dfs(x, y - 1, grid, queue);
+      dfs(x, y + 1, grid, queue);
+    };
+
+    // test
+    let grid = [
+      [0, 1, 0],
+      [0, 0, 0],
+      [0, 0, 1]
+    ];
+    console.log(shortestBridge(grid))
+  </script>
+</body>
+
+</html>
