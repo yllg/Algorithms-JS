@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    // 方法一：前缀和 + 单调双端队列
+    // 时间复杂度：O(n)
+    // 空间复杂度：O(n)
+    var shortestSubarray = function (nums, k) {
+      const n = nums.length;
+      const preSumArr = new Array(n + 1).fill(0);
+      for (let i = 0; i < n; i++) {
+        preSumArr[i + 1] = preSumArr[i] + nums[i];
+      }
+      let res = n + 1;
+      const queue = [];
+      for (let i = 0; i <= n; i++) {
+        const curSum = preSumArr[i];
+        while (queue.length != 0 && curSum - preSumArr[queue[0]] >= k) {
+          res = Math.min(res, i - queue.shift());
+        }
+        while (queue.length != 0 && preSumArr[queue[queue.length - 1]] >= curSum) {
+          queue.pop();
+        }
+        queue.push(i);
+      }
+      return res < n + 1 ? res : -1;
+    };
+
+    // test
+    let nums = [1],
+      k = 1;
+    console.log(shortestSubarray(nums, k))
+  </script>
+</body>
+
+</html>
