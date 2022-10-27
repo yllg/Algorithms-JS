@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    // 方法一：遍历
+    // 时间复杂度：O(n)
+    // 空间复杂度：O(1)
+    var arraySign = function (nums) {
+      let sign = 1;
+      for (const num of nums) {
+        if (num === 0) {
+          return 0;
+        }
+        if (num < 0) {
+          sign = -sign;
+        }
+      }
+      return sign;
+    };
+
+    // test
+    let nums = [-1, -2, -3, -4, 3, 2, 1];
+    console.log(arraySign(nums))
+  </script>
+</body>
+
+</html>
