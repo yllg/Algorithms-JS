@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    // 方法一：模拟
+    // 时间复杂度：O(n)
+    // 空间复杂度：O(1)
+    var countMatches = function (items, ruleKey, ruleValue) {
+      const index = {
+        "type": 0,
+        "color": 1,
+        "name": 2
+      } [ruleKey];
+      let res = 0;
+      for (const item of items) {
+        if (item[index] === ruleValue) {
+          res++;
+        }
+      }
+      return res;
+    };
+
+    // test
+    let items = [
+        ["phone", "blue", "pixel"],
+        ["computer", "silver", "lenovo"],
+        ["phone", "gold", "iphone"]
+      ],
+      ruleKey = "color",
+      ruleValue = "silver";
+
+    console.log(countMatches(items, ruleKey, ruleValue))
+  </script>
+</body>
+
+</html>
