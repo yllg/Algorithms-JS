@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    // 方法一：广度优先搜索
+    // 时间复杂度：O(n * 2^n)
+    // 空间复杂度：O(n * 2^n)
+    var letterCasePermutation = function (s) {
+      const ans = [];
+      const q = [""];
+      while (q.length !== 0) {
+        let cur = q[0];
+        const pos = cur.length;
+        if (pos === s.length) {
+          ans.push(cur);
+          q.shift();
+        } else {
+          if (isLetter(s[pos])) {
+            q.push(cur + swapCase(s[pos]));
+          }
+          q[0] += s[pos];
+        }
+      }
+      return ans;
+    };
+
+    const swapCase = (ch) => {
+      if ('a' <= ch && ch <= 'z') {
+        return ch.toUpperCase();
+      }
+      if ('A' <= ch && ch <= 'Z') {
+        return ch.toLowerCase();
+      }
+    }
+
+    var isLetter = (ch) => {
+      return 'a' <= ch && ch <= 'z' || 'A' <= ch && ch <= 'Z';
+    }
+
+    // 方法二：回溯
+    // 时间复杂度：O(n * 2^n)
+    // 空间复杂度：O(n * 2^n)
+    var letterCasePermutation = function (s) {
+      const ans = [];
+      const dfs = (arr, pos, res) => {
+        while (pos < arr.length && isDigit(arr[pos])) {
+          pos++;
+        }
+        if (pos === arr.length) {
+          res.push(arr.join(""));
+          return;
+        }
+        arr[pos] = String.fromCharCode(arr[pos].charCodeAt() ^ 32);
+        dfs(arr, pos + 1, res);
+        arr[pos] = String.fromCharCode(arr[pos].charCodeAt() ^ 32);
+        dfs(arr, pos + 1, res);
+      }
+      dfs([...s], 0, ans);
+      return ans;
+    };
+
+    var isDigit = (ch) => {
+      return parseFloat(ch).toString() === "NaN" ? false : true;
+    }
+
+    // 方法三：二进制位图
+    // 时间复杂度：O(n * 2^n)
+    // 空间复杂度：O(1)
+    var letterCasePermutation = function (s) {
+      const n = s.length;
+      let m = 0;
+      for (let i = 0; i < n; i++) {
+        if (isLetter(s[i])) {
+          m++;
+        }
+      }
+      const ans = [];
+      for (let mask = 0; mask < (1 << m); mask++) {
+        let sb = '';
+        for (let j = 0, k = 0; j < n; j++) {
+          if (isLetter(s[j]) && (mask & (1 << k++)) !== 0) {
+            sb += s[j].toUpperCase();
+          } else {
+            sb += s[j].toLowerCase();
+          }
+        }
+        ans.push(sb);
+      }
+      return ans;
+    };
+
+    var isDigit = (ch) => {
+      return parseFloat(ch).toString() === "NaN" ? false : true;
+    }
+
+    var isLetter = (ch) => {
+      return 'a' <= ch && ch <= 'z' || 'A' <= ch && ch <= 'Z';
+    }
+
+    // test
+    let s = "a1b2";
+    console.log(letterCasePermutation(s))
+  </script>
+</body>
+
+</html>
