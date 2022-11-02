@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    // 方法一：枚举
+    // 时间复杂度：O(R_x * R_y * n)，其中 R_x和 R_y分别是网络信号塔的 x 坐标和 y 坐标的最大值，n 是网络信号塔的数量。
+    var bestCoordinate = function (towers, radius) {
+      let xMax = Number.MIN_VALUE,
+        yMax = -Number.MAX_VALUE;
+      for (const tower of towers) {
+        let x = tower[0],
+          y = tower[1];
+        xMax = Math.max(xMax, x);
+        yMax = Math.max(yMax, y);
+      }
+      let cx = 0,
+        cy = 0;
+      let maxQuality = 0;
+      for (let x = 0; x <= xMax; x++) {
+        for (let y = 0; y <= yMax; y++) {
+          const coordinate = [x, y];
+          let quality = 0;
+          for (const tower of towers) {
+            const squaredDistance = getSquaredDistance(coordinate, tower);
+            if (squaredDistance <= radius * radius) {
+              const distance = Math.sqrt(squaredDistance);
+              quality += Math.floor(tower[2] / (1 + distance));
+            }
+          }
+          if (quality > maxQuality) {
+            cx = x;
+            cy = y;
+            maxQuality = quality;
+          }
+        }
+      }
+      return [cx, cy];
+    }
+
+    const getSquaredDistance = (coordinate, tower) => {
+      return (tower[0] - coordinate[0]) * (tower[0] - coordinate[0]) + (tower[1] - coordinate[1]) * (tower[1] -
+        coordinate[1]);
+    };
+
+    // test
+    let towers = [
+        [1, 2, 5],
+        [2, 1, 7],
+        [3, 1, 9]
+      ],
+      radius = 2;
+    console.log(bestCoordinate(towers, radius))
+  </script>
+</body>
+
+</html>
