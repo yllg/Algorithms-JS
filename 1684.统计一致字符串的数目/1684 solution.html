@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    // 方法一：遍历
+    // 时间复杂度：O(n+∑m_i)
+    // 空间复杂度：O(1)
+    var countConsistentStrings = function (allowed, words) {
+      let mask = 0;
+      for (let i = 0; i < allowed.length; i++) {
+        const c = allowed[i];
+        mask |= 1 << (c.charCodeAt() - 'a'.charCodeAt());
+      }
+      let res = 0;
+      for (const word of words) {
+        let mask1 = 0;
+        for (let i = 0; i < word.length; i++) {
+          const c = word[i];
+          mask1 |= 1 << (c.charCodeAt() - 'a'.charCodeAt());
+        }
+        if ((mask1 | mask) === mask) {
+          res++;
+        }
+      }
+      return res;
+    };
+
+    // test
+    let allowed = "ab",
+      words = ["ad", "bd", "aaab", "baa", "badab"];
+    console.log(countConsistentStrings(allowed, words))
+  </script>
+</body>
+
+</html>
