@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    // 相似：含有相同数目的元音
+
+    // 方法一：计数
+    // 时间复杂度：O(n)
+    // 空间复杂度：O(n)
+    var halvesAreAlike = function (s) {
+      const a = s.substring(0, s.length / 2);
+      const b = s.substring(s.length / 2);
+      const h = "aeiouAEIOU";
+      let sum1 = 0,
+        sum2 = 0;
+      for (let i = 0; i < a.length; i++) {
+        if (h.indexOf(a[i]) >= 0) {
+          sum1++;
+        }
+      }
+      for (let i = 0; i < b.length; i++) {
+        if (h.indexOf(b[i]) >= 0) {
+          sum2++;
+        }
+      }
+      return sum1 === sum2;
+    };
+
+    // test
+    let s = "book";
+    console.log(halvesAreAlike(s))
+  </script>
+</body>
+
+</html>
