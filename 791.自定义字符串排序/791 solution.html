@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    // 方法一：自定义排序
+    // 时间复杂度：O(nlogn+∣Σ∣）,其中 n 是字符串 s 的长度，Σ 是字符集，在本题中 ∣Σ∣=26。
+    // 空间复杂度：O(∣Σ∣)
+    var customSortString = function (order, s) {
+      const val = new Array(26).fill(0);
+      for (let i = 0; i < order.length; ++i) {
+        val[order[i].charCodeAt() - 'a'.charCodeAt()] = i + 1;
+      }
+      const arr = new Array(s.length).fill(0).map((_, i) => s[i]);
+      arr.sort((c0, c1) => val[c0.charCodeAt() - 'a'.charCodeAt()] - val[c1.charCodeAt() - 'a'.charCodeAt()])
+      let ans = '';
+      for (let i = 0; i < s.length; ++i) {
+        ans += arr[i];
+      }
+      return ans;
+    };
+
+    // 方法二：计数排序
+    // 时间复杂度：O(n+∣Σ∣)
+    // 空间复杂度：O(∣Σ∣)
+    var customSortString = function (order, s) {
+      const freq = new Array(26).fill(0);
+      for (let i = 0; i < s.length; ++i) {
+        const ch = s[i];
+        ++freq[ch.charCodeAt() - 'a'.charCodeAt()];
+      }
+      let ans = '';
+      for (let i = 0; i < order.length; ++i) {
+        const ch = order[i];
+        while (freq[ch.charCodeAt() - 'a'.charCodeAt()] > 0) {
+          ans += ch;
+          freq[ch.charCodeAt() - 'a'.charCodeAt()]--;
+        }
+      }
+      for (let i = 0; i < 26; ++i) {
+        while (freq[i] > 0) {
+          ans += String.fromCharCode(i + 'a'.charCodeAt());
+          freq[i]--;
+        }
+      }
+      return ans;
+    };
+
+    // test
+    let order = "cba",
+      s = "abcd";
+    console.log(customSortString(order, s))
+  </script>
+</body>
+
+</html>
