@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    // 方法一：贪心
+    // 时间复杂度：O(nlogn)
+    // 空间复杂度：O(logn)
+    var maximumUnits = function (boxTypes, truckSize) {
+      boxTypes.sort((a, b) => b[1] - a[1]);
+      let res = 0;
+      for (const boxType of boxTypes) {
+        let numberOfBoxes = boxType[0];
+        let numberOfUnitsPerBox = boxType[1];
+        if (numberOfBoxes < truckSize) {
+          res += numberOfBoxes * numberOfUnitsPerBox;
+          truckSize -= numberOfBoxes;
+        } else {
+          res += truckSize * numberOfUnitsPerBox;
+          break;
+        }
+      }
+      return res;
+    };
+
+    // test
+    let boxTypes = [
+        [1, 3],
+        [2, 2],
+        [3, 1]
+      ],
+      truckSize = 4;
+    console.log(maximumUnits(boxTypes, truckSize))
+  </script>
+</body>
+
+</html>
