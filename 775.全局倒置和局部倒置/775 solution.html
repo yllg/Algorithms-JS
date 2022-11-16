@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    // 方法一：维护后缀最小值
+    // 时间复杂度：O(n)
+    // 空间复杂度：O(1)
+    var isIdealPermutation = function (nums) {
+      let n = nums.length,
+        minSuff = nums[n - 1];
+      for (let i = n - 3; i >= 0; i--) {
+        if (nums[i] > minSuff) {
+          return false;
+        }
+        minSuff = Math.min(minSuff, nums[i + 1]);
+      }
+      return true;
+    };
+
+    // 方法二：归纳证明
+    // 时间复杂度：O(n)
+    // 空间复杂度：O(1)
+    var isIdealPermutation = function (nums) {
+      for (let i = 0; i < nums.length; i++) {
+        if (Math.abs(nums[i] - i) > 1) {
+          return false;
+        }
+      }
+      return true;
+    };
+
+    // test
+    let nums = [1, 0, 2];
+    console.log(isIdealPermutation(nums))
+  </script>
+</body>
+
+</html>
