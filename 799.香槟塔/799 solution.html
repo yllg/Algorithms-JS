@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    // 方法一：模拟
+    // 时间复杂度：O(query_row^2)。使用了两层 for 循环。
+    // 空间复杂度：O(query_row)。使用滚动数组实现的空间复杂度是 O(query_row)
+    var champagneTower = function (poured, query_row, query_glass) {
+      let row = [poured];
+      for (let i = 1; i <= query_row; i++) {
+        const nextRow = new Array(i + 1).fill(0);
+        for (let j = 0; j < i; j++) {
+          const volume = row[j];
+          if (volume > 1) {
+            nextRow[j] += (volume - 1) / 2;
+            nextRow[j + 1] += (volume - 1) / 2;
+          }
+        }
+        row = nextRow;
+      }
+      return Math.min(1, row[query_glass]);
+    };
+
+    // test
+    let poured = 2,
+      query_glass = 1,
+      query_row = 1;
+    console.log(champagneTower(poured, query_row, query_glass))
+  </script>
+</body>
+
+</html>
