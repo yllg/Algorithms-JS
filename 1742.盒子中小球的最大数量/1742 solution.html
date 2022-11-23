@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    // 盒子的编号应当等于小球编号上每位数字的和
+
+    // 方法一：哈希表
+    // 时间复杂度：O(n * log * highLimit)
+    // 空间复杂度：O(log * highLimit)
+    var countBalls = function (lowLimit, highLimit) {
+      const count = new Map();
+      let res = 0;
+      for (let i = lowLimit; i <= highLimit; i++) {
+        let box = 0,
+          x = i;
+        while (x !== 0) {
+          box += x % 10;
+          x = Math.floor(x / 10);
+        }
+        count.set(box, (count.get(box) || 0) + 1);
+        res = Math.max(res, count.get(box));
+      }
+      return res;
+    };
+
+    // test
+    let lowLimit = 1,
+      highLimit = 10;
+    console.log(countBalls(lowLimit, highLimit))
+  </script>
+</body>
+
+</html>
