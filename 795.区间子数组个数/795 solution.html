@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    // 方法一：一次遍历
+    // 时间复杂度：O(n)
+    // 空间复杂度：O(1)
+    var numSubarrayBoundedMax = function (nums, left, right) {
+      let res = 0,
+        last2 = -1,
+        last1 = -1;
+      for (let i = 0; i < nums.length; i++) {
+        if (nums[i] >= left && nums[i] <= right) {
+          last1 = i;
+        } else if (nums[i] > right) {
+          last2 = i;
+          last1 = -1;
+        }
+        if (last1 !== -1) {
+          res += last1 - last2;
+        }
+      }
+      return res;
+    };
+
+    // 方法二：计数
+    // 时间复杂度：O(n)
+    // 空间复杂度：O(1)
+    var numSubarrayBoundedMax = function (nums, left, right) {
+      return count(nums, right) - count(nums, left - 1);
+    }
+
+    const count = (nums, lower) => {
+      let res = 0,
+        cur = 0;
+      for (const x of nums) {
+        cur = x <= lower ? cur + 1 : 0;
+        res += cur;
+      }
+      return res;
+    };
+
+    // test 
+    let nums = [2, 1, 4, 3],
+      left = 2,
+      right = 3;
+    console.log(numSubarrayBoundedMax(nums, left, right))
+  </script>
+</body>
+
+</html>
