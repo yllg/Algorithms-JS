@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    // 方法一：双指针
+    var expressiveWords = function (s, words) {
+      let ans = 0;
+      for (const word of words) {
+        if (expand(s, word)) {
+          ++ans;
+        }
+      }
+      return ans;
+    }
+
+    const expand = (s, t) => {
+      let i = 0,
+        j = 0;
+      while (i < s.length && j < t.length) {
+        if (s[i] !== t[j]) {
+          return false;
+        }
+        const ch = s[i];
+        let cnti = 0;
+        while (i < s.length && s[i] === ch) {
+          ++cnti;
+          ++i;
+        }
+        let cntj = 0;
+        while (j < t.length && t[j] === ch) {
+          ++cntj;
+          ++j;
+        }
+        if (cnti < cntj) {
+          return false;
+        }
+        if (cnti !== cntj && cnti < 3) {
+          return false;
+        }
+      }
+      return i === s.length && j === t.length;
+    };
+
+    // test 
+    let s = "heeellooo",
+      words = ["hello", "hi", "helo"];
+    console.log(expressiveWords(s, words))
+  </script>
+</body>
+
+</html>
