@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    // 方法一：模拟
+    // 时间复杂度：O(n)
+    // 空间复杂度：O(1)
+    var minOperations = function (s) {
+      let cnt = 0;
+      for (let i = 0; i < s.length; i++) {
+        const c = s[i];
+        if (c !== (String.fromCharCode('0'.charCodeAt() + i % 2))) {
+          cnt++;
+        }
+      }
+      return Math.min(cnt, s.length - cnt);
+    };
+
+    // test
+    let s = "0100";
+    console.log(minOperations(s))
+  </script>
+</body>
+
+</html>
