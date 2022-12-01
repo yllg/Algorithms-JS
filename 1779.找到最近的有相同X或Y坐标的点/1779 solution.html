@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    // 方法一：枚举所有的点
+    // 时间复杂度：O(n)
+    // 空间复杂度：O(1)
+    var nearestValidPoint = function (x, y, points) {
+      const n = points.length;
+      let best = Number.MAX_VALUE,
+        bestid = -1;
+      for (let i = 0; i < n; ++i) {
+        const px = points[i][0],
+          py = points[i][1];
+        if (x === px) {
+          const dist = Math.abs(y - py);
+          if (dist < best) {
+            best = dist;
+            bestid = i;
+          }
+        } else if (y === py) {
+          const dist = Math.abs(x - px);
+          if (dist < best) {
+            best = dist;
+            bestid = i;
+          }
+        }
+      }
+      return bestid;
+    };
+
+    // test
+    let x = 3,
+      y = 4,
+      points = [
+        [1, 2],
+        [3, 1],
+        [2, 4],
+        [2, 3],
+        [4, 4]
+      ];
+    console.log(nearestValidPoint(x, y, points))
+  </script>
+</body>
+
+</html>
