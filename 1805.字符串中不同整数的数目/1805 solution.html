@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    // 方法一：双指针
+    // 时间复杂度：O(n)，其中 n 是字符串 word 的长度。
+    // 空间复杂度：O(n)。哈希集合需要占用 O(n) 的空间。
+    var numDifferentIntegers = function (word) {
+      const set = new Set();
+      let n = word.length,
+        p1 = 0,
+        p2;
+      while (true) {
+        while (p1 < n && !isDigit(word[p1])) {
+          p1++;
+        }
+        if (p1 === n) {
+          break;
+        }
+        p2 = p1;
+        while (p2 < n && isDigit(word[p2])) {
+          p2++;
+        }
+        while (p2 - p1 > 1 && word[p1] === '0') {
+          p1++;
+        }
+        set.add(word.slice(p1, p2));
+        p1 = p2;
+      }
+      return set.size;
+    };
+
+    const isDigit = (ch) => {
+      return '0' <= ch && ch <= '9';
+    }
+
+    // test
+    let word = "a123bc34d8ef34";
+    console.log(numDifferentIntegers(word))
+  </script>
+</body>
+
+</html>
