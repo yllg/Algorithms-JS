@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    // 方法一：数学
+    // 时间复杂度：O(1)。仅使用常数时间。
+    // 空间复杂度：O(1)。仅使用常数空间。
+    var squareIsWhite = function (coordinates) {
+      return ((coordinates[0].charCodeAt() - 'a'.charCodeAt() + 1) + (coordinates[1].charCodeAt() - '0'
+        .charCodeAt())) % 2 === 1;
+    };
+
+    // test 
+    let coordinates = "a1";
+    console.log(squareIsWhite(coordinates))
+  </script>
+</body>
+
+</html>
