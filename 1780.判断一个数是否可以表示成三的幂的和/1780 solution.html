@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 将 n 转换成 3 进制。如果 n 的 3 进制表示中每一位均不为 2，那么答案为True，否则为 False。
+
+      // 方法一：进制转换
+      // 时间复杂度：O(logn)，即为进制转换需要的时间。
+      // 空间复杂度：O(1)。
+      var checkPowersOfThree = function (n) {
+        while (n !== 0) {
+          if (n % 3 === 2) {
+            return false;
+          }
+          n = Math.floor(n / 3);
+        }
+        return true;
+      };
+
+      // test
+      let n = 12;
+      console.log(checkPowersOfThree(n));
+    </script>
+  </body>
+</html>
