@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：贪心
+      // 时间复杂度：O(n)
+      // 空间复杂度：O(1)
+      var minOperations = function (nums) {
+        let pre = nums[0] - 1,
+          res = 0;
+        for (const num of nums) {
+          pre = Math.max(pre + 1, num);
+          res += pre - num;
+        }
+        return res;
+      };
+
+      // test
+      let nums = [1, 1, 1];
+      console.log(minOperations(nums));
+    </script>
+  </body>
+</html>
