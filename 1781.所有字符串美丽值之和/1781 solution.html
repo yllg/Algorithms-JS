@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    //  美丽值 定义为：出现频率最高字符与出现频率最低字符的出现次数之差
+
+    // 方法一：双层循环
+    // 时间复杂度：O(C * n^2)
+    // 空间复杂度：O(C)
+    var beautySum = function (s) {
+      let res = 0;
+      for (let i = 0; i < s.length; i++) {
+        const cnt = new Array(26).fill(0);
+        let maxFreq = 0;
+        for (let j = i; j < s.length; j++) {
+          cnt[s[j].charCodeAt() - 'a'.charCodeAt()]++;
+          maxFreq = Math.max(maxFreq, cnt[s[j].charCodeAt() - 'a'.charCodeAt()]);
+          let minFreq = s.length;
+          for (let k = 0; k < 26; k++) {
+            if (cnt[k] > 0) {
+              minFreq = Math.min(minFreq, cnt[k]);
+            }
+          }
+          res += maxFreq - minFreq;
+        }
+      }
+      return res;
+    };
+
+    // test
+    let s = "aabcb";
+    console.log(beautySum(s))
+  </script>
+</body>
+
+</html>
