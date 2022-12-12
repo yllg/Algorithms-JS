@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：动态规划
+      // 时间复杂度：O(n^2)
+      // 空间复杂度：O(n)
+      var maxHeight = function (cuboids) {
+        const n = cuboids.length;
+        for (const v of cuboids) {
+          v.sort((a, b) => a - b);
+        }
+        cuboids.sort((a, b) => a[0] + a[1] + a[2] - (b[0] + b[1] + b[2]));
+        let ans = 0;
+        const dp = new Array(n).fill(0);
+        for (let i = 0; i < n; i++) {
+          dp[i] = cuboids[i][2];
+          for (let j = 0; j < i; j++) {
+            if (
+              cuboids[i][0] >= cuboids[j][0] &&
+              cuboids[i][1] >= cuboids[j][1] &&
+              cuboids[i][2] >= cuboids[j][2]
+            ) {
+              dp[i] = Math.max(dp[i], dp[j] + cuboids[i][2]);
+            }
+          }
+          ans = Math.max(ans, dp[i]);
+        }
+        return ans;
+      };
+
+      // 方法二：记忆化搜索
+      // 时间复杂度：O(n^2)
+      // 空间复杂度：O(n)
+      var maxHeight = function (cuboids) {
+        const n = cuboids.length;
+        for (const v of cuboids) {
+          v.sort((a, b) => a - b);
+        }
+        cuboids.sort((a, b) => a[0] + a[1] + a[2] - (b[0] + b[1] + b[2]));
+
+        const memo = new Array(n).fill(-1);
+
+        const dfs = (cuboids, memo, top, index) => {
+          if (index === cuboids.length) {
+            return 0;
+          }
+          if (top !== -1 && memo[top] !== -1) {
+            return memo[top];
+          }
+          let height = dfs(cuboids, memo, top, index + 1);
+          if (top === -1 || check(cuboids[top], cuboids[index])) {
+            height = Math.max(
+              height,
+              cuboids[index][2] + dfs(cuboids, memo, index, index + 1)
+            );
+          }
+          if (top != -1) {
+            memo[top] = height;
+          }
+          return height;
+        };
+        return dfs(cuboids, memo, -1, 0);
+      };
+
+      const check = (a, b) => {
+        return a[0] <= b[0] && a[1] <= b[1] && a[2] <= b[2];
+      };
+
+      // test
+      let cuboids = [
+        [50, 45, 20],
+        [95, 37, 53],
+        [45, 23, 12],
+      ];
+      console.log(maxHeight(cuboids));
+    </script>
+  </body>
+</html>
