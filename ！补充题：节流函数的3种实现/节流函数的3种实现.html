@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    // 1.定时器版本:首次触发不会执行；停止触发后还会执行一次；
+    function throttle1(func, wait) {
+      let timer = null;
+      return function (...args) {
+        if (!timer) {
+
+          timer = setTimeout(() => {
+            timer = null;
+            func(...args);
+          }, wait);
+        }
+      }
+    }
+
+    // 2.时间戳版本:首次触发立即执行，停止触发后就不会再执行；
+    function throttle2(func, wait) {
+      // 对比时间戳，初始化为0则首次触发立即执行
+      let previous = 0;
+      return function (...args) {
+        let context = this;
+        let now = new Date().getTime();
+        // 间隔大于wait则执行 func 并更新对比时间戳
+        if (now - previous > wait) {
+          func.apply(context, args);
+          previous = now;
+        }
+      }
+    }
+
+    // 3.融合前两种 时间戳+定时器版本： 首次触发立即执行，停止后会再执行一次
+    function throttle3(func, wait) {
+      let timeout;
+      let previous = 0;
+      return function (...args) {
+        let context = this;
+        let now = new Date().getTime();
+        // 距离下次函数执行的剩余时间
+        let remaining = wait - (now - previous);
+        // 如果无剩余时间或系统时间修改
+        if (remaining <= 0 || remaining > wait) {
+          // 如果定时器还存在 则清除并置为null
+          if (timeout) {
+            clearTimeout(timeout);
+            timeout = null;
+          }
+          // 更新对比时间戳并执行函数
+          previous = now;
+          func.apply(context, args);
+        } else if (!timeout) {
+          // 如果有剩余时间但定时器不存在，则设置定时器
+          // remaining毫秒后执行函数，更新对比时间戳 并将定时器置为null
+          timeout = setTimeout(() => {
+            previous = new Date().getTime();
+            timeout = null;
+            func.apply(context, args);
+          }, remaining)
+        }
+      }
+    }
+
+    // test
+    const func = () => {
+      console.log("🍊")
+    }
+    const test1 = throttle1(func, 3000);
+    const test2 = throttle2(func, 3000);
+    const test3 = throttle3(func, 3000);
+
+    document.onmousemove = () => {
+      // func();
+      // test1();
+      // test2();
+      test3();
+    }
+  </script>
+</body>
+
+</html>
