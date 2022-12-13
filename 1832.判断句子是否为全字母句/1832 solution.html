@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    // 全字母句：包含英语字母表中每个字母至少一次的句子
+
+    // 方法一：数组
+    // 时间复杂度：O(n+C)，其中 n 是 sentence 的长度，C 是字符集的大小
+    // 空间复杂度：O(C) C 是字符集的大小
+    var checkIfPangram = function (sentence) {
+      const exist = new Array(26).fill(0);
+      for (let i = 0; i < sentence.length; i++) {
+        const c = sentence[i];
+        exist[c.charCodeAt() - 'a'.charCodeAt()] = true;
+      }
+      for (const x of exist) {
+        if (!x) {
+          return false;
+        }
+      }
+      return true;
+    };
+
+    // 方法二：二进制表示集合
+    // 时间复杂度：O(n)，其中 n 是 sentence 的长度
+    // 空间复杂度：O(1) 
+    var checkIfPangram = function (sentence) {
+      let state = 0;
+      for (let i = 0; i < sentence.length; i++) {
+        const c = sentence[i];
+        state |= 1 << (c.charCodeAt() - 'a'.charCodeAt());
+      }
+      return state == (1 << 26) - 1;
+    };
+
+    // test
+    let sentence = "thequickbrownfoxjumpsoverthelazydog";
+    console.log(checkIfPangram(sentence))
+  </script>
+</body>
+
+</html>
