@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      function arrayToTree(array) {
+        let root = array[0];
+        arr.shift();
+        let tree = {
+          id: root.id,
+          name: root.name,
+          children: array.length > 0 ? toTree(root.id, array) : [],
+        };
+        return tree;
+      }
+
+      function toTree(parentId, array) {
+        let children = [];
+        let len = array.length;
+        for (let i = 0; i < len; i++) {
+          const node = array[i];
+          if (node.parentId === parentId) {
+            children.push({
+              id: node.id,
+              name: node.name,
+              children: toTree(node.id, array),
+            });
+          }
+        }
+        return children;
+      }
+
+      // test
+      const arr = [
+        { id: 2, name: "部门B", parentId: 0 },
+        { id: 3, name: "部门C", parentId: 1 },
+        { id: 1, name: "部门A", parentId: 2 },
+        { id: 4, name: "部门D", parentId: 1 },
+        { id: 5, name: "部门E", parentId: 2 },
+        { id: 6, name: "部门F", parentId: 3 },
+        { id: 7, name: "部门G", parentId: 2 },
+        { id: 8, name: "部门H", parentId: 4 },
+      ];
+
+      console.log(arrayToTree(arr));
+    </script>
+  </body>
+</html>

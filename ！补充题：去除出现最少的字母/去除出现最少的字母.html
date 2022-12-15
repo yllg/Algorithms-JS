@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      function removeMinDuplicateChar(str) {
+        if (str.length == 1) {
+          return str;
+        }
+        //定义一个哈希表
+        let charObj = {};
+        for (let i = 0; i < str.length; i++) {
+          //str.charAt(i) 返回指定位置的字符，类似把字符串拆成数组取元素值一样
+          //没有这个字母，就标记1；有重复就加1
+          if (!charObj[str.charAt(i)]) {
+            charObj[str.charAt(i)] = 1;
+          } else {
+            charObj[str.charAt(i)] += 1;
+          }
+        }
+        //遍历上面的结果集，找到最大的字符，以及它出现的次数
+        let mimChar = "",
+          minValue = Infinity;
+        for (var k in charObj) {
+          if (charObj[k] <= minValue) {
+            mimChar = k;
+            minValue = charObj[k];
+          }
+        }
+        let mimCharArr = [];
+        for (var k in charObj) {
+          if ((charObj[k] === minValue)) {
+            mimCharArr.push(k);
+          }
+        }
+        console.log(`最少字符${mimCharArr}; 出现次数${minValue}`);
+        for (let index = 0; index < mimCharArr.length; index++) {
+          const mimChar = mimCharArr[index];
+          const reg = new RegExp(mimChar, "g");
+          str = str.replace(reg, "");
+        }
+        return str;
+      }
+
+      // test
+        let str1 = "ababac";
+        console.log(removeMinDuplicateChar(str1));
+      let str2 = "aaabbbcceeff";
+      console.log(removeMinDuplicateChar(str2));
+    </script>
+  </body>
+</html>
