@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.21/lodash.min.js"></script>
+  <script>
+    // 方法一：上取整
+    // 时间复杂度:O(n)
+    // 空间复杂度:O(1)
+    var minElements = function (nums, limit, goal) {
+      const sum = _.sum(nums);
+      const diff = Math.abs(sum - goal);
+      return Math.abs(Math.floor((diff + limit - 1) / limit));
+    };
+
+    // test
+    let nums = [1, -1, 1],
+      limit = 3,
+      goal = -4;
+    console.log(minElements(nums, limit, goal))
+  </script>
+</body>
+
+</html>
