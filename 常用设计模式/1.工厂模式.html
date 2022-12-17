@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    // 1.概念： 把创建对象的过程进行更进一层的封装，相同的部分进行提取，不同的地方传递参数即可
+    // 2.demo
+    // 将角色抽象成 User 类，使用工厂进一步封装
+    function User(name, age, career, work) {
+      this.name = name;
+      this.age = age;
+      this.career = career;
+      this.work = work;
+    }
+
+    function Factory(name, age, career) {
+      let work;
+      if (career === "coder") {
+        work = ["写代码", "写细分", "修bug"];
+      } else if (career === "product manager") {
+        work = ["定会议室", "写PRD", "催更"];
+      }
+      // ....
+      return new User(name, age, career, work);
+    }
+
+    // test
+    let xiaoming = new Factory("小明", "24", "coder");
+    let xiaohong = new Factory("小红", "25", "product manager");
+    console.log(xiaoming);
+    console.log(xiaohong);
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    // 1.概念：只创建一次类的实例，其余情况都返回创建好的实例结果。
+    // 2.例子：vue里的插件，安装一次之后不会再次安装，直接返回之前已经实例化的结果; 公用弹窗组件; 日志上报实例; storage实例等等;
+    
+    // 3.demo1: 实现Storage类，使得该对象为单例，基于localStorage进行封装。实现方法 setItem(key,value) 和 getItem(key)
+
+    // 3-1.静态方法版本（推荐）
+    class Singleton {
+      static getInstance() {
+        if (!this.instance) {
+          this.instance = new this();
+        }
+        return this.instance;
+      }
+    }
+
+    class Storage1 extends Singleton {
+      constructor() {
+        super();
+      }
+      setItem(key, value) {
+        return localStorage.setItem(key, value);
+      }
+      getItem(key) {
+        return localStorage.getItem(key);
+      }
+    }
+
+    // test
+    Storage1.getInstance().setItem("test", "111");
+    console.log(Storage1.getInstance().getItem("test"))
+    console.log(Storage1.getInstance().getItem("test1"))
+
+    // 3-2.闭包版本
+    function Storage2() {}
+    Storage2.prototype.setItem = function (key, value) {
+      return localStorage.setItem(key, value);
+    }
+    Storage2.prototype.getItem = function (key) {
+      return localStorage.getItem(key);
+    }
+    
+    const getStorageInstance = (function () {
+      let instance;
+      return function () {
+        if (!instance) {
+          instance = new Storage2();
+        }
+        return instance;
+      }
+    })();
+
+    // test
+    getStorageInstance().setItem("test", "111");
+    console.log(getStorageInstance().getItem("test"))
+    console.log(getStorageInstance().getItem("test1"))
+  </script>
+</body>
+
+</html>

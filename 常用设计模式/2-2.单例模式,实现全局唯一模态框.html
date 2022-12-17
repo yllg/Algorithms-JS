@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    #modal {
+      position: fixed;
+      height: 200px;
+      width: 200px;
+      line-height: 200px;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      border: 1px solid #000;
+      text-align: center;
+    }
+  </style>
+</head>
+
+<body>
+  <button id="open">打开模态框</button>
+  <button id="close">关闭模态框</button>
+  <script>
+    // 1.原生JS实现
+    // 闭包版本
+    const Modal = (function () {
+      let box;
+      return function () {
+        if (!box) {
+          box = document.createElement("div");
+          box.innerHTML = "唯一";
+          box.id = "modal";
+          box.style.display = "none"
+          document.body.appendChild(box);
+        }
+        return box;
+      }
+    })();
+
+    document.getElementById("open").addEventListener("click", () => {
+      const modal = Modal();
+      modal.style.display = "block";
+    });
+    document.getElementById("close").addEventListener("click", () => {
+      const modal = Modal();
+      modal.style.display = "none";
+    });
+
+    // 使用vue或者react框架来实现，类似的
+  </script>
+</body>
+
+</html>
