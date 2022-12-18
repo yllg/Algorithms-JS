@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    // 方法一：贪心 + 前缀和
+    // 时间复杂度：O(n)
+    // 空间复杂度：O(n)
+    var minMoves = function (nums, k) {
+      const g = [];
+      const preSum = [];
+      preSum.push(0);
+      for (let i = 0; i < nums.length; i++) {
+        if (nums[i] === 1) {
+          g.push(i - g.length);
+          preSum.push(preSum[preSum.length - 1] + g[g.length - 1]);
+        }
+      }
+      let m = g.length,
+        res = Number.MAX_VALUE;
+      for (let i = 0; i <= m - k; i++) {
+        let mid = i + Math.floor(k / 2);
+        let r = g[mid];
+        res = Math.min(res, (1 - k % 2) * r + (preSum[i + k] - preSum[mid + 1]) - (preSum[mid] - preSum[i]));
+      }
+      return res;
+    };
+
+    // test
+    let nums = [1, 0, 0, 1, 0, 1],
+      k = 2;
+    console.log(minMoves(nums, k))
+  </script>
+</body>
+
+</html>
