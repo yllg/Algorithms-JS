@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    /**
+    2.发布-订阅模式
+  （1）发布者不直接触及到订阅者，而是由第三方来完成实际的通信操作，比如channelManage
+  （2）是第一种的变体，适合更复杂的场景；
+  （3）vue内的自定义事件的Event Emitter是发布订阅模式，发布者完全不用感知到订阅者，事件的注册和触发都发生在事件总线上，实现了完全解耦；
+    */
+
+    // 1.用obj对象存储事件队列
+    // 2.用Map来存储事件队列
+    class Events {
+      constructor() {
+        this._events = object.create(null);
+      }
+      оn(event, fn) { // 添加事件：event可以是数组
+        if (Array.isArray(event)) {
+          for (let i = 0; i < event.length; i++) {
+            this.on(event[i], fn);
+          }
+        } else {
+          (this._events[event] || (this._events[event] = [])).push(fn);
+        }
+      }
+      emit(event, ...args) { // 触发事件，所有注册的回调都执行
+        const cbs = this._events[event];
+        if (cbs) {
+          for (let i = 0; i < cbs.length; i++) {
+            cbs[i].apply(this, args);
+          }
+        }
+      }
+      off(event, fn) { // 移除事件
+        if (!arguments) {
+          this._events = Object.create(null);
+          return this;
+        }
+        if (Array.isArray(event)) { // event可以是数组
+          for (let i = 0; i < event.length; i++) {
+            this.off(event[i], fn);
+          }
+          return this;
+        }
+        if (!fn) { // 没有指定具体的cb，就全部移除
+          this._events[event] = null;
+          return this;
+        }
+        const cbs = this._evnets[event];
+        let i = cbs.length;
+        while (i--) {
+          const cb = cbs[i];
+          if (cb === fn || cb.fn === fn) {
+            cbs.splice(i, 1);
+            break;
+          }
+        }
+        return this;
+      }
+      once(event, fn) { // 只执行一次
+        function on() {
+          // 先移除，保证只触发一次
+          this.off(event, on);
+          fn.apply(this, arguments);
+        }
+        on.fn = fn;
+        this.on(evnet, on);
+        return this;
+      }
+    }
+
+    // 2.
+  </script>
+</body>
+
+</html>

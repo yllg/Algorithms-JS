@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    /**
+    1.观察者模式：
+  （1）发布者直接触及到订阅者
+  （2）vue的Dep和Watcher就是观察者模式，Dep直接add以及notify触发watcher的更新
+    */
+
+    // 3个核心方法：添加事件监听，移除事件监听，触发事件；扩展的还有：触发一次once等
+    // 扩展问题：触发一系列事件还没结束，有一个事件想要off移除，不能让程序出错怎么设计?
+    // 异步转成同步处理：等着promise，async全部执行完，才能去off
+    class Subject {
+      constructor() {
+        this.observers = [];
+      }
+      add(observer) {
+        this.observers.push(observer);
+      }
+      remove(observer) {
+        const index = this.observers.indexOf(observer);
+        if (index > -1) {
+          this.observers.splice(index, 1);
+        }
+      }
+      notify() {
+        const obs = this.observers;
+        for (let i = 0; i < obs.length; i++) {
+          obs[i].update();
+        }
+      }
+    }
+
+    class Observer {
+      constructor(name) {
+        this.name = name;
+      }
+      update() {
+        console.log(`my name is ${this.name}`)
+      }
+    }
+  </script>
+</body>
+
+</html>

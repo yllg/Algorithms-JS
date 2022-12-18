@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    /**
+    1.概念：
+    使用算法的责任和算法本身分割开来，委派给不同的对象管理。
+    策略模式通常把一个系列的算法包装到一系列的策略类里面，作为一个抽象策略类的子类。
+    简单的说：“准备一组算法，并将每一个算法封装起来，使得它们可以互换”。
+
+    2.例子：
+    vue的compilelei函数，解析模板、指令、标签等；
+    */
+
+    // demo: 淘宝购物，选择不同物流的费用
+    const Taobao = function () {
+      this.company = "";
+    }
+
+    Taobao.prototype = {
+      // 设置物流
+      setStrategy: function (company) {
+        this.company = company;
+      },
+      // 计算费用
+      calculate: function (info) {
+        return this.company.calculate(info);
+      }
+    }
+
+    // 顺丰算法
+    const SF = function () {
+      this.calculate = function (info) {
+        return info.weight * 20;
+      }
+    }
+    // 圆通算法
+    const YT = function () {
+      this.calculate = function (info) {
+        return info.weight * 15;
+      }
+    }
+
+    // test
+    const info = {
+      from: "浙江",
+      to: "长沙",
+      weight: 1
+    };
+    const sf = new SF();
+    const yt = new YT();
+    const taobao = new Taobao();
+    taobao.setStrategy(sf);
+    console.log(taobao.calculate(info))
+    taobao.setStrategy(yt);
+    console.log(taobao.calculate(info))
+  </script>
+</body>
+
+</html>

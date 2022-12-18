@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    // 1.概念：用原型实例指定创建对象种类，并通过拷贝原型来创建新的对象。是一种用来创建对象的模式，JS里面就是创建一个对象作为另一个对象的prototype属性；
+
+    // 方案一：使用Object.create()函数
+    const carPrototype = {
+      model: "宝时捷",
+      getModel: function () {
+        console.log(`车辆模型是：${this.model}`)
+      }
+    };
+
+    const car = Object.create(carPrototype, {
+      model: {
+        value: "法拉利"
+      }
+    });
+
+    car.getModel(); // 车辆模型是：法拉利
+
+    // 方案二：使用prototype
+    function Car(model) {
+      function F() {}
+      F.prototype = carPrototype;
+      const f = new F();
+      f.model = model;
+      return f;
+    }
+
+    const myCar = Car("法拉利");
+    myCar.getModel(); // 车辆模型是：法拉利
+  </script>
+</body>
+
+</html>

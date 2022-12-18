@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <ul id="ul">
+    <li type="button" id="add">添加</li>
+    <li type="button" id="remove">删除
+      <p>111111</p>
+    </li>
+    <li type="button" id="move">移动
+      <p>2222</p>
+    </li>
+    <li type="button" id="select">选择</li>
+  </ul>
+  <script>
+    /**
+    1.概念
+    为一个对象提供一个代用品或占位符，以便控制对它的访问
+    2.例子
+    (1) ES6的proxy就是典型；
+    (2) ul li列表 交互点击事件
+    */
+
+    // 例子1：列表点击事件的代理
+    const oUl = document.getElementById("ul");
+    // 新添加的子元素的点击事件也能被监听到
+    oUl.onclick = function (event) {
+      const e = event || window.event;
+      let target = e.target || e.scrElement;
+      // li 内部结构不确定时，使用递归去判断
+      while (target !== oUl) {
+        if (target.nodeName.toLocaleLowerCase() == "li") {
+          switch (target.id) {
+            case "add":
+              console.log("添加");
+              break;
+            case "remove":
+              console.log("删除");
+              break;
+            case "move":
+              console.log("移动");
+              break;
+            case "select":
+              console.log("选择");
+              break;
+          }
+          break;
+        }
+        target = target.parentNode;
+      }
+    }
+
+    // 例子2：点击页任意标签，打印该标签的名称，考虑兼容性
+    document.onclick = function (event) {
+      const e = event || window.event; //event对象存在时返回event；当window.event存在时返回event，区分ff,ie浏览器
+      const o = e.srcElement || e.target; //ie下支持e.srcElement，ff支持e.target
+      console.log(o.tagName)
+    }
+  </script>
+</body>
+
+</html>
