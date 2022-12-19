@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    // 方法一：广度优先搜索
+    // 时间复杂度：O(n + m)
+    // 空间复杂度：O(n + m)
+    var validPath = function (n, edges, source, destination) {
+      const adj = new Array(n).fill(0).map(() => new Array());
+      for (const edge of edges) {
+        const x = edge[0],
+          y = edge[1];
+        adj[x].push(y);
+        adj[y].push(x);
+      }
+      const visited = new Array(n).fill(false);
+      const queue = [source];
+      visited[source] = true;
+      while (queue.length) {
+        const vertex = queue.shift();
+        if (vertex === destination) {
+          break;
+        }
+        for (const next of adj[vertex]) {
+          if (!visited[next]) {
+            queue.push(next);
+            visited[next] = true;
+          }
+        }
+      }
+      return visited[destination];
+    };
+
+    // 方法二：深度优先搜索
+    // 时间复杂度：O(n + m)
+    // 空间复杂度：O(n + m)
+    var validPath = function (n, edges, source, destination) {
+      const adj = new Array(n).fill(0).map(() => new Array());
+      for (const edge of edges) {
+        const x = edge[0],
+          y = edge[1];
+        adj[x].push(y);
+        adj[y].push(x);
+      }
+      const visited = new Array(n).fill(0);
+      return dfs(source, destination, adj, visited);
+    }
+
+    const dfs = (source, destination, adj, visited) => {
+      if (source === destination) {
+        return true;
+      }
+      visited[source] = true;
+      for (const next of adj[source]) {
+        if (!visited[next] && dfs(next, destination, adj, visited)) {
+          return true;
+        }
+      }
+      return false;
+    };
+
+    // 方法三：并查集
+    // 时间复杂度：O(n+m×α(m))
+    // 空间复杂度：O(n
+    var validPath = function (n, edges, source, destination) {
+      if (source === destination) {
+        return true;
+      }
+      const uf = new UnionFind(n);
+      for (const edge of edges) {
+        uf.uni(edge[0], edge[1]);
+      }
+      return uf.connect(source, destination);
+    }
+
+    class UnionFind {
+      constructor(n) {
+        this.parent = new Array(n).fill(0).map((_, i) => i);
+        this.rank = new Array(n).fill(0);
+      }
+
+      uni(x, y) {
+        const rootx = this.find(x);
+        const rooty = this.find(y);
+        if (rootx !== rooty) {
+          if (this.rank[rootx] > this.rank[rooty]) {
+            this.parent[rooty] = rootx;
+          } else if (this.rank[rootx] < this.rank[rooty]) {
+            this.parent[rootx] = rooty;
+          } else {
+            this.parent[rooty] = rootx;
+            this.rank[rootx]++;
+          }
+        }
+      }
+
+      find(x) {
+        if (this.parent[x] !== x) {
+          this.parent[x] = this.find(this.parent[x]);
+        }
+        return this.parent[x];
+      }
+
+      connect(x, y) {
+        return this.find(x) === this.find(y);
+      }
+    }
+  </script>
+</body>
+
+</html>
