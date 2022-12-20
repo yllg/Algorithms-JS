@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.21/lodash.min.js"></script>
+  <script>
+    // 方法一：二分查找
+    // 时间复杂度：O(nlogC)，其中 n 是数组 nums 的长度，C 是数组 nums 中的最大值，不超过 10^9
+    // 空间复杂度：O(1)。
+    var minimumSize = function (nums, maxOperations) {
+      let left = 1,
+        right = _.max(nums);
+      let ans = 0;
+      while (left <= right) {
+        const y = Math.floor((left + right) / 2);
+        let ops = 0;
+        for (const x of nums) {
+          ops += Math.floor((x - 1) / y);
+        }
+        if (ops <= maxOperations) {
+          ans = y;
+          right = y - 1;
+        } else {
+          left = y + 1;
+        }
+      }
+      return ans;
+    };
+
+    // test
+    let nums = [9],
+      maxOperations = 2;
+    console.log(minimumSize(nums, maxOperations))
+  </script>
+</body>
+
+</html>
