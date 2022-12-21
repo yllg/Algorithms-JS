@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script src="./diff_match_patch_uncompressed.js"></script>
+  <script>
+    // test
+    let pre = 'abcde123',
+      now = '1abc123';
+
+    let dmp = new diff_match_patch();
+    let diffs = dmp.diff_main(pre, now);
+    console.log(diffs)
+
+    /*
+    0：不变的字段；
+    1：新增的字段
+    -1：删除的字段
+
+    结果是
+    [
+      [1, "1"],
+      [0, "abc"],
+      [-1, "de"],
+      [0, "123"],
+    ]
+    */
+    
+  </script>
+</body>
+
+</html>
