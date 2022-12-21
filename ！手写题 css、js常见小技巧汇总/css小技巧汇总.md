@@ -783,7 +783,7 @@ fill: 默认值。内容拉伸填满整个content box, 不保证保持原有的�
 
 其它方案：1将行内元素写为1行(影响阅读)；2使用浮动样式（会影响布局）。
 
-49、解决vertical-align属性不生效
+# 49、解决vertical-align属性不生效
 
 在使用vertical-align:middle实现垂直居中的时候，经常会发现不生效的情况。这里需要注意它生效需要满足的条件：
 
@@ -813,3 +813,21 @@ fill: 默认值。内容拉伸填满整个content box, 不保证保持原有的�
 ```
 
 PS：vertical-align不可继承，必须对子元素单独设置。同时需要注意的是line-height的高度基于font-size（即字体的高度），如果文字要转行会出现异常哦。本文完~
+
+# 50.css实现三列等宽布局
+
+详细见这篇：https://blog.csdn.net/Windyluna/article/details/107524633
+
+（1）等宽、不等高
+
+1）瀑布流布局： multi-columns 布局
+
+2）flex布局
+
+（2）等宽、等高
+
+1）flex布局
+
+2）绝对布局
+
+3）浮动布局
