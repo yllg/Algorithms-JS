@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    // 双重循环
+    function full_arr(arr) {
+      let res = [];
+      let len = arr.length;
+      let index = []; //暂存可能排列的情况
+      sort(-1);
+
+      function sort(start) {
+        start++;
+        if (start > len - 1) {
+          return;
+        }
+        for (index[start] = 0; index[start] < arr[start].length; index[start]++) {
+          sort(start);
+          if (start == len - 1) {
+            let temp = [];
+            let ss = '';
+            for (let i = len - 1; i >= 0; i--) {
+              ss += arr[start - i][index[start - i]];
+            }
+            res.push(ss);
+          }
+        }
+      }
+      return res;
+    }
+
+    let aa = [
+      ['A', 'B', 'C'],
+      [1, 2],
+      ['a', 'b']
+    ]
+    console.log(full_arr(aa));
+  </script>
+</body>
+
+</html>
