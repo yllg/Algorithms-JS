@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    // 方法一：贪心
+    // 时间复杂度：O(1)
+    // 空间复杂度：O(1)
+    var maximumScore = function (a, b, c) {
+      const sum = a + b + c;
+      const maxVal = Math.max(Math.max(a, b), c);
+      return Math.min(sum - maxVal, Math.floor(sum / 2));
+    };
+
+    // test
+    let a = 2,
+      b = 4,
+      c = 6;
+    console.log(maximumScore(a, b, c))
+  </script>
+</body>
+
+</html>
