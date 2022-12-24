@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：贪心算法
+      // 时间复杂度：O((m+n)×max(m,n))
+      // 空间复杂度：O(m+n)
+      var largestMerge = function (word1, word2) {
+        let merge = "";
+        let i = 0,
+          j = 0;
+        while (i < word1.length || j < word2.length) {
+          if (i < word1.length && word1.slice(i) > word2.slice(j)) {
+            merge += word1[i];
+            i++;
+          } else {
+            merge += word2[j];
+            j++;
+          }
+        }
+        return merge;
+      };
+
+      // TODO: 方法二：后缀数组
+
+      // test
+      let word1 = "cabaa",
+        word2 = "bcaaa";
+      console.log(largestMerge(word1, word2));
+    </script>
+  </body>
+</html>
