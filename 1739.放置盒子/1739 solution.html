@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    // 方法一：找规律
+    // 时间复杂度：O(sqrt[3]{n})
+    // 空间复杂度：O(1)
+    var minimumBoxes = function (n) {
+      let cur = 1,
+        i = 1,
+        j = 1;
+      while (n > cur) {
+        n -= cur;
+        i++;
+        cur += i;
+      }
+      cur = 1;
+      while (n > cur) {
+        n -= cur;
+        j++;
+        cur++;
+      }
+      return (i - 1) * i / 2 + j;
+    };
+
+    // 方法二：二分查找
+    // 时间复杂度：O(logn)
+    // 空间复杂度：O(1)
+    var minimumBoxes = function (n) {
+      let i = 0,
+        j = 0;
+      let low = 1,
+        high = Math.min(n, 100000);
+      while (low < high) {
+        const mid = (low + high) >> 1;
+        const sum = mid * (mid + 1) * (mid + 2) / 6;
+        if (sum >= n) {
+          high = mid;
+        } else {
+          low = mid + 1;
+        }
+      }
+      i = low;
+      n -= (i - 1) * i * (i + 1) / 6;
+      low = 1;
+      high = i;
+      while (low < high) {
+        const mid = (low + high) >> 1;
+        const sum = mid * (mid + 1) / 2;
+        if (sum >= n) {
+          high = mid;
+        } else {
+          low = mid + 1;
+        }
+      }
+      j = low;
+      return (i - 1) * i / 2 + j;
+    };
+
+    // 方法三：解方程
+    // 时间复杂度：O(1)
+    // 空间复杂度：O(1)
+    var minimumBoxes = function (n) {
+      let i = Math.floor(Math.pow(6.0 * n, 1.0 / 3));
+      if (g(i) < n) {
+        i++;
+      }
+      n -= g(i - 1);
+      const j = Math.floor(Math.ceil(1.0 * (Math.sqrt(8 * n + 1) - 1) / 2));
+      return (i - 1) * i / 2 + j;
+    }
+
+    const g = (x) => {
+      return x * (x + 1) * (x + 2) / 6;
+    };
+  </script>
+</body>
+
+</html>
