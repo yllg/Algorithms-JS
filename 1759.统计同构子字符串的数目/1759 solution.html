@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    // 方法一：数学
+    // 时间复杂度：O(n)
+    // 空间复杂度：O(1)
+    var countHomogenous = function (s) {
+      const MOD = 1000000007;
+      let res = 0;
+      let prev = s[0];
+      let cnt = 0;
+      for (let i = 0; i < s.length; i++) {
+        const c = s[i];
+        if (c === prev) {
+          cnt++;
+        } else {
+          res += (cnt + 1) * cnt / 2;
+          cnt = 1;
+          prev = c;
+        }
+      }
+      res += (cnt + 1) * cnt / 2;
+      return res % MOD;
+    };
+
+    // test
+    let s = "abbcccaa";
+    console.log(countHomogenous(s))
+  </script>
+</body>
+
+</html>
