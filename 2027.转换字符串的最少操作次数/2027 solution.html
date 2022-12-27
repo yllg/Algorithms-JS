@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    // 方法一：模拟
+    // 时间复杂度：O(n)
+    // 空间复杂度：O(1)
+    function minimumMoves(s) {
+      let c = 0,
+        i = 0
+      while (i < s.length) s[i] === 'X' ? (i += 3, c++) : i++
+      return c
+    };
+
+    // test 
+    let s = "XXX";
+    console.log(minimumMoves(s))
+  </script>
+</body>
+
+</html>
