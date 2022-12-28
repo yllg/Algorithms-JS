@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    // 方法一：哈希表
+    // 时间复杂度：O(n_1 + n_2 + n_3)
+    // 空间复杂度：O(n_1 + n_2 + n_3)
+    var twoOutOfThree = function (nums1, nums2, nums3) {
+      const map = new Map();
+      for (const i of nums1) {
+        map.set(i, 1);
+      }
+      for (const i of nums2) {
+        map.set(i, (map.get(i) || 0) | 2);
+      }
+      for (const i of nums3) {
+        map.set(i, (map.get(i) || 0) | 4);
+      }
+      const res = [];
+      for (const [k, v] of map.entries()) {
+        if ((v & (v - 1)) !== 0) {
+          res.push(k);
+        }
+      }
+      return res;
+    };
+
+    // TODO: 方法2：位运算
+
+    // test
+    let nums1 = [1, 1, 3, 2],
+      nums2 = [2, 3],
+      nums3 = [3];
+    console.log(twoOutOfThree(nums1, nums2, nums3))
+  </script>
+</body>
+
+</html>
