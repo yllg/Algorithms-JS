@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    // 方法一：双指针
+    // 时间复杂度：O(n)
+    // 空间复杂度：O(1)
+    var minimumLength = function (s) {
+      const n = s.length;
+      let left = 0,
+        right = n - 1;
+      while (left < right && s[left] == s[right]) {
+        const c = s[left];
+        while (left <= right && s[left] === c) {
+          left++;
+        }
+        while (left <= right && s[right] === c) {
+          right--;
+        }
+      }
+      return right - left + 1;
+    };
+
+    // test
+    let s = "ca";
+    console.log(minimumLength(s))
+  </script>
+</body>
+
+</html>
