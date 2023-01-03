@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    // 方法一：排序
+    // 时间复杂度：O(nlogn)，其中 n 是学生和座位的数量。
+    // 空间复杂度：O(logn)，其中 n 是学生和座位的数量。
+    var minMovesToSeat = function (seats, students) {
+      seats.sort((a, b) => a - b);
+      students.sort((a, b) => a - b);
+      let res = 0;
+      for (let i = 0; i < seats.length; i++) {
+        res += Math.abs(seats[i] - students[i]);
+      }
+      return res;
+    };
+
+    // test
+    let seats = [3, 1, 5],
+      students = [2, 7, 4];
+    console.log(minMovesToSeat(seats, students))
+  </script>
+</body>
+
+</html>

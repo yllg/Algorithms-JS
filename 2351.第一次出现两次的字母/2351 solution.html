@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    // 方法一：哈希表
+    // 时间复杂度：O(n)
+    // 空间复杂度：O(∣Σ∣)
+    var repeatedCharacter = function (s) {
+      const seen = new Set();
+      for (let i = 0; i < s.length; i++) {
+        const ch = s[i];
+        if (seen.has(ch)) {
+          return ch;
+        }
+        seen.add(ch);
+      }
+      // impossible
+      return ' ';
+    };
+
+    // 方法二：状态压缩
+    // 时间复杂度：O(n)
+    // 空间复杂度：O(1)
+    var repeatedCharacter = function (s) {
+      let seen = 0;
+      for (let i = 0; i < s.length; i++) {
+        const ch = s[i];
+        const x = ch.charCodeAt() - 'a'.charCodeAt();
+        if ((seen & (1 << x)) !== 0) {
+          return ch;
+        }
+        seen |= (1 << x);
+      }
+      // impossible
+      return ' ';
+    };
+
+    // test
+    let s = "abccbaacz";
+    console.log(repeatedCharacter(s))
+  </script>
+</body>
+
+</html>
