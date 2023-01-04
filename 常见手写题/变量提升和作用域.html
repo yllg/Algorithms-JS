@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 1.IIFE内部的b 没有var、let、const修饰
+      // 函数表达式的标识符 不可修改，这里是b是函数，然后不能修改，打印出来就是函数
+      // https://blog.csdn.net/weixin_46112649/article/details/126376367
+      // https://segmentfault.com/q/1010000002810093
+      var b = 10;
+      (function b() {
+        b = 20;
+        console.log(b);
+      })();
+
+      // 2.IIFE内部的b 有var、let、const任何一个修饰，输出20
+      var b = 10;
+      (function b() {
+        var b = 20;
+        console.log(b);
+      })();
+    </script>
+  </body>
+</html>
