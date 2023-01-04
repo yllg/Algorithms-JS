@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    // 一共五种方式：ES5四种，ES6一种
+    // ES5继承：构造函数，原型链，前两者组合，object.create
+    // ES6：class
+
+    // 1.ES5实现 继承
+    // （1）构造函数，参考《你不知道的JS 上》
+    // 基类
+    function Base() {}
+    // 派生类
+    function Derived() {
+      Base.call(this);
+    }
+    // 将派生类的原型的原型链挂在基类的原型上
+    Object.setPrototypeOf(Derived.prototype, Base.prototype);
+
+    // (2)原型链
+    function Super() {}
+
+    function Sub() {}
+    Sub.prototype = new Super();
+    Sub.prototype.constructor = Sub;
+
+    // (3)混合继承~构造函数继承+原型链继承
+    function People(num) {
+      this.num = num;
+      this.name = ['zhangsan', 'lisi', 'wangwu'];
+    }
+    People.prototype.numCount = function () {
+      console.log(this.num);
+    }
+
+    function Person() {
+      People.call(this, num);
+    }
+    Person.prototype = new People();
+    Person.prototype.constructor = Person;
+
+    // (4) Object.create() 方法创建一个新对象，使用现有的对象来提供新创建的对象的__proto__
+    // https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Object/create
+    const person = {
+      isHuman: false,
+      printIntroduction: function () {
+        console.log(`My name is ${this.name}. Am I human? ${this.isHuman}`);
+      }
+    };
+
+    const me = Object.create(person);
+
+    me.name = 'Matthew'; // "name" is a property set on "me", but not on "person"
+    me.isHuman = true; // Inherited properties can be overwritten
+
+    me.printIntroduction();
+    // expected output: "My name is Matthew. Am I human? true"
+
+    // 2.ES6 实现，extend关键字，本质就是 构造函数继承+原型链继承
+    class Super {}
+    class Sub extends Super {}
+  </script>
+</body>
+
+</html>
