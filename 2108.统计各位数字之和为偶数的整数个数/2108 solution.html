@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    // 方法一：暴力枚举
+    // 时间复杂度：O(num×lognum)
+    // 空间复杂度：O(1)
+    var countEven = function (num) {
+      let res = 0;
+      for (let i = 1; i <= num; i++) {
+        let x = i,
+          sum = 0;
+        while (x !== 0) {
+          sum += x % 10;
+          x = Math.floor(x / 10);
+        }
+        if (sum % 2 === 0) {
+          res++;
+        }
+      }
+      return res;
+    };
+
+    // 方法二：数学
+    // 时间复杂度：O(lognum)
+    // 空间复杂度：O(1)
+    var countEven = function (num) {
+      let y = Math.floor(num / 10),
+        x = num % 10;
+      let res = y * 5,
+        ySum = 0;
+      while (y !== 0) {
+        ySum += y % 10;
+        y = Math.floor(y / 10);
+      }
+      if (ySum % 2 === 0) {
+        res += Math.floor(x / 2) + 1;
+      } else {
+        res += Math.floor((x + 1) / 2);
+      }
+      return res - 1;
+    };
+
+    // test
+    let num = 4;
+    console.log(countEven(num))
+  </script>
+</body>
+
+</html>
