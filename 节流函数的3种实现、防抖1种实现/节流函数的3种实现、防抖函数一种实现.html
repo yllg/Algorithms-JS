@@ -99,6 +99,17 @@
       // test3();
       test4();
     }
+
+    // 用CSS实现定时器的功能
+    // 详见这篇文章：https://mp.weixin.qq.com/s/kw1Em1xmFEL7q7tefUF6Kw
+    /**
+     * 总结：
+     * 你可能不需要定时器的几个替代方案，相比定时器而言，CSS 在控制定时器的开启和暂停上更有优势，下面总结一下
+    1. :hover配合transition延时、transitionend监听可以实现鼠标经过延时触发效果，比如防抖节流
+    2. :active配合transition延时、transitionend监听可以实现长按触发效果
+    3. CSS 动画设置infinite后配合animationiteration监听可以实现周期性触发效果，比如轮播图hover就暂停
+    4. 可以直接通过:hover来控制台动画的暂停和播放
+    */
   </script>
 </body>
 
