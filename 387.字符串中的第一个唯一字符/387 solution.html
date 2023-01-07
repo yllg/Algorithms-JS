@@ -65,8 +65,24 @@
             return q.length ? q[0][1] : -1;
         };
 
+        // 方法4: 利用正则
+        // 时间复杂度 O(n)
+        function firstUniqChar(str) {
+            for (var i = 0; i < str.length; i++) {
+                // let char = str[i]; 会自动把字符串转成数组取值，也行
+                let char = str.charAt(i);
+                //全局查到这个字母存到数组中
+                let reg = new RegExp(char, 'g');
+                let l = str.match(reg).length;
+                //长度为1，马上返回，效率最高
+                if (l === 1) {
+                    return char
+                }
+            }
+        }
+
         // test
-        let s = "leetcode";
+        let s = "ababcbdsa";
         console.log(firstUniqChar(s))
     </script>
 </body>
