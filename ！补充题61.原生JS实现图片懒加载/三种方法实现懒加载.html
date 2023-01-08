@@ -39,7 +39,7 @@
         };
     }
 
-    //方法1： H + S > offsetTop
+    //方法1： clientHeight + scrollTop > offsetTop
     function lazyLoad1(imgs) {
         //offsetTop是元素与offsetParent的距离，循环获取直到页面顶部
         function getTop(e) {
