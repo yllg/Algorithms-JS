@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    // 一.中划线转小驼峰
+    // 方法1：遍历
+    function toCamelCase(str) {
+      let items = str.split('-').map((item, index) => {
+        if (index) {
+          let first = item.substring(0, 1)
+          let rest = item.substring(1)
+          return first.toUpperCase() + rest
+        } else {
+          // 第一个字符转成小写
+          return item.toLowerCase()
+        }
+      })
+      return items.join('')
+    }
+
+    // 方法2：正则表达式
+    function toCamelCase(str) {
+      let item = str.replace(/-[a-zA-Z]/g, match => match.replace('-', '').toUpperCase())
+      // 第一个字符转成小写
+      let first = item.substring(0, 1)
+      let rest = item.substring(1)
+      let result = first.toLowerCase() + rest
+      return result
+    }
+
+    console.log(toCamelCase('A-b-cee'))
+
+    // 二.小驼峰转中划线
+    // 方法1：正则表达式
+    function camelCaseTo(str) {
+      return str.replace( /[A-Z]/g, match=>'-'+match.toLowerCase());
+    }
+
+    console.log(camelCaseTo('aBCee'))
+  </script>
+</body>
+
+</html>
