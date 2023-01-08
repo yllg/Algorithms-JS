@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>新手指引功能</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      box-sizing: border-box;
+    }
+
+    .stepBlock {
+      background-color: burlywood;
+      margin-right: 20px;
+    }
+
+    .positionStyle {
+      position: absolute;
+      z-index: 200;
+    }
+
+    /* 蒙层样式 */
+    .overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: rgba(0, 0, 0, .5);
+      z-index: 100;
+    }
+  </style>
+</head>
+
+<body>
+  <section id="mask">
+    <section class="positionStyle" id="tip"></section>
+    <section class="positionStyle" id="curStepMask"></section>
+  </section>
+
+  <section style="margin:200px;">
+    <span id="first" class="stepBlock">
+      第一步
+    </span>
+    <span id="second" class="stepBlock">
+      第二步
+    </span>
+    <span id="third" class="stepBlock">
+      第三步
+    </span>
+  </section>
+
+  <section style="margin-top:30px">
+    <button onclick="setMask()">开始指引</button>
+  </section>
+
+  <script>
+    const tipDict = [{
+        id: 'first',
+        content: '这里是第1步哦'
+      },
+      {
+        id: 'second',
+        content: '这里是第2步哦'
+      },
+      {
+        id: 'third',
+        content: '这里是最后一步哦，点击完成按钮结束新手指引'
+      },
+    ]
+    let flag = 0;
+
+    function setMask() {
+      // 添加蒙层
+      let mask = document.getElementById('mask')
+      mask.setAttribute('class', 'overlay')
+      setTip()
+    }
+
+    function removeMask() {
+      // 移除蒙层
+      let mask = document.getElementById('mask')
+      mask.setAttribute('class', '')
+
+      // 移除tip提示的子元素
+      removeTip()
+      removeStepMask()
+    }
+
+    function setTip() {
+      if (flag < tipDict.length) {
+        // 获取当前步骤的元素，以及元素的位置信息，供后续定位提示信息和覆盖信息使用
+        const curStepEle = document.getElementById(tipDict[flag].id)
+        const bound = curStepEle.getBoundingClientRect()
+
+        // 找到id为tip的元素
+        let ele = document.getElementById("tip")
+
+        // 如果存在子元素，先移除
+        removeTip()
+        removeStepMask()
+
+        // 创建提示信息和下一步的统一父元素，方便后续移除元素
+        let node = document.createElement('div')
+        // 创建提示信息
+        let tipText = document.createTextNode(tipDict[flag].content)
+        // 将提示信息插入到父元素
+        node.appendChild(tipText)
+        // 创建“下一步”按钮
+        let nextBtn = document.createElement('button')
+        nextBtn.innerHTML = flag === tipDict.length - 1 ? '完成' : '下一步';
+        nextBtn.onclick = setTip;
+        // 将按钮插入到父元素
+        node.appendChild(nextBtn)
+        // 设置统一父元素的位置
+
+
+        ele.style.left = bound.x + 'px'
+        ele.style.top = bound.y + 20 + 'px'
+        // 将统一的父元素插入到id为tip的元素
+        ele.appendChild(node)
+
+        // 将当前步骤高亮显示
+        let tag = flag - 1
+        if (tag >= 0) {
+          document.getElementById(tipDict[tag].id).style = ''
+        }
+        // const curStepEle = document.getElementById(tipDict[flag].id)
+        // const bound = curStepEle.getBoundingClientRect()
+
+        const curStepMask = document.getElementById('curStepMask')
+        curStepMask.style.left = bound.x + 'px'
+        curStepMask.style.top = bound.y + 'px'
+
+        const curStepEleClone = curStepEle.cloneNode(true)
+        curStepMask.appendChild(curStepEleClone)
+
+        flag++
+      } else {
+        flag = 0;
+        removeMask()
+      }
+    }
+
+    function removeStepMask() {
+      let ele = document.getElementById('curStepMask')
+      let child = ele.lastElementChild
+      if (child) {
+        ele.removeChild(child)
+      }
+    }
+
+    function removeTip() {
+      let ele = document.getElementById("tip")
+      let child = ele.lastElementChild
+      if (child) {
+        ele.removeChild(child)
+      }
+    }
+
+    /** 
+     * 实现思路：
+     * 1.点击“开始指引”：找到id为mask的元素，为该元素添加蒙层样式（setMask）
+     * 2.添加提示信息：找到id为tip的元素，将提示信息添加为该元素的子元素(setTip)
+     * 3.高亮当前步骤元素：找到当前目标元素，克隆目标元素，然后将克隆后的目标元素添加为curStepMask的子元素(setTip)
+     * 4.定位tip和curStepMask的元素：curStepMask元素在当前目标元素的正上方，tip元素根据情况而定
+     * 5.每次添加当前提示信息时要移除上一次添加的提示信息和覆盖元素（removeTip，removeStepMask）
+     */
+  </script>
+</body>
+
+</html>
