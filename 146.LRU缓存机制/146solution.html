@@ -13,6 +13,7 @@
       // Author : 悬笔e绝
       // Date   : 2019-07-23
 
+      // LRU（Least recently used）最近最少使用算法
       // 用数组实现
       /**
        * @constructor
@@ -34,7 +35,7 @@
         if (val > 0) {
           var index = this.arr.indexOf(key);
           this.arr.splice(index, 1);
-          this.arr.unshift(key);
+          this.arr.unshift(key); // 刚访问过，插到数组最前面
           return val;
         } else {
           return -1;
@@ -47,6 +48,7 @@
        * @returns {void}
        */
       LRUCache.prototype.put = function (key, value) {
+        // 1.已存在就更新值，把key插到数组最前面
         if (this.obj[key]) {
           this.obj[key] = value;
           var index = this.arr.indexOf(key);
@@ -54,10 +56,12 @@
           this.arr.unshift(key);
           return;
         }
+        // 2.不存在就新增，而且超出了容量，把arr最后一个清理掉
         if (this.capacity === this.arr.length) {
           var k = this.arr.pop();
           this.obj[k] = undefined;
         }
+        // 3.不存在就新增，没有超出容量，正常赋值并添加到arr最前面
         this.obj[key] = value;
         this.arr.unshift(key);
       };
