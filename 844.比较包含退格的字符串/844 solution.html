@@ -98,10 +98,17 @@
         };
 
         // test
-        let S = "ab#c", T = "ad#c";
+        let S = "ab#c", T = "ae#c";
         console.log(backspaceCompare1(S, T));
         console.log(backspaceCompare2(S, T));
         console.log(backspaceCompare3(S, T));
+
+        /**
+         *  进阶版
+         * "<-"代表退格键，"<"和"-"均为正常字符
+         * 输入："<-<ab<-c", "<<-<a<-<-c"，结果：false，解释："<ac" !== "c"
+        */
+        
     </script>
 </body>
 
