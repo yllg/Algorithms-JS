@@ -5,5 +5,5 @@ let config = {
     format: text => text,
 }
 app.use(log(config));
-// 浏览器访问 localhost:3000/test 可以看到控制台输出的路径 /test
+// 浏览器访问 http://localhost:3000/test 可以看到控制台输出的路径 /test
 app.listen(3000);
