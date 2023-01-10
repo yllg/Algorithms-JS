@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    const PENDING = 1;
+    const FULFILLED = 2;
+    const REJECTED = 3;
+
+    function MyPromise(executor) {
+      let self = this;
+      this.resolveQueue = [];
+      this.rejectQueue = [];
+      this.state = PENDING;
+      this.val = undefined;
+
+      function resolve(val) {
+        if (self.state === PENDING) {
+          setTimeout(() => {
+            self.state = FULFILLED;
+            self.val = val;
+            self.resolveQueue.forEach((cb) => cb(val));
+          });
+        }
+      }
+
+      function reject(err) {
+        if (self.state === PENDING) {
+          setTimeout(() => {
+            self.state = REJECTED;
+            self.val = err;
+            self.rejectQueue.forEach((cb) => cb(err));
+          });
+        }
+      }
+      try {
+        // 回调是异步执行 函数是同步执行
+        executor(resolve, reject);
+      } catch (err) {
+        reject(err);
+      }
+    }
+
+    MyPromise.prototype.then = function (onResolve, onReject) {
+      let self = this;
+      // 不传值的话默认是一个返回原值的函数
+      onResolve = typeof onResolve === "function" ? onResolve : (v) => v;
+      onReject =
+        typeof onReject === "function" ?
+        onReject :
+        (e) => {
+          throw e;
+        };
+      if (self.state === FULFILLED) {
+        return new MyPromise(function (resolve, reject) {
+          setTimeout(() => {
+            try {
+              let x = onResolve(self.val);
+              if (x instanceof MyPromise) {
+                x.then(resolve);
+              } else {
+                resolve(x);
+              }
+            } catch (e) {
+              reject(e);
+            }
+          });
+        });
+      }
+
+      if (self.state === REJECTED) {
+        return new MyPromise(function (resolve, reject) {
+          setTimeout(() => {
+            try {
+              let x = onReject(self.val);
+              if (x instanceof MyPromise) {
+                x.then(resolve);
+              } else {
+                resolve(x);
+              }
+            } catch (e) {
+              reject(e);
+            }
+          });
+        });
+      }
+
+      if (self.state === PENDING) {
+        return new MyPromise(function (resolve, reject) {
+          self.resolveQueue.push((val) => {
+            try {
+              let x = onResolve(val);
+              if (x instanceof MyPromise) {
+                x.then(resolve);
+              } else {
+                resolve(x);
+              }
+            } catch (e) {
+              reject(e);
+            }
+          });
+          self.rejectQueue.push((val) => {
+            try {
+              let x = onReject(val);
+              if (x instanceof MyPromise) {
+                x.then(resolve);
+              } else {
+                resolve(x);
+              }
+            } catch (e) {
+              reject(e);
+            }
+          });
+        });
+      }
+    };
+
+    MyPromise.prototype.catch = function (onReject) {
+      return this.then(null, onReject);
+    };
+
+    MyPromise.resolve = function (val) {
+      return new MyPromise(function (resolve, reject) {
+        resolve(val);
+      });
+    };
+
+    MyPromise.reject = function (err) {
+      return new MyPromise(function (resolve, reject) {
+        reject(err);
+      });
+    };
+
+    // test
+    let p1 = new MyPromise((resolve, reject) => {
+      setTimeout(() => {
+        resolve(1);
+      }, 1000);
+    });
+    let p2 = new MyPromise((resolve, reject) => {
+      setTimeout(() => {
+        resolve(2);
+      }, 2000);
+    });
+    let p3 = new MyPromise((resolve, reject) => {
+      setTimeout(() => {
+        resolve(3);
+      }, 3000);
+    });
+    let p4 = new MyPromise((resolve, reject) => {
+      setTimeout(() => {
+        reject(4);
+      }, 4000);
+    });
+
+    // 1.promise.all 
+    MyPromise.all = function (promises) {
+      return new MyPromise(function (resolve, reject) {
+        let cnt = 0;
+        let result = [];
+        for (let i = 0; i < promises.length; i++) {
+          promises[i].then(
+            (res) => {
+              result[i] = res;
+              if (++cnt === promises.length) resolve(result);
+            },
+            (err) => {
+              reject(err);
+            }
+          );
+        }
+      });
+    };
+
+    // 1-1.promise.all 测试
+    MyPromise.all([p3, p1, p2]).then(res => {
+      console.log('MyPromise.all', res); // [3,1,2]
+    })
+
+    // 2.promise.race
+    MyPromise.race = function (promises) {
+      return new MyPromise(function (resolve, reject) {
+        for (let i = 0; i < promises.length; i++) {
+          promises[i].then(resolve, reject);
+        }
+      });
+    };
+
+    // 2-1.promise.race 测试
+    MyPromise.race([p3, p1, p2]).then(res => {
+      console.log('MyPromise.race', res); // [3,1,2]
+    })
+
+    // 3.promise.finally
+    MyPromise.prototype.finally = function (callback) {
+      let P = this.constructor;
+      return this.then(
+        value => P.resolve(callback()).then(() => value),
+        reason => P.resolve(callback()).then(() => {
+          throw reason
+        }),
+      )
+    }
+
+    // 3-1.promise.finally 测试
+    MyPromise.resolve("resolve").finally((res) => {
+      console.log("finally")
+    });
+    MyPromise.reject("reject").finally((res) => {
+      console.log("finally")
+    });
+
+    // 4.promise.allSettled
+    // 原因：希望等到一组异步操作都结束了，不管每一个操作是成功还是失败，再进行下一步操作。Promise.all()方法只适合所有异步操作都成功的情况，如果有一个操作失败，就无法满足要求。
+    MyPromise.allSettled = function (promises) {
+      return new Promise((resolve, reject) => {
+        function addElementToResult(i, elem) {
+          result[i] = elem;
+          elementCount++;
+          if (elementCount === result.length) {
+            resolve(result);
+          }
+        }
+        let index = 0;
+        for (const promise of promises) {
+          const currentIndex = index;
+          promise.then(
+            (value) => {
+              addElementToResult(currentIndex, {
+                status: "fulfilled",
+                value,
+              })
+            },
+            (reason) => {
+              addElementToResult(currentIndex, {
+                status: "rejected",
+                reason,
+              })
+            }
+          );
+          index++;
+        }
+        if (index === 0) {
+          resolve([]);
+          return;
+        }
+        let elementCount = 0;
+        const result = new Array(index);
+      });
+    }
+
+    // 4-1.promise.allSettled 测试
+    MyPromise.allSettled([p4, p3, p1, p2]).then(res => {
+      console.log('MyPromise.allSettled', res);
+    })
+  </script>
+</body>
+
+</html>
