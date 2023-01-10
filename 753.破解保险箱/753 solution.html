@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    // 做个最短的字符串,里面n大小的滑动窗口包含全排列,然后k就是可以用的字符
+
+    // 方法一：Hierholzer 算法
+    // 时间复杂度：O(n * k^n)
+    // 空间复杂度：O(n * k^n)
+    var crackSafe = function (n, k) {
+      highest = Math.pow(10, n - 1);
+      let ans = '';
+      const seen = new Set();
+      const dfs = (node) => {
+        for (let x = 0; x < k; ++x) {
+          let nei = node * 10 + x;
+          if (!seen.has(nei)) {
+            seen.add(nei);
+            dfs(nei % highest);
+            ans += x;
+          }
+        }
+      };
+
+      dfs(0);
+      for (let i = 1; i < n; i++) {
+        ans += '0';
+      }
+      return ans;
+    }
+
+    // test
+    let n = 1,
+      k = 2;
+    console.log(crackSafe(n, k))
+  </script>
+</body>
+
+</html>
