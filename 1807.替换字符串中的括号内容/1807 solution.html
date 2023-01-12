@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    // 方法一：哈希表
+    // 时间复杂度：O(n + k)
+    // 空间复杂度：O(n + k)
+    var evaluate = function (s, knowledge) {
+      const dict = new Map();
+      for (const kd of knowledge) {
+        dict.set(kd[0], kd[1]);
+      }
+      let addKey = false;
+      let key = '';
+      let res = '';
+      for (let i = 0; i < s.length; i++) {
+        const c = s[i];
+        if (c === '(') {
+          addKey = true;
+        } else if (c === ')') {
+          if (dict.has(key)) {
+            res += dict.get(key);
+          } else {
+            res += '?';
+          }
+          addKey = false;
+          key = '';
+        } else {
+          if (addKey) {
+            key += c;
+          } else {
+            res += c;
+          }
+        }
+      }
+      return res;
+    };
+
+    // test
+    let s = "(name)is(age)yearsold",
+      knowledge = [
+        ["name", "bob"],
+        ["age", "two"]
+      ];
+    console.log(evaluate(s, knowledge))
+  </script>
+</body>
+
+</html>
