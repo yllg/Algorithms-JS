@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    // 方法一：哈希表计数
+    // 时间复杂度：O(n + m)
+    // 空间复杂度：O(m)
+    var rearrangeCharacters = function (s, target) {
+      const sCounts = new Map();
+      const targetCounts = new Map();
+      const n = s.length,
+        m = target.length;
+      for (let i = 0; i < m; i++) {
+        const c = target[i];
+        targetCounts.set(c, (targetCounts.get(c) || 0) + 1);
+      }
+      for (let i = 0; i < n; i++) {
+        const c = s[i];
+        if (targetCounts.has(c)) {
+          sCounts.set(c, (sCounts.get(c) || 0) + 1);
+        }
+      }
+      let ans = Number.MAX_VALUE;
+      for (const [c, count] of targetCounts.entries()) {
+        const totalCount = sCounts.has(c) ? sCounts.get(c) : 0;
+        ans = Math.min(ans, Math.floor(totalCount / count));
+        if (ans === 0) {
+          return 0;
+        }
+      }
+      return ans;
+    };
+
+    // test
+    let s = "ilovecodingonleetcode",
+      target = "code";
+    console.log(rearrangeCharacters(s, target))
+  </script>
+</body>
+
+</html>
