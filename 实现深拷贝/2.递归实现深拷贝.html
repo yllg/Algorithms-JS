@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+    <script src="../js小工具demo/2.判断数据类型.js"></script>
+    <script>
+        /**
+         * object类型对象
+         * 比parse再stringfy好，但是仍然考虑的不全面。
+         * 实际项目中直接用lodash就好 _.cloneDeep
+         */
+
+        // 1.普通版        
+        function deepClone(obj) {
+            let result = typeof obj.splice === 'function' ? [] : {},
+                key;
+            if (obj && typeof obj === 'object') {
+                for (key in obj) {
+                    if (obj[key] && typeof obj[key] === 'object') {
+                        result[key] = deepClone(obj[key]); //如果对象的属性值为object的时候，递归调用deepClone，即再把某个值对象复制一份到新的对象的对应值中
+                    } else {
+                        result[key] = obj[key]; //如果对象的属性值不为object的时候，直接复制参数对象的每一个键/值到新对象对应的键/值中
+                    }
+                }
+                return result;
+            }
+            return obj;
+        }
+
+        // 方法2：Reflect代理法
+        function deepClone(obj) {
+            if (!isObject(obj)) {
+                throw new Error('obj 不是一个对象！')
+            }
+            let isArray = Array.isArray(obj)
+            let cloneObj = isArray ? [...obj] : {
+                ...obj
+            }
+            Reflect.ownKeys(cloneObj).forEach(key => {
+                cloneObj[key] = isObject(obj[key]) ? deepClone(obj[key]) : obj[key]
+            })
+            return cloneObj
+        }
+
+        // 测试
+        let obj = {
+            a: 1,
+            b: [1, 2, 3],
+            c: {
+                m: 1,
+                n: 2
+            }
+        };
+        let cloneObj = Object.create(null);
+        cloneObj = deepClone(obj);
+
+        console.log(cloneObj.a == obj.a); //true
+        console.log(cloneObj.b == obj.b); //false
+        console.log(cloneObj.b[0] == obj.b[0]); //true
+        console.log(cloneObj.c == obj.c); //false
+        console.log(cloneObj.c.m == obj.c.m); //true
+    </script>
+</body>
+
+</html>

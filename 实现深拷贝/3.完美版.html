@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script src="../js小工具demo/2.判断数据类型.js"></script>
+  <script>
+    /**
+     * 1.处理了：循环引用，函数，数组，Date，Map，Set，正则，symbol等各种情况
+     * 2.循环引用的问题
+     * 即obj.x = obj用一个weakMap<原对象引用,新对象引用>保存已经创建的对象，再下次递归中如果当前等于原对象引用，那么直接返回新创建对象的引用
+     */
+
+    function deepCopy(obj, weakMap = new WeakMap()) {
+      if (!isObject(obj)) return obj
+      if (weakMap.get(obj)) return weakMap.get(obj)
+      // 如果是函数
+      if (isFunc(obj)) {
+        let result = null
+        // 获得函数的主体
+        const bodyReg = /(?<={)(.|\n)+(?=})/m;
+        // 获得参数
+        const paramReg = /(?<=\().+(?=\)\s+{)/;
+        const funcString = obj.toString();
+        // 判断是否是箭头函数
+        if (obj.prototype) {
+          const param = paramReg.exec(funcString);
+          const body = bodyReg.exec(funcString);
+          if (body) {
+            if (param) {
+              const paramArr = param[0].split(',');
+              result = new Function(...paramArr, body[0]);
+            } else {
+              result = new Function(body[0]);
+            }
+          }
+        } else {
+          result = eval(funcString);
+        }
+        weakMap.set(obj, result)
+        return result
+      }
+      // 如果是数组
+      if (Array.isArray(obj)) {
+        let result = []
+        for (let val of obj) {
+          result.push(deepCopy(val, weakMap))
+        }
+        weakMap.set(obj, result)
+        return result
+      }
+      // 如果是Date
+      if (isDate(obj)) {
+        let result = new obj.constructor(obj)
+        weakMap.set(obj, result)
+        return result
+      }
+      // 如果是map
+      if (isSet(obj)) {
+        let result = new Set()
+        obj.forEach((val) => {
+          result.add(deepCopy(val, weakMap))
+        })
+        weakMap.set(obj, result)
+        return result
+      }
+      // 如果是set
+      if (isMap(obj)) {
+        let result = new Map()
+        obj.forEach((val, key) => {
+          result.set(key, deepCopy(key, weakMap))
+        })
+        weakMap.set(obj, result)
+        return result
+      }
+      // 如果是正则
+      if (isRegExp(obj)) {
+        const reFlags = /\w*$/;
+        const result = new obj.constructor(obj.source, reFlags.exec(obj));
+        result.lastIndex = obj.lastIndex;
+        weakMap.set(obj, result)
+        return result;
+      }
+      let result = {}
+      weakMap.set(obj, result)
+      // 考虑symbol类型的属性名
+      let symbols = Object.getOwnPropertySymbols(obj)
+      if (symbols.length > 0) {
+        for (let key of symbols) {
+          let val = obj[key]
+          result[key] = isObject(val) ? deepCopy(val, weakMap) : val
+        }
+      }
+      // 非symbol类型属性名
+      for (let key in obj) {
+        if (obj.hasOwnProperty(key)) {
+          let val = obj[key]
+          result[key] = isObject(val) ? deepCopy(val, weakMap) : val
+        }
+      }
+      return result
+    }
+
+    // test
+    let map = new Map()
+    map.set(1, 1)
+    map.set(2, 2)
+    // ojb包含各种各样的类型
+    let obj = {
+      a: 1,
+      b: '1',
+      c: Symbol(),
+      d: undefined,
+      e: null,
+      f: true,
+      g: {
+        g1: 1,
+        g2: '2',
+        g3: undefined
+      },
+      [Symbol()]: 'symbol',
+      h: function (a) {
+        console.log(a)
+      },
+      i: [1, 2, 3],
+      j: new Date(),
+      k: new Set([1, 2, 3, 4]),
+      l: map,
+      m: /\w*$/g,
+    }
+    // 循环引用
+    obj.x = obj.i
+
+    let deepObj = deepCopy(obj)
+    console.log(deepObj.x === deepObj.i) // true 循环引用关系也copy了
+    console.log(deepObj)
+  </script>
+</body>
+
+</html>

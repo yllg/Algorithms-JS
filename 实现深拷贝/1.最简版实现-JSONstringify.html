@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    /**
+     * 1.浅拷贝和深拷贝的区别
+     * (1)浅拷贝：只进行一层关系的拷贝；只复制地址值，实际上还是指向同一堆内存中的数据。
+     * (2)深拷贝：进行无限层级的拷贝；重新创建了一个相同的数据，二者指向的堆内存的地址值是不同的。这个时候修改赋值前的变量数据不会影响赋值后的变量。
+     * 
+     * 2.最简单的实现，json字符串化再生成新的
+     * 3.有很多缺点
+     * （1）无法实现对函数，稀疏数组，正则等特殊对象的拷贝
+     * （2）会抛弃对象的constructor，所有的构造函数都指向了object。
+     * （3）对象有循环引用，会报错。
+     */
+
+    function deepClone(obj) {
+      let _tmp, result;
+      _tmp = JSON.stringify(obj);
+      result = JSON.parse(_tmp);
+      return result;
+    }
+  </script>
+</body>
+
+</html>
