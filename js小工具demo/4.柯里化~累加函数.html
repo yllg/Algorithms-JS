@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    // 方法1：使用数组的reduce
+    function sum(...args) {
+      let params = args
+      const _sum = (...newArgs) => {
+        if (newArgs.length === 0) {
+          return params.reduce((pre, cur) => pre + cur, 0)
+        } else {
+          params = [...params, ...newArgs]
+          return _sum
+        }
+      }
+      return _sum
+    }
+
+    // test
+    console.log(sum(1, 2)(3)()) // 6
+    console.log(sum(1)(2)(3)()) // 6
+    console.log(sum(1, 2, 4)(4)()) // 11
+
+    /**
+      方法2: 函数柯里化
+      本质就是将一个参数很多的函数分解成单一参数的多个函数
+    */
+
+    const curry = (fn) =>
+      (judge = (...args) =>
+        args.length === fn.length ?
+        fn(...args) :
+        (...arg) => judge(...args, ...arg));
+
+    // test
+    const add = (a, b, c, d) => a + b + c + d;
+    const curryAdd = curry(add);
+
+    // 不能传空参数，比如curryAdd(1, 2, 3)(4)() 这种
+    console.log(curryAdd(1)(2)(3)(4)); // 10
+    console.log(curryAdd(1, 2)(3)(4)); // 10
+    console.log(curryAdd(1, 2, 3)(4)); // 10
+  </script>
+</body>
+
+</html>
