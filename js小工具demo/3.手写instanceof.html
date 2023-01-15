@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    // while循环 一级一级往原型链上找
+    const _instanceof = (target, Fn) => {
+      if ((typeof target !== 'object' && typeof target !== 'function') || target === null) return false
+      let proto = target.__proto__
+      while (true) {
+        if (proto === null) return false
+        if (proto === Fn.prototype) return true
+        proto = proto.__proto__
+      }
+    }
+
+    // test
+    function A() {}
+    const a = new A()
+    console.log(_instanceof(a, A)) // true
+    console.log(_instanceof(1, A)) // false
+  </script>
+</body>
+
+</html>
