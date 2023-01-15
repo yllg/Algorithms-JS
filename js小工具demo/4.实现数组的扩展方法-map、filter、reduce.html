@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    /**
+     * 1.Array.prototype.map
+     * map 中的 exc 接受三个参数，分别是: 元素值、元素下标和原数组
+     * map 返回的是一个新的数组，地址不一样
+     */
+    // 这里不能直接使用箭头函数，否则无法访问到 this
+    Array.prototype._map = function (exc) {
+      const result = []
+      this.forEach((item, index, arr) => {
+        result[index] = exc(item, index, arr)
+      })
+      return result
+    }
+    const a = new Array(2).fill(2)
+    console.log(a.map((item, index, arr) => item * index + 1)) // [1,3]
+    console.log(a._map((item, index, arr) => item * index + 1)) // [1,3]
+
+
+    /**
+     * 2.Array.prototype.filter
+     * filter 中的 exc 接受三个参数，与map一致，主要实现的是数组的过滤功能，会根据 exc 函数的返回值来判断是否“留下”该值。
+     * filter 返回的是一个新的数组，地址不一致。
+     */
+    Array.prototype._filter = function (exc) {
+      const result = []
+      this.forEach((item, index, arr) => {
+        if (exc(item, index, arr)) {
+          result.push(item)
+        }
+      })
+      return result
+    }
+    const b = [1, 3, 4, 5, 6, 2, 5, 1, 8, 20]
+    console.log(b._filter(item => item % 2 === 0)) // [ 4, 6, 2, 8, 20 ]
+
+
+    /**
+     * 3.Array.prototype.reduce
+     * reduce 接受两个参数，第一个为 exc 函数，第二个为初始值，如果不传默认为 0
+     * reduce 最终会返回一个值，当然不一定是 Number 类型的，取决于你是怎么计算的，每次的计算结果都会作为下次 exc 中的第一个参数
+     */
+    Array.prototype._reduce = function (exc, initial = 0) {
+      let result = initial
+      this.forEach((item) => {
+        result = exc(result, item)
+      })
+      return result
+    }
+    let arr = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+    console.log(b.reduce((pre, cur) => pre + cur, 0)) // 55
+    console.log(b._reduce((pre, cur) => pre + cur, 0)) // 55
+  </script>
+</body>
+
+</html>
