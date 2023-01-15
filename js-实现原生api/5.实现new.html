@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    // 
+    const _new = function (fun, ...args) { // 创建一个空对象
+      if (typeof fun !== 'function') {
+        return new Error('参数必须是一个函数');
+      }
+      // 一.原型链挂载
+      // 方法1 分两步
+      // const obj = {};
+      // obj.__proto__ = fun.prototype; 
+      // 方法2 一步
+      let obj = Object.create(fun.prototype);
+      // 二.修改this，将obj 复制给构造体中的 this，
+      // 三.执行函数代码 
+      const result = fun.call(obj, ...args)
+      // 四.返回结果 
+      // 返回值容错
+      if (result !== null && (typeof result === 'object' || typeof result === 'function')) {
+        return result;
+      }
+      // 如果返回对象是null，或不为一个对象或函数，则直接返回刚才创建的对象
+      return obj
+    }
+  </script>
+</body>
+
+</html>
