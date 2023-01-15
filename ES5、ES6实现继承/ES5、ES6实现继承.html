@@ -15,57 +15,53 @@
 
     // 1.ES5实现 继承
     // （1）构造函数，参考《你不知道的JS 上》
-    // 基类
-    function Base() {}
-    // 派生类
-    function Derived() {
-      Base.call(this);
+    // 父类
+    function Parent() {}
+    // 子类
+    function Son() {
+      Parent.call(this); // 继承父类属性
     }
-    // 将派生类的原型的原型链挂在基类的原型上
-    Object.setPrototypeOf(Derived.prototype, Base.prototype);
+    // 将子类的原型的原型链挂在父类的原型上
+    Object.setPrototypeOf(Son.prototype, Parent.prototype);
 
     // (2)原型链
-    function Super() {}
+    function Parent() {}
+    // 子类
+    function Son() {}
+    Son.prototype = new Parent(); // 继承父类方法
+    Son.prototype.constructor = Son;
 
-    function Sub() {}
-    Sub.prototype = new Super();
-    Sub.prototype.constructor = Sub;
-
-    // (3)混合继承~构造函数继承+原型链继承
-    function People(num) {
+    // (3)混合继承/寄生组合式基础 ~ 构造函数继承+原型链继承
+    function Parent(num) {
       this.num = num;
       this.name = ['zhangsan', 'lisi', 'wangwu'];
     }
-    People.prototype.numCount = function () {
+    Parent.prototype.numCount = function () {
       console.log(this.num);
     }
-
-    function Person() {
-      People.call(this, num);
+    function Son() {
+      Parent.call(this, num); // 继承父类属性
     }
-    Person.prototype = new People();
-    Person.prototype.constructor = Person;
+    Son.prototype = new Parent(); // 继承父类方法
+    Son.prototype.constructor = Son;
 
     // (4) Object.create() 方法创建一个新对象，使用现有的对象来提供新创建的对象的__proto__
     // https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Object/create
-    const person = {
+    const Parent = {
       isHuman: false,
       printIntroduction: function () {
         console.log(`My name is ${this.name}. Am I human? ${this.isHuman}`);
       }
     };
-
-    const me = Object.create(person);
-
-    me.name = 'Matthew'; // "name" is a property set on "me", but not on "person"
-    me.isHuman = true; // Inherited properties can be overwritten
-
-    me.printIntroduction();
+    const Son = Object.create(Parent); // 继承属性和方法
+    Son.name = 'Matthew'; // "name" is a property set on "Son", but not on "Parent"
+    Son.isHuman = true; // Inherited properties can be overwritten
+    Son.printIntroduction();
     // expected output: "My name is Matthew. Am I human? true"
 
     // 2.ES6 实现，extend关键字，本质就是 构造函数继承+原型链继承
-    class Super {}
-    class Sub extends Super {}
+    class Parent {}
+    class Son extends Parent {}
   </script>
 </body>
 
