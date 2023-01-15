@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    // 1.call,立即执行，参数是参数列表形式
+    Function.prototype._call = function (context) {
+      context = context || window;
+      context.func = this;
+      if (typeof context.func !== 'function') {
+        throw new TypeError('call must be called on a function');
+      }
+      let arr = [];
+      // 参数索引从1开始
+      for (let i = 1; i < arguments.length; i++) {
+        arr.push(arguments[i]);
+      }
+      let res = context.func(...arr);
+      delete context.func;
+      return res;
+    }
+
+    // test call
+    const obj = {
+      num: 1,
+      add: function (addend) {
+        console.log(this.num + addend)
+      }
+    }
+    const obj2 = {
+      num: 2
+    }
+    obj.add(1) // 2
+    obj.add.call(obj2, 1) // 3
+    obj.add._call(obj2, 1) // 3
+
+
+    // 2.apply,立即执行，参数是数组形式
+    Function.prototype._apply = function (context, args) {
+      context = context || window;
+      context.func = this;
+      if (typeof context.func !== 'function') {
+        throw new TypeError('apply must be called on a function');
+      }
+      let res = context.func(...args);
+      delete context.func;
+      return res;
+    }
+
+    // test apply
+    const obj3 = {
+      num: 3
+    }
+    obj.add(1) // 2
+    obj.add.apply(obj3, [1]) // 4
+    obj.add._apply(obj3, [1]) // 4
+
+
+    // 3.bind,返回函数,需要是调用，延迟执行
+    Function.prototype._bind = function (context, ...bindArgs) {
+      // func 为调用 bind 的原函数
+      const func = this;
+      context = context || window;
+      if (typeof func !== 'function') {
+        throw new TypeError('Bind must be called on a function');
+      }
+      // bind 返回一个绑定 this 的函数
+      return function (...callArgs) {
+        let args = bindArgs.concat(callArgs);
+        if (this instanceof func) {
+          // 意味着是通过 new 调用的 而 new 的优先级高于 bind
+          return new func(...args);
+        }
+        return func.call(context, ...args);
+      }
+    }
+
+    // test bind
+    const obj4 = {
+      num: 4
+    }
+    obj.add(1) // 2
+    const fn = obj.add.bind(obj4, 1)
+    const fn2 = obj.add._bind(obj4, 1)
+    fn() // 5
+    fn2() // 5
+  </script>
+</body>
+
+</html>
