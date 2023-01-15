@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    // 函数返回结果会被缓存下来，只会计算一次。
+
+    // 使用闭包，把结果缓存到内存中
+    const once = (fn) => {
+      let res, isFirst = true
+      return function (...args) {
+        if (!isFirst) return res
+        res = fn.call(this, ...args)
+        isFirst = false
+        return res
+      }
+    }
+
+    // test
+    const f = (x) => x;
+    const onceF = once(f);
+    console.log(onceF(3)); //=> 3
+    console.log(onceF(4)); //=> 3
+  </script>
+</body>
+
+</html>
