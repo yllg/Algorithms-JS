@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+  <title>canvas识别纯色图片的图形数量和面积</title>
+  <style></style>
+</head>
+
+<body>
+  <img src="./images/3.jpg">
+</body>
+<script>
+  // 注意：本demo需要http服务运行
+
+  // 图片太大容易栈溢出
+  let w = 100,
+    h = 100;
+  const threshold = 70; // 根据实际图片可以调整
+  const imgPath = "./images/3.jpg";
+
+  let canvas = document.createElement("canvas");
+  let ctxt = canvas.getContext("2d");
+  let img = new Image();
+  let coordinates = [];
+  canvas.width = w;
+  canvas.height = h;
+  for (let i = 0; i < h; i++) {
+    coordinates[i] = [];
+  }
+  img.src = imgPath; //图片路径
+  img.onload = function () {
+    ctxt.drawImage(img, 0, 0);
+    // 左上角是原点，横向从左到右的像素点，再换行以此类推
+    let data = ctxt.getImageData(0, 0, w, h).data; //读取整张图片的像素。
+    let x = 0,
+      y = 0;
+    // 前提：把第一个点当做背景色
+    const bgDataR = data[0];
+    const bgDataG = data[1];
+    const bgDataB = data[2];
+    for (let i = 0, len = data.length; i < len; i += 4) {
+      let red = data[i], //红色色深
+        green = data[i + 1], //绿色色深
+        blue = data[i + 2], //蓝色色深
+        alpha = data[i + 3]; //透明度
+      //把每个像素点，以二位数组的形式展开
+      // 0-255的颜色值，给一个阈值容差
+      if (Math.abs(red - bgDataR) > threshold || Math.abs(green - bgDataG) > threshold || Math.abs(blue -
+          bgDataB) > threshold) {
+        coordinates[y][x] = 1;
+      } else {
+        coordinates[y][x] = 0;
+      }
+      x++;
+      if (x >= w) {
+        x = 0;
+        y++;
+      }
+    }
+    let rst = getCountAndArea();
+    console.log("个数： " + rst.count);
+    for (let i = 0; i < rst.sum.length; i++) {
+      console.log(`第${i + 1}个面积为: ${rst.sum[i].area} px`);
+    }
+  };
+
+  const getCountAndArea = () => {
+    let sum = [];
+    let count = 0;
+    for (let i = 0; i < h; i++) {
+      for (let j = 0; j < w; j++) {
+        //连续1的个数
+        if (coordinates[i][j] == 1) {
+          let buf = 0;
+          buf = linkSum(i, j, buf);
+          count++;
+          sum.push({
+            index: count,
+            area: buf,
+          });
+        }
+      }
+    }
+    return {
+      count,
+      sum,
+    };
+  };
+
+  //计算连续的面积和个数
+  const linkSum = (i, j, num) => {
+    //走过的路就置0
+    coordinates[i][j] = 0;
+    num++;
+    //向上
+    if (i + 1 < h && coordinates[i + 1][j] == 1) {
+      num = linkSum(i + 1, j, num);
+    }
+    //向下
+    if (j + 1 < w && coordinates[i][j + 1] == 1) {
+      num = linkSum(i, j + 1, num);
+    }
+    //向左
+    if (i - 1 >= 0 && coordinates[i - 1][j] == 1) {
+      num = linkSum(i - 1, j, num);
+    }
+    //向右
+    if (j - 1 >= 0 && coordinates[i][j - 1] == 1) {
+      num = linkSum(i, j - 1, num);
+    }
+
+    return num;
+  };
+</script>
+
+</html>
