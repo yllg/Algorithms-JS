@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+  <title>二维数组转树</title>
+  <style></style>
+</head>
+
+<body></body>
+<script>
+  function transFunc(data) {
+    let array = [];
+    data.forEach(function (itemArray) {
+      itemArray.reduce(function (prev, current) {
+        const flag = false;
+        if (!prev.length) {
+          const temp = {
+            name: current,
+            child: [],
+          };
+          prev.push(temp);
+          return temp.child;
+        }
+        for (let i = 0; i < prev.length; i++) {
+          const item = prev[i];
+          if (item.name === current) {
+            return item.child;
+          }
+        }
+        const temp = {
+          name: current,
+          child: [],
+        };
+        prev.push(temp);
+        return temp.child;
+      }, array);
+    });
+    return array;
+  }
+
+  // test
+  // 按照首字母和字母长度
+  var data = [
+    ["a", "aa", "aaa", "aaaa"],
+    ["b", "bb", "bbb"],
+    ["a", "ab", "aba"],
+    ["a", "aa", "aab"],
+  ];
+  console.log(transFunc(data));
+</script>
+
+</html>
