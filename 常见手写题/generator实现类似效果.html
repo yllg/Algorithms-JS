@@ -63,6 +63,21 @@
         gen.next();
       });
     }); // 依次打印 1 2 3
+
+    // 2-1.gen.next() 封装一层，让其自己能够实现递归调用
+    const gen2 = getResult2()
+
+    function co(g) {
+      const nextObj = g.next();
+      // 递归停止条件：当迭代器迭代到最后一个 yeild  
+      if (nextObj.done) {
+        return;
+      }
+      nextObj.value.then(() => {
+        co(g)
+      })
+    }
+    co(gen2)
   </script>
 </body>
 
