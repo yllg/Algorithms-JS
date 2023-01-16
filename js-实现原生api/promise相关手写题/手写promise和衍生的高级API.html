@@ -158,6 +158,11 @@
         reject(4);
       }, 4000);
     });
+    let p5 = new MyPromise((resolve, reject) => {
+      setTimeout(() => {
+        reject(5);
+      }, 5000);
+    });
 
     // 1.promise.all 
     MyPromise.all = function (promises) {
@@ -259,6 +264,39 @@
     MyPromise.allSettled([p4, p3, p1, p2]).then(res => {
       console.log('MyPromise.allSettled', res);
     })
+
+    // 5.promise.any 接受一组 Promise 实例作为参数，只要有一个成功整体就成功，全部失败才整体失败。
+    MyPromise.any = function (promiseList = []) {
+      return new Promise((resolve, reject) => {
+        if (promiseList.length === 0) return resolve([])
+        let count = 0
+        const result = []
+        for (let i = 0; i < promiseList.length; i++) {
+          Promise.resolve(promiseList[i]).then(res => {
+            resolve(res)
+          }).catch(e => {
+            count++
+            result[i] = e
+            // 全部失败才reject
+            if (count === promiseList.length) {
+              reject(new AggregateError(result))
+            }
+          })
+        }
+      })
+    }
+
+    // 5-1.promise.any 测试
+    MyPromise.any([p4, p1]).then(res => {
+      console.log('MyPromise.any', res)
+    }).catch(res => {
+      console.log('MyPromise.any', res)
+    });
+    MyPromise.any([p4, p5]).then(res => {
+      console.log('MyPromise.any', res)
+    }).catch(res => {
+      console.log('MyPromise.any', res)
+    });
   </script>
 </body>
 
