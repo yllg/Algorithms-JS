@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    // 1.多继承
+    // 正常状态下，对象只能继承一个对象，要么有 foo()，要么有 bar()
+    const Foo = {
+      foo: function () {
+        console.log('foo')
+      }
+    }
+    const Bar = {
+      bar: function () {
+        console.log('bar')
+      }
+    }
+    let sonOfFoo = Object.create(Foo);
+    sonOfFoo.foo(); // foo
+    let sonOfBar = Object.create(Bar);
+    sonOfBar.bar(); // bar
+    // 黑科技开始
+    let sonOfFooBar = new Proxy({}, {
+      get(target, key) {
+        return target[key] || Foo[key] || Bar[key];
+      }
+    })
+    // 我们创造了一个对象同时继承了两个对象，foo() 和 bar() 同时拥有
+    sonOfFooBar.foo(); // foo 有foo方法，继承自对象foo
+    sonOfFooBar.bar(); // bar 也有bar方法，继承自对象bar
+
+    // 2.隐藏私有变量
+    function getObject(rawObj, privateKeys) {
+      return new Proxy(rawObj, {
+        get(target, key, receiver) {
+          if (privateKeys.indexOf(key) !== -1) {
+            // throw new ReferenceError(`${key} 是私有属性，不能访问。`)
+            console.warn(`${key} 是私有属性，不能访问。`)
+          }
+          return target[key]
+        }
+      })
+    }
+    let rawObj = {
+      name: 'Zoe',
+      age: 18,
+      isFemale: true
+    }
+    let obj = getObject(rawObj, ['age'])
+    console.log(obj.name) // Zoe
+    console.log(obj.age) // 报错
+
+    // 3.对象属性校验
+    let person = {
+      name: 'Eason',
+      age: 30
+    }
+    let handler = {
+      // 注意：get参数3个，set参数4个；
+      set(target, key, value, receiver) {
+        if (key === 'name' && typeof value !== 'string') {
+          throw new Error('用户姓名必须是字符串类型')
+        }
+        if (key === 'age' && typeof value !== 'number') {
+          throw new Error('用户年龄必须是数字类型')
+        }
+        return Reflect.set(target, key, value, receiver)
+      }
+    }
+    let personForUser = new Proxy(person, handler)
+    personForUser.name = 'Zoe' // OK
+    personForUser.age = '18' // 报错
+  </script>
+</body>
+
+</html>
