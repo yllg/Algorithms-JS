@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    // 两个句子中的一个句子 只插入一个句子 就得到另一个句子
+
+    // 方法一：字符串按空格分割 + 双指针
+    // 时间复杂度：O(m+n)
+    // 空间复杂度：O(m+n)
+    var areSentencesSimilar = function (sentence1, sentence2) {
+      const words1 = sentence1.split(" ");
+      const words2 = sentence2.split(" ");
+      let i = 0,
+        j = 0;
+      while (i < words1.length && i < words2.length && words1[i] === words2[i]) {
+        i++;
+      }
+      while (j < words1.length - i && j < words2.length - i && words1[words1.length - j - 1] === words2[words2
+          .length - j - 1]) {
+        j++;
+      }
+      return i + j == Math.min(words1.length, words2.length);
+    };
+
+    // test
+    let sentence1 = "My name is Haley",
+      sentence2 = "My Haley";
+    console.log(areSentencesSimilar(sentence1, sentence2))
+  </script>
+</body>
+
+</html>
