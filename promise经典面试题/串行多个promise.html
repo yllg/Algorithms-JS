@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+  <title>串行多个promise</title>
+  <style></style>
+</head>
+
+<body></body>
+<script>
+  // 一个装有 1,2,3 的数组，一个封装的延迟函数
+  // 需求:开始执行时依次等待 1, 2, 3 秒，并在之后打印对应输出
+  const arr = [1, 2, 3];
+
+  function delay(time) {
+    return new Promise((resolve, reject) => {
+      console.log(`wait ${time}s`);
+      setTimeout(() => {
+        console.log("execute");
+        resolve();
+      }, time * 1000);
+    });
+  }
+  // 预期结果
+  // wait 1s // 等待 1 s
+  // execute
+  // wait 2s // 等待 2 s
+  // execute
+  // wait 3s // 等待 3 s
+  // execute
+
+  // 方法1： reduce
+  arr.reduce((s, v) => {
+    return s.then(() => delay(v));
+  }, Promise.resolve());
+
+  // 方法2： async + 循环 + await
+  (async function () {
+    for (const v of arr) {
+      await delay(v);
+    }
+  })();
+
+  // 方法3: 普通循环
+  // 方式 1 的本质是使用一个中间变量（上一次执行结果）来保存链式Promise
+  // 3-1 for循环
+  let p1 = Promise.resolve();
+  for (const i of arr) {
+    p1 = p1.then(() => delay(i));
+  }
+  // 3-2 while 循环
+  let i;
+  let p2 = Promise.resolve();
+  while ((i = arr.shift())) {
+    let s = i;
+    p2 = p2.then(() => delay(s));
+  }
+
+  // 方法4：递归
+  function dispatch(i, p = Promise.resolve()) {
+    if (!arr[i]) return Promise.resolve();
+    return p.then(() => dispatch(i + 1, delay(arr[i])));
+  }
+  dispatch(0);
+  
+  // 方法5：for await of
+  // for await of的规则和for of规则类似，
+  // 只需要实现一个内部[Symbol.asyncIterator] 异步迭代器方法即可
+  function createAsyncIterable(arr) {
+    return {
+      [Symbol.asyncIterator]() {
+        return {
+          i: 0,
+          next() {
+            if (this.i < arr.length) {
+              return delay(arr[this.i]).then(() => ({
+                value: this.i++,
+                done: false,
+              }));
+            }
+            return Promise.resolve({
+              done: true
+            });
+          },
+        };
+      },
+    };
+  }
+  (async function () {
+    for await (i of createAsyncIterable(arr)) {}
+  })();
+</script>
+
+</html>
