@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    // 1.看看下面输出的内容
+    async function getResult() {
+      await new Promise((resolve, reject) => {
+        setTimeout(() => {
+          resolve(1);
+          console.log(1);
+        }, 1000);
+      })
+      await new Promise((resolve, reject) => {
+        setTimeout(() => {
+          resolve(2);
+          console.log(2);
+        }, 500);
+      })
+      await new Promise((resolve, reject) => {
+        setTimeout(() => {
+          resolve(3);
+          console.log(3);
+        }, 100);
+      })
+    }
+
+    getResult() // 1 2 3 
+
+
+    // 2.用 Es6 中的 generator 实现类似的效果
+    function* getResult2(params) {
+      yield new Promise((resolve, reject) => {
+        setTimeout(() => {
+          resolve(1);
+          console.log(1);
+        }, 1000);
+      })
+      yield new Promise((resolve, reject) => {
+        setTimeout(() => {
+          resolve(2);
+          console.log(2);
+        }, 500);
+      })
+      yield new Promise((resolve, reject) => {
+        setTimeout(() => {
+          resolve(3);
+          console.log(3);
+        }, 100);
+      })
+    }
+    const gen = getResult2()
+    // gen.next().value 就是每一次 yield 之后返回的 Promise
+    // gen.next() = {value: yeild 返回的数据,done: 迭代器是否走完} 
+    gen.next().value.then(() => {
+      gen.next().value.then(() => {
+        gen.next();
+      });
+    }); // 依次打印 1 2 3
+  </script>
+</body>
+
+</html>
