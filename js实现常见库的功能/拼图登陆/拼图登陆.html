@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>drag</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      padding: 20px;
+    }
+
+    /* 图形拼图验证码 */
+    .check {
+      width: 400px;
+      height: 300px;
+      background-repeat: no-repeat;
+      background-size: 100% 100%;
+      background-image: url(https://img0.baidu.com/it/u=2028084904,3939052004&fm=253&fmt=auto&app=138&f=JPEG?w=889&h=500);
+      position: relative;
+    }
+
+    .check::before {
+      content: '';
+      width: 50px;
+      height: 50px;
+      background: rgba(0, 0, 0, 0.5);
+      border: 1px solid #fff;
+      position: absolute;
+      top: 100px;
+      left: 280px;
+    }
+
+    .check-child {
+      content: '';
+      width: 50px;
+      height: 50px;
+      border: 1px solid #fff;
+      background-image: inherit;
+      background-repeat: inherit;
+      background-size: 400px 300px;
+      background-position: -280px -100px;
+      position: absolute;
+      top: 100px;
+      left: 0;
+    }
+
+    /* 拖动条 */
+    .drag {
+      width: 400px;
+      height: 50px;
+      background-color: #e3e3e3;
+      margin-top: 10px;
+      position: relative;
+    }
+
+    /* 可拖动的盒子 */
+    .drag-child {
+      width: 50px;
+      height: 50px;
+      background-color: aquamarine;
+      z-index: 10;
+      position: absolute;
+      top: 0;
+      left: 0;
+    }
+
+    /* 提示文字说明 */
+    .drag-tips {
+      display: flex;
+      align-items: center;
+      justify-content: end;
+      width: 95%;
+      height: 100%;
+      margin: 0 auto;
+      font-size: 12px;
+      color: #8a8a8a;
+      user-select: none;
+      z-index: 1;
+      position: absolute;
+      top: 0;
+      left: 0;
+
+    }
+
+    @keyframes move {
+      to {
+        transform: translateX(0);
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <!-- 图形校验区域 -->
+  <div class="check">
+    <!-- 被校验区域 -->
+    <div class="check-child"></div>
+  </div>
+  <!-- 拖动条 -->
+  <div class="drag">
+    <!-- 操作说明 -->
+    <div class="drag-tips">
+      <span>按住左边按钮向右拖动完成上方图像验证</span>
+    </div>
+    <!-- 可拖动的盒子 -->
+    <div class="drag-child"></div>
+  </div>
+</body>
+<script>
+  // 获取元素实例
+  const drag = document.querySelector('.drag-child')
+
+  // 图形被校验区域
+  const check = document.querySelector('.check-child')
+
+  // 通过校验回调
+  const success = () => {
+    console.log('通过校验');
+  }
+
+  // 声明鼠标按下事件
+  const dragMouseDown = event => {
+    // 添加鼠标移动事件
+    document.addEventListener('mousemove', dragMouseMove)
+  }
+  // 监听鼠标移动事件
+  const dragMouseMove = event => {
+    // 获取当前 x 轴坐标
+    const {
+      pageX
+    } = event
+    if (pageX < 0 || pageX > 350) {
+      return
+    }
+    // 修改可移动盒子的 x 轴坐标
+    drag.style.transform = `translateX(${pageX}px)`
+
+    // 修改被校验区域坐标
+    check.style.transform = `translateX(${pageX}px)`
+
+    if (pageX >= 278 && pageX <= 285) {
+      // 执行回调
+      success()
+    }
+  }
+  // 结束鼠标监听事件
+  const dragMouseUP = event => {
+    // 移除鼠标移动事件
+    document.removeEventListener('mousemove', dragMouseMove)
+
+    // 获取当前 x 轴坐标
+    const {
+      pageX
+    } = event
+
+    if (pageX < 278 || pageX > 285) {
+      // 修改可移动盒子的 x 轴坐标
+      drag.style.animation = 'move 0.5s ease-in-out'
+      // 修改被校验区域坐标
+      check.style.animation = 'move 0.5s ease-in-out'
+
+      // 动画结束监听回调
+      const animationEnd = () => {
+        // 修改可移动盒子的 x 轴坐标
+        drag.style.transform = `translateX(${0}px)`
+        // 修改被校验区域坐标
+        check.style.transform = `translateX(${0}px)`
+
+        // 清除动画属性
+        drag.style.animation = ''
+        check.style.animation = ''
+        // 移出动画结束监听
+        document.removeEventListener("animationend", animationEnd)
+      }
+      // 添加动画结束监听
+      document.addEventListener("animationend", animationEnd)
+    }
+  }
+
+  // 添加鼠标按下事件
+  document.addEventListener('mousedown', dragMouseDown)
+  // 添加鼠标弹起事件
+  document.addEventListener('mouseup', dragMouseUP)
+</script>
+
+</html>
