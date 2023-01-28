@@ -18,7 +18,8 @@
      * 3.有很多缺点
      * （1）无法实现对函数，稀疏数组，正则等特殊对象的拷贝
      * （2）会抛弃对象的constructor，所有的构造函数都指向了object。
-     * （3）对象有循环引用，会报错。
+     * （3）数据层次很深时，可能会爆栈（内部也是递归）
+     * （4）对象有循环引用，会报错“Uncaught TypeError: Converting circular structure to JSON”。但不是栈溢出的报错，因为 JSON.stringify 内部做了循环引用的检测
      */
 
     function deepClone(obj) {

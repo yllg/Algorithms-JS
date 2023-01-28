@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    /**
+     * 处理循环引用的思路：
+     * 引入一个数组uniqueList用来存储已经拷贝的数组，每次循环遍历时，先判断对象是否在uniqueList中了，如果在的话就不执行拷贝逻辑了；weakMap也是类似原理
+     * 
+     * 问题：
+     * 1.时间、正则等数据类型的处理，可以看到第三个递归增强版补充进来
+     * 2.如果不想要保持引用，就不适合
+     */
+
+    // find是抽象的一个函数，其实就是遍历uniqueList
+    function find(arr, item) {
+      for (let i = 0; i < arr.length; i++) {
+        if (arr[i].source === item) {
+          return arr[i];
+        }
+      }
+      return null;
+    }
+
+    function cloneForce(x) {
+      const root = {};
+      const loopList = [{
+        parent: root,
+        key: undefined,
+        data: x
+      }];
+      const uniqueList = [];
+      while (loopList.length) {
+        // 深度优先
+        const node = loopList.pop();
+        const parent = node.parent;
+        const key = node.key;
+        const data = node.data;
+        // 初始化赋值目标，key为undefined则拷贝到父元素，否则拷贝到子元素
+        let res = parent;
+        if (typeof key !== 'undefined') {
+          res = parent[key] = {};
+        }
+
+        // 数据已经存在
+        let uniqueData = find(uniqueList, data);
+        if (uniqueData) {
+          parent[key] = uniqueData.target;
+          continue; // 中断本次循环
+        }
+        // 数据不存在
+        // 保存源数据，在拷贝数据中对应的引用
+        uniqueList.push({
+          source: data,
+          target: res
+        });
+
+        for (let k in data) {
+          if (data.hasOwnProperty(k)) {
+            if (typeof data[k] === 'object') {
+              // 下一次循环
+              loopList.push({
+                parent: res,
+                key: k,
+                data: data[k]
+              });
+            } else {
+              res[k] = data[k];
+            }
+          }
+        }
+      }
+      return root;
+    }
+
+    // test
+    var b = {};
+    var a = {
+      a1: b,
+      a2: b
+    };
+    console.log(a.a1 === a.a2) // true
+
+    var c = cloneForce(a);
+    console.log(c.a1 === c.a2) // true
+  </script>
+</body>
+
+</html>

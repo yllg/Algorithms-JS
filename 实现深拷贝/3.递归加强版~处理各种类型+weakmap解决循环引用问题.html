@@ -11,8 +11,8 @@
   <script src="../js小工具demo/2.判断数据类型.js"></script>
   <script>
     /**
-     * 1.处理了：循环引用，函数，数组，Date，Map，Set，正则，symbol等各种情况
-     * 2.循环引用的问题
+     * 处理了各种情况：循环引用，函数，数组，Date，Map，Set，正则，symbol等
+     * 1.循环引用的问题
      * 即obj.x = obj用一个weakMap<原对象引用,新对象引用>保存已经创建的对象，再下次递归中如果当前等于原对象引用，那么直接返回新创建对象的引用
      */
 
@@ -139,6 +139,23 @@
     let deepObj = deepCopy(obj)
     console.log(deepObj.x === deepObj.i) // true 循环引用关系也copy了
     console.log(deepObj)
+
+
+    // 下面的代码可以生成指定深度和每层广度的代码,用来测试栈溢出问题
+    function createData(deep, breadth) {
+      var data = {};
+      var temp = data;
+      for (var i = 0; i < deep; i++) {
+        temp = temp['data'] = {};
+        for (var j = 0; j < breadth; j++) {
+          temp[j] = j;
+        }
+      }
+      return data;
+    }
+    // 会栈溢出
+    const cloneObj = deepCopy(createData(1000000));
+    console.log(cloneObj)
   </script>
 </body>
 
