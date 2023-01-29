@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <div id="root"></div>
+  <script>
+    function render(vnode, container) {
+      return container.appendChild(_render(vnode));
+    }
+
+    function _render(vnode) {
+      // 1.处理数字
+      if (typeof vnode === 'number') {
+        vnode = String(vnode);
+      }
+      // 2.处理文本节点
+      if (typeof vnode === 'string') {
+        const textNode = document.createTextNode(vnode)
+        return textNode;
+      }
+      // 3.普通的dom
+      const dom = document.createElement(vnode.tag);
+      if (vnode.attrs) {
+        Object.keys(vnode.attrs).forEach(key => {
+          const value = vnode.attrs[key];
+          dom.setAttribute(key, value); // 设置属性
+        });
+      }
+      // TODO:4.处理组件
+      if (typeof vnode.tag === 'function') {
+        const component = createComponent(vnode.tag, vnode.attrs);
+        setComponentProps(component, vnode.attrs);
+        return component.base;
+      }
+
+      vnode.children.forEach(child => render(child, dom)); // 递归渲染子节点
+      return dom; // 返回虚拟dom为真正的DOM
+    }
+    //实现dom挂载到页面某个元素
+    const ReactDOM = {
+      render: (vnode, container) => {
+        container.innerHTML = '';
+        return render(vnode, container);
+      }
+    }
+
+    // test
+    const vnode = {
+      tag: 'DIV',
+      attrs: {
+        id: 'app'
+      },
+      children: [{
+          tag: 'SPAN',
+          attrs: {
+            id: 'first-span',
+            class: 'first'
+          },
+          children: [{
+            tag: 'A',
+            children: []
+          }]
+        },
+        {
+          tag: 'SPAN',
+          attrs: {
+            id: 'second-span',
+            class: 'second'
+          },
+          children: [{
+              tag: 'A',
+              children: []
+            },
+            {
+              tag: 'A',
+              children: []
+            }
+          ]
+        }
+      ]
+    }
+
+    render(vnode, document.getElementById("root"))
+  </script>
+</body>
+
+</html>
