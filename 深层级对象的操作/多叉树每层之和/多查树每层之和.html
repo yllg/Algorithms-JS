@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    // 层序遍历
+    const layerSum = function (root) {
+      let result = [],
+        index = 0;
+      const level = (root, index) => {
+        if (!root) return;
+        if (!result[index]) result[index] = 0;
+        result[index] += root.value;
+        if (root.children) root.children.forEach(child => level(child, index + 1))
+      };
+      level(root, index);
+      return result;
+    };
+
+    // test
+    const obj = {
+      value: 2,
+      children: [{
+          value: 6,
+          children: [{
+            value: 1
+          }]
+        },
+        {
+          value: 3,
+          children: [{
+            value: 2
+          }, {
+            value: 3
+          }, {
+            value: 4
+          }]
+        },
+        {
+          value: 5,
+          children: [{
+            value: 7
+          }, {
+            value: 8
+          }]
+        }
+      ]
+    };
+
+    console.log(layerSum(obj));
+  </script>
+</body>
+
+</html>
