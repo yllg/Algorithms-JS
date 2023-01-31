@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Document</title>
+  <style>
+    ul {
+      list-style: none;
+      width: 1200px;
+    }
+
+    li {
+      overflow: hidden;
+      list-style: none;
+    }
+
+    ul,
+    li {
+      margin: 0;
+      padding: 0;
+    }
+
+    img {
+      height: 200px;
+      display: block;
+      float: left;
+      border: 5px solid #fff;
+    }
+
+    .box-border {
+      box-sizing: border-box;
+    }
+  </style>
+</head>
+
+<body>
+  <ul class="picrow">
+
+    <img
+      src="http://f.hiphotos.baidu.com/image/h%3D300/sign=4fac3909deca7bcb627bc12f8e0b6b3f/a2cc7cd98d1001e904a314c5b10e7bec55e79758.jpg"
+      alt="">
+    <img
+      src="http://d.hiphotos.baidu.com/image/h%3D300/sign=1fd4a714f91f3a2945c8d3cea924bce3/fd039245d688d43f14149738741ed21b0ff43bbe.jpg"
+      alt="">
+    <img src="https://images.mepai.me/app/works/13820/2017-08-17/w_59950b7e94e6c/859950b7e94f3b.jpg!720w.jpg" alt="">
+    <img
+      src="http://e.hiphotos.baidu.com/image/h%3D300/sign=a55b17e8ba1bb0519024b528067bda77/0df3d7ca7bcb0a46fe3390f36263f6246a60afe2.jpg"
+      alt="">
+    <img src="http://www.518mgao.com/file/uploadimage/updata/2017/08/31/201708311025310120.jpg" alt="">
+    <img
+      src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1504265748225&di=fba29600e7eab89194d4ab7877018391&imgtype=0&src=http%3A%2F%2Fy.zdmimg.com%2F201310%2F28%2F1b56e3c4.jpg_e600.jpg"
+      alt="">
+    <img src="http://www.518mgao.com/file/uploadimage/updata/2017/08/30/201708302207090692.jpg" />
+
+    <img src="http://www.518mgao.com/file/uploadimage/updata/2017/08/31/201708311002060605.jpg" />
+
+    <img
+      src="http://f.hiphotos.baidu.com/image/h%3D300/sign=b79b73eab012c8fcabf3f0cdcc0292b4/8326cffc1e178a827c117e6aff03738da877e8cf.jpg" />
+    <img src="https://images.mepai.me/app/works/32601/2017-08-17/w_599507392a707/0599507392a76e.jpg!720w.jpg" alt="">
+    <img src="http://www.518mgao.com/file/uploadimage/updata/2017/08/31/201708311100580072.jpg" alt="">
+    <img src="https://images.mepai.me/app/works/13820/2017-08-17/w_59950b7e94e6c/859950b7e94f3b.jpg!720w.jpg" alt="">
+    <img
+      src="http://d.hiphotos.baidu.com/image/h%3D300/sign=3b8c55165de736d147138a08ab514ffc/241f95cad1c8a7864a9551c46e09c93d71cf50b8.jpg"
+      alt=""><img
+      src="http://a.hiphotos.baidu.com/image/h%3D300/sign=91870b7cc0177f3e0f34fa0d40ce3bb9/4afbfbedab64034f38bf5bcca6c379310b551d8d.jpg" />
+
+    <img
+      src="http://a.hiphotos.baidu.com/image/h%3D300/sign=91870b7cc0177f3e0f34fa0d40ce3bb9/4afbfbedab64034f38bf5bcca6c379310b551d8d.jpg" />
+    <img src="https://images.mepai.me/app/works/32601/2017-08-17/w_599507392a707/0599507392a76e.jpg!720w.jpg" alt="">
+    <img src="http://www.518mgao.com/file/uploadimage/updata/2017/08/31/201708311100580072.jpg" alt="">
+    <img
+      src="http://a.hiphotos.baidu.com/image/h%3D300/sign=3156fc6fd843ad4bb92e40c0b2035a89/03087bf40ad162d91ab663d618dfa9ec8b13cda4.jpg"
+      alt="">
+    <img
+      src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1504265748225&di=fba29600e7eab89194d4ab7877018391&imgtype=0&src=http%3A%2F%2Fy.zdmimg.com%2F201310%2F28%2F1b56e3c4.jpg_e600.jpg"
+      alt="">
+  </ul>
+  <script src="https://cdn.bootcss.com/jquery/1.10.2/jquery.min.js"> </script>
+  <script>
+    // 原理参考这一篇：https://blog.csdn.net/A_bet_of_three_years/article/details/78424992
+
+    window.onload = function () {
+      $(function () {
+        var border = 5;
+        // 给定固定的高度
+        var h = 200;
+        //获取当前行的宽度
+        var w = 1200;
+        //给宽度设置数组
+        var ws = [];
+        // number of images appearing in this row
+        // 在这行显示图片的张数
+        var c = 0;
+        // total width of images in this row - including margins
+        //计算当前行的图片总共宽度，包括边距
+        var tw = 0;
+        var photos = [];
+        $.each($("img"), function () {
+          var nw = $(this).width();
+          var nh = $(this).height();
+          if (nh != h) {
+            nw = h / nh * nw;
+          }
+          tw += nw;
+          ws.push(nw);
+          if (tw >= w) {
+            photos.push(ws);
+            console.log(ws.length);
+            tw = 0;
+            ws = [];
+          }
+        })
+        $.each(photos, function (i) {
+          var line = photos[i];
+          console.log(line);
+          var sum = eval(line.join("+"));
+          $.each(line, function (j) {
+            var currentWidth = line[j];
+            var realWidth = currentWidth * w / sum;
+            console.log(realWidth);
+            console.log(c);
+            $("img").eq(c).width(realWidth).addClass("box-border").show();
+            c++;
+          })
+        })
+      })
+
+    }
+  </script>
+</body>
+
+</html>
