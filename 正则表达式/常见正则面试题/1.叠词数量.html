@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 更多叠词相关，参考这篇：https://www.jianshu.com/p/50a79680769d
+
+      const s = "abcdaaabbccccdddefgaaa";
+      const regex = /(.)\1+/g; // 1.匹配叠词，即多个重复的字母
+      const s2 = s.match(regex); // 2.所有叠词放到数组中
+      console.log(s2);
+      const s3 = [...new Set(s2)]; // 3.去重
+      console.log(s3);
+      console.log(s3.length);
+    </script>
+  </body>
+</html>
