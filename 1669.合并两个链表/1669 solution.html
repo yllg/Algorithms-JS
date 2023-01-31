@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    // 删除 list1 的部分，塞入 list2
+
+    // 方法一：模拟
+    // 时间复杂度：O(n+m)
+    // 空间复杂度：O(1)
+    var mergeInBetween = function (list1, a, b, list2) {
+      let preA = list1;
+      for (let i = 0; i < a - 1; i++) {
+        preA = preA.next;
+      }
+      let preB = preA;
+      for (let i = 0; i < b - a + 2; i++) {
+        preB = preB.next;
+      }
+      preA.next = list2;
+      while (list2.next) {
+        list2 = list2.next;
+      }
+      list2.next = preB;
+      return list1;
+    };
+
+    // test
+    //Definition for singly-linked list.
+    function ListNode(val) {
+      this.val = val;
+      this.next = null;
+    }
+
+    let a5 = new ListNode(5);
+    let a4 = new ListNode(4);
+    a4.next = a5;
+    let a3 = new ListNode(3);
+    a3.next = a4;
+    let a2 = new ListNode(2);
+    a2.next = a3;
+    let a1 = new ListNode(1);
+    a1.next = a2;
+    let list1 = new ListNode(0);
+    list1.next = a1;
+
+
+    let b2 = new ListNode(1000002);
+    let b1 = new ListNode(1000001);
+    b1.next = b2;
+    let list2 = new ListNode(1000000);
+    list2.next = b1;
+
+    const a = 3,
+      b = 4;
+
+    console.log(mergeInBetween(list1, a, b, list2))
+  </script>
+</body>
+
+</html>
