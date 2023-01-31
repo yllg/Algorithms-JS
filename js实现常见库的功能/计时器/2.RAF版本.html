@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <div id="app">hello world</div>
+  <div id="status">这里显示倒计时状态</div>
+  <button class="start">开始</button>
+  <button class="pause">停止</button>
+  <button class="goOn">继续</button>
+  <button class="reset">重置</button>
+  <br />
+
+  <script>
+    // 正向毫秒级计时器主要就是利用了window.requestAnimationFrame的回调函数的参数为DOMHighResTimeStamp，且与performance.now()的返回值相同；在实现暂停、继续时，需要计算一下补时时间。
+
+    /**
+     * @description: 补0操作
+     * @param {*} num
+     * @param {*} targetLength
+     * @return {*}
+     */
+    function padZero(num, targetLength = 2) {
+      let str = num + ''
+
+      while (str.length < targetLength) {
+        str = '0' + str
+      }
+
+      return str
+    }
+
+    /**
+     * @description: 解析时间
+     * @param {*} time
+     * @return {*}
+     */
+    function parseTime(time) {
+      const SECOND = 1000
+      const MINUTE = 60 * SECOND
+      const HOUR = 60 * MINUTE
+      const DAY = 24 * HOUR
+
+      const days = Math.floor(time / DAY)
+      const hours = Math.floor((time % DAY) / HOUR)
+      const minutes = Math.floor((time % HOUR) / MINUTE)
+      const seconds = Math.floor((time % MINUTE) / SECOND)
+      const milliseconds = Math.floor(time % SECOND)
+
+      return {
+        total: time,
+        days,
+        hours,
+        minutes,
+        seconds,
+        milliseconds,
+      }
+    }
+
+
+    /**
+     * @description: 格式化时间
+     * @param {*} format
+     * @param {*} currentTime
+     * @return {*}
+     */
+    function parseFormat(format, currentTime) {
+      const {
+        days
+      } = currentTime
+      let {
+        hours,
+        minutes,
+        seconds,
+        milliseconds
+      } = currentTime
+
+      if (format.includes('DD')) {
+        format = format.replace('DD', padZero(days))
+      } else {
+        hours += days * 24
+      }
+
+      if (format.includes('HH')) {
+        format = format.replace('HH', padZero(hours))
+      } else {
+        minutes += hours * 60
+      }
+
+      if (format.includes('mm')) {
+        format = format.replace('mm', padZero(minutes))
+      } else {
+        seconds += minutes * 60
+      }
+
+      if (format.includes('ss')) {
+        format = format.replace('ss', padZero(seconds))
+      } else {
+        milliseconds += seconds * 1000
+      }
+
+      if (format.includes('S')) {
+        const ms = padZero(milliseconds, 3)
+
+        if (format.includes('SSS')) {
+          format = format.replace('SSS', ms)
+        } else if (format.includes('SS')) {
+          format = format.replace('SS', ms.slice(0, 2))
+        } else {
+          format = format.replace('S', ms.charAt(0))
+        }
+      }
+
+      return format
+    }
+
+
+    /**
+     * @description: 渲染时间
+     * @param {*} time
+     * @return {*}
+     */
+    const render = (time) => {
+      time = parseFormat('HH:mm:ss:SSS', parseTime(time))
+      document.querySelector("#status").innerHTML = time
+    }
+
+
+    const useCountUp = (options) => {
+      let rafId, startTime, stopTime, curentTime, counting = false
+
+      const step = (timestamp) => {
+        curentTime = timestamp - startTime;
+        render(curentTime);
+        options.onChange?.(curentTime);
+
+        if (options.time) {
+          if (Math.floor(curentTime) < options.time) {
+            rafId = window.requestAnimationFrame(step)
+          } else {
+            pause()
+            options.onFinish?.()
+          }
+        } else {
+          rafId = window.requestAnimationFrame(step)
+        }
+      }
+
+      const start = () => {
+        // 计时中 或者 已经开始过计时想要重新开始计时，应该先点击一下 重置 再开始计时
+        if (counting || curentTime) {
+          return
+        }
+        counting = true
+        startTime = performance.now()
+        rafId = window.requestAnimationFrame(step)
+      }
+
+      const pause = () => {
+        // 已经暂停后，屏蔽掉点击
+        if (!counting) {
+          return
+        }
+        counting = false
+        stopTime = performance.now()
+        if (rafId) {
+          window.cancelAnimationFrame(rafId)
+        }
+      }
+
+      const goOn = () => {
+        // 已经在计时中，屏蔽掉点击
+        if (counting) {
+          return
+        }
+        counting = true
+        startTime += performance.now() - stopTime
+        rafId = window.requestAnimationFrame(step)
+      }
+
+      const reset = () => {
+        pause()
+        curentTime = 0
+        startTime = 0
+        stopTime = 0
+        render(0)
+      }
+
+      return {
+        start,
+        pause,
+        goOn,
+        reset
+      }
+    }
+
+    const { start, pause, goOn, reset } = useCountUp({
+      // time: 3 * 1000, // 计时的时长，不传就一直计时下去
+      onChange: current => console.log('change', current),
+      onFinish: () => console.log('finish'),
+    });
+
+    document.querySelector('.start').addEventListener('click', () => {
+      start()
+    })
+
+    document.querySelector('.pause').addEventListener('click', () => {
+      pause()
+    })
+
+    document.querySelector('.goOn').addEventListener('click', () => {
+      goOn()
+    })
+
+    document.querySelector('.reset').addEventListener('click', () => {
+      reset()
+    })
+
+  </script>
+</body>
+
+</html>

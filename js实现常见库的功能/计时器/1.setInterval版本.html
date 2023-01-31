@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <input type="text" id="timetext" value="00时00分00秒" readonly>
+  <br>
+  <br>
+  <button type="button" onclick="start()">开始</button>
+  <button type="button" onclick="stop()">暂停</button>
+  <button type="button" onclick="Reset()">重置</button>
+  <script>
+    /**
+     * setInterval版本的问题
+     * 1.最后一位始终为0
+     * 2.有些bug，连续按两次开始，再按暂停和重置有问题
+    */
+
+    //初始化变量
+    let hour, minute, second; //时 分 秒
+    hour = minute = second = 0; //初始化
+    let millisecond = 0; //毫秒
+    let int;
+
+    //重置函数
+    function Reset() {
+      window.clearInterval(int);
+      millisecond = hour = minute = second = 0;
+      document.getElementById('timetext').value = '00时00分00秒000毫秒';
+    }
+
+    //开始函数
+    function start() {
+      int = setInterval(timer, 50); //每隔50毫秒执行一次timer函数
+    }
+
+    //计时函数
+    function timer() {
+      millisecond = millisecond + 50;
+      if (millisecond >= 1000) {
+        millisecond = 0;
+        second = second + 1;
+      }
+      if (second >= 60) {
+        second = 0;
+        minute = minute + 1;
+      }
+      if (minute >= 60) {
+        minute = 0;
+        hour = hour + 1;
+      }
+      document.getElementById('timetext').value = hour + '时' + minute + '分' + second + '秒' + millisecond + '毫秒';
+    }
+
+    //暂停函数
+    function stop() {
+      window.clearInterval(int);
+    }
+  </script>
+</body>
+
+</html>
