@@ -39,6 +39,7 @@
     Parent.prototype.numCount = function () {
       console.log(this.num);
     }
+
     function Son() {
       Parent.call(this, num); // 继承父类属性
     }
@@ -59,9 +60,21 @@
     Son.printIntroduction();
     // expected output: "My name is Matthew. Am I human? true"
 
-    // 2.ES6 实现，extend关键字，本质就是 构造函数继承+原型链继承
-    class Parent {}
-    class Son extends Parent {}
+    // 2.ES6 实现，extends、super关键字，本质就是 构造函数继承+原型链继承
+    class Parent {
+      constructor(name) {
+        this.name = name
+      }
+      getName() {
+        console.log(this.name)
+      }
+    }
+    class Child extends Parent {
+      constructor(name) {
+        super(name)
+        this.sex = 'boy'
+      }
+    }
   </script>
 </body>
 
