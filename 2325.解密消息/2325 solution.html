@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    // 方法一：模拟,哈希表
+    var decodeMessage = function (key, message) {
+      let cur = 'a';
+      const rules = new Map();
+
+      for (let i = 0; i < key.length; ++i) {
+        const c = key[i];
+        if (c !== ' ' && !rules.has(c)) {
+          rules.set(c, cur);
+          cur = String.fromCharCode(cur.charCodeAt() + 1);
+        }
+      }
+
+      let ret = '';
+      for (let i = 0; i < message.length; ++i) {
+        let c = message[i];
+        if (c !== ' ') {
+          c = rules.get(c);
+        }
+        ret += c;
+      }
+
+      return ret;
+    };
+
+    // test
+    let key = "the quick brown fox jumps over the lazy dog",
+      message = "vkbs bs t suepuv";
+    console.log(decodeMessage(key, message))
+  </script>
+</body>
+
+</html>
