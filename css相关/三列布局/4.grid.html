@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<style>
+  /* gird提供了 gird-template-columns、grid-template-rows属性让我们设置行和列的高、宽 */
+  body {
+    display: grid;
+    grid-template-columns: 300px auto 300px;
+  }
+
+  .left {
+    background-color: red;
+  }
+
+  .right {
+    background-color: blue;
+  }
+
+  .middle {
+    background-color: green;
+  }
+</style>
+
+<body>
+  <div class="left">左</div>
+  <div class="middle">中</div>
+  <div class="right">右</div>
+</body>
+
+</html>

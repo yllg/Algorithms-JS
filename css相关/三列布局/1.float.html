@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<style>
+  .left {
+    float: left;
+    width: 100px;
+    height: 200px;
+    background-color: red;
+    vertical-align: top;
+  }
+
+  .right {
+    float: right;
+    width: 100px;
+    height: 400px;
+    background-color: blue;
+    vertical-align: top;
+  }
+
+  .center {
+    position: absolute;
+    display: block;
+    width: calc(100% - 240px);
+    height: 100px;
+    margin: 0 111px;
+    background-color: green;
+  }
+</style>
+
+<body>
+  <dv class="left"></dv>
+  <dv class="center"></dv>
+  <dv class="right"></dv>
+</body>
+
+</html>
