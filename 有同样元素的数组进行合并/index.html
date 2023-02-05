@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    // 方法一：
+    function transform1(arr) {
+      let res = []
+      arr = arr.map(el => el.sort()).sort()
+      const item = arr.reduce((pre, cur) => {
+        if (cur.some(el => pre && pre.includes(el))) {
+          pre = pre.concat(cur)
+        } else {
+          res.push(pre)
+          pre = cur
+        }
+        return [...new Set(pre)]
+      })
+      res.push(item)
+      return res;
+    }
+
+    // 方法二： 
+    function transform2(arr) {
+      const map = new Map()
+      arr.forEach((array, index) => {
+        const findAlp = array.find((v) => map.get(v))
+        if (findAlp) {
+          const set = map.get(findAlp)
+          array.forEach((alp) => {
+            set.add(alp)
+            const findAlp2 = map.get(alp)
+            if (findAlp2 && findAlp2 !== set) {
+              for (const v of findAlp2.values()) {
+                set.add(v)
+                map.set(v, set)
+              }
+            }
+            map.set(alp, set)
+          })
+        } else {
+          const set = new Set(arr[index])
+          array.forEach((alp) => map.set(alp, set))
+        }
+      })
+      const set = new Set()
+      const ret = []
+      for (const [key, value] of map.entries()) {
+        if (set.has(value)) continue
+        set.add(value)
+        ret.push([...value])
+      }
+      return ret
+    }
+
+    // test
+    const arr = [
+      ['a', 'b', 'c'],
+      ['a', 'd'],
+      ['d', 'e'],
+      ['f', 'g'],
+      ['h', 'g'],
+      ['i']
+    ]
+    console.log(transform1(arr));
+    console.log(transform2(arr));
+  </script>
+</body>
+
+</html>
