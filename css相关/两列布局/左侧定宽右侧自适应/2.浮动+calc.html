@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<style>
+ /* 两个元素设置浮动，右侧自适应元素宽度使用calc函数计算 */
+.left{
+    float: left;
+    width: 100px;
+    height: 200px;
+    background-color: red;
+}
+.right{
+    float: left;
+    width: calc(100% - 100px);
+    height: 400px;
+    background-color: blue;
+}
+</style>
+<body>
+  <dv class="left"></dv>
+  <dv class="right"></dv>
+</body>
+
+</html>

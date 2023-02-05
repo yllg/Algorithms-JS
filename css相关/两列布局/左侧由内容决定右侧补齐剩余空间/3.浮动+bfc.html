@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<style>
+  /* 浮动+BFC
+  父元素设置overflow:hidden,左侧定宽元素浮动，右侧自适应元素设置overflow:auto创建BFC */
+  .box {
+    height: 600px;
+    width: 100%;
+    overflow: hidden;
+  }
+
+  .left {
+    float: left;
+    height: 200px;
+    background-color: red;
+  }
+
+  .right {
+    display: block;
+    overflow: auto;
+    height: 400px;
+    background-color: blue;
+  }
+</style>
+
+<body>
+  <div class="box">
+    <dv class="left">左边内容</dv>
+    <dv class="right"></dv>
+  </div>
+</body>
+
+</html>

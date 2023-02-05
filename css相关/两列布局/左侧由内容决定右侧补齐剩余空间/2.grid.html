@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<style>
+  /* 父元素设置display：grid; grid-template-columns:auto 1fr;（这个属性定义列宽，auto关键字表示由浏览器自己决定长度。fr是一个相对尺寸单位，表示剩余空间做等分）grid-gap:20px（行间距） */
+  .parent {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    grid-gap: 20px
+  }
+
+  .left {
+    background-color: red;
+    height: 200px;
+  }
+
+  .right {
+    height: 300px;
+    background-color: blue;
+  }
+</style>
+
+<body>
+  <div class="parent">
+    <dv class="left">左边内容</dv>
+    <dv class="right"></dv>
+  </div>
+</body>
+
+</html>

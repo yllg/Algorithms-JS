@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<style>
+  /* 父元素相对定位，左侧元素绝对定位，右侧自适应元素设置margin-left的值大于定宽元素的宽度 */
+  .left {
+    position: absolute;
+    width: 100px;
+    height: 200px;
+    background-color: red;
+  }
+
+  .right {
+    display: block;
+    margin-left: 100px;
+    height: 400px;
+    background-color: blue;
+  }
+</style>
+
+<body>
+  <dv class="left"></dv>
+  <dv class="right"></dv>
+</body>
+
+</html>

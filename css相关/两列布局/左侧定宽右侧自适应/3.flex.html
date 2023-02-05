@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<style>
+  /* 父元素设置display：flex，自适应元素设置flex：1 */
+  .box {
+    height: 600px;
+    width: 100%;
+    display: flex;
+  }
+
+  .left {
+    width: 100px;
+    height: 200px;
+    background-color: red;
+  }
+
+  .right {
+    flex: 1;
+    height: 400px;
+    background-color: blue;
+  }
+</style>
+
+<body>
+  <div class="box">
+    <dv class="left"></dv>
+    <dv class="right"></dv>
+  </div>
+</body>
+
+</html>
