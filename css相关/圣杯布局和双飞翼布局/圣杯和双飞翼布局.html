@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <style>
+    .outer,
+    .left,
+    .middle,
+    .right {
+      height: 100px;
+      margin-bottom: 5px;
+    }
+
+    .left {
+      background: tomato;
+    }
+
+    .middle {
+      background: lightgreen;
+    }
+
+    .right {
+      background: gold;
+    }
+
+    /* 圣杯布局 通过浮动和负边距实现 */
+    .outer1 {
+      padding: 0 200px 0 100px;
+    }
+
+    .outer1 .middle {
+      width: 100%;
+      float: left;
+    }
+
+    .outer1 .left {
+      width: 100px;
+      float: left;
+      margin-left: -100%;
+      position: relative;
+      left: -100px;
+    }
+
+    .outer1 .right {
+      width: 200px;
+      float: left;
+      margin-left: -200px;
+      position: relative;
+      left: 200px;
+    }
+
+    /* 双飞翼布局 */
+    .outer2 .middle-wrapper {
+      width: 100%;
+      float: left;
+    }
+
+    .outer2 .middle {
+      margin: 0 200px 0 100px;
+    }
+
+    .outer2 .left {
+      width: 100px;
+      float: left;
+      margin-left: -100%;
+    }
+
+    .outer2 .right {
+      width: 200px;
+      float: left;
+      margin-left: -200px;
+    }
+  </style>
+</head>
+<!-- 三栏布局 左右固定 中间自适应
+  和三栏布局要求相同，不过中间列要写在前面保证优先渲染。
+-->
+
+<body>
+  <!-- 圣杯布局 middle 最先 -->
+  <div class="outer outer1">
+    <div class="middle">圣杯-middle</div>
+    <div class="left">圣杯-left</div>
+    <div class="right">圣杯-right</div>
+  </div>
+  <!-- 双飞翼布局 middle 最先 多一层 div -->
+  <div class="outer outer2">
+    <div class="middle-wrapper">
+      <div class="middle">双飞翼布局-middle</div>
+    </div>
+    <div class="left">双飞翼布局-left</div>
+    <div class="right">双飞翼布局-right</div>
+  </div>
+</body>
+
+</html>
