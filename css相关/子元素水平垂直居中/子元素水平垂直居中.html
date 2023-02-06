@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>水平垂直居中</title>
+  <style type="text/css">
+    .outer {
+      height: 200px;
+      width: 200px;
+      background: tomato;
+      margin: 10px;
+      float: left;
+      position: relative;
+    }
+
+    .inner {
+      height: 100px;
+      width: 100px;
+      background: black;
+    }
+
+    /*
+     * 1.通过 position 和 margin 居中
+     * 缺点：需要知道 inner 的长宽
+     */
+    .inner1 {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      margin-top: -50px;
+      margin-left: -50px;
+    }
+
+    /*
+     * 2.通过 position 和 margin 居中 (2
+     */
+    .inner2 {
+      position: absolute;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      margin: auto;
+    }
+
+    /*
+     * 3.通过 flex 进行居中
+     */
+    .outer3 {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    /**
+     * 4.通过 position 和 transform 居中
+     */
+    .inner4 {
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      position: absolute;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="outer outer1">
+    <div class="inner inner1"></div>
+  </div>
+  <div class="outer outer2">
+    <div class="inner inner2"></div>
+  </div>
+  <div class="outer outer3">
+    <div class="inner inner3"></div>
+  </div>
+  <div class="outer outer4">
+    <div class="inner inner4"></div>
+  </div>
+</body>
+
+</html>

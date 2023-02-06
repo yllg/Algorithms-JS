@@ -9,11 +9,13 @@ p{
     white-space: nowrap;
  }
 多行文本溢出显示省略号
+注意：在文本中间或者前面显示省略号，暂时css不支持，只能用JS来处理拼接字符串了
 p {
     display: -webkit-box;
-    -webkit-box-orient: vertical;
-    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;  // 子元素的排列方式
+    -webkit-line-clamp: 3; // 控制换行数量，换三行最后才显示...
     overflow: hidden;
+    text-overflow: ellipsis; 
  }
 ```
 

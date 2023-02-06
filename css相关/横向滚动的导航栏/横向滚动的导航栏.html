@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=div, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <style>
+    body,
+    html {
+      margin: 0;
+      padding: 0;
+    }
+
+    /* flex 实现 */
+    /* .nav {
+            display: flex;
+            height: 30px;
+            border: 1px solid #000;
+            padding: 3px;
+            overflow-x: auto;
+        }
+        .nav::-webkit-scrollbar {
+            display: none;
+        }
+        .item {
+            flex: 0 0 200px;
+            height: 30px;
+            margin-right: 5px;
+            background: gray;
+        } */
+    /* inline-block 和 white-space: nowrap; 实现 */
+    .nav {
+      height: 30px;
+      padding: 3px;
+      border: 1px solid #000;
+      overflow-x: auto;
+      white-space: nowrap;
+    }
+
+    .nav::-webkit-scrollbar {
+      display: none;
+    }
+
+    .item {
+      display: inline-block;
+      width: 200px;
+      height: 30px;
+      margin-right: 5px;
+      background: gray;
+    }
+  </style>
+</head>
+<!-- 水平滚动导航栏 -->
+
+<body>
+  <div class="nav">
+    <div class="item">item1</div>
+    <div class="item">item2</div>
+    <div class="item">item3</div>
+    <div class="item">item4</div>
+    <div class="item">item5</div>
+    <div class="item">item6</div>
+    <div class="item">item7</div>
+    <div class="item">item8</div>
+    <div class="item">item9</div>
+  </div>
+</body>
+
+</html>

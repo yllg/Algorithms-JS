@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <style>
+    .bg {
+      height: 666px;
+      width: 100%;
+      font-size: 60px;
+      text-align: center;
+    }
+
+    .dialog {
+      z-index: 999;
+      position: fixed;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      background: rgba(0, 0, 0, 0.5);
+    }
+
+    .dialog .content {
+      min-height: 300px;
+      width: 600px;
+      background: #fff;
+      border-radius: 5px;
+      border: 1px solid #ebeef5;
+      box-shadow: 0 2px 12px 0 rgba(0, 0, 0, .1);
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+  </style>
+</head>
+
+<body>
+  <div class="bg">
+    页面内容
+  </div>
+  <div class="dialog">
+    <div class="content">
+      弹出框
+    </div>
+  </div>
+</body>
+
+</html>

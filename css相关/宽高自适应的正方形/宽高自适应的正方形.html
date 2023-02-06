@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <title></title>
+  <style>
+    /* 都是像对于屏幕宽度的比例 */
+    .square1 {
+      width: 10%;
+      height: 10vw;
+      background: red;
+    }
+
+    /* margin/padding 百分比是相对父元素 width 的 */
+    .square2 {
+      width: 20%;
+      height: 0;
+      padding-top: 20%;
+      background: orange;
+    }
+
+    /* 通过子元素 margin */
+    .square3 {
+      width: 30%;
+      overflow: hidden;
+      /* 触发 BFC */
+      background: yellow;
+    }
+
+    .square3::after {
+      content: '';
+      display: block;
+      margin-top: 100%;
+      /* 高度相对于 square3 的 width */
+    }
+  </style>
+</head>
+<!-- 画一个正方形 -->
+
+<body>
+  <div class="square1"></div>
+  <div class="square2"></div>
+  <div class="square3"></div>
+</body>
+
+</html>
