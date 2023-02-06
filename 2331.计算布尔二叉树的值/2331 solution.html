@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    // 方法一：递归
+    // 时间复杂度：O(n)
+    // 空间复杂度：O(n)
+    var evaluateTree = function (root) {
+      if (!root.left) {
+        return root.val === 1;
+      }
+      if (root.val === 2) {
+        return evaluateTree(root.left) || evaluateTree(root.right);
+      } else {
+        return evaluateTree(root.left) && evaluateTree(root.right);
+      }
+    };
+  </script>
+</body>
+
+</html>
