@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    // Object.assign() 方法将所有可枚举（Object.propertyIsEnumerable() 返回 true）的自有（Object.hasOwnProperty() 返回 true）属性从一个或多个源对象复制到目标对象，返回修改后的对象。
+
+    Object.assign2 = function (target, ...source) {
+      if (target == null) {
+        throw new TypeError('Cannot convert undefined or null to object')
+      }
+      let ret = Object(target)
+      source.forEach(function (obj) {
+        if (obj != null) {
+          for (let key in obj) {
+            if (obj.hasOwnProperty(key)) {
+              ret[key] = obj[key]
+            }
+          }
+        }
+      })
+      return ret
+    }
+
+    // test1
+    const target1 = {
+      a: 1,
+      b: 2
+    };
+    const source1 = {
+      b: 4,
+      c: 5
+    };
+    const returnedTarget1 = Object.assign(target1, source1);
+    console.log(target1); // Object { a: 1, b: 4, c: 5 }
+    console.log(returnedTarget1 === target1); // true
+
+    // test2
+    const target2 = {
+      a: 1,
+      b: 2
+    };
+    const source2 = {
+      b: 4,
+      c: 5
+    };
+    const returnedTarget2 = Object.assign2(target2, source2);
+    console.log(target2); // Object { a: 1, b: 4, c: 5 }
+    console.log(returnedTarget2 === target2); // true
+  </script>
+</body>
+
+</html>
