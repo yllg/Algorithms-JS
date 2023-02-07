@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>长列表渲染demo</title>
+  <style>
+    .box {
+      width: 500px;
+      height: 500px;
+      margin: 200px auto;
+      overflow: auto;
+      box-sizing: border-box;
+      border: 1px solid #666;
+    }
+
+    .item-box {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .item-box li {
+      height: 150px;
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .item-box li {
+      border-bottom: 1px solid #ddd;
+      box-sizing: border-box;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="box">
+    <ul class="item-box"></ul>
+  </div>
+  <script src="./listScroll.js"></script>
+  <script src="./index.js"></script>
+</body>
+
+</html>
