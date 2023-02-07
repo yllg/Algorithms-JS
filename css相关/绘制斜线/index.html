@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<style>
+  .demo1 {
+    position: relative;
+    margin: 50px auto;
+    width: 100px;
+    height: 100px;
+    box-sizing: border-box;
+    border: 1px solid #333;
+    line-height: 120px;
+    text-indent: 5px;
+  }
+
+  .demo1::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 50px;
+    box-sizing: border-box;
+    border-bottom: 1px solid deeppink;
+    transform-origin: bottom center;
+    transform: rotateZ(45deg) scale(1.414);
+  }
+
+  .demo2 {
+    position: relative;
+    margin: 50px auto;
+    width: 100px;
+    height: 100px;
+    box-sizing: border-box;
+    border: 1px solid #333;
+    line-height: 120px;
+    text-indent: 5px;
+    background:
+      linear-gradient(45deg, transparent 49.5%, deeppink 49.5%, deeppink 50.5%, transparent 50.5%);
+  }
+
+  .demo3 {
+    position: relative;
+    margin: 50px auto;
+    width: 100px;
+    height: 100px;
+    box-sizing: border-box;
+    border: 1px solid #333;
+    background: #fff;
+    line-height: 120px;
+    text-indent: 5px;
+  }
+
+  .demo3::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 0;
+    height: 0;
+    border: 49px solid transparent;
+    border-left: 49px solid deeppink;
+    border-bottom: 49px solid deeppink;
+    transform: translate(0px);
+  }
+
+  .demo3::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 0;
+    height: 0;
+    border: 48px solid transparent;
+    border-left: 48px solid #fff;
+    border-bottom: 48px solid #fff;
+    transform: translate(0px);
+  }
+
+  .demo4 {
+    position: relative;
+    margin: 50px auto;
+    width: 100px;
+    height: 100px;
+    box-sizing: border-box;
+    background-color: deeppink;
+    line-height: 120px;
+    text-indent: 5px;
+  }
+
+  .demo4::before {
+    content: "";
+    position: absolute;
+    left: 0px;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    -webkit-clip-path: polygon(0 0, 0 100px, 100px 100px, 0 0);
+    background: #fff;
+    border: 1px solid #333;
+    transform: translateX(-120px);
+    transform: translateX(0px);
+  }
+
+  .demo4::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    -webkit-clip-path: polygon(100px 99px, 100px 0, 1px 0, 100px 99px);
+    background: #fff;
+    border: 1px solid #333;
+    transform: translateX(120px);
+    transform: translateX(0px);
+  }
+</style>
+
+<body>
+  <div class="demo1">旋转缩放</div>
+  <div class="demo2">线性渐变</div>
+  <div class="demo3">伪元素+三角形</div>
+  <div class="demo4">clip-path</div>
+</body>
+
+</html>
