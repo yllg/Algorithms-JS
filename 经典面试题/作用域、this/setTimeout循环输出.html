@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      for (var i = 0; i < 10; i++) {
+        setTimeout(() => {
+          console.log(i);
+        }, 1000);
+      }
+
+      // 方法1: 多传个参数
+      for (var i = 0; i < 10; i++) {
+        setTimeout(
+          (i) => {
+            console.log(i);
+          },
+          1000,
+          i
+        );
+      }
+
+      // 方法2：IIFE 创建多个 立即执行函数
+      for (var i = 0; i < 10; i++) {
+        ((i) => {
+          setTimeout(() => {
+            console.log(i);
+          }, 1000);
+        })(i);
+      }
+
+      // 方法3：let
+      for (let i = 0; i < 10; i++) {
+        setTimeout(() => {
+          console.log(i);
+        }, 1000);
+      }
+    </script>
+  </body>
+</html>
