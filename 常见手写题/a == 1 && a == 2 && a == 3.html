@@ -35,9 +35,24 @@
     })
     console.log(c === 1 && c === 2 && c === 3) // true
 
-    // 方法4：利用proxy
-    // 使用 Proxy 也可以，但因为 Proxy 的语法是返回一个新的对象，因此要做到 a === 1 可能比较困难，做到 obj.a === 1 还是 OK 的，反正原理是一样的
+    // 方法4：ES6的symbol, 两个等于 ==
+    let d = {
+      [Symbol.toPrimitive]: (i => () => ++i)(0)
+    }
+    console.log(d == 1 && d == 2 && d == 3) // true
 
+    // 方法5：数组 两个等于 ==
+    /**
+     * 解释：
+      Arr.shift 把第一个元素删除并返回；
+      Arr.join 把数组所有元素拼接成一个字符串
+    */
+    let e = [1, 2, 3];
+    e.join = e.shift;
+    console.log(e == 1 && e == 2 && e == 3) // true
+
+    // 方法6：利用proxy
+    // 使用 Proxy 也可以，但因为 Proxy 的语法是返回一个新的对象，因此要做到 a === 1 可能比较困难，做到 obj.a === 1 还是 OK 的，反正原理是一样的
   </script>
 </body>
 
