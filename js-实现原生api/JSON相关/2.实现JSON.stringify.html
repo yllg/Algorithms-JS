@@ -1,16 +1,164 @@
 <!DOCTYPE html>
 <html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
 
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
-</head>
+  <body>
+    <script>
+      /**
+       * JSON.stringify
+       * 将JS对象转成json字符串
+       *
+       * 1.JS内置对象太多了，很多种都需要特殊处理
+       * 2.第二个参数replacer，第三个参数space空格
+       *
+       * 不考虑可选的第二第三个参数，简单实现如下
+       * 参考：https://github.com/YvetteLau/Step-By-Step/issues/39
+       */
 
-<body>
-  <script>
+      function jsonStringify(data) {
+        let dataType = typeof data;
 
-  </script>
-</body>
+        if (dataType !== "object") {
+          let result = data;
+          //data 可能是 string/number/null/undefined/boolean
+          if (Number.isNaN(data) || data === Infinity) {
+            //NaN 和 Infinity 序列化返回 "null"
+            result = "null";
+          } else if (
+            dataType === "function" ||
+            dataType === "undefined" ||
+            dataType === "symbol"
+          ) {
+            //function 、undefined 、symbol 序列化返回 undefined
+            return undefined;
+          } else if (dataType === "string") {
+            result = '"' + data + '"';
+          }
+          //boolean 返回 String()
+          return String(result);
+        } else if (dataType === "object") {
+          if (data === null) {
+            return "null";
+          } else if (data.toJSON && typeof data.toJSON === "function") {
+            return jsonStringify(data.toJSON());
+          } else if (data instanceof Array) {
+            let result = [];
+            //如果是数组
+            //toJSON 方法可以存在于原型链中
+            data.forEach((item, index) => {
+              if (
+                typeof item === "undefined" ||
+                typeof item === "function" ||
+                typeof item === "symbol"
+              ) {
+                result[index] = "null";
+              } else {
+                result[index] = jsonStringify(item);
+              }
+            });
+            result = "[" + result + "]";
+            return result.replace(/'/g, '"');
+          } else {
+            //普通对象
+            /**
+             * 循环引用抛错(暂未检测，循环引用时，堆栈溢出)
+             * symbol key 忽略
+             * undefined、函数、symbol 为属性值，被忽略
+             */
+            let result = [];
+            Object.keys(data).forEach((item, index) => {
+              if (typeof item !== "symbol") {
+                //key 如果是symbol对象，忽略
+                if (
+                  data[item] !== undefined &&
+                  typeof data[item] !== "function" &&
+                  typeof data[item] !== "symbol"
+                ) {
+                  //键值如果是 undefined、函数、symbol 为属性值，忽略
+                  result.push(
+                    '"' + item + '"' + ":" + jsonStringify(data[item])
+                  );
+                }
+              }
+            });
+            return ("{" + result + "}").replace(/'/g, '"');
+          }
+        }
+      }
 
+      // test
+      let sym = Symbol(10);
+      console.log(jsonStringify(sym) === JSON.stringify(sym));
+      let nul = null;
+      console.log(jsonStringify(nul) === JSON.stringify(nul));
+      let und = undefined;
+      console.log(jsonStringify(undefined) === JSON.stringify(undefined));
+      let boo = false;
+      console.log(jsonStringify(boo) === JSON.stringify(boo));
+      let nan = NaN;
+      console.log(jsonStringify(nan) === JSON.stringify(nan));
+      let inf = Infinity;
+      console.log(jsonStringify(Infinity) === JSON.stringify(Infinity));
+      let str = "hello";
+      console.log(jsonStringify(str) === JSON.stringify(str));
+      let reg = new RegExp("\w");
+      console.log(jsonStringify(reg) === JSON.stringify(reg));
+      let date = new Date();
+      console.log(jsonStringify(date) === JSON.stringify(date));
+      let obj = {
+        name: "刘小夕",
+        age: 22,
+        hobbie: ["coding", "writing"],
+        date: new Date(),
+        unq: Symbol(10),
+        sayHello: function () {
+          console.log("hello");
+        },
+        more: {
+          brother: "Star",
+          age: 20,
+          hobbie: [null],
+          info: {
+            money: undefined,
+            job: null,
+            others: [],
+          },
+        },
+      };
+      console.log(jsonStringify(obj) === JSON.stringify(obj));
+
+      function SuperType(name, age) {
+        this.name = name;
+        this.age = age;
+      }
+      let per = new SuperType("小姐姐", 20);
+      console.log(jsonStringify(per) === JSON.stringify(per));
+
+      function SubType(info) {
+        this.info = info;
+      }
+      SubType.prototype.toJSON = function () {
+        return {
+          name: "钱钱钱",
+          mount: "many",
+          say: function () {
+            console.log("我偏不说！");
+          },
+          more: null,
+          reg: new RegExp("\w"),
+        };
+      };
+      let sub = new SubType("hi");
+      console.log(jsonStringify(sub) === JSON.stringify(sub));
+      let map = new Map();
+      map.set("name", "小姐姐");
+      console.log(jsonStringify(map) === JSON.stringify(map));
+      let set = new Set([1, 2, 3, 4, 5, 1, 2, 3]);
+      console.log(jsonStringify(set) === JSON.stringify(set));
+    </script>
+  </body>
 </html>
