@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 链式调用的核心就在于调用完的方法将 自身实例this 返回；
+
+      // 方法1
+      function Class() {
+        console.log("init");
+      }
+      // 这里不能用箭头函数
+      Class.prototype.method = function (param) {
+        console.log(param);
+        return this;
+      };
+      // test1
+      let a = new Class();
+      a.method("1").method("2").method("3");
+
+      // 方法2
+      const obj = {
+        a: function () {
+          console.log("a");
+          return this;
+        },
+        b: function () {
+          console.log("b");
+          return this;
+        },
+      };
+      // test2
+      obj.a().b();
+    </script>
+  </body>
+</html>
