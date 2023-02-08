@@ -17,9 +17,105 @@
             // return Array.from(new Set(arr));
         }
 
+        // 方法2. 利用对象的 key 唯一
+        function unique2(arr) {
+            let obj = {};
+            for (let i = 0; i < arr.length; i++) {
+                let item = arr[i]
+                if (obj[item] !== undefined) {
+                    arr.splice(i, 1);
+                    i--; // 解决删除元素后，数组塌陷问题
+                    continue;
+                }
+                obj[item] = item
+            }
+            return arr;
+        }
+
+        // 方法3. 交换元素位置 优化方法2的splice方法
+        function unique3(arr) {
+            let obj = {};
+            for (let i = 0; i < arr.length; i++) {
+                let item = arr[i]
+                if (obj[item] !== undefined) {
+                    arr[i] = arr[arr.length - 1]
+                    arr.length--;
+                    i--;
+                    continue;
+                }
+                obj[item] = item
+            }
+            return arr;
+        }
+
+        // 方法4. Array.filter + Array.indexOf, 返回 item 第一次出现的位置等于当前的index的元素
+        function unique4(arr) {
+            return arr.filter((item, index) => arr.indexOf(item) === index);
+        }
+
+        // 方法5. Array.filter + Object.hasOwnProperty, 利用对象的键名不可重复的特点。
+        function unique5(arr) {
+            let obj = {}
+            const result = arr.filter(item => obj.hasOwnProperty(typeof item + item) ? false : (obj[typeof item +
+                item] = true))
+            return result
+        }
+
+        // 方法6. Array.reduce + Array.includes
+        function unique6(arr) {
+            let newArr = arr.reduce((accu, cur) => {
+                return accu.includes(cur) ? accu : accu.concat(cur); // 1. 拼接方法
+                // return accu.includes(cur) ? accu : [...accu, cur]; // 2. 扩展运算
+            }, []);
+            return newArr
+        }
+
+        // 方法7. Array.indexOf 额外使用一个新数组来保存唯一项
+        function unique7(arr) {
+            let newArr = []
+            for (var i = 0; i < arr.length; i++) {
+                if (newArr.indexOf(arr[i]) === -1) newArr.push(arr[i])
+            }
+            //等同于 forEach 写法
+            // arr.forEach(item => newArr.indexOf(item) === -1 ? newArr.push(item) : '')
+            return newArr;
+        }
+
+        // 方法8.  Array.includes
+        function unique8(arr) {
+            let newArr = []
+            for (var i = 0; i < arr.length; i++) {
+                if (!newArr.includes(arr[i])) newArr.push(arr[i])
+            }
+            //等同于 forEach 写法
+            // arr.forEach(item => !newArr.includes(item) ? newArr.push(item) : '')
+            return newArr;
+        }
+
+        // 方法9. new Map
+        function unique9(arr) {
+            let map = new Map();
+            let newArr = [];
+            for (let i = 0; i < arr.length; i++) {
+                if (!map.has(arr[i])) {
+                    map.set(arr[i], true);
+                    newArr.push(arr[i]);
+                }
+            }
+            return newArr;
+        }
+
         //测试
-        var arr = [3, 5, 3, 1, 6, 3, 7, 1];
+        let arr = [1, 2, 2, 4, null, null, 'abc', 3, 5, 4, 1, 2, 2, 4, null, null, 'abc', 3, 5, 4]
+        console.log(unique1(arr));
         console.log(unique2(arr));
+        console.log(unique3(arr));
+        console.log(unique4(arr));
+        console.log(unique5(arr));
+        console.log(unique6(arr));
+        console.log(unique7(arr));
+        console.log(unique8(arr));
+        console.log(unique9(arr));
     </script>
 </body>
 
