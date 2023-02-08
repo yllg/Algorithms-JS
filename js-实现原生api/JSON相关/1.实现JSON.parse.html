@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    var json = '{"name":"cxk", "age":25}';
+    console.log(JSON.parse(json))
+
+    // 方法1：eval，此方法属于黑魔法，极易容易被xss攻击，
+    var result1 = eval("(" + json + ")");
+    console.log(result1)
+
+    // 方法2：new Function+自执行函数 跟第一种大同小异
+    var result2 = (new Function('return' + json))();
+    console.log(result2)
+
+    // 更好的方法，参考这篇：《半小时实现一个JSON解析器》 https://zhuanlan.zhihu.com/p/28049617
+  </script>
+</body>
+
+</html>
