@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <button id="myClearInterval">myClearInterval</button>
+  <script>
+    const list = new Set();
+
+    function myInterval(fn, ms) {
+      const ref = {};
+      const exec = () => {
+        return setTimeout(() => {
+          fn.apply(null);
+          const timer = exec();
+          ref.current = timer;
+        }, ms);
+      };
+      ref.current = exec();
+      list.add(ref);
+      return ref;
+    }
+
+    function myClearInterval(ref) {
+      clearTimeout(ref.current);
+      list.delete(ref);
+    }
+
+    // test
+    const ref = myInterval(() => {
+      console.log("myInterval")
+    }, 2000)
+    document.getElementById("myClearInterval").onclick = () => {
+      myClearInterval(ref);
+    };
+  </script>
+</body>
+
+</html>
