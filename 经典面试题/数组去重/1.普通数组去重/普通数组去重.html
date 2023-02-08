@@ -1,21 +1,26 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
 </head>
+
 <body>
     <script>
-    function unique(arr){
-        return  [...new Set(arr)];
-    }
+        // 方法1. set
+        function unique1(arr) {
+            return [...new Set(arr)];
+            // 或者下面
+            // return Array.from(new Set(arr));
+        }
 
-    //测试
-    var arr = [3,5,3,1,6,3,7,1];
-    console.log(unique(arr));
-
+        //测试
+        var arr = [3, 5, 3, 1, 6, 3, 7, 1];
+        console.log(unique2(arr));
     </script>
 </body>
+
 </html>

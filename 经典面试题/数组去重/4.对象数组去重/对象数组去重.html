@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    // 对象数组去重
+    // 第一种: 对象id标识唯一性,重复id的对象去掉
+    var arr1 = [{
+        id: 0,
+        a: 1,
+        b: 2,
+      },
+      {
+        id: 0,
+        a: 1,
+        b: 3,
+      },
+      {
+        id: 1,
+        a: 1,
+        b: 2,
+      },
+    ];
+
+    let unique1 = (arr) => {
+      var hash = [];
+      var result = [];
+      arr.forEach((item, i) => {
+        if (!hash[item.id]) {
+          result.push(item);
+          hash[item.id] = 1;
+        }
+      });
+      return result;
+    };
+    console.log(unique1(arr1));
+
+    /**
+     * 第二种，对象所有属性对比，进行去重
+     * 1.首先写一个函数把对象中的key排序，然后再转成字符串
+     * 2.遍历数组利用Set将转为字符串后的对象去重
+     */
+    function objSort(obj) {
+      let newObj = {}
+      //遍历对象，并将key进行排序
+      Object.keys(obj).sort().map(key => {
+        newObj[key] = obj[key]
+      })
+      //将排序好的数组转成字符串
+      return JSON.stringify(newObj)
+    }
+
+    function unique2(arr) {
+      let set = new Set();
+      for (let i = 0; i < arr.length; i++) {
+        let str = objSort(arr[i])
+        set.add(str)
+      }
+      //将数组中的字符串转回对象
+      arr = [...set].map(item => {
+        return JSON.parse(item)
+      })
+      return arr
+    }
+
+    // test2
+    const arr2 = [{
+      a: 1,
+      b: 2,
+      c: 3
+    }, {
+      b: 2,
+      c: 3,
+      a: 1
+    }, {
+      d: 2,
+      c: 2
+    }];
+    console.log(unique2(arr2))
+  </script>
+</body>
+
+</html>
