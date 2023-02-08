@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <button id="Clear">Clear</button>
+  <script>
+    // 写个 mySetInterVal(fn, a, b),每次间隔 a,a+b,a+2b 时间，写个 myClear可以停止它
+    function mySetInterVal(fn, a, b) {
+      this.a = a;
+      this.b = b;
+      this.time = 0;
+      this.handle = -1;
+      this.start = () => {
+        this.handle = setTimeout(() => {
+          fn();
+          this.time++;
+          this.start(); // 继续调用
+          console.log("下一次间隔", this.a + this.time * this.b);
+        }, this.a + this.time * this.b);
+      }
+      this.stop = () => {
+        clearTimeout(this.handle);
+        this.time = 0;
+      }
+    }
+
+    const test = new mySetInterVal(() => {
+      console.log("mySetInterVal")
+    }, 1000, 2000);
+
+    test.start();
+    document.getElementById("Clear").onclick = () => {
+      test.stop();
+    };
+  </script>
+</body>
+
+</html>
