@@ -1,3 +1,14 @@
+/**
+ * 思路和步骤
+ *（0）直接创建一个index.tsx文件；
+  （1）使用snippet插件的快捷键 rcredux 快速生成一个片段
+  （2）把Component换成PureComponent
+  （3）使用rconst快速创建 constructor
+  （4）补上props和state的接口type
+  （5）写两个按钮，开始定时器、结束定时器，把定时器的start和stop写成组件的两个私有方法即可；
+ */
+
+
 import React, { PureComponent, ReactDOM } from "react";
 import { connect } from "react-redux";
 
