@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    // 方法一：排序
+    // 时间复杂度：O(nl⋅logn)
+    // 空间复杂度：O(l)
+    var removeSubfolders = function (folder) {
+      folder.sort();
+      const ans = [folder[0]];
+      for (let i = 1; i < folder.length; ++i) {
+        const pre = ans[ans.length - 1].length;
+        if (!(pre < folder[i].length && ans[ans.length - 1] === (folder[i].substring(0, pre)) && folder[i].charAt(
+            pre) === '/')) {
+          ans.push(folder[i]);
+        }
+      }
+      return ans;
+    };
+
+    // 方法二:字典树
+    // 时间复杂度：O(nl)
+    // 空间复杂度：O(nl)
+    var removeSubfolders = function (folder) {
+      const root = new Trie();
+      for (let i = 0; i < folder.length; ++i) {
+        const path = split(folder[i]);
+        let cur = root;
+        for (const name of path) {
+          if (!cur.children.has(name)) {
+            cur.children.set(name, new Trie());
+          }
+          cur = cur.children.get(name);
+        }
+        cur.ref = i;
+      }
+
+      const ans = [];
+
+      const dfs = (folder, ans, cur) => {
+        if (cur.ref !== -1) {
+          ans.push(folder[cur.ref]);
+          return;
+        }
+        for (const child of cur.children.values()) {
+          dfs(folder, ans, child);
+        }
+      }
+
+      dfs(folder, ans, root);
+      return ans;
+    }
+
+    const split = (s) => {
+      const ret = [];
+      let cur = '';
+      for (let i = 0; i < s.length; ++i) {
+        const ch = s[i];
+        if (ch === '/') {
+          ret.push(cur);
+          cur = ''
+        } else {
+          cur += ch;
+        }
+      }
+      ret.push(cur);
+      return ret;
+    }
+
+    class Trie {
+      constructor() {
+        this.ref = -1;
+        this.children = new Map();
+      }
+    }
+
+    // test 
+    let folder = ["/a", "/a/b", "/c/d", "/c/d/e", "/c/f"];
+    console.log(removeSubfolders(folder))
+  </script>
+
+</body>
+
+</html>
