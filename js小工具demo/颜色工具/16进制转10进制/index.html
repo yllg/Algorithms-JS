@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      function hexToNum(str) {
+        str = str.slice("1"); // 去掉 #
+        let res = "";
+        if (str.length == 3) {
+          // 使用简写语法的
+          res = str
+            .split("")
+            .map((v) => v.repeat(2))
+            .map((item) => parseInt(`0x${item}`, 16))
+            .join(",");
+        } else {
+          // 全写语法的
+          res = str
+            .match(/\w{2}/g)
+            .map((item) => parseInt(`0x${item}`, 16))
+            .join(",");
+        }
+        return `rgb(${res})`;
+      }
+
+      console.log(hexToNum("#ffccbb"));
+      console.log(hexToNum("#ff0000"));
+    </script>
+  </body>
+</html>
