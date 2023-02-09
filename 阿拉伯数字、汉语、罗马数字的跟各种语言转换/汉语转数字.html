@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      function transformChar(str) {
+        // 九十二
+        const numChar = {
+          零: 0,
+          一: 1,
+          二: 2,
+          三: 3,
+          四: 4,
+          五: 5,
+          六: 6,
+          七: 7,
+          八: 8,
+          九: 9,
+        };
+        const levelChar = {
+          十: 10,
+          百: 100,
+          千: 1000,
+          万: 10000,
+          亿: 100000000,
+        };
+        let arr = Array.from(str);
+        // console.log(arr);
+        let sum = 0,
+          temp = 0;
+        for (let i = 0; i < arr.length; i++) {
+          const char = arr[i];
+          if (char === "零") continue;
+          if (char === "亿" || char === "万") {
+            sum += temp * levelChar[char];
+            temp = 0;
+          } else {
+            const next = arr[i + 1];
+            if (next && next !== "亿" && next !== "万") {
+              temp += numChar[char] * levelChar[next];
+              i++;
+            } else {
+              temp += numChar[char];
+            }
+          }
+        }
+        // console.log(`sum`, sum);
+        // console.log(`temp`, temp);
+        return sum + temp;
+      }
+
+      console.log(transformChar("一十二亿三千零九十六万三千八百九十七")); // 1230963897ƒ
+    </script>
+  </body>
+</html>

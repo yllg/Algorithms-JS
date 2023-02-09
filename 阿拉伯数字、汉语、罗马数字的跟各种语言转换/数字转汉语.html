@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+
+  <body>
+    <script>
+      // 方法一：支持7位，也就是最大1234567
+      /**
+       * 数字转成汉字
+       * @params num === 要转换的数字
+       * @return 汉字
+       * */
+      function toChinesNum(num) {
+        let changeNum = [
+          "零",
+          "一",
+          "二",
+          "三",
+          "四",
+          "五",
+          "六",
+          "七",
+          "八",
+          "九",
+        ];
+        let unit = ["", "十", "百", "千", "万"];
+        num = parseInt(num);
+        let getWan = (temp) => {
+          let strArr = temp.toString().split("").reverse();
+          let newNum = "";
+          let newArr = [];
+          strArr.forEach((item, index) => {
+            newArr.unshift(
+              item === "0" ? changeNum[item] : changeNum[item] + unit[index]
+            );
+          });
+          let numArr = [];
+          newArr.forEach((m, n) => {
+            if (m !== "零") numArr.push(n);
+          });
+          if (newArr.length > 1) {
+            newArr.forEach((m, n) => {
+              if (newArr[newArr.length - 1] === "零") {
+                if (n <= numArr[numArr.length - 1]) {
+                  newNum += m;
+                }
+              } else {
+                newNum += m;
+              }
+            });
+          } else {
+            newNum = newArr[0];
+          }
+
+          return newNum;
+        };
+        let overWan = Math.floor(num / 10000);
+        let noWan = num % 10000;
+        if (noWan.toString().length < 4) {
+          noWan = "0" + noWan;
+        }
+        return overWan ? getWan(overWan) + "万" + getWan(noWan) : getWan(num);
+      }
+
+      // 方法二: 支持9位以上也就是亿级别的; 如果需要人命币上的单位，把注释放开就行
+      function toChineseBig(num) {
+        // 将接收到的num转换为字符串
+        var strNum = String(num);
+        // 定义单位
+        // var unit = ['拾', '佰', '仟', '万', '拾', '佰', '仟', '亿', '拾', '佰', '仟']
+        var unit = [
+          "十",
+          "百",
+          "千",
+          "万",
+          "十",
+          "百",
+          "千",
+          "亿",
+          "十",
+          "百",
+          "千",
+        ];
+        // 结果中放一个符号，用来解决最后的零去不掉的问题
+        var result = ["@"];
+        // 单位下标
+        var unitNo = 0;
+        // 从后往前遍历接收到的数据，省略结束条件
+        for (let i = strNum.length - 1; ; i--) {
+          // 调用转大写函数，将每一个数字转换成中文大写，一次放入一个到结果数组中
+          result.unshift(numToChinese(strNum[i]));
+          // 如果不大于0
+          if (i <= 0) {
+            // 结束循环
+            break;
+          }
+          // 放入一个数字，放入一个单位
+          result.unshift(unit[unitNo]);
+          // 单位下标加1
+          unitNo++;
+        }
+        // 将结果数组转换成字符串，并使用正则替换一些关键位置，让结果符合语法
+        // return result.join('').replace(/(零[仟佰拾]){1,3}/g, '零').replace(/零{2,}/g, '零').replace(/零([万亿])/g, '$1').replace(/亿万/g, '亿').replace(/零*@/g, '')
+        return result
+          .join("")
+          .replace(/(零[千百十]){1,3}/g, "零")
+          .replace(/零{2,}/g, "零")
+          .replace(/零([万亿])/g, "$1")
+          .replace(/亿万/g, "亿")
+          .replace(/零*@/g, "");
+
+        function numToChinese(n) {
+          // var chineseBigNum = '零壹贰叁肆伍陆柒捌玖'
+          var chineseBigNum = "零一二三四五六七八九";
+          return chineseBigNum[n];
+        }
+      }
+
+      // test
+      console.log(toChinesNum(10101010)); // 一千零一十万一千零一十
+      console.log(toChineseBig(112345111111)); // 一千一百二十三亿四千五百一十一万一千一百一十一
+    </script>
+  </body>
+</html>

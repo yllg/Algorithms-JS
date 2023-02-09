@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      function getMonths(times) {
+        let start = new Date(times[0]),
+          end = new Date(times[1]);
+        const months = [];
+        while (start <= end) {
+          const month = start.getMonth() + 1;
+          months.push(month);
+          start.setMonth(month);
+        }
+        return months;
+      }
+      console.log(getMonths(["2021-10", "2023-2"]));
+    </script>
+  </body>
+</html>
