@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    const arr = [
+      [1, 2],
+      [3, 4]
+    ]
+
+    // 方法1 flat，ES10 出的
+    console.log(arr.flat())
+
+    // 方法2  concat + 扩展符
+    var result = [].concat(
+      ...arr
+    );
+    console.log(result)
+
+    // 方法3 reduce + concat
+    var result = arr.reduce((acc, cur) => acc.concat(cur), []);
+    console.log(result)
+
+    // 方法4 toString + split
+    var result = arr
+      .toString()
+      .split(",")
+      .map((item) => +item); // [1,2,3,4]
+    console.log(result)
+
+    // 方法5 递归降维 
+    // forEach
+    const newArr = [];
+    const flatArr1 = (arr) =>
+      arr.forEach((item) => {
+        if (Array.isArray(item)) {
+          flatArr1(item);
+        } else {
+          newArr.push(item);
+        }
+      });
+    flatArr1(arr);
+    console.log(newArr);
+
+    // reduce
+    const flatArr2 = (arr) =>
+      arr.reduce((prev, cur, index, arr) => {
+        if (Array.isArray(cur)) {
+          return prev.concat(...flatArr2(cur));
+        }
+        return prev.concat(cur);
+      }, []);
+    console.log(flatArr2(arr));
+  </script>
+</body>
+
+</html>
