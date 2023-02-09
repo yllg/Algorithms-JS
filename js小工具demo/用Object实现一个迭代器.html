@@ -28,6 +28,20 @@
       console.log(iterator.next());
       console.log(iterator.next());
       console.log(iterator.next());
+      for (const item of a) {
+        console.log(item);
+      }
+
+      // 方法2: generator版本
+      a[Symbol.iterator] = function* () {
+        const keys = Object.keys(this);
+        for (let i = 0; i < keys.length; i++) {
+          yield this[keys[i]];
+        }
+      };
+      for (const item of a) {
+        console.log(item);
+      }
     </script>
   </body>
 </html>
