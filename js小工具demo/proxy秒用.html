@@ -75,7 +75,31 @@
     }
     let personForUser = new Proxy(person, handler)
     personForUser.name = 'Zoe' // OK
-    personForUser.age = '18' // 报错
+    // personForUser.age = '18' // 报错
+
+    // 4.negative 负索引
+    function createNegativeArrayProxy(array) {
+      // 如果传入的参数不是数组，则抛出异常
+      if (!Array.isArray(array)) {
+        throw new TypeError('Expected an array');
+      }
+      //返回新的代理，新代理用传入的数组为代理目标。
+      return new Proxy(array, {
+        get: (target, index) => {
+          index = +index;
+          return target[index < 0 ? target.length + index : index];
+        },
+        set: (target, index, val) => {
+          index = +index;
+          return target[index < 0 ? target.length + index : index] = val;
+        }
+      })
+    }
+
+    const arr = ['x', 'b', 'y', "j"];
+    const proxyArr = createNegativeArrayProxy(arr);
+    console.log(arr[-2]); //undefinded
+    console.log(proxyArr[-2]); //y
   </script>
 </body>
 
