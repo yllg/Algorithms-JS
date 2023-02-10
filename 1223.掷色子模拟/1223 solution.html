@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    // 方法一：动态规划
+    // 时间复杂度：O(n m^2 k)
+    // 空间复杂度：O(n m k)
+    const MOD = 1000000007;
+    var dieSimulator = function (n, rollMax) {
+      const d = new Array(n + 1).fill(0).map(() => new Array(6).fill(0).map(() => new Array(16).fill(0)));
+      for (let j = 0; j < 6; j++) {
+        d[1][j][1] = 1;
+      }
+      for (let i = 2; i <= n; i++) {
+        let t = i & 1;
+        for (let j = 0; j < 6; j++) {
+          d[t][j].fill(0);
+        }
+        for (let j = 0; j < 6; j++) {
+          for (let k = 1; k <= rollMax[j]; k++) {
+            for (let p = 0; p < 6; p++) {
+              if (p !== j) {
+                d[t][p][1] = (d[t][p][1] + d[t ^ 1][j][k]) % MOD;
+              } else if (k + 1 <= rollMax[j]) {
+                d[t][p][k + 1] = (d[t][p][k + 1] + d[t ^ 1][j][k]) % MOD;
+              }
+            }
+          }
+        }
+      }
+
+      let res = 0;
+      for (let j = 0; j < 6; j++) {
+        for (let k = 1; k <= rollMax[j]; k++) {
+          res = (res + d[n & 1][j][k]) % MOD;
+        }
+      }
+      return res;
+    };
+
+    // 方法二：状态表示优化
+    // 时间复杂度：O(nm)
+    // 空间复杂度：O(nm)
+    const MOD = 1000000007;
+    var dieSimulator = function (n, rollMax) {
+      const d = new Array(n + 1).fill(0).map(() => new Array(6).fill(0));
+      const sum = new Array(n + 1).fill(0);
+      sum[0] = 1;
+      for (let i = 1; i <= n; i++) {
+        for (let j = 0; j < 6; j++) {
+          let pos = Math.max(i - rollMax[j] - 1, 0);
+          let sub = ((sum[pos] - d[pos][j]) % MOD + MOD) % MOD;
+          d[i][j] = ((sum[i - 1] - sub) % MOD + MOD) % MOD;
+          if (i <= rollMax[j]) {
+            d[i][j] = (d[i][j] + 1) % MOD;
+          }
+          sum[i] = (sum[i] + d[i][j]) % MOD;
+        }
+      }
+      return sum[n];
+    };
+  </script>
+</body>
+
+</html>
