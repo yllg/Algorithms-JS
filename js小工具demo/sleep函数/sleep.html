@@ -1,45 +1,59 @@
 <!DOCTYPE html>
 <html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
 
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
-</head>
+  <body>
+    <script>
+      // 方法1：while循环 + break
+      // milliseconds 单位 毫秒 ；
+      const sleep1 = function (milliseconds) {
+        var start = new Date().getTime();
+        while (true) {
+          if (new Date().getTime() - start > milliseconds) {
+            break;
+          }
+        }
+      };
 
-<body>
-  <script>
-    // 方法1：while循环 + break
-    // milliseconds 单位 毫秒 ；
-    const sleep1 = function (milliseconds) {
-      var start = new Date().getTime();
-      while (true) {
-        if (new Date().getTime() - start > milliseconds) {
-          break;
+      // 方法2：while循环 + continue
+      function sleep2(delay) {
+        var start = new Date().getTime();
+        while (new Date().getTime() - start < delay) {
+          continue;
         }
       }
-    }
 
-    // 方法2：promise + setTimeout
-    const sleep2 = function (milliseconds) {
-      return new Promise(resolve => {
-        setTimeout(resolve, milliseconds);
-      });
-    };
+      // 方法3：promise + setTimeout
+      const sleep3 = function (milliseconds) {
+        return new Promise((resolve) => {
+          setTimeout(resolve, milliseconds);
+        });
+      };
 
-    // test1  阻塞页面加载
-    // function test1() {
-    //   sleep1(5*1000);
-    //   console.log("hi")
-    // }
-    // test1();
+      // test1  阻塞页面加载
+      // function test1() {
+      //   sleep1(5*1000);
+      //   console.log("hi")
+      // }
+      // test1();
 
-    async function test2() {
-      await sleep2(5*1000);
-      console.log("hi")
-    }
-    test2();
-  </script>
-</body>
+      // test2  阻塞页面加载
+      // function test2() {
+      //   sleep2(5*1000);
+      //   console.log("hi")
+      // }
+      // test2();
 
+      // test3 不阻塞页面加载
+      async function test3() {
+        await sleep3(5 * 1000);
+        console.log("hi");
+      }
+      test3();
+    </script>
+  </body>
 </html>

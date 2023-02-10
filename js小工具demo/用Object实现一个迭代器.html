@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      var a = { a: 1, b: 2, c: 3 };
+
+      a[Symbol.iterator] = function () {
+        const that = this;
+        let index = 0;
+        return {
+          next: function () {
+            const keys = Object.keys(that);
+            return index >= keys.length
+              ? { done: true }
+              : { value: that[keys[index++]], done: false };
+          },
+        };
+      };
+
+      var iterator = a[Symbol.iterator]();
+      console.log(iterator.next());
+      console.log(iterator.next());
+      console.log(iterator.next());
+      console.log(iterator.next());
+      for (const item of a) {
+        console.log(item);
+      }
+
+      // 方法2: generator版本
+      a[Symbol.iterator] = function* () {
+        const keys = Object.keys(this);
+        for (let i = 0; i < keys.length; i++) {
+          yield this[keys[i]];
+        }
+      };
+      for (const item of a) {
+        console.log(item);
+      }
+    </script>
+  </body>
+</html>
