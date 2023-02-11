@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      /**
+       * 请实现抽奖函数rand，保证随机性
+       * 输入为表示对象数组，对象有属性n表示人名，w表示权重
+       * 随机返回一个中奖人名，中奖概率和w成正比
+       */
+
+      let rand = function (p) {
+        const totalWeight = p.reduce(function (pre, cur, index) {
+          cur.startW = pre;
+          return (cur.endW = pre + cur.w);
+        }, 0);
+        let random = Math.ceil(Math.random() * totalWeight);
+        let selectPeople = p.find(
+          (people) => people.startW < random && people.endW >= random
+        );
+        return selectPeople.n;
+      };
+
+      // test
+      let peoples = [
+        { n: "p1", w: 1 },
+        { n: "p2", w: 2 },
+        { n: "p3", w: 7 },
+      ];
+      for (let i = 0; i < 10; i++) {
+        const result = rand(peoples);
+        console.log(result);
+      }
+    </script>
+  </body>
+</html>
