@@ -1,0 +1,35 @@
+<div class="dot">
+  动态省略号
+  <span class="dot-ani"></span>
+</div>
+<style>
+  .dot-ani {
+    display: inline-block;
+    height: 12px;
+    line-height: 12px;
+    overflow: hidden;
+  }
+  .dot-ani::after {
+    position: relative;
+    top: 5px;
+    content: "";
+    animation: spin 1s infinite;
+  }
+  @keyframes spin {
+    100% {
+      content: "";
+    }
+
+    25% {
+      content: " ·";
+    }
+
+    50% {
+      content: " · ·";
+    }
+
+    75% {
+      content: " · · ·";
+    }
+  }
+</style>
