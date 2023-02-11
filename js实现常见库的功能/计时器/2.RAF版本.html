@@ -18,7 +18,19 @@
   <br />
 
   <script>
-    // 正向毫秒级计时器主要就是利用了window.requestAnimationFrame的回调函数的参数为DOMHighResTimeStamp，且与performance.now()的返回值相同；在实现暂停、继续时，需要计算一下补时时间。
+    /**
+     *  正向毫秒级计时器主要就是利用了window.requestAnimationFrame的回调函数的参数为DOMHighResTimeStamp
+     * 且与performance.now()的返回值相同；在实现暂停、继续时，需要计算一下补时时间。
+     * 
+     * 优点：
+     * 浏览器来控制执行时间，更加精确
+     * 
+     * 缺点：
+     * 如果要求时间间隔小于浏览器屏幕刷新屏幕，16ms，就有点麻烦了
+     * 
+     * 如果需要长时间计时，最好还是使用服务端计时，请求服务端并更新；
+     * 比如切换tab再回来，或者最小化再打开时，重新请求服务端时间；
+    */
 
     /**
      * @description: 补0操作
