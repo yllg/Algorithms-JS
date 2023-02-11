@@ -1,0 +1,38 @@
+{
+  "dir": "D:\\node-test\\components",
+  "childFiles": [
+    {
+      "short": "components-dir-tree.json",
+      "full": "D:\\node-test\\components\\components-dir-tree.json"
+    },
+    {
+      "short": "file.js",
+      "full": "D:\\node-test\\components\\file.js"
+    },
+    {
+      "short": "index.js",
+      "full": "D:\\node-test\\components\\index.js"
+    }
+  ],
+  "childDir": {
+    "no": null,
+    "test": {
+      "dir": "D:\\node-test\\components\\test",
+      "childFiles": [],
+      "childDir": {
+        "aa": {
+          "dir": "D:\\node-test\\components\\test\\aa",
+          "childFiles": [
+            {
+              "short": "bb.js",
+              "full": "D:\\node-test\\components\\test\\aa\\bb.js"
+            }
+          ],
+          "childDir": {
+            "cc": null
+          }
+        }
+      }
+    }
+  }
+}
