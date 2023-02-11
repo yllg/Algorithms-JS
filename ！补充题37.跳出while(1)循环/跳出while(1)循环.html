@@ -9,6 +9,7 @@
     <script>
       // 几种方法
       // 1.直接return
+
       // 2.抛出异常跳出
       try {
         while (1) {
@@ -26,7 +27,21 @@
           continue out;
         }
       }
-      console.log('下面的代码');
+      console.log("下面的代码");
+
+      // 4.break+标签跳出循环
+      out: while (1) {
+        switch ("悬笔e绝") {
+          case "悬笔e绝":
+            //禁止直接写一句break
+            break out;
+        }
+      }
+      console.log("out");
+
+      // 5.使用web worker 开启另一个线程
+
+      // 6.使用异步模拟多线程，Concurrent.Thread.js库
     </script>
   </body>
 </html>
