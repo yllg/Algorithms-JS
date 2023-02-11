@@ -39,9 +39,14 @@
       }
       console.log("out");
 
-      // 5.使用web worker 开启另一个线程
+      // 5.使用web worker 开启另一个线程，不阻塞主线程
 
       // 6.使用异步模拟多线程，Concurrent.Thread.js库
+      Concurrent.Thread.create(function () {
+        while (1) {
+          console.log(Math.random());
+        }
+      });
     </script>
   </body>
 </html>
