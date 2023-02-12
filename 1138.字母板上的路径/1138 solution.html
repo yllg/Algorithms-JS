@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：直接模拟
+      // 时间复杂度: O(n×(r+c))
+      // 时间复杂度: O(1)
+      var alphabetBoardPath = function (target) {
+        let cx = 0,
+          cy = 0;
+        let res = "";
+        for (let i = 0; i < target.length; i++) {
+          const c = target[i];
+          const nx = Math.floor((c.charCodeAt() - "a".charCodeAt()) / 5);
+          const ny = Math.floor((c.charCodeAt() - "a".charCodeAt()) % 5);
+          if (nx < cx) {
+            for (let j = 0; j < cx - nx; j++) {
+              res += "U";
+            }
+          }
+          if (ny < cy) {
+            for (let j = 0; j < cy - ny; j++) {
+              res += "L";
+            }
+          }
+          if (nx > cx) {
+            for (let j = 0; j < nx - cx; j++) {
+              res += "D";
+            }
+          }
+          if (ny > cy) {
+            for (let j = 0; j < ny - cy; j++) {
+              res += "R";
+            }
+          }
+          res += "!";
+          cx = nx;
+          cy = ny;
+        }
+        return res;
+      };
+
+      // test
+      let target = "leet";
+      console.log(alphabetBoardPath(target));
+    </script>
+  </body>
+</html>
