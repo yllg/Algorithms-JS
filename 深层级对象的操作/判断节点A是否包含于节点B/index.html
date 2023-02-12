@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div id="a">
+      <div id="c"></div>
+    </div>
+    <div id="b"></div>
+    <script>
+      const isContains = (a, b) => {
+        while (a) {
+          if (a === b) {
+            return true;
+          }
+          a = a.parentNode;
+        }
+        return false;
+      };
+
+      // test
+      let a = document.getElementById("a");
+      let b = document.getElementById("b");
+      let c = document.getElementById("c");
+      console.log(isContains(a, b));
+      console.log(isContains(c, a));
+      console.log(isContains(c, b));
+    </script>
+  </body>
+</html>
