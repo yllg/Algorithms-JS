@@ -316,9 +316,9 @@
         let add = (a, b) => a + b;
         let subtract = (a, b) => a - b;
         let source = "(add 3 (subtract 4 2))";
-        let target = compiler(source); // "add(2, (subtract(4, 2));"  
+        let target = compiler(source); // "add(3, (subtract(4, 2));"  
         console.log('target', target);
-        let result = eval(target); // Ok result is 4 
+        let result = eval(target); // result is 5
         console.log('result', result);
     </script>
 </body>
