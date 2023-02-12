@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法1：for循环+递归
+      function flatObj(obj, parentKey = "", result = {}) {
+        for (const key in obj) {
+          if (obj.hasOwnProperty(key)) {
+            let keyName = `${parentKey}${key}`;
+            if (typeof obj[key] === "object") {
+              flatObj(obj[key], keyName + ".", result);
+            } else {
+              result[keyName] = obj[key];
+            }
+          }
+        }
+        return result;
+      }
+
+      // 方法2： reduce递归
+      const flattenObject = (obj, prefix = "") => {
+        const result = Object.keys(obj).reduce((acc, k) => {
+          const pre = prefix.length ? prefix + "." : "";
+          if (typeof obj[k] === "object") {
+            Object.assign(acc, flattenObject(obj[k], pre + k));
+          } else {
+            acc[pre + k] = obj[k];
+          }
+          return acc;
+        }, {});
+        return result;
+      };
+
+      // test
+      const obj = {
+        class1: {
+          "class1-1": {
+            "class1-1-1": "1-1-1",
+          },
+          "class1-2": "1-2",
+        },
+        class2: {
+          "class2-1": "2-1",
+          "class2-2": {
+            "class2-2-2": "2-2-2",
+          },
+        },
+      };
+
+      console.log(flatObj(obj));
+      console.log(flattenObject(obj));
+    </script>
+  </body>
+</html>
