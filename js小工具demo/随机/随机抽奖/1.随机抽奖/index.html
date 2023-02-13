@@ -14,7 +14,13 @@
         for (let i = 0; i < nums; i++) {
           // 比如 0~1 * 10（数组长度）  -->  0.x ~ 9.x    向下取整 0~9
           const n = Math.floor(Math.random() * arr.length);
-          result.push(arr[n]);
+          const temp = arr[n];
+          // 不能重复占用名额
+          if (result.indexOf(temp) > -1) {
+            i--;
+            continue;
+          }
+          result.push(temp);
         }
         return result;
       }
