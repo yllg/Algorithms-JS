@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      function checkHtml(data) {
+        let tag = [
+          "a",
+          "abbr",
+          "address",
+          "area",
+          "article",
+          "aside",
+          "audio",
+          "b",
+          "base",
+          "bdi",
+          "bdo",
+          "blockquote",
+          "body",
+          "button",
+          "canvas",
+          "caption",
+          "cite",
+          "code",
+          "col",
+          "colgroup",
+          "datalist",
+          "dd",
+          "del",
+          "dfn",
+          "dialog",
+          "div",
+          "dl",
+          "dt",
+          "em",
+          "fieldset",
+          "figcaption",
+          "figure",
+          "footer",
+          "form",
+          "frame",
+          "head",
+          "header",
+          "hgroup",
+          "h1",
+          "h2",
+          "h3",
+          "h4",
+          "h5",
+          "h6",
+          "i",
+          "iframe",
+          "ins",
+          "label",
+          "legend",
+          "li",
+          "map",
+          "mark",
+          "menu",
+          "meter",
+          "nav",
+          "noscript",
+          "object",
+          "ol",
+          "outgroup",
+          "option",
+          "output",
+          "p",
+          "pre",
+          "html",
+          "progress",
+          "q",
+          "rp",
+          "rt",
+          "ruby",
+          "s",
+          "samp",
+          "script",
+          "section",
+          "select",
+          "small",
+          "span",
+          "strike",
+          "strong",
+          "style",
+          "sub",
+          "summary",
+          "sup",
+          "table",
+          "tbody",
+          "td",
+          "textarea",
+          "tfoot",
+          "th",
+          "thead",
+          "time",
+          "title",
+          "tr",
+          "u",
+          "ul",
+          "var",
+          "video",
+          "wbr",
+        ];
+        //清除标签中内容、换行符
+        data = data
+          .replace(/.*?(<.*>).*/g, "$1")
+          .replace(/[\r\n]/g, "")
+          .replace(/\s+.*?>/g, ">");
+        //排除无内容元素,能自闭合的元素
+        data = data.replace(
+          /<(img|br|hr|input|link|meta|area|base|col|command|embed|keygen|param|source|track|wbr).*?>/g,
+          ""
+        );
+        //清除非标签元素，替换标签为()的形式，例如：<div>替换为(、</div>替换为)
+        data = data
+          .replace(/>.*?</g, "><")
+          .replace(/<[^\/].*?>/g, "(")
+          .replace(/<\/.*?[^<]>/g, ")");
+        //判断()是否为偶数
+        if (data.length % 2 != 0) {
+          return false;
+        }
+        //循环删除()直至没有()或者为空
+        while (data.length) {
+          let temp = data;
+          let i = 0;
+          while (i < tag.length) {
+            let key = "<" + tag[i] + "></" + tag[i] + ">";
+            data = data.replace(new RegExp(key, "g"), "");
+            i++;
+          }
+          if (data !== temp) {
+            return false;
+          } else {
+            return true;
+          }
+        }
+        return true;
+      }
+
+      console.log(checkHtml("<div><a></a></div>")); // true
+      console.log(checkHtml("<div><div></div>")); // false
+      console.log(checkHtml("<a></a>")); // true
+      console.log(checkHtml("<a/>")); // false
+      console.log(checkHtml("<div>")); // false
+      console.log(checkHtml("<br>")); // true
+      console.log(checkHtml("</img>")); // false
+      console.log(checkHtml("<img/>")); // true
+      console.log(checkHtml("<img>")); // true
+    </script>
+  </body>
+</html>

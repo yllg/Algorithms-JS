@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <button id="cancel">cancel</button>
+    <script>
+      /**
+       * 实现一个打点计时器
+       * 要求：
+       * （1）从 start 到 end（包含 start 和 end），每1秒打印数字递增1；
+       * （2）返回的对象有个 cancel 方法停止定时操作；
+       * （3）第一个数字要立即输出；
+       */
+
+      function count(start, end) {
+        console.log(start++); // 3.第一个数需要立即输出
+        var timer = setInterval(() => {
+          if (start <= end) {
+            console.log(start++);
+          } else {
+            clearInterval(timer);
+          }
+        }, 1000);
+        return {
+          // 2.返回对象包含cancel方法，用于清除定时器
+          cancel: function () {
+            clearInterval(timer);
+          },
+        };
+      }
+
+      const counter = count(10, 20);
+      document.getElementById("cancel").addEventListener("click", () => {
+        counter.cancel();
+      })
+    </script>
+  </body>
+</html>

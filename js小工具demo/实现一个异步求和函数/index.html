@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 提供一个异步add方法如下，需要实现一个 await sum(...args) 函数
+      function asyncAdd(a, b, callback) {
+        setTimeout(function () {
+          callback(null, a + b);
+        }, 1000);
+      }
+
+      // 解
+      // 先封装一个promise版本的add函数
+      function add(a, b) {
+        return new Promise((resolve) => {
+          asyncAdd(a, b, (err, res) => {
+            if (!err) {
+              resolve(res);
+            }
+          });
+        });
+      }
+
+      // 方法1：串行异步求和
+      function sum1(...args) {
+        return new Promise((resolve) => {
+          args
+            .reduce(
+              (p, n) => p.then((total) => add(total, n)),
+              Promise.resolve(0)
+            )
+            .then(resolve);
+        });
+      }
+
+      // test
+      (async () => {
+        console.time("sum1");
+        const result = await sum1(1, 2, 3, 4, 5); // 15
+        console.log("result", result);
+        console.timeEnd("sum1");
+      })();
+
+      // 方法2，并行两两一组递归求和
+      async function sum2(...args) {
+        // 用于考察每次迭代的过程
+        console.log(args);
+        // 如果仅有一个，直接返回
+        if (args.length === 1) return args[0];
+        let result = [];
+        // 两两一组，如果有剩余一个，直接进入
+        for (let i = 0; i < args.length - 1; i += 2) {
+          result.push(add(args[i], args[i + 1]));
+        }
+        if (args.length % 2) result.push(args[args.length - 1]);
+        // Promise.all 组内求和
+        return sum2(...(await Promise.all(result)));
+      }
+
+      // test
+      (async () => {
+        console.time("sum2");
+        const result = await sum2(1, 2, 3, 4, 5); // 15
+        console.log("result", result);
+        console.timeEnd("sum2");
+      })();
+    </script>
+  </body>
+</html>

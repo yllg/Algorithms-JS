@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 实现一个retry函数，执行失败时重新执行，直到执行成功或者达到最大重试次数，每次重试的间隔为delay
+
+      Promise.retry = function (fn, times, delay) {
+        return new Promise(function (resolve, reject) {
+          const tFn = function () {
+            fn()
+              .then(resolve)
+              .catch((e) => {
+                if (times-- > 0) {
+                  console.log(`还有${times}次机会`);
+                  setTimeout(tFn, delay);
+                } else {
+                  reject(e);
+                }
+              });
+          };
+          return tFn();
+        });
+      };
+
+      Promise.retry2 = function (fn, times, delay) {
+        return new Promise((resolve, reject) => {
+          function innerT() {
+            return fn()
+              .then(resolve)
+              .catch(function (e) {
+                console.log(`还有${times}次机会`);
+                if (times === 0) {
+                  reject(e);
+                } else {
+                  times--;
+                  setTimeout(innerT, delay);
+                }
+              });
+          }
+          return innerT();
+        });
+      };
+
+      // test
+      function request(url) {
+        // return axios.get(url);
+        // 测试重试功能
+        return new Promise((resolve, reject) => {
+          reject("test");
+        });
+      }
+
+      Promise.retry(request, 5, 2000).then((r) => {
+        console.log(`The result is ${r.username}`);
+      });
+      //   Promise.retry2(request, 5, 2000).then(r => {
+      //       console.log(`The result is ${r.username}`)
+      //   })
+    </script>
+  </body>
+</html>

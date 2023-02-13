@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <style>
+    .class1 {
+        background-color: red;
+    }
+  </style>
+  <body>
+    <div id="test" class="a">test</div>
+    <button id="toggleClass">toggleClass</button>
+    <script>
+      function hasClass(obj, cls) {
+        return obj.className.match(new RegExp("(\\s|^)" + cls + "(\\s|$)"));
+      }
+      function addClass(obj, cls) {
+        if (!this.hasClass(obj, cls)) obj.className += " " + cls;
+      }
+      function removeClass(obj, cls) {
+        if (hasClass(obj, cls)) {
+          var reg = new RegExp("(\\s|^)" + cls + "(\\s|$)");
+          obj.className = obj.className.replace(reg, " ");
+        }
+      }
+      function toggleClass(obj, cls) {
+        if (hasClass(obj, cls)) {
+          removeClass(obj, cls);
+        } else {
+          addClass(obj, cls);
+        }
+      }
+
+      // test
+      const obj = document.getElementById("test");
+      const toggle = document.getElementById("toggleClass");
+      toggle.addEventListener("click", () => {
+        toggleClass(obj, "class1");
+      });
+    </script>
+  </body>
+</html>

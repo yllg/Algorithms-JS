@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // Object.defineProperty
+      var __const = function __const(data, value) {
+        window.data = value; // 把要定义的data挂载到window下，并复制
+        Object.defineProperty(window, data, {
+          enumerable: false,
+          configurable: false,
+          get: function () {
+            return value;
+          },
+          set: function (data) {
+            if (data !== value) {
+              throw new TypeError("Assignment to constant variable.");
+            } else {
+              return value;
+            }
+          },
+        });
+      };
+
+      // 同理 proxy 也可以
+
+      // test
+      __const("a", 10);
+      const b = 10;
+      console.log("a", a);
+      console.log("b", a);
+
+      delete a;
+      delete b;
+      console.log("a after delete", a);
+      console.log("b after delete", b);
+
+      for (const item in window) {
+        if (item === "a") {
+          // 因为不可枚举，所以不执行
+          console.log(window[item]);
+        }
+        if (item === "b") {
+          // 因为不可枚举，所以不执行
+          console.log(window[item]);
+        }
+      }
+      a = 20; // 报错
+      b = 20; // 报错
+    </script>
+  </body>
+</html>

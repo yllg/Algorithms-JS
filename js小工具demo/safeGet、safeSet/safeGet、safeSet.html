@@ -32,6 +32,7 @@
         console.log(safeGet(obj, 'a.b.c.d'))
 
         // safeSet
+        // 使用try catch包一下，报错就给出警告
         const safeSet = (content, key, value) => {
             try {
                 let keyArr = key.split('.');

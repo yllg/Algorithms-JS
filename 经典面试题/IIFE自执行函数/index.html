@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 下面代码的输出
+      var a = 10;
+      (function a() {
+        a = 20;
+        console.log(a);
+      })();
+
+      // 答案，a是一个函数
+
+      /**
+       * 解答
+       * 1.IIFE中的函数，都是函数表达式，而不是函数声明
+       * 2.函数名只在该IIFE立即执行函数内部有效，并且是常量绑定。
+       * 3.对一个常量赋值，在 strict 模式下会报错，非 strict 模式下会失败。
+       * 所以上面的代码等价于
+       */
+
+      //   const b = function() {
+      //     // b = 20; // 严格模式会报错，非严格模式 赋值失败
+      //     console.log(b)
+      //   }
+      //   (b)();
+
+      // 改造1: 输出10
+      var a = 10;
+      (function a() {
+        a = 20;
+        console.log(this.a);
+      })();
+
+      // 改造2: 输出20
+      var a = 10;
+      (function a() {
+        var a = 20;
+        console.log(a);
+      })();
+    </script>
+  </body>
+</html>
+l

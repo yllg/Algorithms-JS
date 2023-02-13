@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      let index = 0;
+      let stack = [];
+
+      function next() {
+        let fn = stack[index];
+        index++;
+        if (typeof fn === "function") {
+          fn();
+        }
+      }
+
+      function Man(name) {
+        stack.push(function () {
+          console.log("Hi! This is " + name);
+          next();
+        });
+      }
+
+      var Person = function (name) {
+        return new Man(name);
+      };
+
+      Man.prototype.sleep = function (time) {
+        stack.push(function () {
+          setTimeout(function () {
+            console.log("Wake up after " + time);
+            next();
+          }, time * 1000);
+        });
+        return this;
+      };
+
+      Man.prototype.eat = function (food) {
+        stack.push(function () {
+          console.log("Eat " + food);
+          next();
+        });
+        return this;
+      };
+
+      Man.prototype.sleepFirst = function (time) {
+        stack.unshift(function () {
+          setTimeout(function () {
+            console.log("wake up after " + time);
+            next();
+          }, time * 1000);
+        });
+        return this;
+      };
+      
+    //   Person('Li')
+      /* 输出:
+        Hi! This is Hank!
+        */
+    //   Person('Dan').sleep(5).eat('dinner')
+      /* 输出:
+        Hi! This is Hank!
+        // 等待5秒..
+        Wake up after 5
+        Eat dinner~
+        */
+    //   Person('Jerry').eat('dinner~').eat('supper~')
+      /* 输出:
+        Hi This is Hank!
+        Eat dinner~
+        Eat supper~
+        */
+      Person("Smith").sleepFirst(5).eat("supper");
+      /* 等待5秒，输出
+        Wake up after 5
+        Hi This is Hank!
+        Eat supper
+        */
+      next();
+    </script>
+  </body>
+</html>

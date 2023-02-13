@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法1：替换重写
+      function A() {
+        console.log("调用了函数A");
+      }
+
+      const B = A;
+
+      A = () => {
+        console.log("HelloWorld");
+        B();
+      };
+
+      A();
+
+      // 方法2：添加原型方法
+      (function () {
+        Function.prototype.before = function (beforeFn) {
+          return (...args) => {
+            // 先执行传入的beforeFn的函数
+            beforeFn.apply(this, args);
+            // 再执行调用自身的函数
+            const res = this.apply(this, args);
+            return res;
+          };
+        };
+        Function.prototype.after = function (afterFn) {
+          return (...args) => {
+            // 先执行自身的函数
+            const res = this.apply(this, args);
+            // 再执行传入的afterFn函数
+            afterFn.apply(this, args);
+            return res;
+          };
+        };
+        function A() {
+          console.log("调用了函数A");
+        }
+        const fn = A.before(() => {
+          console.log("before");
+        }).after(() => {
+          console.log("after");
+        });
+        fn();
+      })();
+
+      // TODO: 方法3：装饰器方法
+    </script>
+  </body>
+</html>

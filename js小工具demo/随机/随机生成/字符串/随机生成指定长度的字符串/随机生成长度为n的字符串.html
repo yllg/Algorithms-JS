@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+  </head>
+
+  <body>
+    <script>
+      function randomString(n) {
+        //字符串可选的内容枚举出来
+        let str = "abcdefghijklmnopqrstuvwxyz9876543210";
+        let tmp = "",
+          i = 0,
+          l = str.length;
+        //遍历，从中随机取n个拼起来
+        for (i = 0; i < n; i++) {
+          // 0-1的范围 * l长度，再向下取整
+          tmp += str.charAt(Math.floor(Math.random() * l));
+        }
+        return tmp;
+      }
+
+      // 测试
+      console.log(randomString(5));
+
+      // 生成 m 个不重复的长度为 n 的随机字符串
+      function randomUniqueStringArr(m, n) {
+        var result = [];
+        for (var i = 0; i < m; i++) {
+          random = randomString(n);
+          if (result.indexOf(random) === -1) {
+            result.push(random);
+          } else {
+            i--; // 如果重复了再来一次，保证最后总数量不变
+          }
+        }
+        return result;
+      }
+      // test 生成 5 个不重复的长度为 8 的随机字符串
+      console.log(randomUniqueStringArr(5,8))
+    </script>
+  </body>
+</html>

@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：贪心 + 分类讨论
+      // 时间复杂度：O(1)
+      // 空间复杂度：O(1)
+      var fillCups = function (amount) {
+        amount.sort((a, b) => a - b);
+        if (amount[2] > amount[1] + amount[0]) {
+          return amount[2];
+        }
+        return Math.floor((amount[0] + amount[1] + amount[2] + 1) / 2);
+      };
+
+      // test
+      let amount = [1, 4, 2];
+      console.log(fillCups(amount));
+    </script>
+  </body>
+</html>
