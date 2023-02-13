@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    /**
+     * 注意几个点：
+      1.replace第二个参数可以是函数，每个匹配都会调用，用返回值来替换匹配到的字符串
+      2.第一个参数$0是匹配的字符串，第二个参数$1是子表达式( ) 括号的匹配结果
+      这里第一个匹配 aaa，子匹配a
+      第二个 bbbbb，子匹配b
+      第三个 cccccccc, 子匹配c
+      子匹配数量可以有多个
+      3. \1 必须和( ) 小括号子匹配一起使用
+      表示第一个小括号中要匹配的内容相同;Î
+    */
+    let str = "abcabcabcbbccccc";
+    let num = 0;
+    let char = '';
+    // 1.使其按照一定的次序排列 
+    str = str.split('').sort().join(''); // "aaabbbbbcccccccc" 
+    // 2.定义正则表达式
+    let re = /(\w)\1+/g;
+    // 3.正则+replace配合
+    str.replace(re, ($0, $1) => {
+      if (num < $0.length) {
+        num = $0.length;
+        char = $1;
+      }
+    });
+    console.log(`字符最多的是${char}，出现了${num}次`);
+  </script>
+</body>
+
+</html>

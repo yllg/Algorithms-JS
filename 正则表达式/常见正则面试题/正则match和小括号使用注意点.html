@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    /**
+     * 正则match和小括号使用注意点
+     * 1.不带小括号，就返回匹配的字符串；
+     * 2.有小括号，先返回整个正则匹配的，再返回括号内的；
+     */
+
+    // test1
+    const str = "Hello World";
+    console.log(str.match(/Worl.*/)); // 数组长度1 [World]
+    console.log(str.match(/(Worl).*/)); // 数组长度2 [World, Worl]
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    // match会返回数组，\d数字，{1，}最少出现一次
+    let str = "2023-02-13T09:15:00 Europe/Paris";
+    let arr = str.match(/\d{1,}/g);
+    console.log(arr)
+  </script>
+</body>
+
+</html>
