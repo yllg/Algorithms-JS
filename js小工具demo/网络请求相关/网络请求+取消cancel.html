@@ -10,7 +10,11 @@
 
 <body>
   <script>
-    // 取消
+    // 1.ajax 取消
+    const xhr = new XMLHttpRequest();
+    xhr.abort();
+
+    // 2.fetch 取消
     const fetchWithCancel = (url, options = {}) => {
       const controller = new AbortController();
       const call = fetch(url, {
@@ -20,6 +24,19 @@
       const cancel = () => controller.abort();
       return [call, cancel];
     };
+
+    // 3.axios 取消
+    const controller = new AbortController()
+
+    axios
+      .get('/foo/bar', {
+        signal: controller.signal,
+      })
+      .then(function (response) {
+        //...
+      })
+    // cancel the request
+    controller.abort()
   </script>
 </body>
 
