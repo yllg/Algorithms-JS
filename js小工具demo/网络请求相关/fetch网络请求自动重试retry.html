@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    // 重试
+    const fetchWithRetry = async (url, options, retryCount = 0) => {
+      const {
+        MAXRET = 3, ...remainingOptions
+      } = options;
+      try {
+        return await fetch(url, remainingOptions);
+      } catch (error) {
+        // 如果重试次数没有超过，那么重新调用
+        if (retryCount < maxRetries) {
+          return fetchWithRetry(url, options, retryCount + 1);
+        }
+        // 超过最大重试次数
+        throw error;
+      }
+    };
+  </script>
+</body>
+
+</html>
