@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 从字符串数组arr中随机抽选nums个
+      function rand(nums, arr) {
+        const result = [];
+        for (let i = 0; i < nums; i++) {
+          // 比如 0~1 * 10（数组长度）  -->  0.x ~ 9.x    向下取整 0~9
+          const n = Math.floor(Math.random() * arr.length);
+          result.push(arr[n]);
+        }
+        return result;
+      }
+
+      // test
+      const arr = [
+        "邢涛",
+        "温源",
+        "王梁",
+        "彭康",
+        "杨杨",
+        "马妍",
+        "梁龙居",
+        "黄天成",
+        "李辉",
+        "申志鹏",
+      ];
+      console.log(rand(1, arr));
+      console.log(rand(5, arr));
+    </script>
+  </body>
+</html>
