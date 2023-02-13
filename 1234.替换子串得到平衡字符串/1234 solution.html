@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    // 'Q', 'W', 'E', 'R' 四种字符 都恰好出现 n/4 次
+
+    // 方法一：滑动窗口
+    // 时间复杂度：O(n)
+    // 空间复杂度：O(∣Σ∣)
+    var balancedString = function (s) {
+      const cnt = new Array(26).fill(0);
+      for (let i = 0; i < s.length; i++) {
+        const c = s[i];
+        cnt[idx(c)]++;
+      }
+
+      const partial = s.length / 4;
+      let res = s.length;
+
+      if (check(cnt, partial)) {
+        return 0;
+      }
+      for (let l = 0, r = 0; l < s.length; l++) {
+        while (r < s.length && !check(cnt, partial)) {
+          cnt[idx(s[r])]--;
+          r++;
+        }
+        if (!check(cnt, partial)) {
+          break;
+        }
+        res = Math.min(res, r - l);
+        cnt[idx(s[l])]++;
+      }
+      return res;
+    }
+
+    const idx = (c) => {
+      return c.charCodeAt() - 'A'.charCodeAt();
+    }
+
+    const check = (cnt, partial) => {
+      if (cnt[idx('Q')] > partial || cnt[idx('W')] > partial || cnt[idx('E')] > partial || cnt[idx('R')] > partial) {
+        return false;
+      }
+      return true;
+    };
+
+    // test
+    let s = "QQWE";
+    console.log(balancedString(s))
+  </script>
+</body>
+
+</html>
