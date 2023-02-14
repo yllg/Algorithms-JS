@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    const isWeekend = (date) => [0, 6].indexOf(date.getDay()) !== -1;
+
+    console.log(isWeekend(new Date(2023, 2, 12)));
+    // true (周日)
+    console.log(isWeekend(new Date(2023, 2, 13)));
+    // false (周一)
+  </script>
+</body>
+
+</html>
