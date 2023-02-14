@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    // 合并但不去重
+    const merge = (a, b) => a.concat(b);
+    // Or
+    const merge = (a, b) => [...a, ...b];
+
+    // 合并且去重
+    const merge = [...new Set(a.concat(b))];
+    // Or
+    const merge = [...new Set([...a, ...b])];
+  </script>
+</body>
+
+</html>
