@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    const truncateString = (string, length) => {
+      return string.length < length ? string : `${string.slice(0, length - 3)}...`;
+    };
+
+    console.log(
+      truncateString('Hi, I should be truncated because I am too loooong!', 36),
+    );
+    // Hi, I should be truncated because...
+  </script>
+</body>
+
+</html>

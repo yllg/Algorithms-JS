@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    const truncateStringMiddle = (string, length, start, end) => {
+      return `${string.slice(0, start)}...${string.slice(string.length - end)}`;
+    };
+
+    console.log(
+      truncateStringMiddle(
+        'A long story goes here but then eventually ends!', // string
+        25, // 需要的字符串大小
+        13, // 从原始字符串第几位开始截取
+        17, // 从原始字符串第几位停止截取
+      ),
+    );
+    // A long story ... eventually ends!
+  </script>
+</body>
+
+</html>
