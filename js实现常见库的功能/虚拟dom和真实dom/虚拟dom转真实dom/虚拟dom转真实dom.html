@@ -44,13 +44,6 @@
       vnode.children.forEach(child => render(child, dom)); // 递归渲染子节点
       return dom; // 返回虚拟dom为真正的DOM
     }
-    //实现dom挂载到页面某个元素
-    const ReactDOM = {
-      render: (vnode, container) => {
-        container.innerHTML = '';
-        return render(vnode, container);
-      }
-    }
 
     // test
     const vnode = {
