@@ -1,19 +1,33 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
-  </head>
-  <body>
-    <script>
-      function getRandom(min, max) {
-        return Math.floor(Math.random() * (max - min)) + min;
-      }
 
-      // test
-      console.log(getRandom(10, 20));
-    </script>
-  </body>
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    // 注意 Math.random 返回0-1之间，包括0，不包括1
+
+    // 包含下边界，不包含上边界
+    function getRandom1(min, max) {
+      return Math.floor(Math.random() * (max - min)) + min;
+    }
+
+    // test
+    console.log(getRandom1(10, 20));
+
+    // 包含下边界，包含上边界
+    function getRandom2(min, max) {
+      return Math.floor(Math.random() * (max - min + 1)) + min;
+    }
+
+    // test
+    console.log(getRandom2(10, 20));
+  </script>
+</body>
+
 </html>
