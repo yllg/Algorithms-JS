@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    /**
+    async是 generator 和 promise的语法糖，实现一个 asyncToGenerator
+
+    接受一个generator函数，返回一个promise
+    关键在于 yield划分异步流程，如何自动执行
+    */
+    function asyncToGenerator(generatorFunc) {
+      return function () {
+        const gen = generatorFunc.apply(this, arguments)
+        return new Promise((resolve, reject) => {
+          // 定义一个step函数用来一步一步的跨过yield的阻碍
+          // key有next和throw两种取值，分别对应了gen的next和throw方法
+          // arg参数则是用来把promise resolve出来的值交给下一个yield
+          function step(key, arg) {
+            let generatorResult
+            try {
+              generatorResult = gen[key](arg)
+            } catch (error) {
+              return reject(error)
+            }
+            const {
+              value,
+              done
+            } = generatorResult
+            if (done) {
+              // 这个done是在最后一次调用next后才会为true
+              return resolve(value)
+            } else {
+              // 除了最后一次，每次调用gen.next() 返回{value: Promise, done:false} 结构
+              // promise.resolve可以接受一个promise为参数; 调用step递归往下解开promise
+              return Promise.resolve(value).then(val => step('next', val), err => step('throw', err))
+            }
+          }
+          step("next")
+        })
+      }
+    }
+
+    // test
+    const getData = () => new Promise(resolve => setTimeout(() => resolve("data"), 1000))
+
+    // 1.正常async使用
+    // async function test() {
+    //   const data = await getData()
+    //   console.log('data: ', data);
+    //   const data2 = await getData()
+    //   console.log('data2: ', data2);
+    //   return 'success'
+    // }
+    // // 一秒后打印data 再过一秒打印data2 最后打印success
+    // test().then(res => console.log(res))
+
+    // 2.generator函数 加一个 asyncToGenerator 实现
+    // 2-1.generator函数
+    function* testG() {
+      // await被编译成了yield
+      const data = yield getData()
+      console.log('data: ', data);
+      const data2 = yield getData()
+      console.log('data2: ', data2);
+      return 'success'
+    }
+
+    var test = asyncToGenerator(testG)
+    test().then(res => console.log(res))
+  </script>
+</body>
+
+</html>
