@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      /**
+       * whiteList:字符串数组,活跃用户，如果这批用户参与抽奖，则必定让他中奖。长度不超过1万
+       * participant:字符串数组,真正参与抽奖的用户，长度约是10万。
+       *
+       * 希望从participant返回两个2万个用户，表示中奖用户，优先选取whiteList上的用户，
+       * 若不在whiteList上，对participant 剩余的随机 选取即可。
+       */
+
+      // 随机抽奖函数: 从字符串数组arr中随机抽选nums个
+      function rand(nums, arr) {
+        const result = [];
+        for (let i = 0; i < nums; i++) {
+          // 比如 0~1 * 10（数组长度）  -->  0.x ~ 9.x    向下取整 0~9
+          const n = Math.floor(Math.random() * arr.length);
+          const temp = arr[n];
+          // 不能重复占用名额
+          if (result.indexOf(temp) > -1) {
+            i--;
+            continue;
+          }
+          result.push(temp);
+        }
+        return result;
+      }
+
+      //如果这批用户参与抽奖，则必定让他中奖(也就whiteList不一定在participant)
+      function lottery(total, whiteList, participant) {
+        let set2 = new Set(participant);
+        let num = 0;
+        let res = [];
+        for (let item of whiteList) {
+          if (set2.has(item)) {
+            res.push(item);
+            num++;
+            // 为了不影响后面的抽奖运算 要delete
+            set2.delete(item);
+          }
+        }
+        let lest = total - num;
+        // 随机取剩下
+        let otherArr = rand(lest, [...set2]);
+        return res.concat(otherArr);
+      }
+
+      // test
+      const whiteList = ["李辉", "李四", "张全蛋"];
+      const participant = [
+        "张三",
+        "李四",
+        "王五",
+        "张二麻子",
+        "邢涛",
+        "温源",
+        "王梁",
+        "彭康",
+        "杨杨",
+        "马妍",
+        "梁龙居",
+        "黄天成",
+        "李辉",
+        "申志鹏",
+      ];
+
+      console.log(lottery(5, whiteList, participant));
+    </script>
+  </body>
+</html>
