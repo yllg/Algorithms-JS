@@ -11,7 +11,9 @@
   <div id="root"></div>
   <script>
     function render(vnode, container) {
-      return container.appendChild(_render(vnode));
+      const realDom = _render(vnode);
+      console.log("转换完成")
+      return container.appendChild(realDom);
     }
 
     function _render(vnode) {
