@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <div id='app'>
+    <span id="first-span" class="span">11</span>
+    <p id="first-p" class="p">12</p>
+  </div>
+  <button id="button"> id为app dom转成虚拟dom </button>
+  <script>
+    const domToVdom = function () {
+      // 1.定义 vdom 的数据结构
+      function vnode(tag, data) {
+        this.tag = tag;
+        this.attrs = data;
+        this.childern = [];
+      }
+      vnode.prototype.addChild = function (node) {
+        this.childern.push(node);
+      }
+
+      // 2.使用 fragment 和 slice 方法，得到节点数组(nodelist),
+      var b = document.getElementById('app')
+      var fragment = document.createDocumentFragment()
+      while (b.firstChild) {
+        fragment.appendChild(b.firstChild)
+      }
+      var nodelist = fragment.childNodes;
+      nodelist = Array.prototype.slice.call(nodelist);
+
+      // 3.递归函数创建 vnode
+      function createvnode(node) {
+        let v = null;
+        if (node.nodeType === 1) {
+          let tag = node.nodeName.toLowerCase();
+          let data = {};
+          let attribute = node.attributes;
+          [...attribute].forEach(attr => {
+            var {
+              name,
+              value
+            } = attr;
+            data[name] = value;
+          })
+          v = new vnode(tag, data);
+          nodechildern = node.childNodes;
+          if (nodechildern) {
+            [...nodechildern].forEach(kid => {
+              v.addChild(createvnode(kid))
+            })
+          }
+
+        } else if (node.nodeType === 3) {
+          v = new vnode('text', node.nodeValue)
+        }
+        return v;
+      }
+      // 4.遍历nodelist
+      var vnodelist = []
+      nodelist.forEach(node => {
+        vnodelist.push(createvnode(node));
+      })
+      console.log(vnodelist)
+      // 5.还原
+      b.appendChild(fragment)
+    }
+
+    const button = document.getElementById("button");
+    button.addEventListener('click', () => {
+      domToVdom();
+    })
+  </script>
+</body>
+
+</html>
