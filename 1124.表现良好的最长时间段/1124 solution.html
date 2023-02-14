@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    // 表现良好的时间段」，意味在这段时间内，「劳累的天数」是严格 大于「不劳累的天数」。
+
+    // 方法一：贪心
+    // 时间复杂度：O(n)
+    // 空间复杂度：O(n)
+    var longestWPI = function (hours) {
+      const n = hours.length;
+      const s = new Array(n + 1).fill(0);
+      const stk = [0];
+      for (let i = 1; i <= n; i++) {
+        s[i] = s[i - 1] + (hours[i - 1] > 8 ? 1 : -1);
+        if (s[stk[stk.length - 1]] > s[i]) {
+          stk.push(i);
+        }
+      }
+
+      let res = 0;
+      for (let r = n; r >= 1; r--) {
+        while (stk.length && s[stk[stk.length - 1]] < s[r]) {
+          res = Math.max(res, r - stk.pop());
+        }
+      }
+      return res;
+    };
+
+    // 方法二：哈希表
+    // 时间复杂度：O(n)
+    // 空间复杂度：O(n)
+    var longestWPI = function (hours) {
+      const n = hours.length;
+      const map = new Map();
+      let s = 0,
+        res = 0;
+      for (let i = 0; i < n; i++) {
+        s += hours[i] > 8 ? 1 : -1;
+        if (s > 0) {
+          res = Math.max(res, i + 1);
+        } else {
+          if (map.has(s - 1)) {
+            res = Math.max(res, i - map.get(s - 1));
+          }
+        }
+        if (!map.has(s)) {
+          map.set(s, i);
+        }
+      }
+      return res;
+    };
+
+    // test
+    let hours = [9, 9, 6, 0, 6, 6, 9];
+    console.log(longestWPI(hours))
+  </script>
+</body>
+
+</html>
