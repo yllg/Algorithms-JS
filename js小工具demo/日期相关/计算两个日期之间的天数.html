@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    const daysDiff = (date, date2) => Math.ceil(Math.abs(date - date2) / 86400000);
+
+    console.log(daysDiff(new Date('2023-01-01'), new Date('2023-02-14')));
+    console.log(daysDiff(new Date('2021-05-10'), new Date('2023-02-14')));
+    
+  </script>
+</body>
+
+</html>
