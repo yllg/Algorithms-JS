@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      function _isNaN(num) {
+        return (
+          !(typeof num === "string" || typeof num === "number") || isNaN(num)
+        );
+      }
+
+      // 求最大值
+      function max(arr) {
+        arr = arr.filter((item) => !_isNaN(item));
+        return arr.length ? Math.max.apply(null, arr) : undefined;
+      }
+      var result = max([1, 2, "11", null, "fdf", []]); // 11
+      console.log(result);
+
+      // 求最小值
+      function min(arr) {
+        arr = arr.filter((item) => !_isNaN(item));
+        return arr.length ? Math.min.apply(null, arr) : undefined;
+      }
+      var result = min([1, 2, "11", null, "fdf", []]); // 1
+      console.log(result);
+    </script>
+  </body>
+</html>
+l
