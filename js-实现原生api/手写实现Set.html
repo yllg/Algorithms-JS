@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    function _Set(arr) {
+      this.items = arr ? unique(arr) : [];
+      this.size = this.items.length; // Array的大小
+    }
+
+    _Set.prototype = {
+      add: function (value) {
+        // 添加元素,若元素已存在,则跳过，返回 _Set 结构本身。
+        if (!this.has(value)) {
+          this.items.push(value);
+          this.size++;
+        }
+        return this;
+      },
+      clear: function () {
+        //清除所有成员，没有返回值。
+        this.items = []
+        this.size = 0
+      },
+      delete: function (value) {
+        //删除某个值，返回一个布尔值，表示删除是否成功。
+        return this.items.some((v, i) => {
+          if (v === value) {
+            this.items.splice(i, 1)
+            return true
+          }
+          return false
+        })
+      },
+      has: function (value) {
+        //返回一个布尔值，表示该值是否为Set的成员。
+        return this.items.some(v => v === value)
+      },
+      values: function () {
+        return this.items
+      },
+    }
+
+    // test
+    // 原生Set
+    s = new Set();
+    s.add(1).add(2).add(2);
+    // 注意2被加入了两次
+    console.log(s.size) // 2
+    console.log(s.has(1)) // true
+    console.log(s.has(2)) // true
+    console.log(s.has(3)) // false
+    s.delete(2);
+    console.log(s.has(2)) // false
+
+    // _Set
+    _s = new _Set();
+    _s.add(1).add(2).add(2);
+    // 注意2被加入了两次
+    console.log(_s.size) // 2
+    console.log(_s.has(1)) // true
+    console.log(_s.has(2)) // true
+    console.log(_s.has(3)) // false
+    _s.delete(2);
+    console.log(_s.has(2)) // false
+  </script>
+</body>
+
+</html>
