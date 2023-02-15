@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <button id="fullScreen">全屏</button>
+    <button id="exitFullScreen">退出全屏</button>
+    <script>
+      function toFullScreen() {
+        let elem = document.body;
+        elem.webkitRequestFullScreen
+          ? elem.webkitRequestFullScreen()
+          : elem.mozRequestFullScreen
+          ? elem.mozRequestFullScreen()
+          : elem.msRequestFullscreen
+          ? elem.msRequestFullscreen()
+          : elem.requestFullScreen
+          ? elem.requestFullScreen()
+          : alert("浏览器不支持全屏");
+      }
+
+      function exitFullscreen() {
+        let elem = parent.document;
+        elem.webkitCancelFullScreen
+          ? elem.webkitCancelFullScreen()
+          : elem.mozCancelFullScreen
+          ? elem.mozCancelFullScreen()
+          : elem.cancelFullScreen
+          ? elem.cancelFullScreen()
+          : elem.msExitFullscreen
+          ? elem.msExitFullscreen()
+          : elem.exitFullscreen
+          ? elem.exitFullscreen()
+          : alert("切换失败,可尝试Esc退出");
+      }
+
+      const enter = document.getElementById("fullScreen");
+      enter.addEventListener("click", toFullScreen);
+      const exit = document.getElementById("exitFullScreen");
+      exit.addEventListener("click", exitFullscreen);
+    </script>
+  </body>
+</html>
