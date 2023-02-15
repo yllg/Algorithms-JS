@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    // 实际就是求最大公约数 是否为1
+
+    // 方法一：数论
+    // 时间复杂度：O(n+logm)
+    // 空间复杂度：O(1)
+    var isGoodArray = function (nums) {
+      let divisor = nums[0];
+      for (const num of nums) {
+        divisor = gcd(divisor, num);
+        if (divisor === 1) {
+          break;
+        }
+      }
+      return divisor === 1;
+    }
+
+    const gcd = (num1, num2) => {
+      while (num2 !== 0) {
+        const temp = num1;
+        num1 = num2;
+        num2 = temp % num2;
+      }
+      return num1;
+    };
+  </script>
+</body>
+
+</html>
