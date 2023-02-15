@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    // 位运算优化版本
+    function repeat(str, n) {
+      let res = '';
+      while (n) {
+        if (n % 2 === 1) {
+          res += str;
+        }
+        if (n > 1) {
+          str += str;
+        }
+        n >>= 1; // 除以2
+      }
+      return res
+    };
+    console.log(repeat('123', 3)) // 123123123
+  </script>
+</body>
+
+</html>
