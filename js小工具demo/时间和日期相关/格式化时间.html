@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 占位符 用正则匹配和replace函数进行替换
+      function dateFormater(formater, t) {
+        let date = t ? new Date(t) : new Date(),
+          Y = date.getFullYear() + "",
+          M = date.getMonth() + 1,
+          D = date.getDate(),
+          H = date.getHours(),
+          m = date.getMinutes(),
+          s = date.getSeconds();
+        return formater
+          .replace(/YYYY|yyyy/g, Y)
+          .replace(/YY|yy/g, Y.substr(2, 2))
+          .replace(/MM/g, (M < 10 ? "0" : "") + M)
+          .replace(/DD/g, (D < 10 ? "0" : "") + D)
+          .replace(/HH|hh/g, (H < 10 ? "0" : "") + H)
+          .replace(/mm/g, (m < 10 ? "0" : "") + m)
+          .replace(/ss/g, (s < 10 ? "0" : "") + s);
+      }
+      console.log(dateFormater("YYYY-MM-DD HH:mm")); // 2023-02-15 23:59
+      console.log(dateFormater("YYYYMMDDHHmm")); // 202302152359
+    </script>
+  </body>
+</html>

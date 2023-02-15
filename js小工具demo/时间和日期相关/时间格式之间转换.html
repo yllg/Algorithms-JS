@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      function dateStrForma(str, from, to) {
+        //'20190626' 'YYYYMMDD' 'YYYY年MM月DD日'
+        str += "";
+        let Y = "";
+        if (~(Y = from.indexOf("YYYY"))) {
+          Y = str.substr(Y, 4);
+          to = to.replace(/YYYY|yyyy/g, Y);
+        } else if (~(Y = from.indexOf("YY"))) {
+          Y = str.substr(Y, 2);
+          to = to.replace(/YY|yy/g, Y);
+        }
+
+        let k, i;
+        ["M", "D", "H", "h", "m", "s"].forEach((s) => {
+          i = from.indexOf(s + s);
+          k = ~i ? str.substr(i, 2) : "";
+          to = to.replace(s + s, k);
+        });
+        return to;
+      }
+      console.log(dateStrForma("20190626", "YYYYMMDD", "YYYY年MM月DD日")); // 2019年06月26日
+      console.log(
+        dateStrForma("121220190626", "----YYYYMMDD", "YYYY年MM月DD日")
+      ); // 2019年06月26日
+      console.log(dateStrForma("2019年06月26日", "YYYY年MM月DD日", "YYYYMMDD")); // 20190626
+    </script>
+  </body>
+</html>
