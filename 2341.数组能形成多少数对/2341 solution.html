@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    // 方法一：哈希表
+    // 时间复杂度：O(n)
+    // 空间复杂度：O(n)
+    var numberOfPairs = function (nums) {
+      const cnt = new Map();
+      let res = 0;
+      for (const num of nums) {
+        cnt.set(num, !(cnt.get(num) || false));
+        if (!cnt.get(num)) {
+          res++;
+        }
+      }
+      return [res, nums.length - 2 * res];
+    };
+
+    // test
+    let nums = [1, 3, 2, 1, 3, 2, 2];
+    console.log(numberOfPairs(nums))
+  </script>
+</body>
+
+</html>
