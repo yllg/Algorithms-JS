@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 两个工具函数
+      // 检查value是否是类数组
+      function isArrayLike(value) {
+        return value != null && isLength(value.length) && !isFunction(value);
+      }
+
+      // 判断数据是不是Object类型的数据。
+      function isPlainObject(obj) {
+        return Object.prototype.toString.call(obj) === "[object Object]";
+      }
+
+      // 返回一个由一个给定对象的自身可枚举属性组成的数组
+      Object.keys =
+        Object.keys ||
+        function keys(object) {
+          if (object === null || object === undefined) {
+            throw new TypeError("Cannot convert undefined or null to object");
+          }
+          let result = [];
+          if (isArrayLike(object) || isPlainObject(object)) {
+            for (let key in object) {
+              object.hasOwnProperty(key) && result.push(key);
+            }
+          }
+          return result;
+        };
+    </script>
+  </body>
+</html>
