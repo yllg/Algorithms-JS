@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    // 返回 满足条件的第一个值
+    Array.prototype._find = function (callback, ctx) {
+      let length = this.length
+      for (let index = 0; index < length; index++) {
+        if (callback.call(ctx, this[index], index, this)) {
+          return this[index]
+        }
+      }
+    }
+
+    // test
+    var ages = [3, 10, 18, 20];
+
+    function checkAdult(age) {
+      return age >= 18;
+    }
+    console.log(ages.find(checkAdult)) // 18
+    console.log(ages._find(checkAdult)) // 18
+  </script>
+</body>
+
+</html>
