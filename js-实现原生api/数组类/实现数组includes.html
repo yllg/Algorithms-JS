@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    Array.prototype._includes = function (value, start) {
+      let ctx = this;
+      let length = ctx.length;
+      start = parseInt(start)
+      if (isNaN(start)) {
+        start = 0
+      } else if (start < 0) {
+        start = -start > length ? 0 : (length + start);
+      }
+      let index = ctx.indexOf(value);
+      return index >= start;
+    }
+    const arr = [1, 2, 3, 4, 5]
+    console.log(arr.includes(1)) // true
+    console.log(arr.includes(6)) // false
+    console.log(arr._includes(1)) // true
+    console.log(arr._includes(6)) // false
+  </script>
+</body>
+
+</html>
