@@ -13,6 +13,7 @@
       function getTiming() {
         setTimeout(() => {
           const t = window.performance.timing;
+          const m = window.performance.memory;
           const performanceInfo = [{
               key: "Redirect",
               desc: "网页重定向的耗时",
@@ -40,7 +41,7 @@
             },
             {
               key: "Content Download",
-              desc: "下载服务端返回数据的时间",
+              desc: "请求耗时/下载服务端返回数据的时间",
               "value(ms)": t.responseEnd - t.responseStart
             },
             {
@@ -77,6 +78,11 @@
               key: "Loaded",
               desc: "页面load的总耗时",
               "value(ms)": t.loadEventEnd - t.navigationStart
+            },
+            {
+              key: "memory usage",
+              desc: "js内存使用占比",
+              "value(ms)": (m.usedJSHeapSize / m.totalJSHeapSize * 100).toFixed(2) + '%'
             }
           ];
           console.table(performanceInfo);
