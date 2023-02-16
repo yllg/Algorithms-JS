@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      const reg = /^.*(https?:\/\/.+):(\d+):(\d+)$/;
+
+      const ErrorToMessage = (error) => {
+        const stackMsgArr = (error.stack || "").split(`
+      `);
+        const stack = [];
+        stackMsgArr.forEach((msg) => {
+          if (!msg.trim()) return;
+          const match = msg.trim().match(reg);
+          if (!match) return;
+          stack.push({
+            filename: match[1],
+            line: parseInt(match[2]),
+            column: parseInt(match[3]),
+          });
+        });
+        return {
+          message: error.message,
+          stack,
+        };
+      };
+
+      // test1 chrome Error
+      const fixtureStack = new TypeError("Error raised");
+      fixtureStack.stack = `TypeError: Error raised
+        at bar http://192.168.31.8:8000/c.js:2:9
+        at foo http://192.168.31.8:8000/b.js:4:15
+        at calc http://192.168.31.8:8000/a.js:4:3
+        at <anonymous>:1:11
+        at http://192.168.31.8:8000/a.js:22:3
+        `;
+
+      console.log(ErrorToMessage(fixtureStack));
+
+      // test2 firefox Error
+      const fixtureFirefoxStack = new TypeError("Error raised");
+      fixtureFirefoxStack.stack = `
+        bar@http://192.168.31.8:8000/c.js:2:9
+        foo@http://192.168.31.8:8000/b.js:4:15
+        calc@http://192.168.31.8:8000/a.js:4:3
+        <anonymous>:1:11
+        http://192.168.31.8:8000/a.js:22:3
+        `;
+
+      console.log(ErrorToMessage(fixtureFirefoxStack));
+    </script>
+  </body>
+</html>
