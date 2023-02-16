@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    // 这里不能直接使用箭头函数，否则无法访问到 this
+    Array.prototype._fill = function (value, start, end) {
+      let ctx = this
+      let length = ctx.length;
+      start = parseInt(start)
+      if (isNaN(start)) {
+        start = 0
+      } else if (start < 0) {
+        start = -start > length ? 0 : (length + start);
+      }
+      end = parseInt(end)
+      if (isNaN(end) || end > length) {
+        end = length
+      } else if (end < 0) {
+        end += length;
+      }
+      while (start < end) {
+        ctx[start++] = value;
+      }
+      return ctx;
+    }
+    const a = new Array(3).fill(2)
+    const _a = new Array(3)._fill(2)
+    console.log(a) // [2, 2, 2]
+    console.log(_a) // [2, 2, 2]
+  </script>
+</body>
+
+</html>
