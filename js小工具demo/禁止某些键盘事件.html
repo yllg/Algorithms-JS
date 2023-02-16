@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    document.addEventListener('keydown', function (event) {
+      return !(
+        112 == event.keyCode || //禁止F1
+        123 == event.keyCode || //禁止F12
+        event.ctrlKey && 82 == event.keyCode || //禁止ctrl+R
+        event.ctrlKey && 18 == event.keyCode || //禁止ctrl+N
+        event.shiftKey && 121 == event.keyCode || //禁止shift+F10
+        event.altKey && 115 == event.keyCode || //禁止alt+F4
+        "A" == event.srcElement.tagName && event.shiftKey //禁止shift+点击a标签
+      ) || (event.returnValue = false)
+    });
+  </script>
+</body>
+
+</html>
