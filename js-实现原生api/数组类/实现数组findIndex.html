@@ -9,12 +9,12 @@
 
 <body>
   <script>
-    // 返回 满足条件的第一个值
-    Array.prototype._find = function (fn, ctx) {
+    // 返回 满足条件的第一个值的索引
+    Array.prototype._findIndex = function (fn, ctx) {
       let length = this.length
       for (let index = 0; index < length; index++) {
         if (fn.call(ctx, this[index], index, this)) {
-          return this[index]
+          return index
         }
       }
     }
@@ -25,8 +25,9 @@
     function checkAdult(age) {
       return age >= 18;
     }
-    console.log(ages.find(checkAdult)) // 18
-    console.log(ages._find(checkAdult)) // 18
+    console.log(ages.findIndex(checkAdult)) // 2
+    console.log(ages._findIndex(checkAdult)) // 2
+  </script>
   </script>
 </body>
 
