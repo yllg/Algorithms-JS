@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    function numdiv(num1, num2) {
+      let baseNum1 = 0,
+        baseNum2 = 0;
+      let baseNum3, baseNum4;
+      try {
+        baseNum1 = num1.toString().split(".")[1].length;
+      } catch (e) {
+        baseNum1 = 0;
+      }
+      try {
+        baseNum2 = num2.toString().split(".")[1].length;
+      } catch (e) {
+        baseNum2 = 0;
+      }
+      with(Math) {
+        baseNum3 = Number(num1.toString().replace(".", ""));
+        baseNum4 = Number(num2.toString().replace(".", ""));
+        return (baseNum3 / baseNum4) * pow(10, baseNum2 - baseNum1);
+      }
+    };
+
+    console.log(numdiv(99, 3))
+    console.log(numdiv(100, 3))
+    console.log(99 / 3)
+    console.log(100 / 3)
+  </script>
+</body>
+
+</html>

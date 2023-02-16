@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    function numMulti(num1, num2) {
+      let baseNum = 0;
+      try {
+        baseNum += num1.toString().split(".")[1].length;
+      } catch (e) {}
+      try {
+        baseNum += num2.toString().split(".")[1].length;
+      } catch (e) {}
+      return Number(num1.toString().replace(".", "")) * Number(num2.toString().replace(".", "")) / Math.pow(10,
+        baseNum);
+    };
+
+    // test
+    console.log(numMulti(12, 13))
+    console.log(12 * 13)
+  </script>
+</body>
+
+</html>
