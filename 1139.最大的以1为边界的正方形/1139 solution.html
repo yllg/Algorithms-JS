@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    // 方法一：动态规划
+    // 时间复杂度：O(m×n×min(m,n))
+    // 空间复杂度：O(m×n)
+    var largest1BorderedSquare = function (grid) {
+      const m = grid.length,
+        n = grid[0].length;
+      const left = new Array(m + 1).fill(0).map(() => new Array(n + 1).fill(0));
+      const up = new Array(m + 1).fill(0).map(() => new Array(n + 1).fill(0));
+      let maxBorder = 0;
+      for (let i = 1; i <= m; i++) {
+        for (let j = 1; j <= n; j++) {
+          if (grid[i - 1][j - 1] === 1) {
+            left[i][j] = left[i][j - 1] + 1;
+            up[i][j] = up[i - 1][j] + 1;
+            let border = Math.min(left[i][j], up[i][j]);
+            while (left[i - border + 1][j] < border || up[i][j - border + 1] < border) {
+              border--;
+            }
+            maxBorder = Math.max(maxBorder, border);
+          }
+        }
+      }
+      return maxBorder * maxBorder;
+    };
+
+    // test
+    const grid1 = [
+      [1, 1, 1],
+      [1, 0, 1],
+      [1, 1, 1]
+    ];
+    console.log(largest1BorderedSquare(grid1))
+    const grid2 = [
+      [1, 1, 1],
+      [1, 1, 1],
+      [1, 1, 0]
+    ];
+    console.log(largest1BorderedSquare(grid2))
+  </script>
+</body>
+
+</html>
