@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    // 方法1: 动态规划
+    var stoneGameII = function (piles) {
+      const len = piles.length;
+      const dp = new Array(len).fill(0).map(() => new Array(len + 1).fill(0));
+      let sum = 0;
+      for (let i = len - 1; i >= 0; i--) {
+        sum += piles[i];
+        for (let M = 1; M <= len; M++) {
+          if (i + 2 * M >= len) {
+            dp[i][M] = sum;
+          } else {
+            for (let x = 1; x <= 2 * M; x++) {
+              dp[i][M] = Math.max(dp[i][M], sum - dp[i + x][Math.max(x, M)])
+            }
+          }
+        }
+      }
+      return dp[0][1];
+    };
+
+    // test
+    const piles = [2, 7, 9, 4, 4];
+
+    console.log(stoneGameII(piles))
+  </script>
+</body>
+
+</html>
