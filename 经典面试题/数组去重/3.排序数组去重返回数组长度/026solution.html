@@ -34,7 +34,7 @@
             return result.length;
         }
 
-        // 方法3：双指针
+        // 方法3：双指针; 不是用额外空间，空间复杂度 O(n)
         var removeDuplicates = function (nums) {
             const n = nums.length;
             if (n === 0) {
