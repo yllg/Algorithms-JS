@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<style>
+  .wrap .top {
+    position: absolute;
+    width: 300px;
+    height: 100px;
+    margin: 20px;
+    border: 1px solid #000;
+    background-color: transparent;
+    backdrop-filter: blur(3px);
+  }
+</style>
+
+<body>
+  <div class="wrap">
+    <div class="top"></div>
+    //由于类名为 top 的 div 盒子绝对定位，脱离文档流，同时层级提升，因此 div 盒子的层级高于 p 段落的层级，
+    //div 盒子会将 p 元素覆盖，位于 p 元素的上方，p 标签中的文字位于 div 盒子后方，在 div 盒子添加 backdrop：blur(3px)后，文字也就变模糊了
+    <p>best wish for you</p>
+  </div>
+
+</body>
+
+</html>
