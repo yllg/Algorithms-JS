@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    //定义一个栈
+    function Stack() {
+      var items = [];
+      // 从栈顶添加元素，---压栈
+      this.push = function (item) {
+        items.push(item)
+      }
+      //弹出栈顶元素
+      this.pop = function () {
+        return items.pop();
+      }
+      // 返回栈顶元素
+      this.top = function () {
+        return items[items.length - 1];
+      }
+      // 判断栈是否为空
+      this.isEmpty = function () {
+        return items.length == 0;
+      }
+      // 返回栈的长度
+      this.size = function () {
+        return items.length;
+      }
+      // 清空栈
+      this.clear = function () {
+        items = [];
+      }
+    }
+
+    function decode(str) {
+      if (str) {
+        let stack = new Stack();
+        for (let i = 0; i < str.length; i++) {
+          //如果不是']' 压入栈
+          if (str[i] != ']') {
+            stack.push(str[i]);
+          } else {
+            let temp = ''; //接收要重复的部分
+            while (stack.top() != '[') { //如果不是'[' 就加到temp上
+              temp = stack.top() + temp;
+              stack.pop(); //出栈
+            }
+            stack.pop(); //'[' 出栈
+            let n = 0,
+              m = 1; //n 记录重复的次数 m 考虑几十、几百..次的情况
+            while (!stack.isEmpty() && stack.top() >= '0' && stack.top() <= '9') {
+              n += parseInt(stack.top()) * m;
+              m *= 10;
+              stack.pop();
+            }
+            //重复
+            for (let i = 0; i < n; i++) {
+              for (let j = 0; j < temp.length; j++) {
+                stack.push(temp[j]);
+              }
+            }
+          }
+        }
+        let decodeStr = ''; //重复结果
+        while (!stack.isEmpty()) {
+          decodeStr = stack.top() + decodeStr;
+          stack.pop(); //出栈
+        }
+        return decodeStr;
+      }
+    }
+
+    console.log(decode('2[abc]3[cd]ef'));
+    console.log(decode('3[a2[c]]'));
+  </script>
+</body>
+
+</html>
