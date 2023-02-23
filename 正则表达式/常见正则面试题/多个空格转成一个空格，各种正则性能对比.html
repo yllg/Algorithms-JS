@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    // test
+    const str = "adfdlf     sdkfsdf  dfd";
+    const str1 = str.replace(/  +/g, ' ') //  380ms
+    const str2 = str.replace(/\s\s+/g, ' ') //  390ms
+    const str3 = str.replace(/ {2,}/g, ' ') //  470ms
+    const str4 = str.replace(/ +/g, ' ') //  790ms
+    const str5 = str.replace(/ +(?= )/g, '') // 3250ms
+
+    console.log(str1)
+    console.log(str2)
+    console.log(str3)
+    console.log(str4)
+    console.log(str5)
+  </script>
+</body>
+
+</html>
