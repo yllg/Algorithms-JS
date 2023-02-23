@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    // 方法一：归纳法
+    // 时间复杂度：O(2^n)
+    // 空间复杂度：O(1)
+    var circularPermutation = function (n, start) {
+      const ret = [start];
+      for (let i = 1; i <= n; i++) {
+        const m = ret.length;
+        for (let j = m - 1; j >= 0; j--) {
+          ret.push(((ret[j] ^ start) | (1 << (i - 1))) ^ start);
+        }
+      }
+      return ret;
+    };
+
+    // 方法二: 公式法
+    // 时间复杂度：O(2^n)
+    // 空间复杂度：O(1)
+    var circularPermutation = function (n, start) {
+      const ret = [];
+      for (let i = 0; i < 1 << n; i++) {
+        ret.push((i >> 1) ^ i ^ start);
+      }
+      return ret;
+    };
+
+    // test
+    let n = 2,
+      start = 3;
+    console.log(circularPermutation(n, start))
+  </script>
+</body>
+
+</html>
