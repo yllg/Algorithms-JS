@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    // 正则实现
+    function reverseLetter(str) {
+      const result = str.replace(/[a-zA-Z]/g, function (a) {
+        return /[a-z]/.test(a) ? a.toUpperCase() : a.toLowerCase();
+      });
+      return result;
+    }
+
+    // test
+    const str = 'AbcDefGh';
+    console.log(reverseLetter(str)) // aBCdEFgH
+  </script>
+</body>
+
+</html>
