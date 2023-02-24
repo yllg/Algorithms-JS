@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    // 方法一：排序 + 模拟
+    // 时间复杂度：O(n^2)
+    // 空间复杂度：O(logn)
+    var minimumOperations = function (nums) {
+      let ans = 0;
+      nums.sort((a, b) => a - b);
+      const length = nums.length;
+      for (let i = 0; i < length; i++) {
+        if (nums[i] > 0) {
+          subtract(nums, nums[i], i);
+          ans++;
+        }
+      }
+      return ans;
+    }
+
+    const subtract = (nums, x, startIndex) => {
+      const length = nums.length;
+      for (let i = startIndex; i < length; i++) {
+        nums[i] -= x;
+      }
+    };
+
+    // 方法二：哈希集合
+    // 时间复杂度：O(n)
+    // 空间复杂度：O(n)
+    var minimumOperations = function (nums) {
+      const set = new Set();
+      for (const num of nums) {
+        if (num > 0) {
+          set.add(num);
+        }
+      }
+      return set.size;
+    };
+  </script>
+</body>
+
+</html>
