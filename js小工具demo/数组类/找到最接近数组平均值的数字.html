@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    // 1.获取数组平均值
+    function getAverage(arr) {
+      const average = arr.reduce((acc, val) => acc + val, 0) / arr.length;
+      return average;
+    }
+
+    // 2.找到距离目标最近的元素
+    function getClosest(array, target) {
+      let closest = array.sort((a, b) => Math.abs(target - a) - Math.abs(target - b))[0];
+      return closest;
+    }
+
+    // test
+    let array = [15, 10, 15, 20, 21, 30, 35];
+    const average = getAverage(array);
+    const closetItem = getClosest(array, average);
+    console.log("average", average)
+    console.log("closetItem", closetItem)
+  </script>
+</body>
+
+</html>
