@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    // 符串abcd123ABCD456   怎么转换为 ABCD321abcd654
+    // 数字要倒序 小写转大写, 大写转小写
+
+    Array.prototype.reverse = function () {
+      var tmp;
+      for (var i = 0, j = this.length - 1; i < j; i++, j--) {
+        tmp = this[i];
+        this[i] = this[j];
+        this[j] = tmp;
+      }
+      return this;
+    };
+
+    function foo(s) {
+      let code;
+      let a = []; // 二维数组
+      let b;
+      let last = 0;
+
+      for (var i = 0; i < s.length; i++) {
+        // 统一用ASCII码存储
+        code = s.charCodeAt(i);
+        // a-z A-Z
+        if ((97 <= code && code <= 97 + 26 - 1) || (65 <= code && code <= 65 + 26 - 1)) {
+          if (last !== 1) {
+            b = [], b.push(code), a.push(b);
+          } else {
+            a[a.length - 1].push(code);
+          }
+          last = 1;
+        } else if (48 <= code && code <= 48 + 9) {
+          // 数字
+          if (last !== 2) {
+            b = [], b.push(code), a.push(b);
+          } else {
+            a[a.length - 1].push(code);
+          }
+          last = 2;
+        } else {
+          // 其他字符
+          if (last !== 0) {
+            b = [], b.push(code), a.push(b);
+          } else {
+            a[a.length - 1].push(code);
+          }
+          last = 0;
+        }
+      }
+
+      s = a.map(function (a) {
+        var c = a[0];
+        // 数字进行反转
+        if (48 <= c && c <= 48 + 9) {
+          return a.reverse();
+        } else if (97 <= c && c <= 97 + 26 - 1) {
+          // 小写字符变为大写
+          return a.map(function (c) {
+            return (c &= 0xdf);
+          });
+        } else if (48 <= c && c <= 48 + 26 - 1) {
+          // 大写字符变为小写
+          return a.map(function (c) {
+            return (c |= 0x20);
+          });
+        }
+        return a;
+      }).map(function (a) {
+        // ASCII转回字符
+        return a.map(function (c) {
+          return String.fromCharCode(c);
+        }).join('');
+      }).join('');
+      return s;
+    }
+
+    var s = "abcd123ABCD456";
+    console.log(foo(s));
+  </script>
+</body>
+
+</html>
