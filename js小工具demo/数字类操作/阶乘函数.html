@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    // 阶乘：从1开始，*2*3*4等等
+    function factorial(n) {
+      var result = 1,
+        i = 2;
+      while (i <= n) {
+        result *= i;
+        i++;
+      }
+      return result;
+    }
+
+    // test
+    console.log(factorial(3))
+    console.log(factorial(4))
+    console.log(factorial(5))
+  </script>
+</body>
+
+</html>
