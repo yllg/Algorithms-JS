@@ -21,11 +21,14 @@
       this.outStack = [];
     };
 
+    // 入队，放到 inStack中
     MyQueue.prototype.push = function (x) {
       this.inStack.push(x);
     };
 
+    // 出队
     MyQueue.prototype.pop = function () {
+      // outStack 为空，把 inStack 元素依次弹出，放到 outStack 中
       if (!this.outStack.length) {
         this.in2out();
       }
