@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    // 注意, s1和s2只含有x和y两种字符。交换只能发生在两个不同字符串之间，不能是同一个字符串内部
+
+    // 方法一：贪心
+    // 时间复杂度：O(n)
+    // 空间复杂度：O(1)
+    var minimumSwap = function (s1, s2) {
+      let xy = 0,
+        yx = 0;
+      const n = s1.length;
+      for (let i = 0; i < n; i++) {
+        const a = s1[i],
+          b = s2[i];
+        if (a === 'x' && b === 'y') {
+          xy++;
+        }
+        if (a === 'y' && b === 'x') {
+          yx++;
+        }
+      }
+      if ((xy + yx) % 2 === 1) {
+        return -1;
+      }
+      return Math.floor(xy / 2) + Math.floor(yx / 2) + xy % 2 + yx % 2;
+    };
+
+    // test
+    let s1 = "xx",
+      s2 = "yy";
+    console.log(minimumSwap(s1, s2))
+  </script>
+</body>
+
+</html>
