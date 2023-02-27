@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    // 方法一：贪心 + 分类讨论
+    // 时间复杂度：O(n)
+    // 空间复杂度：O(1)
+    var movesToMakeZigzag = function (nums) {
+      return Math.min(help(nums, 0), help(nums, 1));
+    }
+
+    const help = (nums, pos) => {
+      let res = 0;
+      for (let i = pos; i < nums.length; i += 2) {
+        let a = 0;
+        if (i - 1 >= 0) {
+          a = Math.max(a, nums[i] - nums[i - 1] + 1);
+        }
+        if (i + 1 < nums.length) {
+          a = Math.max(a, nums[i] - nums[i + 1] + 1);
+        }
+        res += a;
+      }
+      return res;
+    };
+
+    // test
+    let nums = [1, 2, 3];
+    console.log(movesToMakeZigzag(nums))
+  </script>
+</body>
+
+</html>
