@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    // 方法一：哈希表
+    // 时间复杂度：O((n+m)log(n+m))
+    // 空间复杂度：O(n+m)
+    var mergeSimilarItems = function (items1, items2) {
+      const map = new Map();
+      for (const v of items1) {
+        map.set(v[0], (map.get(v[0]) || 0) + v[1]);
+      }
+      for (const v of items2) {
+        map.set(v[0], (map.get(v[0]) || 0) + v[1]);
+      }
+
+      const res = [];
+      for (const [k, v] of map.entries()) {
+        const pair = [];
+        pair.push(k);
+        pair.push(v);
+        res.push(pair);
+      }
+      res.sort((a, b) => a[0] - b[0]);
+      return res;
+    };
+
+    // test
+    let items1 = [
+        [1, 1],
+        [4, 5],
+        [3, 8]
+      ],
+      items2 = [
+        [3, 1],
+        [1, 5]
+      ];
+    console.log(mergeSimilarItems(items1, items2))
+  </script>
+</body>
+
+</html>
