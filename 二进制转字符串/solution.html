@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    // 方法一：转换二进制数
+    // 时间复杂度：O(C)
+    // 空间复杂度：O(C)
+    var printBin = function (num) {
+      let sb = '0.';
+      while (sb.length <= 32 && num !== 0) {
+        num *= 2;
+        const digit = Math.floor(num);
+        sb += digit;
+        num -= digit;
+      }
+      return sb.length <= 32 ? sb : "ERROR";
+    };
+
+    // test
+    let num = 0.625;
+    console.log(printBin(num))
+  </script>
+</body>
+
+</html>
