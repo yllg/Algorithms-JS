@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    // 方法一：枚举
+    // 时间复杂度：O(n)
+    // 空间复杂度：O(1)
+    var minimumDeletions = function (s) {
+      let leftb = 0,
+        righta = 0;
+      for (let i = 0; i < s.length; i++) {
+        if (s[i] === 'a') {
+          righta++;
+        }
+      }
+      let res = righta;
+      for (let i = 0; i < s.length; i++) {
+        const c = s[i];
+        if (c === 'a') {
+          righta--;
+        } else {
+          leftb++;
+        }
+        res = Math.min(res, leftb + righta);
+      }
+      return res;
+    };
+
+    // test
+    let s = "aababbab";
+    console.log(minimumDeletions(s))
+  </script>
+</body>
+
+</html>
