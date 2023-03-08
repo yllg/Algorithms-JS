@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    // m*n的棋盘，左上角向右下角一步一步的拿礼物
+
+    // 方法一：动态规划
+    // 时间复杂度：O(mn)
+    // 空间复杂度：O(mn)
+    var maxValue = function (grid) {
+      const m = grid.length,
+        n = grid[0].length;
+      const f = new Array(2).fill(0).map(() => new Array(n).fill(0));
+      for (let i = 0; i < m; i++) {
+        const pos = i % 2;
+        for (let j = 0; j < n; j++) {
+          if (i > 0) {
+            f[pos][j] = Math.max(f[pos][j], f[1 - pos][j]);
+          }
+          if (j > 0) {
+            f[pos][j] = Math.max(f[pos][j], f[pos][j - 1]);
+          }
+          f[pos][j] += grid[i][j];
+        }
+      }
+      return f[(m - 1) % 2][n - 1];
+    };
+
+    // test
+    let grid = [
+      [1, 3, 1],
+      [1, 5, 1],
+      [4, 2, 1]
+    ];
+
+    console.log(maxValue(grid))
+  </script>
+</body>
+
+</html>
