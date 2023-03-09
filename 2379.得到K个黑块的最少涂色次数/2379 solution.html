@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    // 方法一：滑动窗口
+    // 时间复杂度：O(n)
+    // 空间复杂度：O(1)
+    var minimumRecolors = function (blocks, k) {
+      let l = 0,
+        r = 0,
+        cnt = 0;
+      while (r < k) {
+        cnt += blocks[r] === 'W' ? 1 : 0;
+        r++;
+      }
+      let res = cnt;
+      while (r < blocks.length) {
+        cnt += blocks[r] === 'W' ? 1 : 0;
+        cnt -= blocks[l] === 'W' ? 1 : 0;
+        res = Math.min(res, cnt);
+        l++;
+        r++;
+      }
+      return res;
+    };
+
+    // test
+    let blocks = "WBBWWBBWBW",
+      k = 7;
+    console.log(minimumRecolors(blocks, k))
+  </script>
+</body>
+
+</html>
