@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    /**
+     * 希尔排序
+     * 1.先将要排序的一组数按某个增量d（n/2,n为要排序数的个数）分成若干组，每组中记录的下标相差d.对每组中全部元素进行直接插入排序
+     * 2.然后再用一个较小的增量（d/2）对它进行分组，在每组中再进行直接插入排序。
+     * 3.当增量减到1时，进行直接插入排序后，排序完成。
+     */
+
+    function hillSort(arr) {
+      let len = arr.length;
+      for (let gap = parseInt(len / 2); gap >= 1; gap = parseInt(gap / 2)) {
+        for (let i = gap; i < len; i++) {
+          if (arr[i] < arr[i - gap]) {
+            let temp = arr[i];
+            let j = i - gap;
+            while (j >= 0 && arr[j] > temp) {
+              arr[j + gap] = arr[j];
+              j -= gap;
+            }
+            arr[j + gap] = temp;
+          }
+        }
+      }
+      return arr;
+    }
+
+    // test
+    var dataStore = [1, 8, 3, 2, 9, 5, 4, 7];
+    console.log(hillSort(dataStore));
+  </script>
+</body>
+
+</html>
