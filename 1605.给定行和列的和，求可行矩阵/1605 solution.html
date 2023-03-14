@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    // 方法一：贪心
+    // 时间复杂度：O(n×m)
+    // 空间复杂度：O(1)
+    var restoreMatrix = function (rowSum, colSum) {
+      const n = rowSum.length,
+        m = colSum.length;
+      const matrix = new Array(n).fill(0).map(() => new Array(m).fill(0));
+      let i = 0,
+        j = 0;
+      while (i < n && j < m) {
+        const v = Math.min(rowSum[i], colSum[j]);
+        matrix[i][j] = v;
+        rowSum[i] -= v;
+        colSum[j] -= v;
+        if (rowSum[i] === 0) {
+          ++i;
+        }
+        if (colSum[j] === 0) {
+          ++j;
+        }
+      }
+      return matrix;
+    };
+
+    // test
+    let rowSum = [3, 8],
+      colSum = [4, 7];
+    console.log(restoreMatrix(rowSum, colSum))
+  </script>
+</body>
+
+</html>
