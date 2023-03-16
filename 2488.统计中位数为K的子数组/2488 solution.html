@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    // 方法一：前缀和
+    // 时间复杂度：O(n)
+    // 空间复杂度：O(n)
+    var countSubarrays = function (nums, k) {
+      const n = nums.length;
+      let kIndex = -1;
+      for (let i = 0; i < n; i++) {
+        if (nums[i] === k) {
+          kIndex = i;
+          break;
+        }
+      }
+      let ans = 0;
+      const counts = new Map();
+      counts.set(0, 1);
+      let sum = 0;
+      for (let i = 0; i < n; i++) {
+        sum += sign(nums[i] - k);
+        if (i < kIndex) {
+          counts.set(sum, (counts.get(sum) || 0) + 1);
+        } else {
+          const prev0 = (counts.get(sum) || 0);
+          const prev1 = (counts.get(sum - 1) || 0);
+          ans += prev0 + prev1;
+        }
+      }
+      return ans;
+    }
+
+    const sign = (num) => {
+      if (num === 0) {
+        return 0;
+      }
+      return num > 0 ? 1 : -1;
+    };
+
+    // test
+    let nums = [3, 2, 1, 4, 5],
+      k = 4;
+    console.log(countSubarrays(nums, k))
+  </script>
+</body>
+
+</html>
