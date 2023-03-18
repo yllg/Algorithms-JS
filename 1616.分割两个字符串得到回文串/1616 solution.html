@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    // 方法一：双指针
+    // 时间复杂度：O(n)
+    // 空间复杂度：O(1)
+    var checkPalindromeFormation = function (a, b) {
+      return checkConcatenation(a, b) || checkConcatenation(b, a);
+    }
+
+    const checkConcatenation = (a, b) => {
+      const n = a.length;
+      let left = 0,
+        right = n - 1;
+      while (left < right && a[left] === b[right]) {
+        left++;
+        right--;
+      }
+      if (left >= right) {
+        return true;
+      }
+      return checkSelfPalindrome(a, left, right) || checkSelfPalindrome(b, left, right);
+    }
+
+    const checkSelfPalindrome = (a, left, right) => {
+      while (left < right && a[left] === a[right]) {
+        left++;
+        right--;
+      }
+      return left >= right;
+    };
+
+    // test
+    let a = "x",
+      b = "y";
+    console.log(checkPalindromeFormation(a, b))
+  </script>
+</body>
+
+</html>
