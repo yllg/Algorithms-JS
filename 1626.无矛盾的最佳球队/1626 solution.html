@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.21/lodash.min.js"></script>
+  <script>
+    // 如果一名年龄较小球员的分数 严格大于 一名年龄较大的球员，则存在矛盾。
+
+    // 方法一：动态规划
+    // 时间复杂度：O(n^2)
+    // 空间复杂度：O(n)
+    var bestTeamScore = function (scores, ages) {
+      const n = scores.length;
+      const people = new Array(n).fill(0).map(() => new Array(2).fill(0));
+      for (let i = 0; i < n; ++i) {
+        people[i] = [scores[i], ages[i]];
+      }
+      people.sort((a, b) => a[0] !== b[0] ? a[0] - b[0] : a[1] - b[1]);
+      const dp = new Array(n).fill(0);
+      let res = 0;
+      for (let i = 0; i < n; ++i) {
+        for (let j = i - 1; j >= 0; --j) {
+          if (people[j][1] <= people[i][1]) {
+            dp[i] = Math.max(dp[i], dp[j]);
+          }
+        }
+        dp[i] += people[i][0];
+        res = Math.max(res, dp[i]);
+      }
+      return res;
+    };
+
+    // 方法二：动态规划【树状数组优化】
+    // 时间复杂度：O(n×logn)
+    // 空间复杂度：O(n)
+    var bestTeamScore = function (scores, ages) {
+      const maxAge = _.max(ages);
+      const t = new Array(maxAge + 1).fill(0);
+      let res = 0;
+      const n = scores.length;
+      const people = new Array(n).fill(0).map(() => new Array(2).fill(0));
+      for (let i = 0; i < n; ++i) {
+        people[i] = [scores[i], ages[i]];
+      }
+      people.sort((a, b) => a[0] !== b[0] ? a[0] - b[0] : a[1] - b[1]);
+
+      const lowbit = (x) => {
+        return x & (-x);
+      }
+
+      const update = (i, val) => {
+        for (; i <= maxAge; i += lowbit(i)) {
+          t[i] = Math.max(t[i], val);
+        }
+      }
+
+      const query = (i) => {
+        let ret = 0;
+        for (; i > 0; i -= lowbit(i)) {
+          ret = Math.max(ret, t[i]);
+        }
+        return ret;
+      };
+
+      for (let i = 0; i < n; ++i) {
+        const score = people[i][0],
+          age = people[i][1],
+          cur = score + query(age);
+        update(age, cur);
+        res = Math.max(res, cur);
+      }
+      return res;
+    }
+
+    // test
+    let scores = [1, 3, 5, 10, 15],
+      ages = [1, 2, 3, 4, 5];
+    console.log(bestTeamScore(scores, ages))
+  </script>
+</body>
+
+</html>
