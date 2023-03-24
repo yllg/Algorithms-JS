@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    // 方法一：前缀和
+    // 时间复杂度：O(n)
+    // 空间复杂度：O(n)
+    var minSubarray = function (nums, p) {
+      let x = 0;
+      for (const num of nums) {
+        x = (x + num) % p;
+      }
+      if (x === 0) {
+        return 0;
+      }
+      const index = new Map();
+      let y = 0,
+        res = nums.length;
+      for (let i = 0; i < nums.length; i++) {
+        index.set(y, i); // f[i] mod p = y，因此哈希表记录 y 对应的下标为 i
+        y = (y + nums[i]) % p;
+        if (index.has((y - x + p) % p)) {
+          res = Math.min(res, i - index.get((y - x + p) % p) + 1);
+        }
+      }
+      return res === nums.length ? -1 : res;
+    };
+
+    // test
+    let nums = [6, 3, 5, 2],
+      p = 9
+    console.log(minSubarray(nums, p))
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    // 方法一：转换 + 前缀和
+    // 时间复杂度: O(n)
+    // 空间复杂度: O(n)
+    var findLongestSubarray = function (array) {
+      const indices = new Map();
+      indices.set(0, -1);
+      let sum = 0;
+      let maxLength = 0;
+      let startIndex = -1;
+      const n = array.length;
+      for (let i = 0; i < n; i++) {
+        if (isLetter(array[i][0])) {
+          sum++;
+        } else {
+          sum--;
+        }
+        if (indices.has(sum)) {
+          const firstIndex = indices.get(sum);
+          if (i - firstIndex > maxLength) {
+            maxLength = i - firstIndex;
+            startIndex = firstIndex + 1;
+          }
+        } else {
+          indices.set(sum, i);
+        }
+      }
+      if (maxLength === 0) {
+        return [];
+      }
+      return [...array.slice(startIndex, startIndex + maxLength)];
+    };
+
+    const isLetter = (ch) => {
+      return 'a' <= ch && ch <= 'z' || 'A' <= ch && ch <= 'Z';
+    }
+
+    // test
+    const array = ["A", "1", "B", "C", "D", "2", "3", "4", "E", "5", "F", "G", "6", "7", "H", "I", "J", "K", "L", "M"];
+    console.log(findLongestSubarray(array))
+  </script>
+</body>
+
+</html>

@@ -9,6 +9,27 @@
 
 <body>
   <script>
+    // 简易版1
+    function parseParam1(url) {
+      let reg = /([^?&=]+)=([^?&=]+)/g
+      let obj = {}
+      url.replace(reg, function () {
+        obj[arguments[1]] = arguments[2]
+      })
+      return obj
+    }
+
+    // 简易版2
+    function parseParam2(url) {
+      let obj = {}
+      // const search = window.location.search
+      url.replace(/([^&=?]+)=([^&]+)/g, (m, $1, $2) => {
+        obj[$1] = decodeURIComponent($2)
+      })
+      return obj
+    }
+
+    // 完善版本
     function parseParam(url) {
       const paramsStr = url.split("?")[1]; // 将？后面的字符串取出来
       const paramsArr = paramsStr.split("&"); // 将字符串以 & 分割后存到数组中
@@ -37,7 +58,9 @@
 
     // test 
     let urlStr = 'http://www.inode.club?name=yllg&study=js&study=node&chinese';
-    console.log(parseParam(urlStr))
+    console.log(parseParam1(urlStr)) // {name: 'yllg', study: 'node'}
+    console.log(parseParam2(urlStr)) // {name: 'yllg', study: 'node'}
+    console.log(parseParam(urlStr)) // {name: 'yllg', study: [js, node], chinese: true}
   </script>
 </body>
 

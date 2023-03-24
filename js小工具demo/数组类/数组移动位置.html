@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    /** 移动方法
+     * list: 原数组
+     * newIndex: 想要移到的位置索引
+     * oldIndex: 初始的位置索引
+     */
+    function move(list, newIndex, oldIndex) {
+      list.splice(newIndex, 0, list.splice(oldIndex, 1)[0])
+      /** splice 会更改原来数组的数据 */
+      /**  list.splice(oldIndex, 1)[0] 删除旧数据位置返回删除的数据 */
+      /** list.splice(newIndex, 0, old)  相当于把删除的旧数据插入到新的位置上去 */
+    }
+
+    // test
+    const list1 = [1, 2, 3, 4, 5];
+    // 把数字3移到第一位，第一位的索引是0，3的索引是2，
+    move(list1, 0, 2);
+    console.log(list1)
+
+    const list2 = [1, 2, 3, 4, 5];
+    // 把数字5移到第二位，第二位的索引是1，5的索引是4
+    move(list2, 1, 4);
+    console.log(list2)
+  </script>
+</body>
+
+</html>

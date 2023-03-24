@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    // 方法一：动态规划
+    // 时间复杂度：O(n*2^n)
+    // 空间复杂度：O(n)
+    var countSubgraphsForEachDiameter = function (n, edges) {
+      const adj = new Array(n).fill(0);
+      for (let i = 0; i < n; i++) {
+        adj[i] = [];
+      }
+      for (const edge of edges) {
+        const x = edge[0] - 1;
+        const y = edge[1] - 1;
+        adj[x].push(y);
+        adj[y].push(x);
+      }
+
+      const ans = new Array(n - 1).fill(0);
+      for (let i = 1; i < (1 << n); i++) {
+        const root = 32 - numberOfLeadingZeros(i) - 1;
+        mask = i;
+        diameter = 0;
+        dfs(root, adj);
+        if (mask === 0 && diameter > 0) {
+          ans[diameter - 1]++;
+        }
+      }
+      return ans;
+    }
+
+    const dfs = (root, adj) => {
+      let first = 0,
+        second = 0;
+      mask &= ~(1 << root);
+      for (const vertex of adj[root]) {
+        if ((mask & (1 << vertex)) !== 0) {
+          mask &= ~(1 << vertex);
+          const distance = 1 + dfs(vertex, adj);
+          if (distance > first) {
+            second = first;
+            first = distance;
+          } else if (distance > second) {
+            second = distance;
+          }
+        }
+      }
+      diameter = Math.max(diameter, first + second);
+      return first;
+    };
+
+    const numberOfLeadingZeros = (i) => {
+      if (i === 0)
+        return 32;
+      let n = 1;
+      if (i >>> 16 === 0) {
+        n += 16;
+        i <<= 16;
+      }
+      if (i >>> 24 === 0) {
+        n += 8;
+        i <<= 8;
+      }
+      if (i >>> 28 === 0) {
+        n += 4;
+        i <<= 4;
+      }
+      if (i >>> 30 === 0) {
+        n += 2;
+        i <<= 2;
+      }
+      n -= i >>> 31;
+      return n;
+    }
+
+    // 方法二：深度优先搜索
+    // 时间复杂度：O(n*2^n)
+    // 空间复杂度：O(n)
+    var countSubgraphsForEachDiameter = function (n, edges) {
+      const adj = new Array(n).fill(0);
+      for (let i = 0; i < n; i++) {
+        adj[i] = [];
+      }
+      for (const edge of edges) {
+        const x = edge[0] - 1;
+        const y = edge[1] - 1;
+        adj[x].push(y);
+        adj[y].push(x);
+      }
+
+      const ans = new Array(n - 1).fill(0);
+      for (let i = 1; i < (1 << n); i++) {
+        const x = 32 - numberOfLeadingZeros(i) - 1;
+        let mask = i;
+        let y = -1;
+        const queue = [x];
+        mask &= ~(1 << x);
+        while (queue.length) {
+          y = queue.shift();
+          for (const vertex of adj[y]) {
+            if ((mask & (1 << vertex)) !== 0) {
+              mask &= ~(1 << vertex);
+              queue.push(vertex);
+            }
+          }
+        }
+        if (mask === 0) {
+          const diameter = dfs(adj, -1, y, i);
+          if (diameter > 0) {
+            ans[diameter - 1]++;
+          }
+        }
+      }
+      return ans;
+    }
+
+    const dfs = (adj, parent, u, mask) => {
+      let depth = 0;
+      for (const v of adj[u]) {
+        if (v !== parent && (mask & (1 << v)) !== 0) {
+          depth = Math.max(depth, 1 + dfs(adj, u, v, mask));
+        }
+      }
+      return depth;
+    }
+    const numberOfLeadingZeros = (i) => {
+      if (i === 0)
+        return 32;
+      let n = 1;
+      if (i >>> 16 === 0) {
+        n += 16;
+        i <<= 16;
+      }
+      if (i >>> 24 === 0) {
+        n += 8;
+        i <<= 8;
+      }
+      if (i >>> 28 === 0) {
+        n += 4;
+        i <<= 4;
+      }
+      if (i >>> 30 === 0) {
+        n += 2;
+        i <<= 2;
+      }
+      n -= i >>> 31;
+      return n;
+    }
+
+    // 方法三：枚举任意两点直径
+    // 时间复杂度：O(n^3)
+    // 空间复杂度：O(n^2)
+    var countSubgraphsForEachDiameter = function (n, edges) {
+      const adj = new Array(n).fill(0);
+      const dist = new Array(n).fill(0).map(() => new Array(n).fill(Number.MAX_SAFE_INTEGER));
+      for (let i = 0; i < n; i++) {
+        dist[i][i] = 0;
+      }
+      for (let i = 0; i < n; i++) {
+        adj[i] = [];
+      }
+      for (const edge of edges) {
+        const x = edge[0] - 1;
+        const y = edge[1] - 1;
+        adj[x].push(y);
+        adj[y].push(x);
+        dist[x][y] = dist[y][x] = 1;
+      }
+      for (let i = 0; i < n; i++) {
+        for (let j = 0; j < n; j++) {
+          for (let k = 0; k < n; k++) {
+            if (dist[j][i] !== Number.MAX_VALUE && dist[i][k] !== Number.MAX_VALUE) {
+              dist[j][k] = Math.min(dist[j][k], dist[j][i] + dist[i][k]);
+            }
+          }
+        }
+      }
+      const ans = new Array(n - 1).fill(0);
+      for (let i = 0; i < n - 1; i++) {
+        for (let j = i + 1; j < n; j++) {
+          ans[dist[i][j] - 1] += dfs(adj, dist, i, -1, i, j);
+        }
+      }
+      return ans;
+    }
+
+    const dfs = (adj, dist, u, parent, x, y) => {
+      if (dist[u][x] > dist[x][y] || dist[u][y] > dist[x][y]) {
+        return 1;
+      }
+      if ((dist[u][y] === dist[x][y] && u < x) || (dist[u][x] === dist[x][y] && u < y)) {
+        return 1;
+      }
+      let ret = 1;
+      for (const v of adj[u]) {
+        if (v !== parent) {
+          ret *= dfs(adj, dist, v, u, x, y);
+        }
+      }
+      if (dist[u][x] + dist[u][y] > dist[x][y]) {
+        ret++;
+      }
+      return ret;
+    }
+    const numberOfLeadingZeros = (i) => {
+      if (i === 0)
+        return 32;
+      let n = 1;
+      if (i >>> 16 === 0) {
+        n += 16;
+        i <<= 16;
+      }
+      if (i >>> 24 === 0) {
+        n += 8;
+        i <<= 8;
+      }
+      if (i >>> 28 === 0) {
+        n += 4;
+        i <<= 4;
+      }
+      if (i >>> 30 === 0) {
+        n += 2;
+        i <<= 2;
+      }
+      n -= i >>> 31;
+      return n;
+    }
+  </script>
+</body>
+
+</html>

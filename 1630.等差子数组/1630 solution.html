@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    // 给出数组、左右索引边界，子数组是否能重新排列为等差数组
+
+    // 方法一：多次遍历 + 枚举
+    // 时间复杂度：O(nm)
+    // 空间复杂度：O(n)
+    var checkArithmeticSubarrays = function (nums, l, r) {
+      const n = l.length;
+      const ans = [];
+      for (let i = 0; i < n; ++i) {
+        let left = l[i],
+          right = r[i];
+        let minv = nums[left],
+          maxv = nums[left];
+        for (let j = left + 1; j <= right; ++j) {
+          minv = Math.min(minv, nums[j]);
+          maxv = Math.max(maxv, nums[j]);
+        }
+
+        if (minv === maxv) {
+          ans.push(true);
+          continue;
+        }
+        if ((maxv - minv) % (right - left) !== 0) {
+          ans.push(false);
+          continue;
+        }
+
+        const d = (maxv - minv) / (right - left);
+        let flag = true;
+        const seen = new Array(right - left + 1).fill(0);
+        for (let j = left; j <= right; ++j) {
+          if ((nums[j] - minv) % d !== 0) {
+            flag = false;
+            break;
+          }
+          const t = Math.floor((nums[j] - minv) / d);
+          if (seen[t]) {
+            flag = false;
+            break;
+          }
+          seen[t] = true;
+        }
+        ans.push(flag);
+      }
+      return ans;
+    };
+
+    // test
+    let nums = [4, 6, 5, 9, 3, 7],
+      l = [0, 0, 2],
+      r = [2, 3, 5];
+    console.log(checkArithmeticSubarrays(nums, l, r))
+  </script>
+</body>
+
+</html>

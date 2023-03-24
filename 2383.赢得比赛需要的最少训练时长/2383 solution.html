@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    // 方法一：模拟
+    // 时间复杂度：O(n)
+    // 空间复杂度：O(1)
+    var minNumberOfHours = function (initialEnergy, initialExperience, energy, experience) {
+      let sum = 0;
+      for (const e of energy) {
+        sum += e;
+      }
+      let trainingHours = initialEnergy > sum ? 0 : sum + 1 - initialEnergy;
+      for (const e of experience) {
+        if (initialExperience <= e) {
+          trainingHours += 1 + (e - initialExperience);
+          initialExperience = 2 * e + 1;
+        } else {
+          initialExperience += e;
+        }
+      }
+      return trainingHours;
+    };
+
+    // test
+    const initialEnergy = 5,
+      initialExperience = 3,
+      energy = [1, 4, 3, 2],
+      experience = [2, 6, 3, 1];
+
+    console.log(minNumberOfHours(initialEnergy, initialExperience, energy, experience))
+  </script>
+</body>
+
+</html>
