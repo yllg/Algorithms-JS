@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    // 删除一个子数组（可以为空），使得 arr 中剩下的元素是 非递减 的。
+
+    // 方法一：双指针
+    // 时间复杂度：O(n)
+    // 空间复杂度：O(1)
+    var findLengthOfShortestSubarray = function (arr) {
+      let n = arr.length,
+        j = n - 1;
+      while (j > 0 && arr[j - 1] <= arr[j]) {
+        j--;
+      }
+      if (j === 0) {
+        return 0;
+      }
+      let res = j;
+      for (let i = 0; i < n; i++) {
+        while (j < n && arr[j] < arr[i]) {
+          j++;
+        }
+        res = Math.min(res, j - i - 1);
+        if (i + 1 < n && arr[i] > arr[i + 1]) {
+          break;
+        }
+      }
+      return res;
+    };
+
+    // test
+    let arr = [1, 2, 3, 10, 4, 2, 3, 5];
+    console.log(findLengthOfShortestSubarray(arr))
+  </script>
+</body>
+
+</html>
