@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    // 方法一：哈希表
+    // 时间复杂度: O(n)
+    // 空间复杂度: O(n)
+    var findSubarrays = function (nums) {
+      const n = nums.length;
+      const seen = new Set();
+      for (let i = 0; i < n - 1; ++i) {
+        let sum = nums[i] + nums[i + 1];
+        if (seen.has(sum)) {
+          return true;
+        }
+        seen.add(sum);
+      }
+      return false;
+    };
+
+    // test
+    let nums = [4, 2, 4];
+    console.log(findSubarrays(nums))
+  </script>
+</body>
+
+</html>
