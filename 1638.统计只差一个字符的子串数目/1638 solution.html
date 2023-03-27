@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    // 方法一：枚举
+    // 时间复杂度: O(m×n×min(m,n))
+    // 空间复杂度: O(1)
+    var countSubstrings = function (s, t) {
+      const m = s.length,
+        n = t.length;
+      let ans = 0;
+      for (let i = 0; i < m; i++) {
+        for (let j = 0; j < n; j++) {
+          let diff = 0;
+          for (let k = 0; i + k < m && j + k < n; k++) {
+            diff += s[i + k] === t[j + k] ? 0 : 1;
+            if (diff > 1) {
+              break;
+            } else if (diff === 1) {
+              ans++;
+            }
+          }
+        }
+      }
+      return ans;
+    };
+
+    // 方法二：动态规划
+    // 时间复杂度：O(m×n)
+    // 空间复杂度：O(m×n)
+    var countSubstrings = function (s, t) {
+      const m = s.length,
+        n = t.length;
+      const dpl = new Array(m + 1).fill(0).map(() => new Array(n + 1).fill(0));
+      const dpr = new Array(m + 1).fill(0).map(() => new Array(n + 1).fill(0));
+      for (let i = 0; i < m; i++) {
+        for (let j = 0; j < n; j++) {
+          dpl[i + 1][j + 1] = s[i] === t[j] ? (dpl[i][j] + 1) : 0;
+        }
+      }
+      for (let i = m - 1; i >= 0; i--) {
+        for (let j = n - 1; j >= 0; j--) {
+          dpr[i][j] = s[i] === t[j] ? (dpr[i + 1][j + 1] + 1) : 0;
+        }
+      }
+      let ans = 0;
+      for (let i = 0; i < m; i++) {
+        for (let j = 0; j < n; j++) {
+          if (s[i] !== t[j]) {
+            ans += (dpl[i][j] + 1) * (dpr[i + 1][j + 1] + 1);
+          }
+        }
+      }
+      return ans;
+    };
+
+    // test
+    let s = "aba",
+      t = "baba";
+    console.log(countSubstrings(s, t))
+  </script>
+</body>
+
+</html>
