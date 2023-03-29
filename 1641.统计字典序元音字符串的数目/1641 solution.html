@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    // 返回长度为 n 、仅由元音 (a, e, i, o, u) 组成 且 按字典序排列 的字符串数量。
+
+    // 方法一：动态规划
+    // 时间复杂度：O(n×Σ)
+    // 空间复杂度：O(Σ)
+    var countVowelStrings = function (n) {
+      const dp = new Array(5).fill(1);
+      for (let i = 1; i < n; i++) {
+        for (let j = 1; j < 5; j++) {
+          dp[j] += dp[j - 1];
+        }
+      }
+      return _.sum(dp);
+    };
+
+    // 方法二：组合数学
+    var countVowelStrings = function (n) {
+      return (n + 1) * (n + 2) * (n + 3) * (n + 4) / 24;
+    };
+
+    // test
+    let n = 2;
+    console.log(countVowelStrings(n))
+  </script>
+</body>
+
+</html>
