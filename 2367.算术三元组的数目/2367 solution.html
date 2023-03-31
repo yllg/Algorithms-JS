@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    // 方法一：暴力枚举
+    // 时间复杂度：O(n^3)
+    // 空间复杂度：O(1)
+    var arithmeticTriplets = function (nums, diff) {
+      let ans = 0;
+      const n = nums.length;
+      for (let i = 0; i < n; i++) {
+        for (let j = i + 1; j < n; j++) {
+          if (nums[j] - nums[i] !== diff) {
+            continue;
+          }
+          for (let k = j + 1; k < n; k++) {
+            if (nums[k] - nums[j] === diff) {
+              ans++;
+            }
+          }
+        }
+      }
+      return ans;
+    };
+
+    // 方法二：哈希集合
+    // 时间复杂度：O(n)
+    // 空间复杂度：O(n)
+    var arithmeticTriplets = function (nums, diff) {
+      const set = new Set();
+      for (const x of nums) {
+        set.add(x);
+      }
+      let ans = 0;
+      for (const x of nums) {
+        if (set.has(x + diff) && set.has(x + 2 * diff)) {
+          ans++;
+        }
+      }
+      return ans;
+    };
+
+    // 方法三：三指针
+    // 时间复杂度：O(n)
+    // 空间复杂度：O(1)
+    var arithmeticTriplets = function (nums, diff) {
+      let ans = 0;
+      const n = nums.length;
+      for (let i = 0, j = 1, k = 2; i < n - 2 && j < n - 1 && k < n; i++) {
+        j = Math.max(j, i + 1);
+        while (j < n - 1 && nums[j] - nums[i] < diff) {
+          j++;
+        }
+        if (j >= n - 1 || nums[j] - nums[i] > diff) {
+          continue;
+        }
+        k = Math.max(k, j + 1);
+        while (k < n && nums[k] - nums[j] < diff) {
+          k++;
+        }
+        if (k < n && nums[k] - nums[j] === diff) {
+          ans++;
+        }
+      }
+      return ans;
+    };
+
+    // test
+    let nums = [0, 1, 4, 6, 7, 10],
+      diff = 3;
+    console.log(arithmeticTriplets(nums, diff))
+  </script>
+</body>
+
+</html>
