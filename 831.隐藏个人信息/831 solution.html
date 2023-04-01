@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    // 方法一：模拟
+    // 时间复杂度: O(n)
+    // 空间复杂度: O(n)
+    const country = ["", "+*-", "+**-", "+***-"];
+
+    var maskPII = function (s) {
+      const at = s.indexOf("@");
+      if (at > 0) {
+        s = s.toLowerCase();
+        return (s[0] + "*****" + s.substring(at - 1)).toLowerCase();
+      }
+      let sb = "";
+      for (let i = 0; i < s.length; i++) {
+        const c = s.charAt(i);
+        if ('0' <= c && c <= '9') {
+          sb += c;
+        }
+      }
+      s = sb.toString();
+      return country[s.length - 10] + "***-***-" + s.substring(s.length - 4);
+    };
+
+    // test
+    let s = "LeetCode@LeetCode.com";
+    console.log(maskPII(s))
+  </script>
+</body>
+
+</html>
