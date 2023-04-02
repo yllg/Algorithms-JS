@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    // 方法一：动态规划
+    // 时间复杂度：O(n^3)
+    // 空间复杂度：O(n^2)
+    var minScoreTriangulation = function (values) {
+      const n = values.length;
+      const memo = new Map();
+      const dp = (i, j) => {
+        if (i + 2 > j) {
+          return 0;
+        }
+        if (i + 2 === j) {
+          return values[i] * values[i + 1] * values[j];
+        }
+        const key = i * n + j;
+        if (!memo.has(key)) {
+          let minScore = Number.MAX_VALUE;
+          for (let k = i + 1; k < j; k++) {
+            minScore = Math.min(minScore, values[i] * values[k] * values[j] + dp(i, k) + dp(k, j));
+          }
+          memo.set(key, minScore);
+        }
+        return memo.get(key);
+      }
+      return dp(0, n - 1);
+    };
+
+    // test
+    let values = [1, 2, 3];
+    console.log(minScoreTriangulation(values))
+  </script>
+</body>
+
+</html>
