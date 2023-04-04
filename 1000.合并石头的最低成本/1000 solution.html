@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    // 方法一：动态规划
+    // 时间复杂度：O(n^3)
+    // 空间复杂度：O(n^2)
+    const INF = 0x3f3f3f3f;
+    var mergeStones = function (stones, k) {
+      const n = stones.length;
+      if ((n - 1) % (k - 1) !== 0) {
+        return -1;
+      }
+
+      const d = new Array(n).fill(0).map(() => new Array(n).fill(INF));
+      const sum = new Array(n).fill(0);
+
+      for (let i = 0, s = 0; i < n; i++) {
+        d[i][i] = 0;
+        s += stones[i];
+        sum[i] = s;
+      }
+
+      for (let len = 2; len <= n; len++) {
+        for (let l = 0; l < n && l + len - 1 < n; l++) {
+          let r = l + len - 1;
+          for (let p = l; p < r; p += k - 1) {
+            d[l][r] = Math.min(d[l][r], d[l][p] + d[p + 1][r]);
+          }
+          if ((r - l) % (k - 1) === 0) {
+            d[l][r] += sum[r] - (l === 0 ? 0 : sum[l - 1]);
+          }
+        }
+      }
+      return d[0][n - 1];
+    };
+
+    // test
+    let stones = [3, 2, 4, 1],
+      k = 2;
+    console.log(mergeStones(stones, k))
+  </script>
+</body>
+
+</html>
