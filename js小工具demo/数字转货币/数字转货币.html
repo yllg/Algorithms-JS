@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    /**
+     * JavaScript 提供了 Intl.NumberFormat 对象，它允许您以本地化语言的方式格式化数字。
+     * 
+     * 可以处理 ~ 角度、面积、长度、字节、时间、质量、温度、容器、货币等等
+     * https://zhuanlan.zhihu.com/p/356991916
+     * https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Intl/NumberFormat
+     * 
+     * 它提供的选项之一是将数字格式化为货币。
+      此函数接受 3 个参数：
+      num — 要格式化的数字。
+      currency — 要格式化为的货币 — 默认设置为“CNY”，因为我们的业务主要需要处理基于人民币的价格。
+      locale — 默认设置为“zh-CN'”，因为我们的业务是人民币的信息。
+    */
+
+    function convertToCurrency(num, currency = 'CNY', locale = 'zh-CN') {
+      const formatter = new Intl.NumberFormat(locale, {
+        style: 'currency',
+        currency: currency
+      });
+      return formatter.format(num);
+    }
+
+    // test
+    const value1 = convertToCurrency('1799.99');
+    console.log(value1) // ¥1,799.99
+  </script>
+</body>
+
+</html>
