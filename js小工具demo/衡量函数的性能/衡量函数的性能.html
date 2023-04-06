@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    /**
+     * name — 标签的名称显示在控制台中。
+     * fn — 您要衡量其性能的函数。
+     * 任何额外的参数——你正在调用的函数的参数。
+     */
+    function measurePerformance(name, fn, ...args) {
+      if (typeof fn !== "function") {
+        console.error(`Provide a valid function, ${typeof fn} provided`)
+        return;
+      }
+      console.time(name)
+      fn.bind(this, ...args);
+      console.timeEnd(name)
+    }
+
+    function multiply(a, b) {
+      return a * b;
+    }
+
+    measurePerformance('Multiply method', multiply, 7, 10);
+  </script>
+</body>
+
+</html>
