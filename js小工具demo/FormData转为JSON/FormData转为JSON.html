@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <form action="post">
+    <div class="row">
+      <label for="name">Name</label>
+      <input type="text" id="name" name="name" placeholder="John Doe">
+    </div>
+
+    <div class="row">
+      <label for="email">E-mail Address</label>
+      <input type="email" id="email" name="email" placeholder="johndoe@gmail.com">
+    </div>
+
+    <div class="row">
+      <label for="phone">Phone Number</label>
+      <input type="tel" id="phone" name="phone" placeholder="+316-12345678">
+    </div>
+
+    <div class="row">
+      <label for="interests1">Interests</label>
+      <div class="checkbox">
+        <input type="checkbox" name="interests" id="interests1" value="Programming">
+        <label for="interests1">Programming</label>
+      </div>
+
+      <div class="checkbox">
+        <input type="checkbox" name="interests" id="interests2" value="Golf">
+        <label for="interests2">Golf</label>
+      </div>
+
+      <div class="checkbox">
+        <input type="checkbox" name="interests" id="interests3" value="Traveling">
+        <label for="interests3">Traveling</label>
+      </div>
+
+      <div class="checkbox">
+        <input type="checkbox" name="interests" id="interests4" value="Reading">
+        <label for="interests4">Reading</label>
+      </div>
+
+      <div class="checkbox">
+        <input type="checkbox" name="interests" id="interests5" value="Writing">
+        <label for="interests5">Writing</label>
+      </div>
+    </div>
+
+    <div class="row">
+      <button type="submit">Submit</button>
+    </div>
+  </form>
+  <script>
+    function convertFormdataToJsonObject(formData) {
+      const data = {};
+      for (const [key, value] of formData.entries()) {
+        if (Object.prototype.hasOwnProperty.call(data, key)) {
+          const oldValue = data[key];
+          if (!Array.isArray(data[key])) {
+            data[key] = [];
+            data[key].push(oldValue);
+          }
+          data[key].push(value);
+          continue;
+        }
+        data[key] = value;
+      }
+      return data;
+    }
+
+    const form = document.querySelector('form');
+    form.addEventListener('submit', (event) => {
+      event.preventDefault();
+      const formData = new FormData(form);
+      const json = convertFormdataToJsonObject(formData);
+      console.log(json);
+    });
+  </script>
+</body>
+
+</html>
