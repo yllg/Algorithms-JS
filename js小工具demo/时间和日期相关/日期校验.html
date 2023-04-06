@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    function isDateValid(date) {
+      return !Number.isNaN(date.getTime());
+    }
+
+    function getDayOfWeek(date) {
+      if (isDateValid(date) === false) {
+        throw new Error('Invalid date submitted');
+      }
+
+      return date.toLocaleString(
+        'default', {
+          weekday: 'long'
+        }
+      );
+    }
+
+    const date1 = new Date('2022-09-05');
+    const date2 = new Date('not valid date string');
+
+    console.log(getDayOfWeek(date1)); // Outputs: Monday
+    console.log(getDayOfWeek(date2)); // Outputs: Error
+  </script>
+</body>
+
+</html>
