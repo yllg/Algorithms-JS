@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    /**
+     * content — 要转换为对象的 HTML 字符串。
+     * 选择器——您想要接收的内容的选择器——DOMParser 对象将创建一个完整的 HTML Object。如果您只想要某个元素，您可以传入选择器，例如“section”，您将收到该元素。
+     */
+    function parseStringAsHtml(
+      content,
+      selector
+    ) {
+      const domParser = new DOMParser();
+      const parsed = domParser.parseFromString(content, 'text/html');
+
+      return parsed.querySelector(selector);
+    }
+
+    // test
+    const htmlString = `
+      <article>
+        <header><h1>Article Heading</h1></header>
+        
+        <div>
+          <p>Article main content</p>
+        </div>
+        
+        <footer><small>Article footer</small></footer>
+      </article>
+    `;
+    const articleHtml = parseStringAsHtml(htmlString, 'article');
+    console.log(articleHtml)
+    const footerHtml = parseStringAsHtml(htmlString, 'footer');
+    console.log(footerHtml)
+  </script>
+</body>
+
+</html>
