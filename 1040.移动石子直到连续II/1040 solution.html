@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    // 方法一：双指针
+    // 时间复杂度：O(nlogn)
+    // 空间复杂度：O(logn)
+    var numMovesStonesII = function (stones) {
+      let n = stones.length;
+      stones.sort((a, b) => a - b);
+      if (stones[n - 1] - stones[0] + 1 == n) {
+        return [0, 0];
+      }
+      let ma = Math.max(stones[n - 2] - stones[0] + 1, stones[n - 1] - stones[1] + 1) - (n - 1);
+      let mi = n;
+      let j = 0;
+      for (let i = 0; i < n; i++) {
+        while (j + 1 < n && stones[j + 1] - stones[i] + 1 <= n) {
+          j++;
+        }
+        if (j - i + 1 == n - 1 && stones[j] - stones[i] + 1 == n - 1) {
+          mi = Math.min(mi, 2);
+        } else {
+          mi = Math.min(mi, n - (j - i + 1));
+        }
+      }
+      return [mi, ma];
+    };
+
+    // test
+    let stones = [7, 4, 9];
+    console.log(numMovesStonesII(stones))
+  </script>
+</body>
+
+</html>
