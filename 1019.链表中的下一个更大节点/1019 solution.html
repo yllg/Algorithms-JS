@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    // 方法一：单调栈
+    // 时间复杂度：O(n)
+    // 空间复杂度：O(n)
+    var nextLargerNodes = function (head) {
+      const ans = [];
+      const stack = [];
+
+      let cur = head;
+      let idx = -1;
+      while (cur) {
+        ++idx;
+        ans.push(0);
+        while (stack.length && stack[stack.length - 1][0] < cur.val) {
+          ans[stack.pop()[1]] = cur.val;
+        }
+        stack.push([cur.val, idx]);
+        cur = cur.next;
+      }
+
+      const size = ans.length;
+      const arr = new Array(size);
+      for (let i = 0; i < size; ++i) {
+        arr[i] = ans[i];
+      }
+      return arr;
+    };
+  </script>
+</body>
+
+</html>
