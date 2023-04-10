@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    /**
+     * 输入 [a1a,bef345h,ccc]
+     * 默认逻辑是数字转*星号，第二个参数可以转换为自定义的处理逻辑
+     * 返回 [a*a,bef*,ccc]，[true, true, false]
+     */
+
+    /**
+     * formatFn
+     * 默认逻辑是数字转*星号
+     * return: 满足处理条件返回处理后的值，不满足就返回false
+     */
+    function defaultFormatFn(str) {
+      if (/\d{1,}/.test(str)) {
+        const result = str.replace(/\d{1,}/g, "*");
+        return result;
+      } else {
+        return false;
+      }
+    }
+
+    /**
+     * strArr: 字符串
+     * formatFn: 自定义的转换逻辑，默认数字转*号，也可以小写转大些，首字母大写等等
+     */
+    function transformStr(strArr, formatFn) {
+      if (!formatFn) {
+        formatFn = defaultFormatFn;
+      }
+      const result = {
+        strArr: [],
+        boolArr: []
+      }
+      strArr.forEach(str => {
+        const res = formatFn(str);
+        if (res === false) {
+          result.strArr.push(str); // 不满足就用原值
+          result.boolArr.push(false);
+        } else {
+          result.strArr.push(res); // 满足使用转换后的值
+          result.boolArr.push(true);
+        }
+      });
+      return result;
+    }
+
+    // test
+    const strArr = ["a1a", "bef345h", "ccc", "d12fff45h"];
+    console.log(transformStr(strArr))
+  </script>
+</body>
+
+</html>
