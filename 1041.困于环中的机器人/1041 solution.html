@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    // 重复指令，机器人在环形路线行走，返回true，否则返回false
+
+    // 方法一：模拟
+    // 时间复杂度：O(n)
+    // 空间复杂度：O(1)
+    var isRobotBounded = function (instructions) {
+      const direc = [
+        [0, 1],
+        [1, 0],
+        [0, -1],
+        [-1, 0]
+      ]
+      let direcIndex = 0
+      let x = 0,
+        y = 0
+      const n = instructions.length
+      for (let i = 0; i < n; i++) {
+        let instruction = instructions[i]
+        if (instruction === 'G') {
+          x += direc[direcIndex][0]
+          y += direc[direcIndex][1]
+        } else if (instruction === 'L') {
+          direcIndex += 3
+          direcIndex %= 4
+        } else {
+          direcIndex++
+          direcIndex %= 4
+        }
+      }
+      return direcIndex !== 0 || (x === 0 && y === 0)
+    }
+
+    // test
+    let instructions = "GGLLGG";
+    console.log(isRobotBounded(instructions))
+  </script>
+</body>
+
+</html>
