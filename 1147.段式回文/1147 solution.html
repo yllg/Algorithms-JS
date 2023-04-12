@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    /**
+     * 把字符串分成很多段，每一段为粒度，收尾相等，称为 ”段式回文“
+     */
+
+    // 方法一：贪心 + 双指针
+    // 时间复杂度：O(n^2)
+    // 空间复杂度：O(1)
+    var longestDecomposition = function (text) {
+      const n = text.length;
+      let res = 0;
+      let l = 0,
+        r = n - 1;
+      while (l <= r) {
+        let len = 1;
+        while (l + len - 1 < r - len + 1) {
+          if (judge(text, l, r - len + 1, len)) {
+            res += 2;
+            break;
+          }
+          ++len;
+        }
+        if (l + len - 1 >= r - len + 1) {
+          ++res;
+        }
+        l += len;
+        r -= len;
+      }
+      return res;
+    }
+
+    const judge = (text, l1, l2, len) => {
+      while (len > 0) {
+        if (text[l1] !== text[l2]) {
+          return false;
+        }
+        ++l1;
+        ++l2;
+        --len;
+      }
+      return true;
+    };
+
+    // TODO: 方法二：滚动哈希
+
+    // test
+    const text = "ghiabcdefhelloadamhelloabcdefghi";
+    console.log(longestDecomposition(text))
+  </script>
+</body>
+
+</html>
