@@ -44,8 +44,23 @@
         // Timeout 1
         // Timeout 2
 
-        // 解析：
-        // await是语法糖，其实还是两个promise各有两个then，会跳来跳去执行
+        /**
+         * 解析：
+         * await是语法糖，其实还是两个promise各有两个then，会跳来跳去执行
+         * 
+         * 分析过程
+            第一轮
+            宏任务：Last line 1、 
+            微任务：P1 P2 P1 P2 、Last line 2
+
+            第二轮
+            宏任务： Timeout 1
+            微：
+
+            第三轮
+            宏任务： Timeout 2
+            微：
+        */ 
     </script>
 </body>
 
