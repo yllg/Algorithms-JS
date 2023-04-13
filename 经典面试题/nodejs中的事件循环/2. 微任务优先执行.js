@@ -50,6 +50,28 @@ console.log('script end');
  * （3）setTimeout 1ms执行完加到 poll队列，去执行；里面的fs.readfile 2放到下一轮；
  * （4）poll队列为空，去执行 setImmediate
  * （5）文件读取完成 加入poll队列，输出 read file success 和 read file success 2
+ * 
+ * 
+ * 分析过程
+    第一轮：
+    宏任务  script start， script end       
+    微任务：nextTick callback、promise1、4、2、5、3、6
+
+    第二轮：
+    宏任务   setTimeout ; timer阶段执行   
+    微：
+
+    第三轮：
+    宏任务  setImmediate ; check阶段执行  
+    微：
+
+    第四轮：
+    宏任务 read file success ; 文件读取完成，进入 poll阶段
+    微：
+
+    第五轮：
+    宏任务   read file success 2 ;      
+    微：
  */
 
 // 结果：
