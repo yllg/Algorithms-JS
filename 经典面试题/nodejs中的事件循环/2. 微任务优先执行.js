@@ -43,6 +43,15 @@ process.nextTick(() => {
 // 首次事件循环执行
 console.log('script end');
 
+/**
+ * 分析思路
+ * （1）主代码块输出script start、 script end
+ * （2）微任务： promise和nextTick 全都放到poll中，一次性全部执行完，nextTick优先级高，所以先打印
+ * （3）setTimeout 1ms执行完加到 poll队列，去执行；里面的fs.readfile 2放到下一轮；
+ * （4）poll队列为空，去执行 setImmediate
+ * （5）文件读取完成 加入poll队列，输出 read file success 和 read file success 2
+ */
+
 // 结果：
 // script start
 // script end
