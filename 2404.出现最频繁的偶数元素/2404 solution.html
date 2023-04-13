@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    // 存在多个满足条件的元素，只需要返回 最小 的一个。如果不存在这样的元素，返回 -1
+
+    // 方法一：哈希表计数
+    // 时间复杂度：O(n)
+    // 空间复杂度：O(n)
+    var mostFrequentEven = function (nums) {
+      let count = new Map();
+      for (let x of nums) {
+        if (x % 2 == 0) {
+          count.set(x, (count.get(x) || 0) + 1);
+        }
+      }
+      let res = -1,
+        ct = 0;
+      for (let [k, v] of count) {
+        if (res == -1 || v > ct || v == ct && k < res) {
+          res = k;
+          ct = v;
+        }
+      }
+      return res;
+    };
+
+    // test
+    const nums = [0, 1, 2, 2, 4, 4, 1];
+    console.log(mostFrequentEven(nums))
+  </script>
+</body>
+
+</html>
