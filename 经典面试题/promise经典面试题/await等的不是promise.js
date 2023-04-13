@@ -5,7 +5,7 @@ async function async1() {
 }
 
 async function async2() {
-  console.log('async2');
+  console.log('async2'); // 宏任务； return返回的是微任务，见下一题
 }
 
 console.log('script start');

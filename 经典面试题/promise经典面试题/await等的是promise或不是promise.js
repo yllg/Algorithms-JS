@@ -15,8 +15,8 @@ async function test1() {
   console.log('end test1');
 }
 async function test2() {
-  console.log('test2');
-  return await 'return test2 value';
+  console.log('test2'); // 宏任务
+  return await 'return test2 value'; // return是微任务，加不加await会影响优先级
 }
 test1();
 console.log('start script');
