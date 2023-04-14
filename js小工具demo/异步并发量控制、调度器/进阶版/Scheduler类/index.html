@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    /**
+     * Scheduler 异步任务并发管理调度器
+     * limit 同时执行的最大项次数
+     */
+    class Scheduler {
+      constructor(options) {
+        this.tasks = []; // 总任务队列
+        this.runningTasks = []; // 正在执行的任务队列
+        this.limit = options?.limit?? 1;
+      }
+      Add(task) {
+        this.tasks.push(task);
+        this.Run();
+      }
+      Run() {
+        const taskLength = this.tasks && this.tasks.length;
+        while (
+          this.runningTasks.length < this.limit &&
+          this.tasks.length > 0
+        ) {
+          const runTask = this.tasks.shift();
+          this.runningTasks.push(runTask);
+          runTask()
+            .catch((error) => {
+              console.error(
+                `${runTask.GetId()} running error ${
+              (error && error.message) || ''
+            } ${(error && error.stack) || ''}`
+              );
+            })
+            .finally(() => {
+              const index = this.runningTasks.findIndex((task) => {
+                task === runTask;
+              });
+              this.runningTasks.splice(index, 1);
+              this.Run();
+            });
+        }
+      }
+    }
+
+    // test
+
+    // 返回promise
+    function GenerateTask(i) {
+      return () => new Promise(resolve => setTimeout(() => {
+        console.log(i);
+        resolve(i)
+      }, i))
+    }
+
+    let queue = new Scheduler({
+      limit: 2 // 并发量 2
+    });
+
+    function AddTask(generateTask, time) {
+      queue.Add(generateTask(time));
+    }
+    AddTask(GenerateTask, 1000);
+    AddTask(GenerateTask, 5000);
+    AddTask(GenerateTask, 3000);
+    AddTask(GenerateTask, 2000);
+  </script>
+</body>
+
+</html>
