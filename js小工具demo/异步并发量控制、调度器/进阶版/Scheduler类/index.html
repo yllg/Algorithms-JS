@@ -60,12 +60,12 @@
       }, i))
     }
 
-    let queue = new Scheduler({
+    let scheduler = new Scheduler({
       limit: 2 // 并发量 2
     });
 
     function AddTask(generateTask, time) {
-      queue.Add(generateTask(time));
+      scheduler.Add(generateTask(time));
     }
     AddTask(GenerateTask, 1000);
     AddTask(GenerateTask, 5000);
