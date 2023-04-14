@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    // 可以将小写字母插入模式串 pattern 得到待查询项 query，返回true，否则返回false
+
+    // 方法一：正则
+    function camelMatch(queries, pattern) {
+      let reg = new RegExp(`^[a-z]*${pattern.split('').map(v=>v+'[a-z]*').join('')}$`)
+      return queries.map(v => reg.test(v))
+    };
+
+    // 方法二：dfs
+    /**
+     * @param {string[]} queries
+     * @param {string} pattern
+     * @return {boolean[]}
+     */
+    var camelMatch = function (queries, pattern) {
+      let res = []
+      let dfs = (pattern, value) => {
+        if (pattern.length > value.length) return false
+        if (pattern === '') {
+          return (value === '') || !(/[A-Z]+/.test(value))
+        }
+        let pChar = pattern[0];
+        let i = 0;
+        let j = i
+        while (value[j] !== pChar && j < value.length) {
+          j++
+        }
+        let remain = value.substring(j + 1);
+        if (remain.indexOf(pChar) !== -1 && pattern.substring(1).indexOf(pChar) === -1 && /[A-Z]+/.test(pChar))
+          return false
+        if ((j !== value.length) || (i === j)) {
+          if (dfs(pattern.substring(1), remain)) return true
+        }
+        return false
+      }
+      for (let q of queries) {
+        let ans = dfs(pattern, q)
+        res.push(ans)
+      }
+      return res
+    };
+
+    // test
+    let queries = ["FooBar", "FooBarTest", "FootBall", "FrameBuffer", "ForceFeedBack"],
+      pattern = "FB";
+
+    console.log(camelMatch(queries, pattern))
+  </script>
+</body>
+
+</html>
