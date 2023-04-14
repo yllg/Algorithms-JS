@@ -30,7 +30,7 @@ class Queue {
     this.maxRunningNum = options?.maxRunningNum ?? 1;
   }
 
-  AddTask(task) {
+  Add(task) {
     this.tasks.push(task);
     this.Run();
   }
@@ -47,7 +47,7 @@ class Queue {
   Run() {
     const taskLength = this.tasks && this.tasks.length;
     if (taskLength > 200) {
-      LoggerManager.getInstance().warn(
+      console.warn(
         `Queue task lenght is greater than 200, length is ${taskLength}`
       );
     }
@@ -60,7 +60,7 @@ class Queue {
       runTask
         .excute()
         .catch((error) => {
-          LoggerManager.getInstance().error(
+          console.error(
             `${runTask.GetId()} running error ${
               (error && error.message) || ''
             } ${(error && error.stack) || ''}`
