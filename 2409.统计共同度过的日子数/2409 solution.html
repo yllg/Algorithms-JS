@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    // 方法一：分别计算出每个日子是一年中的第几天后求差
+    // 时间复杂度：O(1)
+    // 空间复杂度：O(1)
+    var countDaysTogether = function (arriveAlice, leaveAlice, arriveBob, leaveBob) {
+      let datesOfMonths = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+      let prefixSum = [0];
+      for (let i = 0; i < datesOfMonths.length; i++) {
+        prefixSum.push(prefixSum[i] + datesOfMonths[i]);
+      }
+
+      let arriveAliceDay = calculateDayOfYear(arriveAlice, prefixSum);
+      let leaveAliceDay = calculateDayOfYear(leaveAlice, prefixSum);
+      let arriveBobDay = calculateDayOfYear(arriveBob, prefixSum);
+      let leaveBobDay = calculateDayOfYear(leaveBob, prefixSum);
+
+      return Math.max(0, Math.min(leaveAliceDay, leaveBobDay) - Math.max(arriveAliceDay, arriveBobDay) + 1);
+    };
+
+    function calculateDayOfYear(day, prefixSum) {
+      let month = parseInt(day.substring(0, 2));
+      let date = parseInt(day.substring(3));
+      return prefixSum[month - 1] + date;
+    }
+
+    // test
+    let arriveAlice = "08-15",
+      leaveAlice = "08-18",
+      arriveBob = "08-16",
+      leaveBob = "08-19";
+
+    console.log(countDaysTogether(arriveAlice, leaveAlice, arriveBob, leaveBob))
+  </script>
+</body>
+
+</html>
