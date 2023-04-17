@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 时间复杂度O(n)
+      // 空间复杂度O(n)
+      function gardenNoAdj(n, paths) {
+        // 填颜色题目
+        // 先将所有位置填上相同的颜色
+        const res = new Array(n).fill(1);
+        // 记录相邻位置关系
+        const map = new Map();
+        for (const [p1, p2] of paths) {
+          map.get(p1) ? map.set(p1, map.get(p1).concat(p2)) : map.set(p1, [p2]);
+          map.get(p2) ? map.set(p2, map.get(p2).concat(p1)) : map.set(p2, [p1]);
+        }
+        // 当前颜色取决于相邻元素剩下的颜色
+        for (const [key, value] of map) {
+          // 共4种颜色
+          const colors = [1, 2, 3, 4];
+          // 遍历相邻位置
+          for (const path of value) {
+            // 拿到相邻位置的颜色
+            const color = res[path - 1];
+            // 排除该颜色
+            const index = colors.indexOf(color);
+            colors.splice(index, 1);
+          }
+          res[key - 1] = colors[0];
+        }
+        return res;
+      }
+    </script>
+  </body>
+</html>
