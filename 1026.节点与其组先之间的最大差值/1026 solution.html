@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    // 方法一：深度优先搜索
+    // 时间复杂度：O(n)
+    // 空间复杂度：O(n)
+    var maxAncestorDiff = function (root) {
+      return dfs(root, root.val, root.val);
+    };
+
+    function dfs(root, mi, ma) {
+      if (root === null) {
+        return 0;
+      }
+      var diff = Math.max(Math.abs(root.val - mi), Math.abs(root.val - ma));
+      mi = Math.min(mi, root.val);
+      ma = Math.max(ma, root.val);
+      diff = Math.max(diff, dfs(root.left, mi, ma));
+      diff = Math.max(diff, dfs(root.right, mi, ma));
+      return diff;
+    }
+  </script>
+</body>
+
+</html>
