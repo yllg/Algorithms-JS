@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    // 方法一：动态规划
+    // 时间复杂度：O(nk)
+    // 空间复杂度：O(n)
+    var maxSumAfterPartitioning = function (arr, k) {
+      const n = arr.length;
+      const d = new Array(n + 1).fill(0);
+      for (let i = 1; i <= n; i++) {
+        let maxValue = arr[i - 1];
+        for (let j = i - 1; j >= Math.max(0, i - k); j--) {
+          d[i] = Math.max(d[i], d[j] + maxValue * (i - j));
+          if (j > 0) {
+            maxValue = Math.max(maxValue, arr[j - 1]);
+          }
+        }
+      }
+      return d[n];
+    };
+
+    // test
+    let arr = [1, 15, 7, 9, 2, 5, 10],
+      k = 3;
+    console.log(maxSumAfterPartitioning(arr, k))
+  </script>
+</body>
+
+</html>
