@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    // 方法一：动态规划
+    // 时间复杂度: O(n×(logm+min(m,n)))
+    // 空间复杂度：O(n)
+    const INF = 0x3f3f3f3f;
+    var makeArrayIncreasing = function (arr1, arr2) {
+      arr2.sort((a, b) => a - b);
+      const list = [];
+      let prev = -1;
+      for (const num of arr2) {
+        if (num !== prev) {
+          list.push(num);
+          prev = num;
+        }
+      }
+      const temp = new Array(arr1.length + 2).fill(0);
+      temp.splice(1, arr1.length, ...arr1);
+      /* 右侧哨兵 inf */
+      temp[arr1.length + 1] = INF;
+      /* 左侧哨兵 -1 */
+      temp[0] = -1;
+      arr1 = temp;
+      const n = arr1.length;
+      const m = list.length;
+
+      const dp = new Array(n).fill(INF);
+      dp[0] = 0;
+      for (let i = 1; i < n; i++) {
+        /* arr1[i] 左侧的元素不进行替换 */
+        if (arr1[i - 1] < arr1[i]) {
+          dp[i] = Math.min(dp[i], dp[i - 1]);
+        }
+        /* 固定替换元素的右侧终点 */
+        const k = binarySearch(list, arr1[i]);
+        /* 枚举从 i 左侧连续替换元素的个数 */
+        for (let j = 1; j <= Math.min(i - 1, k); ++j) {
+          /* 替换的连续 j 个元素的左侧起点需满足大于 arr1[i - j - 1] */
+          if (arr1[i - j - 1] < list[k - j]) {
+            dp[i] = Math.min(dp[i], dp[i - j - 1] + j);
+          }
+        }
+      }
+      return dp[n - 1] === INF ? -1 : dp[n - 1];
+    }
+
+    const binarySearch = (list, target) => {
+      let low = 0,
+        high = list.length;
+      while (low < high) {
+        const mid = low + Math.floor((high - low) / 2);
+        if (list[mid] >= target) {
+          high = mid;
+        } else {
+          low = mid + 1;
+        }
+      }
+      return low;
+    };
+
+    // test
+    let arr1 = [1, 5, 3, 6, 7],
+      arr2 = [1, 3, 2, 4];
+    console.log(makeArrayIncreasing(arr1, arr2))
+  </script>
+</body>
+
+</html>
