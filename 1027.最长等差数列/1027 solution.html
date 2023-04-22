@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.21/lodash.min.js"></script>
+    <script>
+      // 方法一：动态规划
+      // 时间复杂度：O(nC); 其中 n 是数组 nums 的长度，C 是数组 nums 中的元素范围。
+      // 空间复杂度：O(n)
+      var longestArithSeqLength = function (nums) {
+        const minv = _.min(nums);
+        const maxv = _.max(nums);
+        const diff = maxv - minv;
+        let ans = 1;
+        for (let d = -diff; d <= diff; ++d) {
+          const f = new Array(maxv + 1).fill(-1);
+          for (const num of nums) {
+            let prev = num - d;
+            if (prev >= minv && prev <= maxv && f[prev] !== -1) {
+              f[num] = Math.max(f[num], f[prev] + 1);
+              ans = Math.max(ans, f[num]);
+            }
+            f[num] = Math.max(f[num], 1);
+          }
+        }
+        return ans;
+      };
+
+      // test
+      let nums = [20, 1, 15, 3, 10, 5, 8];
+      console.log(longestArithSeqLength(nums));
+    </script>
+  </body>
+</html>
