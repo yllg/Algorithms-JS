@@ -33,11 +33,7 @@
           this.runningTasks.push(runTask);
           runTask()
             .catch((error) => {
-              console.error(
-                `${runTask.GetId()} running error ${
-              (error && error.message) || ''
-            } ${(error && error.stack) || ''}`
-              );
+              console.error(`${runTask} running error: ${error}`);
             })
             .finally(() => {
               const index = this.runningTasks.findIndex((task) => {
