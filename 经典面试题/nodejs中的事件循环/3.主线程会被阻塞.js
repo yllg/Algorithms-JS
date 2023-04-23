@@ -34,7 +34,7 @@ function sleep(n) {
 
 /**
  * 注意
- * setTimeout 0s，nodejs的 timer 阶段要先与 file IO的poll阶段
+ * setTimeout 0s，nodejs的 timer 阶段 要先于 file IO的poll阶段
  * 如果 setTimeout 延时很久，file IO的poll阶段 先于 timer 阶段
  */
 // setTimeout 50ms 的结果
