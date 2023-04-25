@@ -47,6 +47,7 @@
         pred = pred.next;
       }
       let toAdd = new ListNode(val);
+      // 注意先后
       toAdd.next = pred.next;
       pred.next = toAdd;
     };
@@ -84,12 +85,14 @@
         return -1;
       }
       let curr;
+      // 优化：从前往后查找
       if (index + 1 < this.size - index) {
         curr = this.head;
         for (let i = 0; i <= index; i++) {
           curr = curr.next;
         }
       } else {
+        // 优化：从后往前查找
         curr = this.tail;
         for (let i = 0; i < this.size - index; i++) {
           curr = curr.prev;
@@ -111,14 +114,16 @@
         return;
       }
       index = Math.max(0, index);
-      let pred, succ;
+      let pred, succ; // 双链，需要两个变量
       if (index < this.size - index) {
+        // 优化：从前往后查找
         pred = this.head;
         for (let i = 0; i < index; i++) {
           pred = pred.next;
         }
         succ = pred.next;
       } else {
+        // 优化：从后往前查找
         succ = this.tail;
         for (let i = 0; i < this.size - index; i++) {
           succ = succ.prev;
