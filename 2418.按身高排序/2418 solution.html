@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    // 方法一：排序
+    // 时间复杂度：O(nlogn)
+    // 空间复杂度：O(n)
+    var sortPeople = function (names, heights) {
+      const n = names.length;
+      const indices = Array.from({
+        length: n
+      }, (_, i) => i);
+      indices.sort((a, b) => heights[b] - heights[a]);
+      const res = new Array(n);
+      for (let i = 0; i < n; i++) {
+        res[i] = names[indices[i]];
+      }
+      return res;
+    };
+
+    // test
+    let names = ["Mary", "John", "Emma"],
+      heights = [180, 165, 170];
+    console.log(sortPeople(names, heights))
+  </script>
+</body>
+
+</html>
