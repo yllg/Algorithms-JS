@@ -164,7 +164,7 @@
       }, 5000);
     });
 
-    // 1.promise.all 
+    // 1.promise.all; 所有成功才成功resolve，任何一个失败就reject
     MyPromise.all = function (promises) {
       return new MyPromise(function (resolve, reject) {
         let cnt = 0;
@@ -188,7 +188,7 @@
       console.log('MyPromise.all', res); // [3,1,2]
     })
 
-    // 2.promise.race
+    // 2.promise.race; 返回最先resolve的promise
     MyPromise.race = function (promises) {
       return new MyPromise(function (resolve, reject) {
         for (let i = 0; i < promises.length; i++) {
@@ -202,7 +202,7 @@
       console.log('MyPromise.race', res); // [3,1,2]
     })
 
-    // 3.promise.finally
+    // 3.promise.finally; 不管成功或失败都要执行回调
     MyPromise.prototype.finally = function (callback) {
       let P = this.constructor;
       return this.then(
