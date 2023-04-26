@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    // 方法一：动态规划 + 滑动窗口
+    // 时间复杂度：O(n)
+    // 空间复杂度：O(1)
+    var maxSumTwoNoOverlap = function (nums, firstLen, secondLen) {
+      return Math.max(help(nums, firstLen, secondLen), help(nums, secondLen, firstLen));
+    };
+
+    function help(nums, firstLen, secondLen) {
+      let suml = nums.slice(0, firstLen).reduce((acc, val) => acc + val, 0);
+      let maxSumL = suml;
+      let sumr = nums.slice(firstLen, firstLen + secondLen).reduce((acc, val) => acc + val, 0);
+      let res = maxSumL + sumr;
+      for (let i = firstLen + secondLen, j = firstLen; i < nums.length; i++, j++) {
+        suml += nums[j] - nums[j - firstLen];
+        maxSumL = Math.max(maxSumL, suml);
+        sumr += nums[i] - nums[i - secondLen];
+        res = Math.max(res, maxSumL + sumr);
+      }
+      return res;
+    }
+
+    // test
+    let nums = [0, 6, 5, 2, 2, 5, 1, 9, 4],
+      firstLen = 1,
+      secondLen = 2;
+    console.log(maxSumTwoNoOverlap(nums, firstLen, secondLen))
+  </script>
+</body>
+
+</html>
