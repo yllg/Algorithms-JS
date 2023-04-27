@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    /**
+     * 前身：单词1 添加 恰好一个 字母 变成 单词2，就说1是2的前身
+     * 字符串链，数组中的每个单词是后一个的前身
+     * 返回最长的长度
+     */
+
+    // 方法一：动态规划
+    // 时间复杂度：O(n×m×(logn+m))
+    // 空间复杂度：O(n×m)
+    var longestStrChain = function (words) {
+      const cnt = new Map();
+      words.sort((a, b) => a.length - b.length);
+      let res = 0;
+      for (const word of words) {
+        cnt.set(word, 1);
+        for (let i = 0; i < word.length; i++) {
+          const prev = word.substring(0, i) + word.substring(i + 1);
+          if (cnt.has(prev)) {
+            cnt.set(word, Math.max(cnt.get(word), cnt.get(prev) + 1));
+          }
+        }
+        res = Math.max(res, cnt.get(word));
+      }
+      return res;
+    };
+
+    // test
+    let words = ["a", "b", "ba", "bca", "bda", "bdca"];
+    console.log(longestStrChain(words))
+  </script>
+</body>
+
+</html>
