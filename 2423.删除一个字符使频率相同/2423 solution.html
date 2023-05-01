@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：枚举
+      // 时间复杂度：O(n+∣Σ∣^2)
+      // 空间复杂度：O(∣Σ∣)
+      var equalFrequency = function (word) {
+        const charCount = new Array(26).fill(0);
+        for (let c of word) {
+          charCount[c.charCodeAt(0) - "a".charCodeAt(0)]++;
+        }
+        for (let i = 0; i < 26; i++) {
+          if (charCount[i] == 0) {
+            continue;
+          }
+          charCount[i]--;
+          const frequency = new Set();
+          for (const f of charCount) {
+            if (f > 0) {
+              frequency.add(f);
+            }
+          }
+          if (frequency.size == 1) {
+            return true;
+          }
+          charCount[i]++;
+        }
+        return false;
+      };
+
+      // 方法2：枚举 + 哈希表
+      // 时间复杂度：O(n+∣Σ∣)
+      // 空间复杂度：O(∣Σ∣)
+      var equalFrequency = function (word) {
+        let charCount = new Array(26).fill(0);
+        for (let c of word) {
+          charCount[c.charCodeAt(0) - "a".charCodeAt(0)]++;
+        }
+        let freqCount = new Map();
+        for (let c of charCount) {
+          if (c > 0) {
+            freqCount.set(c, (freqCount.get(c) || 0) + 1);
+          }
+        }
+        for (let c of charCount) {
+          if (c == 0) {
+            continue;
+          }
+          freqCount.set(c, freqCount.get(c) - 1);
+          if (freqCount.get(c) == 0) {
+            freqCount.delete(c);
+          }
+          if (c - 1 > 0) {
+            freqCount.set(c - 1, (freqCount.get(c - 1) || 0) + 1);
+          }
+          if (freqCount.size == 1) {
+            return true;
+          }
+          if (c - 1 > 0) {
+            freqCount.set(c - 1, freqCount.get(c - 1) - 1);
+            if (freqCount.get(c - 1) == 0) {
+              freqCount.delete(c - 1);
+            }
+          }
+          freqCount.set(c, (freqCount.get(c) || 0) + 1);
+        }
+        return false;
+      };
+
+      // test
+      let word = "abcc";
+      console.log(equalFrequency(word));
+    </script>
+  </body>
+</html>
