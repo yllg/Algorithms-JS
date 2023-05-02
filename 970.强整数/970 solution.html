@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    // 方法一：枚举
+    // 时间复杂度：O(log^2(bound))，双层循环的时间复杂度是 O(log^2(bound))
+    // 空间复杂度：O(log^2(bound))，是哈希集合的空间复杂度
+    var powerfulIntegers = function (x, y, bound) {
+      const set = new Set();
+      let value1 = 1;
+      for (let i = 0; i < 21; i++) {
+        let value2 = 1;
+        for (let j = 0; j < 21; j++) {
+          let value = value1 + value2;
+          if (value <= bound) {
+            set.add(value);
+          } else {
+            break;
+          }
+          value2 *= y;
+        }
+        if (value1 > bound) {
+          break;
+        }
+        value1 *= x;
+      }
+      return [...set];
+    };
+
+    // test
+    let x = 2,
+      y = 3,
+      bound = 10;
+    console.log(powerfulIntegers(x, y, bound))
+  </script>
+</body>
+
+</html>
