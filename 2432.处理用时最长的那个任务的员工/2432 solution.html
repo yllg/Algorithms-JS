@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    // 方法一：枚举每一位员工
+    // 时间复杂度：O(m)
+    // 空间复杂度：O(1)
+    var hardestWorker = function (n, logs) {
+      let ans = logs[0][0],
+        maxCost = logs[0][1];
+      for (let i = 1; i < logs.length; i++) {
+        const idx = logs[i][0];
+        const cost = logs[i][1] - logs[i - 1][1];
+        if (cost > maxCost || (cost === maxCost && idx < ans)) {
+          ans = idx;
+          maxCost = cost;
+        }
+      }
+      return ans;
+    };
+
+    // test
+    let n = 10,
+      logs = [
+        [0, 3],
+        [2, 5],
+        [0, 9],
+        [1, 15]
+      ];
+    console.log(hardestWorker(n, logs))
+  </script>
+</body>
+
+</html>
