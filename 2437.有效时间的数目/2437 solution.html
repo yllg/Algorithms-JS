@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    // 方法一：分开枚举
+    // 时间复杂度：O(1)。由于时钟的最大值为 24，分钟的最大值为 60，在此题解中分别枚举所可能的时钟，以及所有可能分钟，时间复杂度为 O(24+60)=O(1)。
+    // 空间复杂度：O(1)
+    var countTime = function (time) {
+      let res = 0;
+      const dfs = (arr, pos) => {
+        if (pos === arr.length) {
+          if (check(arr)) {
+            res++;
+          }
+          return;
+        }
+        if (arr[pos] === '?') {
+          for (let i = 0; i <= 9; i++) {
+            arr[pos] = String.fromCharCode('0'.charCodeAt() + i);
+            dfs(arr, pos + 1);
+            arr[pos] = '?';
+          }
+        } else {
+          dfs(arr, pos + 1);
+        }
+      }
+
+      const check = (arr) => {
+        const hh = (arr[0].charCodeAt() - '0'.charCodeAt()) * 10 + arr[1].charCodeAt() - '0'.charCodeAt();
+        const mm = (arr[3].charCodeAt() - '0'.charCodeAt()) * 10 + arr[4].charCodeAt() - '0'.charCodeAt();
+        return hh < 24 && mm < 60;
+      };
+      const arr = [...time];
+      dfs(arr, 0);
+      return res;
+    }
+
+    // test
+    let time = "?5:00";
+    console.log(countTime(time))
+  </script>
+</body>
+
+</html>
