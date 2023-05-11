@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    // 1-n的每一个数字的二进制表示，都是s的子串，返回true
+
+    // 方法一：数学 + 滑动窗口 + 哈希表
+    // 时间复杂度：O(logn+m)
+    // 空间复杂度：O(m)
+    var queryString = function (s, n) {
+      if (n === 1) {
+        return [...s].indexOf('1') !== -1;
+      }
+      let k = 30;
+      while ((1 << k) >= n) {
+        --k;
+      }
+      if (s.length < (1 << (k - 1)) + k - 1 || s.length < n - (1 << k) + k + 1) {
+        return false;
+      }
+      return help(s, k, 1 << (k - 1), (1 << k) - 1) && help(s, k + 1, 1 << k, n);
+    }
+
+    const help = (s, k, mi, ma) => {
+      const set = new Set();
+      let t = 0;
+      for (let r = 0; r < s.length; ++r) {
+        t = t * 2 + (s[r].charCodeAt() - '0'.charCodeAt());
+        if (r >= k) {
+          t -= (s[r - k].charCodeAt() - '0'.charCodeAt()) << k;
+        }
+        if (r >= k - 1 && t >= mi && t <= ma) {
+          set.add(t);
+        }
+      }
+      return set.size === ma - mi + 1;
+    };
+
+    // test
+    let s = "0110",
+      n = 3;
+    console.log(queryString(s, n))
+  </script>
+</body>
+
+</html>
