@@ -10,12 +10,17 @@
 
 <body>
     <script>
+        // 方法一：两次遍历
+        // 时间复杂度 O(n)
+        // 空间复杂度 O(n)
         function findMaxDuplicateChar(str) {
             if (str.length == 1) {
                 return str;
             }
             //定义一个哈希表
             let charObj = {};
+            // 1.使用str.charAt(i)
+            // 2.也可以使用 str.split('').forEach
             for (let i = 0; i < str.length; i++) {
                 //str.charAt(i) 返回指定位置的字符，类似把字符串拆成数组取元素值一样
                 //没有这个字母，就标记1；有重复就加1
@@ -36,6 +41,29 @@
             }
             return "最多字符" + maxChar + "; 出现次数" + maxValue;
         }
+
+        // 方法二: 一次遍历
+        // 时间复杂度 O(n)
+        // 空间复杂度 O(n)
+        function findMaxDuplicateChar(str) {
+            let hash = {};
+            let max = 0;
+            let result;
+            str.split('').forEach(s => {
+                if (hash[s]) {
+                    hash[s] += 1;
+                    if (hash[s] > max) {
+                        max = hash[s];
+                        result = s
+                    }
+                } else {
+                    hash[s] = 1;
+                }
+            });
+            return "最多字符" + result + "; 出现次数" + max;
+        }
+
+        // 方法三: 排序+正则，快排 nlogn
 
         //测试
         var str = "afjghdfraaaasdenas";
