@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：暴力枚举
+      // 时间复杂度O(n^2)
+      // 空间复杂度O(1)
+      var findMaxK = function (nums) {
+        let k = -1;
+        for (const x of nums) {
+          for (const y of nums) {
+            if (-x === y) {
+              k = Math.max(k, x);
+            }
+          }
+        }
+        return k;
+      };
+
+      // 方法二：哈希表
+      // 时间复杂度O(n)
+      // 空间复杂度O(n)
+      var findMaxK = function (nums) {
+        let k = -1;
+        const set = new Set();
+        for (const x of nums) {
+          set.add(x);
+        }
+        for (const x of nums) {
+          if (set.has(-x)) {
+            k = Math.max(k, x);
+          }
+        }
+        return k;
+      };
+
+      // 方法三：排序 + 双指针
+      // 时间复杂度O(nlogn)
+      // 空间复杂度O(logn)
+      var findMaxK = function (nums) {
+        nums.sort((a, b) => a - b);
+        for (let i = 0, j = nums.length - 1; i < j; j--) {
+          while (i < j && nums[i] < -nums[j]) {
+            i++;
+          }
+          if (nums[i] === -nums[j]) {
+            return nums[j];
+          }
+        }
+        return -1;
+      };
+
+      // test
+      let nums = [-1, 2, -3, 3];
+      console.log(findMaxK(nums));
+    </script>
+  </body>
+</html>
