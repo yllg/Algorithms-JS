@@ -14,10 +14,10 @@
 
         function funcOne() {
             myPromise1.then(res => {
-                console.log(res);
+                console.log(res); // 第一层 resolve，输出 Promise 1
                 return res;
             }).then(res => {
-                console.log(res)
+                console.log(res) // 第二层 resolve，输出 Promise 1
             });
             setTimeout(() => console.log("Timeout 1"), 0);
             console.log("Last line 1");
@@ -25,10 +25,10 @@
 
         async function funcTwo() {
             const res = await myPromise2;
-            console.log(res)
-            console.log(await res);
-            setTimeout(() => console.log("Timeout 2"), 0);
-            console.log("Last line 2");
+            console.log(res)  // 第一层 resolve，输出 Promise 2
+            console.log(await res);  // 第二层 resolve，输出 Promise 2
+            setTimeout(() => console.log("Timeout 2"), 0); // 第三轮宏任务
+            console.log("Last line 2"); // 放到第一轮的微任务中
         }
 
         funcOne();
