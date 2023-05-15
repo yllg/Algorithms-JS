@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    // 按照列翻转，1变0，0变1，行内所有元素值相等的行数
+
+    // 方法一：哈希
+    // 时间复杂度：O(mn)
+    // 空间复杂度：O(m)
+    var maxEqualRowsAfterFlips = function (matrix) {
+      let m = matrix.length,
+        n = matrix[0].length;
+      let map = {};
+      for (let i = 0; i < m; i++) {
+        let arr = new Array(n).fill('0');
+        for (let j = 0; j < n; j++) {
+          // 如果 matrix[i][0] 为 1，则对该行元素进行翻转
+          arr[j] = '0' + (matrix[i][j] ^ matrix[i][0]);
+        }
+        let s = arr.join('');
+        map[s] = (map[s] || 0) + 1;
+      }
+      let res = 0;
+      for (let key in map) {
+        res = Math.max(res, map[key]);
+      }
+      return res;
+    }
+
+    // test
+    let matrix = [
+      [0, 1],
+      [1, 0]
+    ];
+    console.log(maxEqualRowsAfterFlips(matrix))
+  </script>
+</body>
+
+</html>
