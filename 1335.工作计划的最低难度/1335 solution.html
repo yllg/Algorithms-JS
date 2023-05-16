@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    // 方法一：动态规划
+    // 时间复杂度：O(n^2 × d)
+    // 空间复杂度：O(n)
+    var minDifficulty = function (jobDifficulty, d) {
+      const n = jobDifficulty.length;
+      if (n < d) {
+        return -1;
+      }
+      let dp = new Array(n).fill(0);
+      for (let i = 0, j = 0; i < n; ++i) {
+        j = Math.max(j, jobDifficulty[i]);
+        dp[i] = j;
+      }
+      for (let i = 1; i < d; ++i) {
+        const ndp = new Array(n).fill(0x3f3f3f3f);
+        for (let j = i; j < n; ++j) {
+          let ma = 0;
+          for (let k = j; k >= i; --k) {
+            ma = Math.max(ma, jobDifficulty[k]);
+            ndp[j] = Math.min(ndp[j], ma + dp[k - 1]);
+          }
+        }
+        dp = ndp;
+      }
+      return dp[n - 1];
+    };
+
+    // 方法二：单调栈
+    // 时间复杂度：O(n × d)
+    // 空间复杂度：O(n)
+    var minDifficulty = function (jobDifficulty, d) {
+      const n = jobDifficulty.length;
+      if (n < d) {
+        return -1;
+      }
+      let dp = new Array(n).fill(0);
+      for (let j = 0, ma = 0; j < n; ++j) {
+        ma = Math.max(ma, jobDifficulty[j]);
+        dp[j] = ma;
+      }
+      for (let i = 1; i < d; ++i) {
+        const stack = [];
+        const ndp = new Array(n).fill(0);
+        for (let j = i; j < n; ++j) {
+          let mi = dp[j - 1];
+          while (stack.length && jobDifficulty[stack[stack.length - 1][0]] < jobDifficulty[j]) {
+            mi = Math.min(mi, stack.pop()[1]);
+          }
+          if (stack.length === 0) {
+            ndp[j] = mi + jobDifficulty[j];
+          } else {
+            ndp[j] = Math.min(ndp[stack[stack.length - 1][0]], mi + jobDifficulty[j]);
+          }
+          stack.push([j, mi]);
+        }
+        dp = ndp;
+      }
+      return dp[n - 1];
+    };
+
+    // test
+    let jobDifficulty = [6, 5, 4, 3, 2, 1],
+      d = 2;
+    console.log(minDifficulty(jobDifficulty, d))
+  </script>
+</body>
+
+</html>
