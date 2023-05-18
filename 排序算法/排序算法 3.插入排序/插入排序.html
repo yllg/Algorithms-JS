@@ -15,7 +15,7 @@
         //2.从“未排序”抽出第一个数，和“已排序”部分比较，插入到合适的位置
         // 时间复杂度 O(n),空间复杂度 O(1)
         function insertionSort(myArray) {
-            var len = myArray.length, // 数组的长度
+            let len = myArray.length, // 数组的长度
                 value, // 当前比较的值
                 i, // 未排序部分的当前位置
                 j; // 已排序部分的当前位置
@@ -42,7 +42,7 @@
         }
 
         //测试一下
-        var dataStore = [1, 8, 3, 2, 9, 5, 4, 7];
+        let dataStore = [1, 8, 3, 2, 9, 5, 4, 7];
         console.log(insertionSort(dataStore));
     </script>
 </body>

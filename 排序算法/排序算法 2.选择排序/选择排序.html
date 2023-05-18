@@ -14,7 +14,7 @@
         //1.找出最小的数，和第一个交换位置
         //2.在剩下的数中，找出最二小的数，和第二个交换位置;以此类推
         function selectionSort(myArray) {
-            var len = myArray.length,
+            let len = myArray.length,
                 min;
 
             for (i = 0; i < len; i++) {
@@ -36,13 +36,13 @@
 
         //交换数组两个元素
         function swap(myArray, p1, p2) {
-            var temp = myArray[p1];
+            let temp = myArray[p1];
             myArray[p1] = myArray[p2];
             myArray[p2] = temp;
         }
 
         //测试一下
-        var dataStore = [1, 8, 3, 2, 9, 5, 4, 7];
+        let dataStore = [1, 8, 3, 2, 9, 5, 4, 7];
         console.log(selectionSort(dataStore));
     </script>
 </body>

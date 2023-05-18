@@ -14,10 +14,10 @@
         //1.依次比较相邻的两个数，如果第一个比第二个小，不变。如果第一个比第二个大，调换顺序。一轮下来，最后一个是最大的数
         //2.对除了最后一个之外的数重复第一步，直到只剩一个数
         function bubbleSort(myArray) {
-            var len = myArray.length;
-            var i;
-            var j;
-            var stop;
+            let len = myArray.length;
+            let i;
+            let j;
+            let stop;
 
             for (i = 0; i < len - 1; i++) {
                 //stop 内层循环不用考虑最后面已经排好的元素了
@@ -31,7 +31,7 @@
         }
         //交换数组两个元素
         function swap(myArray, p1, p2) {
-            var temp = myArray[p1];
+            let temp = myArray[p1];
             myArray[p1] = myArray[p2];
             myArray[p2] = temp;
         }
@@ -77,8 +77,8 @@
         }
 
         //test
-        var dataStore1 = [1, 8, 3, 2, 9, 5, 4, 7];
-        var dataStore2 = [1, 8, 3, 2, 9, 5, 4, 7];
+        const dataStore1 = [1, 8, 3, 2, 9, 5, 4, 7];
+        const dataStore2 = [1, 8, 3, 2, 9, 5, 4, 7];
         console.log(bubbleSort(dataStore1));
         console.log(bubbleSortOptTriple(dataStore2));
     </script>
