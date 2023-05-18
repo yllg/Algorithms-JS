@@ -8,9 +8,9 @@ class TNode {
 }
 
 class MyLinkedList {
-  he = new TNode(-1);
-  ta = new TNode(-1);
-  sz = 0;
+  he = new TNode(-1); // head 头节点
+  ta = new TNode(-1); // tail 尾节点
+  sz = 0; // size 链表长度
   constructor() {
     this.he.next = this.ta;
     this.ta.prev = this.he;
