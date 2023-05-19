@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    // 方法一：回溯
+    // 时间复杂度：O(n×n!)
+    // 空间复杂度：O(n)
+    var numTilePossibilities = function (tiles) {
+      const count = new Map()
+      for (let t of tiles) {
+        count.set(t, (count.get(t) || 0) + 1)
+      }
+      const tile = new Set(tiles)
+      const n = tiles.length
+
+      function dfs(i) {
+        if (i == n) {
+          return 1
+        }
+        let res = 1
+        for (let t of tile) {
+          if (count.get(t) > 0) {
+            count.set(t, count.get(t) - 1)
+            res += dfs(i + 1)
+            count.set(t, count.get(t) + 1)
+          }
+        }
+        return res
+      }
+
+      return dfs(0) - 1
+    }
+
+    // test
+    let tiles = "AAB";
+    console.log(numTilePossibilities(tiles))
+  </script>
+</body>
+
+</html>
