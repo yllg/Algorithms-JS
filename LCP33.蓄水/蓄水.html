@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    // 方法一：贪心 + 数学
+    // 时间复杂度：O(n×C)，其中 n 为数组 bucket 的长度，C 为数组 vat 的范围。
+    // 空间复杂度：O(1)
+    var storeWater = function (bucket, vat) {
+      const maxk = _.max(vat);
+      if (maxk === 0) {
+        return 0;
+      }
+      let res = Number.MAX_VALUE;
+      for (let k = 1; k <= maxk && k < res; ++k) {
+        let t = 0;
+        for (let i = 0; i < bucket.length; ++i) {
+          t += Math.max(0, Math.floor((vat[i] + k - 1) / k - bucket[i]));
+        }
+        res = Math.min(res, t + k);
+      }
+      return res;
+    };
+
+    // 方法二：贪心 + 优先队列
+    var storeWater = function (bucket, vat) {
+      const n = bucket.length;
+      const pq = new MaxHeap((a, b) => a[0] > b[0]);
+      let cnt = 0;
+      for (let i = 0; i < n; ++i) {
+        if (bucket[i] === 0 && vat[i] !== 0) {
+          ++cnt;
+          ++bucket[i];
+        }
+        if (vat[i] > 0) {
+          pq.add([Math.floor((vat[i] + bucket[i] - 1) / bucket[i]), i]);
+        }
+      }
+      if (pq.size <= 0) {
+        return 0;
+      }
+      let res = Number.MAX_VALUE;
+      while (cnt < res) {
+        const arr = pq.poll();
+        const v = arr[0],
+          i = arr[1];
+        res = Math.min(res, cnt + v);
+        if (v === 1) {
+          break;
+        }
+        const t = Math.floor((vat[i] + v - 2) / (v - 1));
+        cnt += t - bucket[i];
+        bucket[i] = t;
+        pq.add([Math.floor((vat[i] + bucket[i] - 1) / bucket[i]), i]);
+      }
+      return res;
+    };
+
+    class MaxHeap {
+      constructor(compareFunc = (a, b) => a > b) {
+        this.compare = compareFunc;
+        this.heap = [];
+      }
+
+      get size() {
+        return this.heap.length;
+      }
+
+      peek() {
+        return this.heap[0];
+      }
+
+      add(value) {
+        this.heap.push(value);
+        this.heapifyUp();
+      }
+
+      poll() {
+        if (this.size === 0) {
+          return null;
+        }
+        if (this.size === 1) {
+          return this.heap.pop();
+        }
+        const max = this.heap[0];
+        this.heap[0] = this.heap.pop();
+        this.heapifyDown();
+        return max;
+      }
+
+      heapifyUp() {
+        let currentIndex = this.size - 1;
+        while (currentIndex > 0) {
+          const parentIndex = Math.floor((currentIndex - 1) / 2);
+          if (this.compare(this.heap[currentIndex], this.heap[parentIndex])) {
+            [this.heap[currentIndex], this.heap[parentIndex]] = [this.heap[parentIndex], this.heap[currentIndex]];
+            currentIndex = parentIndex;
+          } else {
+            break;
+          }
+        }
+      }
+
+      heapifyDown() {
+        let currentIndex = 0;
+        while (currentIndex < this.size) {
+          let largestIndex = currentIndex;
+          const leftChildIndex = 2 * currentIndex + 1;
+          const rightChildIndex = 2 * currentIndex + 2;
+          if (leftChildIndex < this.size && this.compare(this.heap[leftChildIndex], this.heap[largestIndex])) {
+            largestIndex = leftChildIndex;
+          }
+          if (rightChildIndex < this.size && this.compare(this.heap[rightChildIndex], this.heap[largestIndex])) {
+            largestIndex = rightChildIndex;
+          }
+          if (largestIndex !== currentIndex) {
+            [this.heap[currentIndex], this.heap[largestIndex]] = [this.heap[largestIndex], this.heap[currentIndex]];
+            currentIndex = largestIndex;
+          } else {
+            break;
+          }
+        }
+      }
+    }
+
+    // test
+    let bucket = [1, 3],
+      vat = [6, 8]
+    console.log(storeWater(bucket, vat))
+  </script>
+</body>
+
+</html>
