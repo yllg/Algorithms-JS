@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    // 方法一：深度优先搜索
+    // 时间复杂度：O(n)
+    // 空间复杂度：O(n)
+    var sufficientSubset = function (root, limit) {
+      const haveSufficient = checkSufficientLeaf(root, 0, limit);
+      return haveSufficient ? root : null;
+    };
+
+    var checkSufficientLeaf = function (node, sum, limit) {
+      if (node == null) {
+        return false;
+      }
+      if (node.left == null && node.right == null) {
+        return node.val + sum >= limit;
+      }
+      const haveSufficientLeft = checkSufficientLeaf(node.left, sum + node.val, limit);
+      const haveSufficientRight = checkSufficientLeaf(node.right, sum + node.val, limit);
+      if (!haveSufficientLeft) {
+        node.left = null;
+      }
+      if (!haveSufficientRight) {
+        node.right = null;
+      }
+      return haveSufficientLeft || haveSufficientRight;
+    };
+  </script>
+</body>
+
+</html>
