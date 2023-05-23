@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    // 方法一：排序 + 哈希表
+    // 时间复杂度：O(nlogn)
+    // 空间复杂度：O(n)
+    var largestValsFromLabels = function (values, labels, numWanted, useLimit) {
+      const n = values.length;
+      const idx = Array.from(Array(n), (_, i) => i);
+      idx.sort((i, j) => values[j] - values[i]);
+
+      let ans = 0,
+        choose = 0;
+      const cnt = {};
+      for (let i = 0; i < n; i++) {
+        const label = labels[idx[i]];
+        if (cnt[label] === useLimit) {
+          continue;
+        }
+        choose++;
+        ans += values[idx[i]];
+        cnt[label] = (cnt[label] || 0) + 1;
+        if (choose === numWanted) {
+          break;
+        }
+      }
+      return ans;
+    }
+
+    // test
+    let values = [5, 4, 3, 2, 1],
+      labels = [1, 1, 2, 2, 3],
+      numWanted = 3,
+      useLimit = 1;
+    console.log(largestValsFromLabels(values, labels, numWanted, useLimit))
+  </script>
+</body>
+
+</html>
