@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    // 一.初始化 2 种 Node 类型
+    // HTML [nodeType](https://developer.mozilla.org/zh-CN/docs/Web/API/Node/nodeType) 会比较多，这里为了让大家明白核心原理，省去了一些不重要的
+    const nodeType = {
+      TEXT: 'text',
+      ELEMENT: 'element',
+    };
+    // 最外层增加一个模拟的根节点标签
+    const frameflag = 'rootnode';
+    // 计算一个完整标签的范围，eg. [0, 50]
+    const createRange = (startPos, endPos) => {
+      // 因为最外层模拟了 <rootnode>，所以需要将这部分长度减掉
+      const frameFlagOffset = frameflag.length + 2;
+      return [startPos - frameFlagOffset, endPos - frameFlagOffset]
+    };
+
+    // 找到数组的最后一项
+    function arrBack(arr) {
+      return arr[arr.length - 1];
+    }
+
+    // 处理开标签
+    function openMarkUpParse(leadingSlash, attributes, tagName, tagStartPos, tagEndPos, currentParent, stack) {
+      if (!leadingSlash) {
+        const attrs = {};
+        // 解析 id、class 属性，并且挂到 attrs 对象下
+        const kAttributePattern = /(?:^|\s)(id|class)\s*=\s*((?:'[^']*')|(?:"[^"]*")|\S+)/gi;
+        for (let attMatch;
+          (attMatch = kAttributePattern.exec(attributes));) {
+          const {
+            1: key,
+            2: val
+          } = attMatch;
+          // 属性值是否带引号
+          const isQuoted = val[0] === `'` || val[0] === `"`;
+          attrs[key.toLowerCase()] = isQuoted ? val.slice(1, val.length - 1) : val;
+        }
+
+        const currentNode = {
+          tagName,
+          attrs,
+          rawAttrs: attributes.slice(1),
+          type: nodeType.ELEMENT,
+          // 这里的 range 不一定是正确的 range，需要匹配到闭标签以后更新
+          range: createRange(tagStartPos, tagEndPos),
+          children: [],
+        };
+        // 将当前节点信息放入到 currentParent 的 children 中
+        currentParent.children.push(currentNode);
+        // 重置 currentParent 节点为当前节点
+        currentParent = currentNode;
+        // 将每个节点依次塞到栈中，然后在后面的闭标签中以栈的方式释放
+        stack.push(currentParent);
+      }
+    }
+
+    // 处理闭标签; 还需匹配到闭标签后更新 range 并且将之从栈（stack）中踢出
+    function closeMarkUpParse(leadingSlash, tagName, tagStartPos, tagEndPos, currentParent, stack, closingSlash) {
+      // 自闭合元素
+      const kSelfClosingElements = {
+        area: true,
+        img: true,
+        // ...省略了部分标签
+      };
+      if (leadingSlash || closingSlash || kSelfClosingElements[tagName]) {
+        // 开闭标签名是否匹配，比如有可能写成 <div></div1>，这种就需要异常处理
+        if (currentParent.tagName === tagName) {
+          // 更新 range，之前处理开标签算出的 range 是不包含闭标签的
+          currentParent.range[1] = createRange(-1, Math.max(lastTextPos, tagEndPos))[1];
+          // 将处理完的开闭标签踢出
+          stack.pop();
+          // 将 stack 的最后一个节点赋值给 currentParent
+          currentParent = arrBack(stack);
+        } else {
+          // <div></div1>，异常直接从栈中踢出，不更新 range
+          stack.pop();
+          currentParent = arrBack(stack);
+        }
+      }
+    }
+
+    /** 遍历解析/提取 HTML 标签字符串 */
+    function markupParse(data, lastTextPos, currentParent, stack) {
+      // 参考标签文档：https:/ / html.spec.whatwg.org / multipage / custom - elements.html# valid - custom - element - name
+      const kMarkupPattern = /<(\/?)([a-zA-Z][-.:0-9_a-zA-Z]*)((?:\s+[^>]*?(?:(?:'[^']*')|(?:"[^"]*"))?)*)\s*(\/?)>/g;
+      while ((match = kMarkupPattern.exec(data))) {
+        /**
+         * matchText: 匹配的字符  eg. <span id="xxx">
+         * leadingSlash: 是否为闭合标签 eg. /
+         * tagName: 标签名 eg. span
+         * attributes: 属性 eg. id="xxx"
+         * closingSlash: 是否为自闭合 eg. /
+         */
+        let {
+          0: matchText,
+          1: leadingSlash,
+          2: tagName,
+          3: attributes,
+          4: closingSlash
+        } = match;
+        // 本次匹配到的字符串
+        const matchLength = matchText.length;
+        // 本次匹配的起始位置
+        const tagStartPos = kMarkupPattern.lastIndex - matchLength;
+        // 本次匹配的末尾位置
+        const tagEndPos = kMarkupPattern.lastIndex;
+
+        if (lastTextPos > -1) {
+          // 处理文本，eg. hello world
+          // 上次匹配的末尾位置 + 本次匹配的字符长度 小于 本次匹配的末尾位置就说明中间有 text，这个稍微想下其实还是比较好理解的
+          // 如果没有 text，lastTextPos + matchLength 都会等于 tagEndPos
+          if (lastTextPos + matchLength < tagEndPos) {
+            // 上次匹配的末尾位置到本次匹配的起始位置
+            const text = data.substring(lastTextPos, tagStartPos);
+            currentParent.children.push({
+              type: nodeType.TEXT,
+              range: createRange(lastTextPos, tagStartPos),
+              value: text,
+            });
+          }
+        }
+
+        // 记录上次匹配的位置
+        lastTextPos = kMarkupPattern.lastIndex;
+
+        // 如果匹配到的标签是模拟标签，就跳过
+        if (tagName === frameflag) continue;
+
+        // ...处理 nodeType 为 element 逻辑
+
+        // 处理开标签
+        openMarkUpParse(leadingSlash, attributes, tagName, tagStartPos, tagEndPos, currentParent, stack);
+        // 处理闭标签和自闭合标签
+        closeMarkUpParse(leadingSlash, tagName, tagStartPos, tagEndPos, currentParent, stack, closingSlash)
+      }
+    }
+
+    /** 解析入口 */
+    function parse(data) {
+      data = data.replace(/\n/g, '') // 去除所有空字符串
+
+      // 最外层模拟的节点
+      const root = {
+        tagName: '',
+        children: [],
+      };
+
+      // 设置 root 为父节点
+      let currentParent = root;
+      // 栈管理
+      const stack = [root];
+      let lastTextPos = -1;
+
+      // 将模拟的根节点和需要解析的 html 拼接
+      data = `<${frameflag}>${data}</${frameflag}>`;
+
+      // ...开始遍历/解析
+      markupParse(data, lastTextPos, currentParent, stack);
+
+      // 通过处理，将 stack 返回就是最终的结果
+      return stack;
+    }
+
+    // test
+    const root = parse(
+      `<div id="test" class="container" c="b">
+        <div class="text-block">
+          <span id="xxx">Hello World</span>
+        </div>
+        <img src="xx.jpg" />
+      </div>
+      <div>test</div>
+      `
+    );
+    console.log(root);
+    // [{"tagName":"","children":[{"tagName":"div","attrs":{"id":"test","class":"container"},"rawAttrs":"id=\"test\" class=\"container\" c=\"b\"","type":"element","range":[0,128],"children":[{"tagName":"div","attrs":{"class":"text-block"},"rawAttrs":"class=\"text-block\"","type":"element","range":[39,102],"children":[{"tagName":"span","attrs":{"id":"xxx"},"rawAttrs":"id=\"xxx\"","type":"element","range":[63,96],"children":[{"type":"text","range":[78,89],"value":"Hello World"}]}]},{"tagName":"img","attrs":{},"rawAttrs":"src=\"xx.jpg\" ","type":"element","range":[102,122],"children":[]}]}]}]
+  </script>
+</body>
+
+</html>
