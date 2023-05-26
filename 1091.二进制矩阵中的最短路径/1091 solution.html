@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    /**
+     * 从矩阵左上角走到右下角，途径的单元格都是0
+     */
+
+    // 方法一：广度优先搜索
+    // 时间复杂度:O(n^2)
+    // 空间复杂度:O(n^2)
+    var shortestPathBinaryMatrix = function (grid) {
+      if (grid[0][0] === 1) {
+        return -1;
+      }
+      const n = grid.length;
+      const dist = new Array(n).fill(undefined).map(() => new Array(n).fill(Infinity));
+      dist[0][0] = 1;
+      const queue = [
+        [0, 0]
+      ];
+      while (queue.length > 0) {
+        const [x, y] = queue.shift();
+        for (let dx = -1; dx <= 1; dx++) {
+          for (let dy = -1; dy <= 1; dy++) {
+            if (x == n - 1 && y == n - 1) {
+              return dist[x][y];
+            }
+            if (x + dx < 0 || x + dx >= n || y + dy < 0 || y + dy >= n) { // 越界
+              continue;
+            }
+            if (grid[x + dx][y + dy] > 0 || dist[x + dx][y + dy] <= dist[x][y] + 1) { // 单元格值不为 0 或已被访问
+              continue;
+            }
+            dist[x + dx][y + dy] = dist[x][y] + 1;
+            queue.push([x + dx, y + dy]);
+          }
+        }
+      }
+      return -1;
+    }
+
+    // test
+    let grid = [
+      [0, 1],
+      [1, 0]
+    ];
+    console.log(shortestPathBinaryMatrix(grid))
+  </script>
+</body>
+
+</html>
