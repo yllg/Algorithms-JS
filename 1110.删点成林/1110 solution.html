@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    // 方法一：深度优先搜索
+    // 时间复杂度：O(n)
+    // 空间复杂度：O(n)
+    var delNodes = function (root, to_delete) {
+      const toDeleteSet = new Set(to_delete);
+      const roots = [];
+      dfs(root, true, toDeleteSet, roots);
+      return roots;
+    }
+
+    function dfs(node, isRoot, toDeleteSet, roots) {
+      if (!node) {
+        return null;
+      }
+      const deleted = toDeleteSet.has(node.val);
+      node.left = dfs(node.left, deleted, toDeleteSet, roots);
+      node.right = dfs(node.right, deleted, toDeleteSet, roots);
+      if (deleted) {
+        return null;
+      } else {
+        if (isRoot) {
+          roots.push(node);
+        }
+        return node;
+      }
+    }
+  </script>
+</body>
+
+</html>
