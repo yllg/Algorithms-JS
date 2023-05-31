@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    // 方法一：动态规划
+    // 时间复杂度：O(n^3)
+    // 空间复杂度：O(n^2)
+    var mctFromLeafValues = function (arr) {
+      const n = arr.length;
+      const dp = Array(n).fill(0).map(() => Array(n).fill(Infinity));
+      const mval = Array(n).fill(0).map(() => Array(n));
+      for (let j = 0; j < n; j++) {
+        mval[j][j] = arr[j];
+        dp[j][j] = 0;
+      }
+      for (let i = n - 1; i >= 0; i--) {
+        for (let j = i + 1; j < n; j++) {
+          mval[i][j] = Math.max(arr[i], mval[i + 1][j]);
+          for (let k = i; k < j; k++) {
+            dp[i][j] = Math.min(dp[i][j], dp[i][k] + dp[k + 1][j] + mval[i][k] * mval[k + 1][j]);
+          }
+        }
+      }
+      return dp[0][n - 1];
+    }
+
+    // 方法二：单调栈
+    // 时间复杂度：O(n)
+    // 空间复杂度：O(n)
+    var mctFromLeafValues = function (arr) {
+      let res = 0;
+      let stack = [];
+      for (let x of arr) {
+        while (stack.length && stack[stack.length - 1] <= x) {
+          let y = stack.pop();
+          if (!stack.length || stack[stack.length - 1] > x) {
+            res += y * x;
+          } else {
+            res += stack[stack.length - 1] * y;
+          }
+        }
+        stack.push(x);
+      }
+      while (stack.length >= 2) {
+        let x = stack.pop();
+        res += stack[stack.length - 1] * x;
+      }
+      return res;
+    }
+
+    // test
+    let arr = [6, 2, 4];
+    console.log(mctFromLeafValues(arr))
+  </script>
+</body>
+
+</html>
