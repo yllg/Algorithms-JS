@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    // 方法一：贪心 + 二分查找
+    // 时间复杂度：O(nlogn + nlogC)
+    // 空间复杂度：O(logn)
+    var maximumTastiness = function (price, k) {
+      price.sort((a, b) => a - b);
+      let left = 0,
+        right = price[price.length - 1] - price[0];
+      while (left < right) {
+        const mid = Math.floor((left + right + 1) / 2);
+        if (check(price, k, mid)) {
+          left = mid;
+        } else {
+          right = mid - 1;
+        }
+      }
+      return left;
+    }
+
+    const check = (price, k, tastiness) => {
+      let prev = -Number.MAX_VALUE / 2;
+      let cnt = 0;
+      for (const p of price) {
+        if (p - prev >= tastiness) {
+          cnt++;
+          prev = p;
+        }
+      }
+      return cnt >= k;
+    };
+
+    // test
+    let price = [13, 5, 1, 8, 21, 2],
+      k = 3;
+    console.log(maximumTastiness(price, k))
+  </script>
+</body>
+
+</html>
