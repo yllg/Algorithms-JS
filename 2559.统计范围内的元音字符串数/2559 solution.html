@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    // 方法一：前缀和
+    // 时间复杂度：O(n+q)
+    // 空间复杂度：O(n)
+    var vowelStrings = function (words, queries) {
+      let n = words.length;
+      let prefixSums = new Array(n + 1).fill(0);
+      for (let i = 0; i < n; i++) {
+        let value = isVowelString(words[i]) ? 1 : 0;
+        prefixSums[i + 1] = prefixSums[i] + value;
+      }
+      let ans = [];
+      for (let i = 0; i < queries.length; i++) {
+        let start = queries[i][0],
+          end = queries[i][1];
+        ans.push(prefixSums[end + 1] - prefixSums[start]);
+      }
+      return ans;
+    }
+
+    function isVowelString(word) {
+      return isVowelLetter(word[0]) && isVowelLetter(word[word.length - 1]);
+    }
+
+    function isVowelLetter(c) {
+      return c == 'a' || c == 'e' || c == 'i' || c == 'o' || c == 'u';
+    }
+
+    // test
+    let words = ["aba", "bcb", "ece", "aa", "e"],
+      queries = [
+        [0, 2],
+        [1, 4],
+        [1, 1]
+      ];
+    console.log(vowelStrings(words, queries))
+  </script>
+</body>
+
+</html>
