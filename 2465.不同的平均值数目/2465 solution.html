@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：排序 + 哈希表
+      // 时间复杂度：O(n)
+      // 时间复杂度：O(n)
+      var distinctAverages = function (nums) {
+        nums.sort((a, b) => a - b);
+        const seen = new Set();
+        for (let i = 0, j = nums.length - 1; i < j; i++, j--) {
+          seen.add(nums[i] + nums[j]);
+        }
+        return seen.size;
+      };
+
+      // test
+      let nums = [4, 1, 4, 0, 3, 5];
+      console.log(distinctAverages(nums));
+    </script>
+  </body>
+</html>
