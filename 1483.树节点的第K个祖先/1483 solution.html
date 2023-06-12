@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：倍增
+      // 时间复杂度：初始化的时间复杂度是 O(n×logn)
+      // 空间复杂度：初始化的空间复杂度是 O(n×logn)
+      const LOG = 16;
+      var TreeAncestor = function (n, parent) {
+        ancestors = new Array(n).fill(0).map(() => new Array(LOG).fill(-1));
+        for (let i = 0; i < n; i++) {
+          ancestors[i][0] = parent[i];
+        }
+        for (let j = 1; j < LOG; j++) {
+          for (let i = 0; i < n; i++) {
+            if (ancestors[i][j - 1] !== -1) {
+              ancestors[i][j] = ancestors[ancestors[i][j - 1]][j - 1];
+            }
+          }
+        }
+      };
+
+      TreeAncestor.prototype.getKthAncestor = function (node, k) {
+        for (let j = 0; j < LOG; j++) {
+          if (((k >> j) & 1) !== 0) {
+            node = ancestors[node][j];
+            if (node === -1) {
+              return -1;
+            }
+          }
+        }
+        return node;
+      };
+    </script>
+  </body>
+</html>
