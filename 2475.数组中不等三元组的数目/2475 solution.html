@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：枚举
+      // 时间复杂度：O(n^3)
+      // 空间复杂度：O(1)
+      var unequalTriplets = function (nums) {
+        let res = 0,
+          n = nums.length;
+        for (let i = 0; i < n; i++) {
+          for (let j = i + 1; j < n; j++) {
+            for (let k = j + 1; k < n; k++) {
+              if (
+                nums[i] != nums[j] &&
+                nums[i] != nums[k] &&
+                nums[j] != nums[k]
+              ) {
+                res++;
+              }
+            }
+          }
+        }
+        return res;
+      };
+
+      // 方法二：排序
+      // 时间复杂度：O(nlogn)
+      // 空间复杂度：O(logn)
+      var unequalTriplets = function (nums) {
+        nums.sort();
+        let res = 0,
+          n = nums.length;
+        for (let i = 0, j = 0; i < n; i = j) {
+          while (j < n && nums[j] == nums[i]) {
+            j++;
+          }
+          res += i * (j - i) * (n - j);
+        }
+        return res;
+      };
+
+      // 方法三：哈希表
+      // 时间复杂度：O(n)
+      // 空间复杂度：O(n)
+      var unequalTriplets = function (nums) {
+        let count = {},
+          res = 0,
+          n = nums.length,
+          t = 0;
+        for (let x of nums) {
+          count[x] = count[x] || 0;
+          count[x]++;
+        }
+        for (let k in count) {
+          res += t * count[k] * (n - t - count[k]);
+          t += count[k];
+        }
+        return res;
+      };
+
+      // test
+      let nums = [4, 4, 2, 4, 3];
+      console.log(unequalTriplets(nums));
+    </script>
+  </body>
+</html>
