@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：深度优先搜索
+      //   时间复杂度：O(mn×logmn)
+      //   空间复杂度：O(mn)
+      var pondSizes = (land) => {
+        const m = land.length;
+        const n = land[0].length;
+        const resList = [];
+        for (let i = 0; i < m; i++) {
+          for (let j = 0; j < n; j++) {
+            if (land[i][j] === 0) {
+              resList.push(dfs(land, i, j));
+            }
+          }
+        }
+        const res = resList.sort((a, b) => a - b);
+        return res;
+      };
+
+      const dfs = (land, x, y) => {
+        const m = land.length;
+        const n = land[0].length;
+        if (x < 0 || x >= m || y < 0 || y >= n || land[x][y] !== 0) {
+          return 0;
+        }
+        land[x][y] = -1;
+        let res = 1;
+        for (let dx = -1; dx <= 1; dx++) {
+          for (let dy = -1; dy <= 1; dy++) {
+            if (dx === 0 && dy === 0) {
+              continue;
+            }
+            res += dfs(land, x + dx, y + dy);
+          }
+        }
+        return res;
+      };
+
+      // 方法二：广度优先搜索
+      //   时间复杂度：O(mn×logmn)
+      //   空间复杂度：O(m+n)
+      let pondSizes = (land) => {
+        const m = land.length;
+        const n = land[0].length;
+        const resList = [];
+        for (let i = 0; i < m; i++) {
+          for (let j = 0; j < n; j++) {
+            if (land[i][j] === 0) {
+              resList.push(bfs(land, i, j));
+            }
+          }
+        }
+        const res = resList.sort((a, b) => a - b);
+        return res;
+      };
+
+      const bfs = (land, x, y) => {
+        const m = land.length;
+        const n = land[0].length;
+        let res = 0;
+        const queue = [];
+        queue.push([x, y]);
+        land[x][y] = -1;
+        while (queue.length > 0) {
+          const arr = queue.shift();
+          const currX = arr[0];
+          const currY = arr[1];
+          res++;
+          for (let dx = -1; dx <= 1; dx++) {
+            for (let dy = -1; dy <= 1; dy++) {
+              if (dx === 0 && dy === 0) {
+                continue;
+              }
+              if (
+                currX + dx < 0 ||
+                currX + dx >= m ||
+                currY + dy < 0 ||
+                currY + dy >= n ||
+                land[currX + dx][currY + dy] !== 0
+              ) {
+                continue;
+              }
+              land[currX + dx][currY + dy] = -1;
+              queue.push([currX + dx, currY + dy]);
+            }
+          }
+        }
+        return res;
+      };
+    </script>
+  </body>
+</html>
