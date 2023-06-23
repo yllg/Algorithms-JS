@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：分情况讨论
+      // 时间复杂度：O(1)
+      // 空间复杂度：O(1)
+      var numberOfCuts = function (n) {
+        if (n === 1) {
+          return 0;
+        }
+        if (n % 2 === 0) {
+          return n / 2;
+        }
+        return n;
+      };
+
+      // test
+      let n = 3;
+      console.log(numberOfCuts(n));
+    </script>
+  </body>
+</html>

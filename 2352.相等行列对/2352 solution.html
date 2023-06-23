@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    // 方法一：哈希表
+    // 时间复杂度：O(n^2)
+    // 空间复杂度：O(n^2)
+    var equalPairs = function (grid) {
+      const n = grid.length;
+      const cnt = {};
+
+      for (const row of grid) {
+        const rowStr = row.toString();
+        cnt[rowStr] = (cnt[rowStr] || 0) + 1;
+      }
+
+      let res = 0;
+      for (let j = 0; j < n; j++) {
+        const arr = [];
+        for (let i = 0; i < n; i++) {
+          arr.push(grid[i][j]);
+        }
+        const arrStr = arr.toString();
+        if (cnt[arrStr]) {
+          res += cnt[arrStr];
+        }
+      }
+      return res;
+    };
+
+    // test
+    let grid = [
+      [3, 2, 1],
+      [1, 7, 6],
+      [2, 7, 7]
+    ];
+    console.log(equalPairs(grid))
+  </script>
+</body>
+
+</html>

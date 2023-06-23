@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：记录翻转位置的最大值
+      // 时间复杂度：O(n)
+      // 空间复杂度：O(1)
+      var numTimesAllBlue = function (flips) {
+        const n = flips.length;
+        let ans = 0,
+          right = 0;
+        for (let i = 0; i < n; ++i) {
+          right = Math.max(right, flips[i]);
+          if (right === i + 1) {
+            ++ans;
+          }
+        }
+        return ans;
+      };
+
+      // test
+      let flips = [3, 2, 4, 1, 5];
+      console.log(numTimesAllBlue(flips));
+    </script>
+  </body>
+</html>

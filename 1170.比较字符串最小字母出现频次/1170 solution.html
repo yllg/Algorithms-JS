@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=\, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+
+  <body>
+    <script>
+      // 方法一：后缀和
+      // 时间复杂度：O((n+m)p)，其中 n 是 queries 的长度，m 是 words 的长度，p 是 queries 和 words 中的最长字符串的长度。
+      // 空间复杂度：O(1)
+      function f(s) {
+        let cnt = 0;
+        let ch = 'z';
+        for (let c of s) {
+          if (c < ch) {
+            ch = c;
+            cnt = 1;
+          } else if (c == ch) {
+            cnt++;
+          }
+        }
+        return cnt;
+      }
+
+      var numSmallerByFrequency = function (queries, words) {
+        let count = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+        for (let s of words) {
+          count[f(s)]++;
+        }
+        for (let i = 9; i >= 0; i--) {
+          count[i] += count[i + 1];
+        }
+        res = [];
+        for (let s of queries) {
+          res.push(count[f(s) + 1]);
+        }
+        return res;
+      };
+
+      // test
+      let queries = ['cbd'],
+        words = ['zaaaz'];
+      console.log(numSmallerByFrequency(queries, words));
+    </script>
+  </body>
+</html>

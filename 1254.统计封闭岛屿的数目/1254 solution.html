@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：广度优先搜索
+      // 时间复杂度：O(mn)
+      // 空间复杂度：O(1)
+      const dir = [
+        [-1, 0],
+        [1, 0],
+        [0, -1],
+        [0, 1],
+      ];
+      var closedIsland = function (grid) {
+        const m = grid.length;
+        const n = grid[0].length;
+        let ans = 0;
+
+        for (let i = 0; i < m; i++) {
+          for (let j = 0; j < n; j++) {
+            if (grid[i][j] === 0) {
+              const qu = [];
+              grid[i][j] = 1;
+              let closed = true;
+
+              qu.push([i, j]);
+              while (qu.length) {
+                const arr = qu.shift();
+                let cx = arr[0],
+                  cy = arr[1];
+                if (cx === 0 || cy === 0 || cx === m - 1 || cy === n - 1) {
+                  closed = false;
+                }
+                for (let d = 0; d < 4; d++) {
+                  let nx = cx + dir[d][0];
+                  let ny = cy + dir[d][1];
+                  if (
+                    nx >= 0 &&
+                    nx < m &&
+                    ny >= 0 &&
+                    ny < n &&
+                    grid[nx][ny] === 0
+                  ) {
+                    grid[nx][ny] = 1;
+                    qu.push([nx, ny]);
+                  }
+                }
+              }
+              if (closed) {
+                ans++;
+              }
+            }
+          }
+        }
+        return ans;
+      };
+
+      // 方法二：深度优先搜索
+      // 时间复杂度：O(mn)
+      // 空间复杂度：O(1)
+      var closedIsland = function (grid) {
+        let ans = 0;
+        const m = grid.length;
+        const n = grid[0].length;
+
+        for (let i = 0; i < m; i++) {
+          for (let j = 0; j < n; j++) {
+            if (grid[i][j] === 0 && dfs(i, j, grid, m, n)) {
+              ans++;
+            }
+          }
+        }
+        return ans;
+      };
+
+      const dfs = (x, y, grid, m, n) => {
+        if (x < 0 || y < 0 || x >= m || y >= n) {
+          return false;
+        }
+        if (grid[x][y] != 0) {
+          return true;
+        }
+        grid[x][y] = -1;
+        const ret1 = dfs(x - 1, y, grid, m, n);
+        const ret2 = dfs(x + 1, y, grid, m, n);
+        const ret3 = dfs(x, y - 1, grid, m, n);
+        const ret4 = dfs(x, y + 1, grid, m, n);
+        return ret1 && ret2 && ret3 && ret4;
+      };
+
+      // 方法三：并查集
+      // 时间复杂度：O(mn X α(mn))
+      // 空间复杂度：O(mn)
+      var closedIsland = function (grid) {
+        const m = grid.length;
+        const n = grid[0].length;
+        const uf = new UnionFind(m * n);
+
+        for (let i = 0; i < m; i++) {
+          if (grid[i][0] === 0) {
+            uf.uni(i * n, 0);
+          }
+          if (grid[i][n - 1] === 0) {
+            uf.uni(i * n + n - 1, 0);
+          }
+        }
+        for (let j = 1; j < n - 1; j++) {
+          if (grid[0][j] === 0) {
+            uf.uni(j, 0);
+          }
+          if (grid[m - 1][j] === 0) {
+            uf.uni((m - 1) * n + j, 0);
+          }
+        }
+        for (let i = 0; i < m; i++) {
+          for (let j = 0; j < n; j++) {
+            if (grid[i][j] === 0) {
+              if (i > 0 && grid[i - 1][j] === 0) {
+                uf.uni(i * n + j, (i - 1) * n + j);
+              }
+              if (j > 0 && grid[i][j - 1] === 0) {
+                uf.uni(i * n + j, i * n + j - 1);
+              }
+            }
+          }
+        }
+
+        const cnt = new Set();
+        for (let i = 0; i < m; i++) {
+          for (let j = 0; j < n; j++) {
+            if (grid[i][j] === 0) {
+              cnt.add(uf.find(i * n + j));
+            }
+          }
+        }
+        let total = cnt.size;
+        if (cnt.has(uf.find(0))) {
+          total--;
+        }
+        return total;
+      };
+
+      class UnionFind {
+        constructor(n) {
+          this.parent = new Array(n);
+          for (let i = 0; i < n; i++) {
+            this.parent[i] = i;
+          }
+          this.rank = new Array(n).fill(0);
+        }
+
+        uni(x, y) {
+          const rootx = this.find(x);
+          const rooty = this.find(y);
+          if (rootx !== rooty) {
+            if (this.rank[rootx] > this.rank[rooty]) {
+              this.parent[rooty] = rootx;
+            } else if (this.rank[rootx] < this.rank[rooty]) {
+              this.parent[rootx] = rooty;
+            } else {
+              this.parent[rooty] = rootx;
+              this.rank[rootx]++;
+            }
+          }
+        }
+
+        find(x) {
+          if (this.parent[x] !== x) {
+            this.parent[x] = this.find(this.parent[x]);
+          }
+          return this.parent[x];
+        }
+      }
+
+      // test
+      let grid = [
+        [1, 1, 1, 1, 1, 1, 1, 0],
+        [1, 0, 0, 0, 0, 1, 1, 0],
+        [1, 0, 1, 0, 1, 1, 1, 0],
+        [1, 0, 0, 0, 0, 1, 0, 1],
+        [1, 1, 1, 1, 1, 1, 1, 0],
+      ];
+
+      console.log(closedIsland(grid));
+    </script>
+  </body>
+</html>

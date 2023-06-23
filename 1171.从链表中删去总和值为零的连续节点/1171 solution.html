@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：哈希表
+      // 时间复杂度：O(n)
+      // 空间复杂度：O(n)
+      var removeZeroSumSublists = function (head) {
+        let dummy = new ListNode(0);
+        dummy.next = head;
+        let seen = {};
+        let prefix = 0;
+        for (let node = dummy; node !== null; node = node.next) {
+          prefix += node.val;
+          seen[prefix] = node;
+        }
+        prefix = 0;
+        for (let node = dummy; node !== null; node = node.next) {
+          prefix += node.val;
+          node.next = seen[prefix].next;
+        }
+        return dummy.next;
+      };
+    </script>
+  </body>
+</html>

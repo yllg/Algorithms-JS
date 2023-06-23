@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 重新排列 子串 s[left], ..., s[right]，并从中选择 最多 k 项替换成任何小写英文字母。 子串可以变成回文形式的字符串，那么检测结果为 true，否则结果为 false。
+
+      // 方法一：前缀数组 + 位运算
+      // 时间复杂度：O(n+m)
+      // 空间复杂度：O(n)
+      var canMakePaliQueries = function (s, queries) {
+        const n = s.length;
+        const count = Array(n + 1).fill(0);
+        for (let i = 0; i < n; i++) {
+          count[i + 1] =
+            count[i] ^ (1 << (s[i].charCodeAt(0) - 'a'.charCodeAt(0)));
+        }
+        const res = [];
+        for (const query of queries) {
+          const l = query[0],
+            r = query[1],
+            k = query[2];
+          let bits = 0,
+            x = count[r + 1] ^ count[l];
+          while (x > 0) {
+            x &= x - 1;
+            bits++;
+          }
+          res.push(bits <= k * 2 + 1);
+        }
+        return res;
+      };
+
+      // test
+      let s = 'abcda',
+        queries = [
+          [3, 3, 0],
+          [1, 2, 0],
+          [0, 3, 1],
+          [0, 3, 2],
+          [0, 4, 1],
+        ];
+      console.log(canMakePaliQueries(s, queries));
+    </script>
+  </body>
+</html>
