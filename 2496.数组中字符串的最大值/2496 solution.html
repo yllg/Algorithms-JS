@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：字符串遍历
+      // 时间复杂度：O(nm)
+      // 空间复杂度：O(1)
+      var maximumValue = function (strs) {
+        let res = 0;
+        for (const s of strs) {
+          let isDigits = true;
+          for (const c of s) {
+            isDigits &= c >= "0" && c <= "9";
+          }
+          res = Math.max(res, isDigits ? Number(s) : s.length);
+        }
+        return res;
+      };
+
+      // test
+      let strs = ["alic3", "bob", "3", "4", "00000"];
+      console.log(maximumValue(strs));
+    </script>
+  </body>
+</html>
