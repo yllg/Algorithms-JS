@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：动态规划
+      // 时间复杂度：O(n)
+      // 空间复杂度：O(1)
+      var maximumSum = function (arr) {
+        let dp0 = arr[0],
+          dp1 = 0,
+          res = arr[0];
+        for (let i = 1; i < arr.length; i++) {
+          dp1 = Math.max(dp0, dp1 + arr[i]);
+          dp0 = Math.max(dp0, 0) + arr[i];
+          res = Math.max(res, Math.max(dp0, dp1));
+        }
+        return res;
+      };
+
+      // test
+      let arr = [1, -2, 0, 3];
+      console.log(maximumSum(arr));
+    </script>
+  </body>
+</html>
