@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：遍历
+      // 时间复杂度：O(n)
+      // 空间复杂度：O(1)
+      var isCircularSentence = function (sentence) {
+        const n = sentence.length;
+        if (sentence[n - 1] !== sentence[0]) {
+          return false;
+        }
+        for (let i = 0; i < n; i++) {
+          if (sentence[i] === ' ' && sentence[i + 1] !== sentence[i - 1]) {
+            return false;
+          }
+        }
+        return true;
+      };
+
+      // test
+      let sentence = 'leetcode exercises sound delightful';
+      console.log(isCircularSentence(sentence));
+    </script>
+  </body>
+</html>
