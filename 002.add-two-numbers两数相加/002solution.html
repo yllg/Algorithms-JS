@@ -1,117 +1,111 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <title>两数之和</title>
-</head>
+  </head>
 
-<body>
+  <body>
     <script>
-        // Source : https://leetcode.com/problems/add-two-numbers/
-        // Author : 悬笔e绝
-        // Date   : 2018-03-14       
+      // Source : https://leetcode.com/problems/add-two-numbers/
+      // Author : 悬笔e绝
+      // Date   : 2018-03-14
 
-        /**
-         * @param {ListNode} l1
-         * @param {ListNode} l2
-         * @return {ListNode}
-         */
-        // 解法1：常规法
-        var addTwoNumbers1 = function (l1, l2) {
-            var add = 0,
-                ans, head;
-            //可能两个链表的长度不一样
-            while (l1 || l2) {
-                //某一个到头了就取0
-                var a = l1 ? l1.val : 0,
-                    b = l2 ? l2.val : 0;
-                //头结点是各位相加； add表示进位
-                var sum = a + b + add;
-                //~~向下取整，拿到进位值
-                add = ~~(sum / 10);
-                // 取模
-                var node = new ListNode(sum % 10);
+      /**
+       * @param {ListNode} l1
+       * @param {ListNode} l2
+       * @return {ListNode}
+       */
+      // 解法1：常规法
+      var addTwoNumbers1 = function (l1, l2) {
+        var add = 0,
+          ans,
+          head;
+        //可能两个链表的长度不一样
+        while (l1 || l2) {
+          //某一个到头了就取0
+          var a = l1 ? l1.val : 0,
+            b = l2 ? l2.val : 0;
+          //头结点是各位相加； add表示进位
+          var sum = a + b + add;
+          //~~向下取整，拿到进位值
+          add = ~~(sum / 10);
+          // 取模
+          var node = new ListNode(sum % 10);
 
-                if (!ans)
-                    ans = head = node;
-                else {
-                    //！！其实就是往ans的next加，ans和head指向一块地址
-                    head.next = node;
-                    //把head重置
-                    head = node;
-                }
-                //链表继续下一个节点
-                if (l1)
-                    l1 = l1.next;
-                if (l2)
-                    l2 = l2.next;
-            }
-            //有进位，需要再加上一个节点
-            if (add) {
-                var node = new ListNode(add);
-                head.next = node;
-                head = node;
-            }
-            return ans;
-        };
-
-        // 解法2：模拟
-        // 时间复杂度 O(max(m,n)) 空间复杂度 O(max(m,n))
-        var addTwoNumbers2 = function (l1, l2) {
-            let head = null,
-                tail = null;
-            let carry = 0;
-            while (l1 || l2) {
-                const n1 = l1 ? l1.val : 0;
-                const n2 = l2 ? l2.val : 0;
-                const sum = n1 + n2 + carry;
-                if (!head) {
-                    head = tail = new ListNode(sum % 10);
-                } else {
-                    tail.next = new ListNode(sum % 10);
-                    tail = tail.next;
-                }
-                carry = Math.floor(sum / 10);
-                if (l1) {
-                    l1 = l1.next;
-                }
-                if (l2) {
-                    l2 = l2.next;
-                }
-            }
-            if (carry > 0) {
-                tail.next = new ListNode(carry);
-            }
-            return head;
-        };
-
-
-
-        //Definition for singly-linked list.
-        function ListNode(val) {
-            this.val = val;
-            this.next = null;
+          if (!ans) ans = head = node;
+          else {
+            //！！其实就是往ans的next加，ans和head指向一块地址
+            head.next = node;
+            //把head重置
+            head = node;
+          }
+          //链表继续下一个节点
+          if (l1) l1 = l1.next;
+          if (l2) l2 = l2.next;
         }
+        //有进位，需要再加上一个节点
+        if (add) {
+          var node = new ListNode(add);
+          head.next = node;
+          head = node;
+        }
+        return ans;
+      };
 
-        //测试
-        var a3 = new ListNode(3);
-        var a2 = new ListNode(4);
-        a2.next = a3;
-        var a1 = new ListNode(2);
-        a1.next = a2;
+      // 解法2：模拟
+      // 时间复杂度 O(max(m,n)) 空间复杂度 O(1)
+      var addTwoNumbers2 = function (l1, l2) {
+        let head = null,
+          tail = null;
+        let carry = 0;
+        while (l1 || l2) {
+          const n1 = l1 ? l1.val : 0;
+          const n2 = l2 ? l2.val : 0;
+          const sum = n1 + n2 + carry;
+          if (!head) {
+            head = tail = new ListNode(sum % 10);
+          } else {
+            tail.next = new ListNode(sum % 10);
+            tail = tail.next;
+          }
+          carry = Math.floor(sum / 10);
+          if (l1) {
+            l1 = l1.next;
+          }
+          if (l2) {
+            l2 = l2.next;
+          }
+        }
+        if (carry > 0) {
+          tail.next = new ListNode(carry);
+        }
+        return head;
+      };
 
-        var b3 = new ListNode(4);
-        var b2 = new ListNode(6);
-        b2.next = b3;
-        var b1 = new ListNode(5);
-        b1.next = b2;
+      //Definition for singly-linked list.
+      function ListNode(val) {
+        this.val = val;
+        this.next = null;
+      }
 
-        console.log(addTwoNumbers1(a1, b1));
-        console.log(addTwoNumbers2(a1, b1));
+      //测试
+      var a3 = new ListNode(3);
+      var a2 = new ListNode(4);
+      a2.next = a3;
+      var a1 = new ListNode(2);
+      a1.next = a2;
+
+      var b3 = new ListNode(4);
+      var b2 = new ListNode(6);
+      b2.next = b3;
+      var b1 = new ListNode(5);
+      b1.next = b2;
+
+      console.log(addTwoNumbers1(a1, b1));
+      console.log(addTwoNumbers2(a1, b1));
     </script>
-</body>
-
+  </body>
 </html>
