@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：栈
+      // 将两个单链表中的数据导出到两个栈中, 然后依次同时出栈，相加，保存十位，只留个位，头插到结果链表中, 最后判断十位是否还有数字，若有，头插到结果链表中
+      var addTwoNumbers = function (l1, l2) {
+        // 栈
+        let stack1 = [],
+          stack2 = [];
+        while (l1 || l2) {
+          if (l1) {
+            stack1.push(l1.val);
+            l1 = l1.next;
+          }
+          if (l2) {
+            stack2.push(l2.val);
+            l2 = l2.next;
+          }
+        }
+        let res = new ListNode();
+        let add = 0;
+        while (stack1.length || stack2.length) {
+          let num = 0;
+          num += stack1.length ? stack1.pop() : 0;
+          num += stack2.length ? stack2.pop() : 0;
+          num += add;
+          if (num > 9) {
+            add = parseInt(num / 10);
+            num = num % 10;
+          } else {
+            add = 0;
+          }
+          //头插
+          let node = new ListNode(num);
+          node.next = res.next;
+          res.next = node;
+        }
+        if (add !== 0) {
+          let node = new ListNode(add);
+          node.next = res.next;
+          res.next = node;
+        }
+        return res.next;
+      };
+    </script>
+  </body>
+</html>
