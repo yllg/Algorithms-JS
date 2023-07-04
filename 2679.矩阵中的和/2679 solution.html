@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：排序
+      // 时间复杂度：O(mnlogn)
+      // 空间复杂度：O(mlogn)
+      var matrixSum = function (nums) {
+        let res = 0;
+        let m = nums.length;
+        let n = nums[0].length;
+        for (let i = 0; i < m; i++) {
+          nums[i].sort((a, b) => a - b);
+        }
+        for (let j = 0; j < n; j++) {
+          let maxVal = 0;
+          for (let i = 0; i < m; i++) {
+            maxVal = Math.max(maxVal, nums[i][j]);
+          }
+          res += maxVal;
+        }
+        return res;
+      };
+
+      // test
+      let nums = [
+        [7, 2, 1],
+        [6, 4, 2],
+        [6, 5, 3],
+        [3, 2, 1],
+      ];
+      console.log(matrixSum(nums));
+    </script>
+  </body>
+</html>
