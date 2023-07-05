@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：贪心
+      // 时间复杂度：O(1)
+      // 空间复杂度：O(1)
+      var kItemsWithMaximumSum = function (numOnes, numZeros, numNegOnes, k) {
+        if (k <= numOnes) {
+          return k;
+        } else if (k <= numOnes + numZeros) {
+          return numOnes;
+        } else {
+          return numOnes - (k - numOnes - numZeros);
+        }
+      };
+
+      // test
+      let numOnes = 3,
+        numZeros = 2,
+        numNegOnes = 0,
+        k = 2;
+      console.log(kItemsWithMaximumSum(numOnes, numZeros, numNegOnes, k));
+    </script>
+  </body>
+</html>
