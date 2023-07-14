@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：深度优先搜索 dfs
+      // 时间复杂度 O(n), 空间复杂度 O(n)
+      let move;
+
+      var distributeCoins = function (root) {
+        move = 0;
+        dfs(root);
+        return move;
+      };
+
+      function dfs(root) {
+        let moveleft = 0;
+        let moveright = 0;
+        if (root === null) {
+          return 0;
+        }
+        if (root.left !== null) {
+          moveleft = dfs(root.left);
+        }
+        if (root.right !== null) {
+          moveright = dfs(root.right);
+        }
+        move += Math.abs(moveleft) + Math.abs(moveright);
+        return moveleft + moveright + root.val - 1;
+      }
+    </script>
+  </body>
+</html>
