@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      /**
+       * 下面示例用了极少的代码实现了动态的模板渲染引擎，不仅支持普通的动态变量的替换，还支持包含 for 循环，if 判断等的动态的 JS 语法逻辑
+       * 具体实现逻辑在笔者另外一篇文章《面试官问：你能手写一个模版引擎吗？》（https://juejin.cn/post/7207697872706486328）做了非常详详尽的说明，感兴趣的小伙伴可自行阅读。
+       */
+
+      // 这是包含了js代码的动态模板
+      var template =
+        "My avorite sports:" +
+        "<%if(this.showSports) {%>" +
+        "<% for(var index in this.sports) {   %>" +
+        "<a><%this.sports[index]%></a>" +
+        "<%}%>" +
+        "<%} else {%>" +
+        "<p>none</p>" +
+        "<%}%>";
+      // 这是我们要拼接的函数字符串
+      const code = `with(obj) {
+        var r=[];
+        r.push("My avorite sports:");
+        if(this.showSports) {
+            for(var index in this.sports) {
+            r.push("<a>");
+            r.push(this.sports[index]);
+            r.push("</a>");
+            }
+        } else {
+            r.push("<span>none</span>");
+        }
+        return r.join("");
+        }`;
+      // 动态渲染的数据
+      const options = {
+        sports: ["swimming", "basketball", "football"],
+        showSports: true,
+      };
+      // 构建可行的函数并传入参数，改变函数执行时this的指向
+      result = new Function("obj", code).apply(options, [options]);
+      console.log(result);
+    </script>
+  </body>
+</html>
