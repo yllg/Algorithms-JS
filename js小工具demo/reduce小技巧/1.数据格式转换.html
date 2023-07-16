@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 有时候前端需要对后端传来的数据进行转换，以适配前端的业务逻辑，或者对组件的数据格式进行转换再传给后端进行处理，而 reduce 是一个非常强大的工具。
+      const arr = [
+        { classId: "1", name: "张三", age: 16 },
+        { classId: "1", name: "李四", age: 15 },
+        { classId: "2", name: "王五", age: 16 },
+        { classId: "3", name: "赵六", age: 15 },
+        { classId: "2", name: "孔七", age: 16 },
+      ];
+
+      const result = groupArrayByKey(arr, "classId");
+
+      function groupArrayByKey(arr = [], key) {
+        return arr.reduce(
+          (t, v) => (!t[v[key]] && (t[v[key]] = []), t[v[key]].push(v), t),
+          {}
+        );
+      }
+
+      console.log(result);
+    </script>
+  </body>
+</html>
