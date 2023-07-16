@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      function double() {
+        return value * 2;
+      }
+
+      // 不传的话给一个默认值0
+      function double(value = 0) {
+        return value * 2;
+      }
+
+      // 用户必须要传一个参数，不传参数就抛出一个错误
+
+      const required = () => {
+        throw new Error("This function requires one parameter.");
+      };
+      function double(value = required()) {
+        return value * 2;
+      }
+
+      console.log(double(3)); // 6
+      double(); // throw Error
+    </script>
+  </body>
+</html>
