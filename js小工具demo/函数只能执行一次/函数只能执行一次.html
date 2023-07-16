@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      function once(fn) {
+        // 利用闭包判断函数是否执行过
+        let called = false;
+        return function () {
+          if (!called) {
+            called = true;
+            fn.apply(this, arguments);
+          }
+        };
+      }
+
+      function fn1() {
+        console.log(1);
+      }
+
+      const fn1Once = once(fn1);
+      fn1Once();
+      fn1Once();
+      fn1Once();
+      fn1Once();
+    </script>
+  </body>
+</html>
