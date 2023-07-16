@@ -1,64 +1,63 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
-</head>
+  </head>
 
-<body>
+  <body>
     <script>
-        // 方法1：树形动态规划
-        let ans, sz, dp, graph;
-        const dfs = (u, f) => {
-            sz[u] = 1;
-            dp[u] = 0;
-            for (const v of graph[u]) {
-                if (v === f) {
-                    continue;
-                }
-                dfs(v, u);
-                dp[u] += dp[v] + sz[v];
-                sz[u] += sz[v];
-            }
+      // 方法1：树形动态规划
+      // 时间复杂度 O(n) 空间复杂度 O(n)
+      let ans, sz, dp, graph;
+      const dfs = (u, f) => {
+        sz[u] = 1;
+        dp[u] = 0;
+        for (const v of graph[u]) {
+          if (v === f) {
+            continue;
+          }
+          dfs(v, u);
+          dp[u] += dp[v] + sz[v];
+          sz[u] += sz[v];
         }
-        const dfs2 = (u, f) => {
-            ans[u] = dp[u];
-            for (const v of graph[u]) {
-                if (v === f) {
-                    continue;
-                }
-                const pu = dp[u],
-                    pv = dp[v];
-                const su = sz[u],
-                    sv = sz[v];
+      };
+      const dfs2 = (u, f) => {
+        ans[u] = dp[u];
+        for (const v of graph[u]) {
+          if (v === f) {
+            continue;
+          }
+          const pu = dp[u],
+            pv = dp[v];
+          const su = sz[u],
+            sv = sz[v];
 
-                dp[u] -= dp[v] + sz[v];
-                sz[u] -= sz[v];
-                dp[v] += dp[u] + sz[u];
-                sz[v] += sz[u];
+          dp[u] -= dp[v] + sz[v];
+          sz[u] -= sz[v];
+          dp[v] += dp[u] + sz[u];
+          sz[v] += sz[u];
 
-                dfs2(v, u);
+          dfs2(v, u);
 
-                dp[u] = pu, dp[v] = pv;
-                sz[u] = su, sz[v] = sv;
-            }
+          (dp[u] = pu), (dp[v] = pv);
+          (sz[u] = su), (sz[v] = sv);
         }
-        var sumOfDistancesInTree = function (N, edges) {
-            ans = new Array(N).fill(0);
-            sz = new Array(N).fill(0);
-            dp = new Array(N).fill(0);
-            graph = new Array(N).fill(0).map(v => []);
-            for (const [u, v] of edges) {
-                graph[u].push(v);
-                graph[v].push(u);
-            }
-            dfs(0, -1);
-            dfs2(0, -1);
-            return ans;
-        };
+      };
+      var sumOfDistancesInTree = function (N, edges) {
+        ans = new Array(N).fill(0);
+        sz = new Array(N).fill(0);
+        dp = new Array(N).fill(0);
+        graph = new Array(N).fill(0).map((v) => []);
+        for (const [u, v] of edges) {
+          graph[u].push(v);
+          graph[v].push(u);
+        }
+        dfs(0, -1);
+        dfs2(0, -1);
+        return ans;
+      };
     </script>
-</body>
-
+  </body>
 </html>
