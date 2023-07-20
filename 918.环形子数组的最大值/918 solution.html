@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法一：动态规划
+        // 时间复杂度：O(n)
+        // 空间复杂度：O(n)
+        var maxSubarraySumCircular = function (nums) {
+            let n = nums.length;
+            const leftMax = new Array(n).fill(0);
+            // 对坐标为 0 处的元素单独处理，避免考虑子数组为空的情况
+            leftMax[0] = nums[0];
+            let leftSum = nums[0];
+            let pre = nums[0];
+            let res = nums[0];
+            for (let i = 1; i < n; i++) {
+                pre = Math.max(pre + nums[i], nums[i]);
+                res = Math.max(res, pre);
+                leftSum += nums[i];
+                leftMax[i] = Math.max(leftMax[i - 1], leftSum);
+            }
+
+            // 从右到左枚举后缀，固定后缀，选择最大前缀
+            let rightSum = 0;
+            for (let i = n - 1; i > 0; i--) {
+                rightSum += nums[i];
+                res = Math.max(res, rightSum + leftMax[i - 1]);
+            }
+            return res;
+        };
+
+        // 方法二：取反
+        // 时间复杂度：O(n)
+        // 空间复杂度：O(1)
+        var maxSubarraySumCircular = function (nums) {
+            let n = nums.length;
+            const leftMax = new Array(n).fill(0);
+            // 对坐标为 0 处的元素单独处理，避免考虑子数组为空的情况
+            leftMax[0] = nums[0];
+            let leftSum = nums[0];
+            let pre = nums[0];
+            let res = nums[0];
+            for (let i = 1; i < n; i++) {
+                pre = Math.max(pre + nums[i], nums[i]);
+                res = Math.max(res, pre);
+                leftSum += nums[i];
+                leftMax[i] = Math.max(leftMax[i - 1], leftSum);
+            }
+
+            // 从右到左枚举后缀，固定后缀，选择最大前缀
+            let rightSum = 0;
+            for (let i = n - 1; i > 0; i--) {
+                rightSum += nums[i];
+                res = Math.max(res, rightSum + leftMax[i - 1]);
+            }
+            return res;
+        };
+
+
+        // 方法三：单调队列
+        // 时间复杂度：O(n)
+        // 空间复杂度：O(n)
+        var maxSubarraySumCircular = function (nums) {
+            const n = nums.length;
+            const queue = [];
+            let pre = nums[0], res = nums[0];
+            queue.push([0, pre]);
+            for (let i = 1; i < 2 * n; i++) {
+                while (queue.length !== 0 && queue[0][0] < i - n) {
+                    queue.shift();
+                }
+                pre += nums[i % n];
+                res = Math.max(res, pre - queue[0][1]);
+                while (queue.length !== 0 && queue[queue.length - 1][1] >= pre) {
+                    queue.pop();
+                }
+                queue.push([i, pre]);
+            }
+            return res;
+        };
+
+        // test
+        let nums = [1, -2, 3, -2];
+        console.log(maxSubarraySumCircular(nums));
+    </script>
+</body>
+
+</html>
