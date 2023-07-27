@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：排序
+      // 时间复杂度：O(m×n×logn)
+      // 空间复杂度：O(logn)
+      var deleteGreatestValue = function (grid) {
+        const m = grid.length,
+          n = grid[0].length;
+        for (let i = 0; i < m; i++) {
+          grid[i].sort((a, b) => a - b);
+        }
+        let res = 0;
+        for (let j = 0; j < n; j++) {
+          let mx = 0;
+          for (let i = 0; i < m; i++) {
+            mx = Math.max(mx, grid[i][j]);
+          }
+          res += mx;
+        }
+        return res;
+      };
+
+      // test
+      let grid = [
+        [1, 2, 4],
+        [3, 3, 1],
+      ];
+      console.log(deleteGreatestValue(grid));
+    </script>
+  </body>
+</html>
