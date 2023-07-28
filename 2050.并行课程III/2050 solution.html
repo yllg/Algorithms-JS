@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：记忆化搜索
+      // 时间复杂度：O(m+n)
+      // 空间复杂度：O(m+n)
+      var minimumTime = function (n, relations, time) {
+        let res = 0;
+        let prev = Array(n + 1).fill(0);
+        for (let i = 0; i <= n; i++) {
+          prev[i] = [];
+        }
+        for (var relation of relations) {
+          let x = relation[0],
+            y = relation[1];
+          prev[y].push(x);
+        }
+        let memo = {};
+        for (let i = 1; i <= n; i++) {
+          res = Math.max(res, dp(i, time, prev, memo));
+        }
+        return res;
+      };
+
+      function dp(i, time, prev, memo) {
+        if (!memo[i]) {
+          let cur = 0;
+          for (let p of prev[i]) {
+            cur = Math.max(cur, dp(p, time, prev, memo));
+          }
+          cur += time[i - 1];
+          memo[i] = cur;
+        }
+        return memo[i];
+      }
+
+      // test
+      let n = 3,
+        relations = [
+          [1, 3],
+          [2, 3],
+        ],
+        time = [3, 2, 5];
+      console.log(minimumTime(n, relations, time));
+    </script>
+  </body>
+</html>
