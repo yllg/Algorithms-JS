@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：动态规划 + 前缀和
+      // 时间复杂度：O(nlogn)
+      // 空间复杂度：O(logn)
+      var sumOfPower = function (nums) {
+        let n = nums.length;
+        nums.sort((a, b) => a - b);
+        let dp = 0,
+          preSum = 0;
+        let res = 0,
+          mod = 1e9 + 7;
+        for (let i = 0; i < n; i++) {
+          dp = (nums[i] + preSum) % mod;
+          preSum = (preSum + dp) % mod;
+          res =
+            (res +
+              Number(
+                (BigInt(nums[i]) * BigInt(nums[i]) * BigInt(dp)) % BigInt(mod)
+              )) %
+            mod;
+        }
+        return res;
+      };
+
+      // test
+      let nums = [2, 1, 4];
+      console.log(sumOfPower(nums));
+    </script>
+  </body>
+</html>
