@@ -1,73 +1,85 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <title>Document</title>
-</head>
+  </head>
 
-<body>
+  <body>
     <script>
-        // Source : https://leetcode.com/problems/merge-two-sorted-lists/
-        // Author : 悬笔e绝
-        // Date   : 2018-03-22
+      // Source : https://leetcode.com/problems/merge-two-sorted-lists/
+      // Author : 悬笔e绝
+      // Date   : 2018-03-22
 
-        /**
-         * @param {ListNode} l1
-         * @param {ListNode} l2
-         * @return {ListNode}
-         */
+      /**
+       * @param {ListNode} l1
+       * @param {ListNode} l2
+       * @return {ListNode}
+       */
 
-         //思路：
-         //把两个链表的节点全都拆出来，放到数组中，sort升序，再把next连接起来
-        var mergeTwoLists = function (l1, l2) {
-            var ans = [];
-            //把l1链表拆开放到ans中
-            while (l1) {
-                ans.push(new ListNode(l1.val));
-                l1 = l1.next;
-            }
-            //把l2链表拆开放到ans中
-            while (l2) {
-                ans.push(new ListNode(l2.val));
-                l2 = l2.next;
-            }
-            //用数组的sort排序
-            ans.sort(function (a, b) {
-                return a.val - b.val;
-            });
-            if (!ans.length) return null;
-            //把排序后的节点，串起来
-            for (var i = 0, len = ans.length; i < len - 1; i++)
-                ans[i].next = ans[i + 1];
-            //返回头节点
-            return ans[0];
-        };
+      // 方法一：递归
+      // 时间复杂度：O(n+m)
+      // 空间复杂度：O(n+m)
+      var mergeTwoLists = function (l1, l2) {
+        if (l1 === null) {
+          return l2;
+        } else if (l2 === null) {
+          return l1;
+        } else if (l1.val < l2.val) {
+          l1.next = mergeTwoLists(l1.next, l2);
+          return l1;
+        } else {
+          l2.next = mergeTwoLists(l1, l2.next);
+          return l2;
+        }
+      };
 
-        // Definition for singly-linked list.
-        function ListNode(val) {
-            this.val = val;
-            this.next = null;
+      // 方法二：迭代
+      // 时间复杂度：O(n+m)
+      // 空间复杂度：O(1)
+      var mergeTwoLists = function (l1, l2) {
+        const prehead = new ListNode(-1);
+
+        let prev = prehead;
+        while (l1 != null && l2 != null) {
+          if (l1.val <= l2.val) {
+            prev.next = l1;
+            l1 = l1.next;
+          } else {
+            prev.next = l2;
+            l2 = l2.next;
+          }
+          prev = prev.next;
         }
 
-        //测试 1->2->4, 1->3->4
-        var N3 = new ListNode(4);
-        var N2 = new ListNode(2);
-        N2.next = N3;
-        var N1 = new ListNode(1);
-        N1.next = N2;
+        // 合并后 l1 和 l2 最多只有一个还未被合并完，我们直接将链表末尾指向未合并完的链表即可
+        prev.next = l1 === null ? l2 : l1;
 
-        var N6 = new ListNode(4);
-        var N5 = new ListNode(3);
-        N5.next = N6;
-        var N4 = new ListNode(1);
-        N4.next = N5;
+        return prehead.next;
+      };
 
-        console.log(mergeTwoLists(N1,N4));
+      // Definition for singly-linked list.
+      function ListNode(val) {
+        this.val = val;
+        this.next = null;
+      }
 
+      //测试 1->2->4, 1->3->4
+      var N3 = new ListNode(4);
+      var N2 = new ListNode(2);
+      N2.next = N3;
+      var N1 = new ListNode(1);
+      N1.next = N2;
+
+      var N6 = new ListNode(4);
+      var N5 = new ListNode(3);
+      N5.next = N6;
+      var N4 = new ListNode(1);
+      N4.next = N5;
+
+      console.log(mergeTwoLists(N1, N4));
     </script>
-</body>
-
+  </body>
 </html>
