@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：动态规划 + 分情况讨论
+      // 时间复杂度 O(n) 空间复杂度 O(1)
+      var maxAbsoluteSum = function (nums) {
+        let positiveMax = 0,
+          negativeMin = 0;
+        let positiveSum = 0,
+          negativeSum = 0;
+        for (let num of nums) {
+          positiveSum += num;
+          positiveMax = Math.max(positiveMax, positiveSum);
+          positiveSum = Math.max(0, positiveSum);
+          negativeSum += num;
+          negativeMin = Math.min(negativeMin, negativeSum);
+          negativeSum = Math.min(0, negativeSum);
+        }
+        return Math.max(positiveMax, -negativeMin);
+      };
+
+      // test
+      let nums = [1, -3, 2, 3, -4];
+      console.log(maxAbsoluteSum(nums));
+    </script>
+  </body>
+</html>
