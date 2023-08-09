@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：模拟
+      // 时间复杂度 O(logn) 空间复杂度 O(1)
+      var subtractProductAndSum = function (n) {
+        let m = 1,
+          s = 0;
+        while (n > 0) {
+          let x = n % 10;
+          n = Math.floor(n / 10);
+          m *= x;
+          s += x;
+        }
+        return m - s;
+      };
+
+      // test
+      let n = 234;
+      console.log(subtractProductAndSum(n));
+    </script>
+  </body>
+</html>
