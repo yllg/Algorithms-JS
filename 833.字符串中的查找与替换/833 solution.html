@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：按照下标排序 + 模拟
+      // 时间复杂度：O(n+mlogm+ml)
+      // 空间复杂度：O(n+ml)
+      var findReplaceString = function (s, indices, sources, targets) {
+        const n = s.length;
+        const m = indices.length;
+
+        const ops = new Array(m);
+        for (let i = 0; i < m; i++) {
+          ops[i] = i;
+        }
+        ops.sort((i, j) => indices[i] - indices[j]);
+
+        let ans = "";
+        let pt = 0;
+        for (let i = 0; i < n; ) {
+          while (pt < m && indices[ops[pt]] < i) {
+            pt++;
+          }
+          let found = false;
+          while (pt < m && indices[ops[pt]] == i) {
+            if (
+              s.substring(i, i + sources[ops[pt]].length) === sources[ops[pt]]
+            ) {
+              found = true;
+              break;
+            }
+            pt++;
+          }
+          if (found) {
+            ans += targets[ops[pt]];
+            i += sources[ops[pt]].length;
+          } else {
+            ans += s[i];
+            i++;
+          }
+        }
+        return ans;
+      };
+
+      // 方法二：哈希表 + 模拟
+      // 时间复杂度：O(n+ml)
+      // 空间复杂度：O(n+ml)
+      var findReplaceString = function (s, indices, sources, targets) {
+        const n = s.length,
+          m = indices.length;
+
+        const ops = new Map();
+        for (let i = 0; i < m; i++) {
+          if (!ops.has(indices[i])) {
+            ops.set(indices[i], []);
+          }
+          ops.get(indices[i]).push(i);
+        }
+
+        let ans = "";
+        for (let i = 0; i < n; ) {
+          let succeed = false;
+          if (ops.has(i)) {
+            console.log(ops.get(i));
+            for (const pt of ops.get(i)) {
+              if (
+                s.substring(i, Math.min(i + sources[pt].length, n)) ===
+                sources[pt]
+              ) {
+                succeed = true;
+                ans += targets[pt];
+                i += sources[pt].length;
+                break;
+              }
+            }
+          }
+          if (!succeed) {
+            ans += s[i];
+            ++i;
+          }
+        }
+        return ans;
+      };
+
+      // test
+      let s = "abcd",
+        indexes = [0, 2],
+        sources = ["a", "cd"],
+        targets = ["eee", "ffff"];
+      console.log(findReplaceString(s, indexes, sources, targets));
+    </script>
+  </body>
+</html>
