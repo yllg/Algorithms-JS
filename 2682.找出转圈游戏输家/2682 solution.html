@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      /**
+       * 当某个朋友第 2 次接到球时，游戏结束。在整场游戏中没有接到过球的朋友是 输家 。
+       */
+
+      // 方法一：直接模拟
+      // 时间复杂度 O(n)
+      // 空间复杂度 O(n)
+      var circularGameLosers = function (n, k) {
+        let visit = new Array(n).fill(false);
+        for (let i = k, j = 0; !visit[j]; i += k) {
+          visit[j] = true;
+          j = (j + i) % n;
+        }
+        let ans = [];
+        for (let i = 0; i < n; i++) {
+          if (!visit[i]) {
+            ans.push(i + 1);
+          }
+        }
+        return ans;
+      };
+
+      // test
+      let n = 5,
+        k = 2;
+      console.log(circularGameLosers(n, k));
+    </script>
+  </body>
+</html>
