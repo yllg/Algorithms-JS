@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：双指针
+      // 时间复杂度：O(n)
+      // 时间复杂度：O(1)
+      var canChange = function (start, target) {
+        const n = start.length;
+        let i = 0,
+          j = 0;
+        while (i < n && j < n) {
+          while (i < n && start[i] === "_") {
+            i++;
+          }
+          while (j < n && target[j] === "_") {
+            j++;
+          }
+          if (i < n && j < n) {
+            if (start[i] !== target[j]) {
+              return false;
+            }
+            const c = start[i];
+            if ((c === "L" && i < j) || (c === "R" && i > j)) {
+              return false;
+            }
+            i++;
+            j++;
+          }
+        }
+        while (i < n) {
+          if (start[i] !== "_") {
+            return false;
+          }
+          i++;
+        }
+        while (j < n) {
+          if (target[j] !== "_") {
+            return false;
+          }
+          j++;
+        }
+        return true;
+      };
+
+      // test
+      let start = "_L__R__R_",
+        target = "L______RR";
+      console.log(canChange(start, target));
+    </script>
+  </body>
+</html>
