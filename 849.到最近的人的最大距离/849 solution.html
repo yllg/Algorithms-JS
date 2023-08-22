@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 男厕所便池选位算法~
+
+      // 方法一：双指针 + 贪心
+      // 时间复杂度：O(n)
+      // 时间复杂度：O(1)
+      var maxDistToClosest = function (seats) {
+        let res = 0,
+          l = 0;
+        while (l < seats.length && seats[l] === 0) {
+          l++;
+        }
+        res = Math.max(res, l);
+        while (l < seats.length) {
+          let r = l + 1;
+          while (r < seats.length && seats[r] === 0) {
+            r++;
+          }
+          if (r === seats.length) {
+            res = Math.max(res, r - l - 1);
+          } else {
+            res = Math.max(res, parseInt((r - l) / 2));
+          }
+          l = r;
+        }
+        return res;
+      };
+
+      // test
+      let seats = [1, 0, 0, 0, 1, 0, 1];
+      console.log(maxDistToClosest(seats));
+    </script>
+  </body>
+</html>
