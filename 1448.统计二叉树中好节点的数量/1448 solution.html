@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：深度优先遍历
+      // 时间复杂度：O(n)
+      // 时间复杂度：O(n)
+      var goodNodes = function (root) {
+        const dfs = (root, path_max) => {
+          if (root == null) {
+            return 0;
+          }
+          let res = 0;
+          if (root.val >= path_max) {
+            res++;
+            path_max = root.val;
+          }
+          res += dfs(root.left, path_max) + dfs(root.right, path_max);
+          return res;
+        };
+        return dfs(root, -Infinity);
+      };
+    </script>
+  </body>
+</html>
