@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：广度优先搜索
+      // 时间复杂度：O(max⁡(max⁡(forbidden)+a,x)+b)
+      // 空间复杂度：O(max(max(forbidden)+a,x)+b)
+      var minimumJumps = function (forbidden, a, b, x) {
+        const lower = 0;
+        const upper = Math.max(Math.max(...forbidden) + a, x) + b;
+        let q = [[0, 1, 0]];
+        const visited = new Set([0]);
+        const forbiddenSet = new Set(forbidden);
+        while (q.length > 0) {
+          let position = q[0][0];
+          let direction = q[0][1];
+          let step = q[0][2];
+          q.shift();
+          if (position == x) {
+            return step;
+          }
+          let nextPosition = position + a;
+          let nextDirection = 1;
+          if (
+            lower <= nextPosition &&
+            nextPosition <= upper &&
+            !visited.has(nextPosition * nextDirection) &&
+            !forbiddenSet.has(nextPosition)
+          ) {
+            visited.add(nextPosition * nextDirection);
+            q.push([nextPosition, nextDirection, step + 1]);
+          }
+          if (direction == 1) {
+            nextPosition = position - b;
+            nextDirection = -1;
+            if (
+              lower <= nextPosition &&
+              nextPosition <= upper &&
+              !visited.has(nextPosition * nextDirection) &&
+              !forbiddenSet.has(nextPosition)
+            ) {
+              visited.add(nextPosition * nextDirection);
+              q.push([nextPosition, nextDirection, step + 1]);
+            }
+          }
+        }
+        return -1;
+      };
+
+      // test
+      let forbidden = [14, 4, 18, 1, 15],
+        a = 3,
+        b = 15,
+        x = 9;
+      console.log(minimumJumps(forbidden, a, b, x));
+    </script>
+  </body>
+</html>
