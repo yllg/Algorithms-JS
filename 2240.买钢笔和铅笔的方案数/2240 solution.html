@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：枚举
+      var waysToBuyPensPencils = function (total, cost1, cost2) {
+        if (cost1 < cost2) {
+          return waysToBuyPensPencils(total, cost2, cost1);
+        }
+        let res = 0,
+          cnt = 0;
+        while (cnt * cost1 <= total) {
+          res += parseInt((total - cnt * cost1) / cost2) + 1;
+          cnt++;
+        }
+        return res;
+      };
+
+      // test
+      let total = 20,
+        cost1 = 10,
+        cost2 = 5;
+      console.log(waysToBuyPensPencils(total, cost1, cost2));
+    </script>
+  </body>
+</html>
