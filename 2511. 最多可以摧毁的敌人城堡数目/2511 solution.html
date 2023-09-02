@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：直接模拟
+      // 时间复杂度：O(n)
+      // 空间复杂度：O(1)
+      var captureForts = function (forts) {
+        let ans = 0,
+          pre = -1;
+        for (let i = 0; i < forts.length; i++) {
+          if (forts[i] == 1 || forts[i] == -1) {
+            if (pre >= 0 && forts[i] != forts[pre]) {
+              ans = Math.max(ans, i - pre - 1);
+            }
+            pre = i;
+          }
+        }
+        return ans;
+      };
+
+      // test
+      let forts = [1, 0, 0, -1, 0, 0, 0, 0, 1];
+      console.log(captureForts(forts));
+    </script>
+  </body>
+</html>
