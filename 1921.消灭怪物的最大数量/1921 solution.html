@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：贪心 + 排序
+      // 时间复杂度O(nlogn) 空间复杂度O(n)
+      var eliminateMaximum = function (dist, speed) {
+        const n = dist.length;
+        const arrivalTimes = new Array(n).fill(0);
+        for (let i = 0; i < n; i++) {
+          arrivalTimes[i] = Math.ceil(dist[i] / speed[i]);
+        }
+        arrivalTimes.sort((a, b) => a - b);
+        for (let i = 0; i < n; i++) {
+          if (arrivalTimes[i] <= i) {
+            return i;
+          }
+        }
+        return n;
+      };
+
+      // test
+      let dist = [1, 3, 4],
+        speed = [1, 1, 1];
+      console.log(eliminateMaximum(dist, speed));
+    </script>
+  </body>
+</html>
