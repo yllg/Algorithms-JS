@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：分类讨论
+      // 时间复杂度：O(m+n)
+      // 空间复杂度：O(m)
+      var minNumber = function (nums1, nums2) {
+        const same = () => {
+          const s = new Set(nums1);
+          let x = 10;
+          for (const m of nums2) {
+            if (s.has(m)) {
+              x = Math.min(x, m);
+            }
+          }
+          return x == 10 ? -1 : x;
+        };
+        const count = same();
+        if (count != -1) {
+          return count;
+        }
+        const x = Math.min(...nums1);
+        const y = Math.min(...nums2);
+        return Math.min(x * 10 + y, y * 10 + x);
+      };
+
+      // test
+      let nums1 = [4, 1, 3],
+        nums2 = [5, 7];
+      console.log(minNumber(nums1, nums2));
+    </script>
+  </body>
+</html>
