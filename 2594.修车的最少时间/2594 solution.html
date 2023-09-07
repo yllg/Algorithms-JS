@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：二分查找
+      // 时间复杂度：O(nlog(L))
+      // 时间复杂度：O(1)
+      var repairCars = function (ranks, cars) {
+        let l = 1;
+        let r = ranks[0] * cars * cars;
+        const check = (m) => {
+          let cnt = 0;
+          for (const x of ranks) {
+            cnt += Math.floor(Math.sqrt(m / x));
+          }
+          return cnt >= cars;
+        };
+
+        while (l < r) {
+          const m = (l + r) >> 1;
+          if (check(m)) {
+            r = m;
+          } else {
+            l = m + 1;
+          }
+        }
+        return l;
+      };
+
+      // test
+      let ranks = [4, 2, 3, 1],
+        cars = 10;
+      console.log(repairCars(ranks, cars));
+    </script>
+  </body>
+</html>
