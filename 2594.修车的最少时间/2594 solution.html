@@ -32,6 +32,31 @@
         return l;
       };
 
+      // 方法二: 二分查找+优化
+      var repairCars = function (ranks, cars) {
+        const cnt = new Array(101).fill(0); // 数组比哈希表更快
+        for (const r of ranks) {
+          cnt[r]++;
+        }
+        const minR = Math.min(...ranks);
+        let left = 0;
+        let right = minR * cars * cars;
+        while (left + 1 < right) {
+          const mid = Math.floor((left + right) / 2);
+          let s = 0;
+          for (let r = minR; r <= 100; r++) {
+            // 至多循环 100 次
+            s += Math.floor(Math.sqrt(mid / r)) * cnt[r];
+          }
+          if (s >= cars) {
+            right = mid;
+          } else {
+            left = mid;
+          }
+        }
+        return right;
+      };
+
       // test
       let ranks = [4, 2, 3, 1],
         cars = 10;
