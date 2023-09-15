@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：模拟
+      // 时间复杂度：O(m+n)
+      // 空间复杂度：O(1)
+      var giveGem = function (gem, operations) {
+        for (const operation of operations) {
+          const x = operation[0];
+          const y = operation[1];
+          const number = Math.floor(gem[x] / 2);
+          gem[x] -= number;
+          gem[y] += number;
+        }
+        const mn = Math.min(...gem);
+        const mx = Math.max(...gem);
+        return mx - mn;
+      };
+
+      // test
+      let gem = [3, 1, 2],
+        operations = [
+          [0, 2],
+          [2, 1],
+          [2, 0],
+        ];
+      console.log(giveGem(gem, operations));
+    </script>
+  </body>
+</html>
