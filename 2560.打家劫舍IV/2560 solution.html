@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：二分查找
+      // 时间复杂度：O(nlogT)
+      // 空间复杂度：O(1)
+      var minCapability = function (nums, k) {
+        let lower = Math.min(...nums);
+        let upper = Math.max(...nums);
+        while (lower <= upper) {
+          const middle = Math.floor((lower + upper) / 2);
+          let count = 0;
+          let visited = false;
+          for (const x of nums) {
+            if (x <= middle && !visited) {
+              count++;
+              visited = true;
+            } else {
+              visited = false;
+            }
+          }
+          if (count >= k) {
+            upper = middle - 1;
+          } else {
+            lower = middle + 1;
+          }
+        }
+        return lower;
+      };
+
+      // test
+      let nums = [2, 3, 5, 9],
+        k = 2;
+      console.log(minCapability(nums, k));
+    </script>
+  </body>
+</html>
