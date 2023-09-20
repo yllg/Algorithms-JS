@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：贪心
+      // 时间复杂度：O(n)
+      // 空间复杂度：O(1)
+      var minCount = function (coins) {
+        let sum = 0;
+        for (let i = 0; i < coins.length; i++) {
+          sum += parseInt((coins[i] + 1) / 2);
+        }
+        return sum;
+      };
+
+      // test
+      let coins = [4, 2, 1];
+      console.log(minCount(coins));
+    </script>
+  </body>
+</html>
