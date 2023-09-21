@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：两次拓扑排序
+      // 时间复杂度：O(n)
+      // 空间复杂度：O(n)
+      var collectTheCoins = function (coins, edges) {
+        n = coins.length;
+        g = new Array(n).fill(0).map(() => new Array());
+        degree = new Array(n).fill(0);
+        for (const edge of edges) {
+          let x = edge[0],
+            y = edge[1];
+          g[x].push(y);
+          g[y].push(x);
+          degree[x]++;
+          degree[y]++;
+        }
+
+        let rest = n;
+        let q = [];
+        // 删除树中所有无金币的叶子节点，直到树中所有的叶子节点都是含有金币的
+        for (let i = 0; i < n; i++) {
+          if (degree[i] == 1 && coins[i] == 0) {
+            q.push(i);
+          }
+        }
+        while (q.length > 0) {
+          const u = q.shift();
+          degree[u]--;
+          rest--;
+          for (const v of g[u]) {
+            degree[v]--;
+            if (degree[v] == 1 && coins[v] == 0) {
+              q.push(v);
+            }
+          }
+        }
+
+        // 删除树中所有的叶子节点, 连续删除2次
+        for (let j = 0; j < 2; j++) {
+          let q = [];
+          for (let i = 0; i < n; i++) {
+            if (degree[i] == 1) {
+              q.push(i);
+            }
+          }
+          while (q.length > 0) {
+            u = q.shift();
+            degree[u]--;
+            rest--;
+            for (const v of g[u]) {
+              degree[v]--;
+            }
+          }
+        }
+
+        return rest == 0 ? 0 : (rest - 1) * 2;
+      };
+
+      // test
+      let coins = [1, 0, 0, 0, 0, 1],
+        edges = [
+          [0, 1],
+          [1, 2],
+          [2, 3],
+          [3, 4],
+          [4, 5],
+        ];
+      console.log(collectTheCoins(coins, edges));
+    </script>
+  </body>
+</html>
