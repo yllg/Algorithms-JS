@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：贪心
+      // 时间复杂度：O(1)
+      // 空间复杂度：O(1)
+      var distMoney = function (money, children) {
+        if (money < children) {
+          return -1;
+        }
+        money -= children;
+        let cnt = Math.min(Math.floor(money / 7), children);
+        money -= cnt * 7;
+        children -= cnt;
+        if ((children == 0 && money > 0) || (children == 1 && money == 3)) {
+          cnt -= 1;
+        }
+        return cnt;
+      };
+
+      // test
+      let money = 20,
+        children = 3;
+      console.log(distMoney(money, children));
+    </script>
+  </body>
+</html>
