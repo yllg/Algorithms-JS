@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：模拟
+      // 时间复杂度：O(1)
+      // 空间复杂度：O(1)
+      var passThePillow = function (n, time) {
+        time %= (n - 1) * 2;
+        return time < n ? time + 1 : n * 2 - time - 1;
+      };
+
+      // test
+      let n = 4,
+        time = 5;
+      console.log(passThePillow(n, time));
+    </script>
+  </body>
+</html>
