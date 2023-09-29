@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.21/lodash.min.js"></script>
+    <script>
+      // 方法一：贪心
+      // 时间复杂度：O(nlogn) 空间复杂度：O(n)
+      var earliestFullBloom = function (plantTime, growTime) {
+        let ans = 0,
+          days = 0;
+        for (const [p, g] of _.zip(plantTime, growTime).sort(
+          (a, b) => b[1] - a[1]
+        )) {
+          days += p; // 累加生长天数
+          ans = Math.max(ans, days + g); // 更新最晚开花时间
+        }
+        return ans;
+      };
+
+      // test
+      let plantTime = [1, 4, 3],
+        growTime = [2, 3, 1];
+      console.log(earliestFullBloom(plantTime, growTime));
+    </script>
+  </body>
+</html>
