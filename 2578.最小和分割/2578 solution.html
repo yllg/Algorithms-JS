@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：贪心
+      // 时间复杂度：O(log⁡num⋅log⁡log⁡num)
+      // 空间复杂度：O(⁡log⁡num)
+      var splitNum = function (num) {
+        const stnum = [...String(num)].map(Number).sort((a, b) => a - b);
+        let num1 = 0,
+          num2 = 0;
+        stnum.forEach((val, i) => {
+          i % 2 == 0 ? (num1 = num1 * 10 + val) : (num2 = num2 * 10 + val);
+        });
+        return num1 + num2;
+      };
+
+      // test
+      let num = 4325;
+      console.log(splitNum(num));
+    </script>
+  </body>
+</html>
