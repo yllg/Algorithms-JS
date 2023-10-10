@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：脑筋急转弯 + 排序
+      // 时间复杂度：O(nlogn)
+      // 空间复杂度：O(n)
+      var sumDistance = function (nums, s, d) {
+        const mod = 1e9 + 7;
+        n = nums.length;
+        pos = new Array(n).fill(0);
+        for (let i = 0; i < n; i++) {
+          pos[i] = s[i] === "L" ? nums[i] - d : nums[i] + d;
+        }
+        pos.sort((a, b) => a - b);
+        let res = 0;
+        for (let i = 1; i < n; i++) {
+          res += ((((pos[i] - pos[i - 1]) * i) % mod) * (n - i)) % mod;
+          res %= mod;
+        }
+        return res;
+      };
+
+      // test
+      let nums = [-2, 0, 2],
+        s = "RLL",
+        d = 3;
+      console.log(sumDistance(nums, s, d));
+    </script>
+  </body>
+</html>
