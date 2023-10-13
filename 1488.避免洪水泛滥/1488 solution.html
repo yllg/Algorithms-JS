@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：直接遍历
+      /**
+       * @param {number[]} rains
+       * @return {number[]}
+       */
+      var avoidFlood = function (rains) {
+        let ans = Array(rains.length).fill(-1);
+        let rain = {}; // 存下雨的日期
+        let zero = []; // 存不下雨的日期
+        for (let i = 0; i < rains.length; i++) {
+          if (rains[i] == 0) {
+            zero.push(i);
+          } else {
+            if (rain[rains[i]] != undefined) {
+              let j = 0;
+              while (j < zero.length) {
+                if (zero[j] > rain[rains[i]]) {
+                  break;
+                }
+                j++;
+              }
+              if (j == zero.length) {
+                return [];
+              }
+              let index = zero.splice(j, 1)[0];
+              ans[index] = rains[i];
+            }
+            rain[rains[i]] = i;
+          }
+        }
+        zero.map((v) => (ans[v] = 1)); // 将剩余的不下雨的天数全部设为抽1的水
+        return ans;
+      };
+
+      // test
+      let rains = [1, 2, 3, 4];
+      console.log(avoidFlood(rains));
+    </script>
+  </body>
+</html>
