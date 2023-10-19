@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：哈希统计
+      // 时间复杂度 O(n^2)
+      // 空间复杂度 O(n^2)
+      var tupleSameProduct = function (nums) {
+        const n = nums.length;
+        const cnt = new Map();
+        for (let i = 0; i < n; i++) {
+          for (let j = i + 1; j < n; j++) {
+            const key = nums[i] * nums[j];
+            cnt.set(key, (cnt.get(key) || 0) + 1);
+          }
+        }
+        let ans = 0;
+        for (const v of cnt.values()) {
+          ans += v * (v - 1) * 4;
+        }
+        return ans;
+      };
+
+      // test
+      let nums = [2, 3, 4, 6];
+      console.log(tupleSameProduct(nums));
+    </script>
+  </body>
+</html>
