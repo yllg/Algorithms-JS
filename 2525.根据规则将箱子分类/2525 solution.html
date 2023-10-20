@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：数学
+      // 时间复杂度 O(1)
+      // 空间复杂度 O(1)
+      var categorizeBox = function (length, width, height, mass) {
+        const maxd = Math.max(length, width, height);
+        const vol = length * width * height;
+        const isBulky = maxd >= 10000 || vol >= 10 ** 9;
+        const isHeavy = mass >= 100;
+        if (isBulky && isHeavy) {
+          return "Both";
+        } else if (isBulky) {
+          return "Bulky";
+        } else if (isHeavy) {
+          return "Heavy";
+        } else {
+          return "Neither";
+        }
+      };
+
+      // test
+      let length = 1000,
+        width = 35,
+        height = 700,
+        mass = 300;
+      console.log(categorizeBox(length, width, height, mass));
+    </script>
+  </body>
+</html>
