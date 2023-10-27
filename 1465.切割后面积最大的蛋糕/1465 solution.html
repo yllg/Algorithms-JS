@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：贪心
+      // 时间复杂度：O(max{n×logn,m×logm})
+      // 空间复杂度：O(max{logn,logm})
+      var maxArea = function (h, w, horizontalCuts, verticalCuts) {
+        const mod = 1e9 + 7;
+        horizontalCuts.sort((a, b) => a - b);
+        verticalCuts.sort((a, b) => a - b);
+        var calMax = function (arr, boardr) {
+          let res = 0,
+            pre = 0;
+          for (let i = 0; i < arr.length; i++) {
+            res = Math.max(arr[i] - pre, res);
+            pre = arr[i];
+          }
+          return Math.max(res, boardr - pre);
+        };
+        return (
+          (BigInt(calMax(horizontalCuts, h)) *
+            BigInt(calMax(verticalCuts, w))) %
+          BigInt(mod)
+        );
+      };
+
+      // test
+      let h = 5,
+        w = 4,
+        horizontalCuts = [1, 2, 4],
+        verticalCuts = [1, 3];
+      console.log(maxArea(h, w, horizontalCuts, verticalCuts));
+    </script>
+  </body>
+</html>
