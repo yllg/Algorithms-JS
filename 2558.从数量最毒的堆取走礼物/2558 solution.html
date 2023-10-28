@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：最大堆
+      // 时间复杂度：O(klogn)
+      // 空间复杂度：O(n)
+      var pickGifts = function (gifts, k) {
+        const pq = new MaxPriorityQueue();
+        gifts.map((v) => {
+          pq.enqueue(v);
+        });
+        while (k > 0) {
+          let x = pq.dequeue().element;
+          pq.enqueue(Math.floor(Math.sqrt(x)));
+          k--;
+        }
+        let res = 0;
+        while (pq.size() > 0) {
+          res += pq.dequeue().element;
+        }
+        return res;
+      };
+    </script>
+  </body>
+</html>
