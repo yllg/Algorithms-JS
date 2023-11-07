@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：枚举范围内的字符串
+      // 时间复杂度：O(n+∣Σ∣)，其中 n 是数组 words 的长度，Σ 是元音的集合，本题中是5
+      // 时间复杂度：O(∣Σ∣)，即为哈希集合需要使用的空间。
+      var vowelStrings = function (words, left, right) {
+        vowels = new Set(["a", "e", "i", "o", "u"]);
+        let ans = 0;
+        for (let i = left; i <= right; ++i) {
+          const word = words[i];
+          if (vowels.has(word[0]) && vowels.has(word[word.length - 1])) {
+            ans++;
+          }
+        }
+        return ans;
+      };
+
+      // test
+      let words = ["are", "amy", "u"],
+        left = 0,
+        right = 2;
+      console.log(vowelStrings(words, left, right));
+    </script>
+  </body>
+</html>
