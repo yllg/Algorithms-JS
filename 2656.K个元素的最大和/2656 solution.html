@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：贪心
+      // 时间复杂度：O(n)
+      // 空间复杂度：O(1)
+      var maximizeSum = function (nums, k) {
+        const m = Math.max(...nums);
+        return ((2 * m + k - 1) * k) / 2;
+      };
+
+      // test
+      let nums = [1, 2, 3, 4, 5],
+        k = 3;
+      console.log(maximizeSum(nums, k));
+    </script>
+  </body>
+</html>
