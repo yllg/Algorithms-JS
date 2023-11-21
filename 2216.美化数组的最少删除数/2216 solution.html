@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：一次遍历
+      // 时间复杂度：O(n)
+      // 空间复杂度：O(1)
+      var minDeletion = function (nums) {
+        let ans = 0,
+          n = nums.length,
+          check = true;
+        for (let i = 0; i + 1 < n; i++) {
+          if (nums[i] == nums[i + 1] && check) {
+            ans++;
+          } else {
+            check = !check;
+          }
+        }
+        if ((n - ans) % 2 != 0) {
+          ans++;
+        }
+        return ans;
+      };
+
+      // test
+      let nums = [1, 1, 2, 3, 5];
+      console.log(minDeletion(nums));
+    </script>
+  </body>
+</html>
