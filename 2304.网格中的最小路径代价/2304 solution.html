@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：记忆化搜索
+      // 时间复杂度：O(m*n^2)
+      // 空间复杂度：O(m*n)
+      var minPathCost = function (grid, moveCost) {
+        let m = grid.length,
+          n = grid[0].length;
+        let memo = new Array(m).fill(0).map(() => new Array(n).fill(-1));
+        function dfs(i, j) {
+          if (i == 0) {
+            return grid[i][j];
+          }
+          if (memo[i][j] >= 0) {
+            return memo[i][j];
+          }
+          let res = Infinity;
+          for (let k = 0; k < n; k++) {
+            res = Math.min(
+              res,
+              dfs(i - 1, k) + moveCost[grid[i - 1][k]][j] + grid[i][j]
+            );
+          }
+          memo[i][j] = res;
+          return res;
+        }
+        let res = Infinity;
+        for (let j = 0; j < n; j++) {
+          res = Math.min(res, dfs(m - 1, j));
+        }
+        return res;
+      };
+
+      // 方法二：动态规划
+      // 时间复杂度：O(m*n^2)
+      // 空间复杂度：O(n)
+      var minPathCost = function (grid, moveCost) {
+        let m = grid.length,
+          n = grid[0].length;
+        let dp = new Array(2).fill(0).map(() => new Array(n));
+        dp[0] = Array.from(grid[0]);
+        let cur = 0;
+        for (let i = 1; i < m; i++) {
+          let next = 1 - cur;
+          for (let j = 0; j < n; j++) {
+            dp[next][j] = Infinity;
+            for (let k = 0; k < n; k++) {
+              dp[next][j] = Math.min(
+                dp[next][j],
+                dp[cur][k] + moveCost[grid[i - 1][k]][j] + grid[i][j]
+              );
+            }
+          }
+          cur = next;
+        }
+        return Math.min(...dp[cur]);
+      };
+
+      // test
+      let grid = [
+          [5, 3],
+          [4, 0],
+          [2, 1],
+        ],
+        moveCost = [
+          [9, 8],
+          [1, 5],
+          [10, 12],
+          [18, 6],
+          [2, 4],
+          [14, 3],
+        ];
+      console.log(minPathCost(grid, moveCost));
+    </script>
+  </body>
+</html>
