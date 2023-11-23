@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：模拟
+      // 时间复杂度: O(k×n)
+      // 空间复杂度: O(k)
+      var entityParser = function (text) {
+        const entityMap = {
+          "&quot;": '"',
+          "&apos;": "'",
+          "&gt;": ">",
+          "&lt;": "<",
+          "&frasl;": "/",
+          "&amp;": "&",
+        };
+
+        let i = 0;
+        const n = text.length;
+        const res = [];
+
+        while (i < n) {
+          let isEntity = false;
+          if (text[i] === "&") {
+            for (const [key, value] of Object.entries(entityMap)) {
+              if (text.slice(i, i + key.length) === key) {
+                res.push(value);
+                isEntity = true;
+                i += key.length;
+                break;
+              }
+            }
+          }
+          if (!isEntity) {
+            res.push(text[i]);
+            i += 1;
+          }
+        }
+        return res.join("");
+      };
+
+      // test
+      let text = "&amp; is an HTML entity but &ambassador; is not.";
+      console.log(entityParser(text));
+    </script>
+  </body>
+</html>
