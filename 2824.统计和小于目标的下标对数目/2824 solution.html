@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：枚举
+      // 时间复杂度: O(n)
+      // 空间复杂度: O(1)
+      var countPairs = function (nums, target) {
+        let res = 0;
+        for (let i = 0; i < nums.length; i++) {
+          for (let j = i + 1; j < nums.length; j++) {
+            if (nums[i] + nums[j] < target) {
+              res++;
+            }
+          }
+        }
+        return res;
+      };
+
+      // 方法二：二分查找
+      // 时间复杂度: O(nlogn)
+      // 空间复杂度: O(logn)
+      var countPairs = function (nums, target) {
+        function binarySearch(nums, lo, hi, target) {
+          let res = hi + 1;
+          while (lo <= hi) {
+            const mid = lo + Math.floor((hi - lo) / 2);
+            if (nums[mid] >= target) {
+              res = mid;
+              hi = mid - 1;
+            } else {
+              lo = mid + 1;
+            }
+          }
+          return res;
+        }
+        nums.sort((a, b) => a - b);
+        let res = 0;
+        for (let i = 0; i < nums.length; i++) {
+          res += binarySearch(nums, 0, i - 1, target - nums[i]);
+        }
+        return res;
+      };
+
+      // 方法三：双指针
+      // 时间复杂度: O(nlogn)
+      // 空间复杂度: O(logn)
+      var countPairs = function (nums, target) {
+        nums.sort((a, b) => a - b);
+        let res = 0;
+        for (let i = 0, j = nums.length - 1; i < j; i++) {
+          while (i < j && nums[i] + nums[j] >= target) {
+            j--;
+          }
+          res += j - i;
+        }
+        return res;
+      };
+
+      // test
+      let nums = [-1, 1, 2, 3, 1],
+        target = 2;
+      console.log(countPairs(nums, target));
+    </script>
+  </body>
+</html>
