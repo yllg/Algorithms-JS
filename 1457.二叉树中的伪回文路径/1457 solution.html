@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：深度优先搜索
+      // 时间复杂度：O(C×n)，其中 C 是节点中不同元素的数量，n 是二叉树的节点数。
+      // 时间复杂度：O(n), n 是二叉树的节点数。
+      var pseudoPalindromicPaths = function (root) {
+        let counter = new Array(10).fill(0);
+        return dfs(root, counter);
+      };
+
+      var dfs = function (root, counter) {
+        if (!root) {
+          return 0;
+        }
+        counter[root.val]++;
+        let res = 0;
+        if (!root.left && !root.right) {
+          if (isPseudoPalindrome(counter)) {
+            res = 1;
+          }
+        } else {
+          res = dfs(root.left, counter) + dfs(root.right, counter);
+        }
+        counter[root.val]--;
+        return res;
+      };
+
+      var isPseudoPalindrome = function (counter) {
+        let odd = 0;
+        for (value of counter) {
+          if (value % 2 == 1) {
+            odd++;
+          }
+        }
+        return odd <= 1;
+      };
+    </script>
+  </body>
+</html>
