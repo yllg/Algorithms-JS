@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：双端队列
+      // 时间复杂度：O(n)
+      // 空间复杂度：O(n)
+      function DLNode(val, next = null, prev = null) {
+        this.val = val;
+        this.next = next;
+        this.prev = prev;
+      }
+
+      function Deque() {
+        this.head = new DLNode(-1);
+        this.tail = new DLNode(-1);
+        this.head.next = this.tail;
+        this.tail.prev = this.head;
+        this.count = 0;
+        this.pushFront = function (val) {
+          node = new DLNode(val);
+          node.prev = this.head;
+          node.next = this.head.next;
+          node.next.prev = node;
+          this.head.next = node;
+          this.count++;
+        };
+
+        this.pushBack = function (val) {
+          node = new DLNode(val);
+          node.prev = this.tail.prev;
+          node.next = this.tail;
+          node.prev.next = node;
+          this.tail.prev = node;
+          this.count++;
+        };
+
+        this.popFront = function () {
+          if (this.isEmpty()) {
+            return -1;
+          }
+          var val = this.head.next.val;
+          this.head.next = this.head.next.next;
+          this.head.next.prev = this.head;
+          this.count--;
+          return val;
+        };
+        this.popBack = function () {
+          if (this.isEmpty()) {
+            return -1;
+          }
+          var val = this.tail.prev.val;
+          this.tail.prev = this.tail.prev.prev;
+          this.tail.prev.next = this.tail;
+          this.count--;
+          return val;
+        };
+
+        this.length = function () {
+          return this.count;
+        };
+
+        this.isEmpty = function () {
+          return this.count == 0;
+        };
+      }
+
+      var FrontMiddleBackQueue = function () {
+        this.left = new Deque();
+        this.right = new Deque();
+      };
+
+      FrontMiddleBackQueue.prototype.pushFront = function (val) {
+        this.left.pushFront(val);
+        if (this.left.length() == this.right.length() + 2) {
+          this.right.pushFront(this.left.popBack());
+        }
+      };
+
+      FrontMiddleBackQueue.prototype.pushMiddle = function (val) {
+        if (this.left.length() == this.right.length() + 1) {
+          this.right.pushFront(this.left.popBack());
+        }
+        this.left.pushBack(val);
+      };
+
+      FrontMiddleBackQueue.prototype.pushBack = function (val) {
+        this.right.pushBack(val);
+        if (this.left.length() + 1 == this.right.length()) {
+          this.left.pushBack(this.right.popFront());
+        }
+      };
+
+      FrontMiddleBackQueue.prototype.popFront = function () {
+        if (this.left.isEmpty()) {
+          return -1;
+        }
+        var val = this.left.popFront();
+        if (this.left.length() + 1 == this.right.length()) {
+          this.left.pushBack(this.right.popFront());
+        }
+        return val;
+      };
+
+      FrontMiddleBackQueue.prototype.popMiddle = function () {
+        if (this.left.isEmpty()) {
+          return -1;
+        }
+        var val = this.left.popBack();
+        if (this.left.length() + 1 == this.right.length()) {
+          this.left.pushBack(this.right.popFront());
+        }
+        return val;
+      };
+
+      FrontMiddleBackQueue.prototype.popBack = function () {
+        if (this.left.isEmpty()) {
+          return -1;
+        }
+        var val = 0;
+        if (this.right.isEmpty()) {
+          val = this.left.popBack();
+        } else {
+          val = this.right.popBack();
+          if (this.left.length() == this.right.length() + 2) {
+            this.right.pushFront(this.left.popBack());
+          }
+        }
+        return val;
+      };
+      
+    </script>
+  </body>
+</html>
