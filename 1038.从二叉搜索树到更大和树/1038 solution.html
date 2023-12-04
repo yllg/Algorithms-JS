@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 时间复杂度：O(n)
+      // 空间复杂度：O(n)
+      var bstToGst = function (root) {
+        let s = 0;
+        function dfs(node) {
+          if (node === null) {
+            return;
+          }
+          dfs(node.right); // 递归右子树
+          s += node.val;
+          node.val = s; // 此时 s 就是 >= node.val 的所有数之和
+          dfs(node.left); // 递归左子树
+        }
+        dfs(root);
+        return root;
+      };
+    </script>
+  </body>
+</html>
