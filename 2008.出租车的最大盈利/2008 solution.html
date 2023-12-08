@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：动态规划 + 二分查找
+      // 时间复杂度：O(mlogm)
+      // 空间复杂度：O(m)
+      const binarySearch = function (arr, high, target) {
+        let low = 0;
+        while (low < high) {
+          let mid = low + Math.floor((high - low) / 2);
+          if (arr[mid][1] > target) {
+            high = mid;
+          } else {
+            low = mid + 1;
+          }
+        }
+        return low;
+      };
+
+      var maxTaxiEarnings = function (n, rides) {
+        rides.sort((a, b) => a[1] - b[1]);
+        const m = rides.length;
+        const dp = new Array(m + 1).fill(0);
+        for (let i = 0; i < m; i++) {
+          let j = binarySearch(rides, i, rides[i][0]);
+          dp[i + 1] = Math.max(
+            dp[i],
+            dp[j] + rides[i][1] - rides[i][0] + rides[i][2]
+          );
+        }
+        return dp[m];
+      };
+
+      // 方法二：动态规划 + 哈希表
+      // 时间复杂度：O(m+n)
+      // 空间复杂度：O(m+n)
+      var maxTaxiEarnings = function (n, rides) {
+        const dp = new Array(n + 1).fill(0);
+        const rideMap = new Map();
+        for (const ride of rides) {
+          if (rideMap.has(ride[1])) {
+            rideMap.set(ride[1], [...rideMap.get(ride[1]), ride]);
+          } else {
+            rideMap.set(ride[1], [ride]);
+          }
+        }
+        for (let i = 1; i <= n; i++) {
+          dp[i] = dp[i - 1];
+          if (rideMap.has(i)) {
+            for (const ride of rideMap.get(i)) {
+              dp[i] = Math.max(
+                dp[i],
+                dp[ride[0]] + ride[1] - ride[0] + ride[2]
+              );
+            }
+          }
+        }
+        return dp[n];
+      };
+
+      // test
+      let n = 20,
+        rides = [
+          [1, 6, 1],
+          [3, 10, 2],
+          [10, 12, 3],
+          [11, 12, 2],
+          [12, 15, 2],
+          [13, 18, 1],
+        ];
+      console.log(maxTaxiEarnings(n, rides));
+    </script>
+  </body>
+</html>
