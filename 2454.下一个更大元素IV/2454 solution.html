@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：单调栈 + 优先队列
+      // 时间复杂度：O(n*logn)
+      // 空间复杂度：O(n)
+      var secondGreaterElement = function (nums) {
+        const n = nums.length;
+        const res = new Array(n).fill(-1);
+        const stack = [];
+        const q = new MinPriorityQueue();
+
+        for (let i = 0; i < n; i++) {
+          while (!q.isEmpty() && q.front().element[0] < nums[i]) {
+            res[q.front().element[1]] = nums[i];
+            q.dequeue();
+          }
+          while (stack.length > 0 && nums[stack[stack.length - 1]] < nums[i]) {
+            let x = stack[stack.length - 1];
+            q.enqueue([nums[x], x], nums[x]);
+            stack.pop();
+          }
+          stack.push(i);
+        }
+        return res;
+      };
+
+      // 方法二：双单调栈
+      // 时间复杂度：O(n)
+      // 空间复杂度：O(n)
+      var secondGreaterElement = function (nums) {
+        const n = nums.length;
+        const res = new Array(n).fill(-1);
+        const st1 = [],
+          st2 = [];
+
+        for (let i = 0; i < n; i++) {
+          let v = nums[i];
+          while (st2.length > 0 && nums[st2[st2.length - 1]] < v) {
+            res[st2[st2.length - 1]] = v;
+            st2.pop();
+          }
+          let pos = st1.length - 1;
+          while (pos >= 0 && nums[st1[pos]] < v) {
+            pos--;
+          }
+          st2.push(...st1.slice(pos + 1, st1.length));
+          st1.splice(pos + 1);
+          st1.push(i);
+        }
+        return res;
+      };
+
+      // test
+      let nums = [2, 4, 0, 9, 6];
+      console.log(secondGreaterElement(nums));
+    </script>
+  </body>
+</html>
