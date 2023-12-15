@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：广度优先搜索
+      // 时间复杂度：O(n)
+      // 空间复杂度：O(n)
+      var reverseOddLevels = function (root) {
+        let q = [root];
+        let isOdd = false;
+        while (q.length) {
+          if (isOdd) {
+            const n = q.length;
+            for (let i = 0; i < n / 2; i++) {
+              [q[i].val, q[n - 1 - i].val] = [q[n - 1 - i].val, q[i].val];
+            }
+          }
+          const tmp = [...q];
+          q = [];
+          for (const node of tmp) {
+            if (node.left) {
+              q.push(node.left);
+            }
+            if (node.right) {
+              q.push(node.right);
+            }
+          }
+          isOdd ^= true;
+        }
+        return root;
+      };
+
+      // 方法二：深度优先搜索
+      // 时间复杂度：O(n)
+      // 空间复杂度：O(logn)
+      var reverseOddLevels = function (root) {
+        const dfs = function (root1, root2, isOdd) {
+          if (root1 == null) {
+            return;
+          }
+          if (isOdd) {
+            [root1.val, root2.val] = [root2.val, root1.val];
+          }
+          dfs(root1.left, root2.right, !isOdd);
+          dfs(root1.right, root2.left, !isOdd);
+        };
+        dfs(root.left, root.right, true);
+        return root;
+      };
+    </script>
+  </body>
+</html>
