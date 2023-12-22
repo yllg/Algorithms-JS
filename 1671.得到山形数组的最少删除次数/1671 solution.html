@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：动态规划
+      // 时间复杂度：O(n^2)
+      // 空间复杂度：O(n)
+      var minimumMountainRemovals = function (nums) {
+        const n = nums.length;
+        const pre = getLISArray(nums);
+        let suf = getLISArray(nums.reverse());
+        suf.reverse();
+
+        let ans = 0;
+        for (let i = 0; i < n; ++i) {
+          if (pre[i] > 1 && suf[i] > 1) {
+            ans = Math.max(ans, pre[i] + suf[i] - 1);
+          }
+        }
+
+        return n - ans;
+      };
+
+      var getLISArray = function (nums) {
+        const n = nums.length;
+        const dp = new Array(n).fill(1);
+        for (let i = 0; i < n; ++i) {
+          for (let j = 0; j < i; ++j) {
+            if (nums[j] < nums[i]) {
+              dp[i] = Math.max(dp[i], dp[j] + 1);
+            }
+          }
+        }
+        return dp;
+      };
+
+      // 方法二：二分查找
+      // 时间复杂度：O(nlogn)
+      // 空间复杂度：O(n)
+      var minimumMountainRemovals = function (nums) {
+        const n = nums.length;
+        const pre = getLISArray(nums);
+        let suf = getLISArray(nums.reverse());
+        suf.reverse();
+
+        let ans = 0;
+        for (let i = 0; i < n; ++i) {
+          if (pre[i] > 1 && suf[i] > 1) {
+            ans = Math.max(ans, pre[i] + suf[i] - 1);
+          }
+        }
+
+        return n - ans;
+      };
+
+      var getLISArray = function (nums) {
+        const n = nums.length;
+        const dp = new Array(n).fill(1);
+        const seq = new Array();
+        for (let i = 0; i < n; ++i) {
+          let index = binarySearch(seq, nums[i]);
+          if (index == seq.length) {
+            seq.push(nums[i]);
+            dp[i] = seq.length;
+          } else {
+            seq[index] = nums[i];
+            dp[i] = index + 1;
+          }
+        }
+        // console.log(dp);
+        return dp;
+      };
+
+      var binarySearch = function (seq, target) {
+        let low = 0,
+          high = seq.length;
+        while (low < high) {
+          let mid = low + Math.floor((high - low) / 2);
+          if (seq[mid] >= target) {
+            high = mid;
+          } else {
+            low = mid + 1;
+          }
+        }
+        return low;
+      };
+
+      // test
+      let nums = [2, 1, 1, 5, 6, 2, 3, 1];
+      console.log(minimumMountainRemovals(nums));
+    </script>
+  </body>
+</html>
