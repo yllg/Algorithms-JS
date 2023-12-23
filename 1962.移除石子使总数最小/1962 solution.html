@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：贪心 + 优先队列
+      // 时间复杂度：O(k×logn+n)
+      // 空间复杂度：O(n)
+      var minStoneSum = function (piles, k) {
+        const pq = new MaxPriorityQueue();
+        for (const pile of piles) {
+          pq.enqueue(pile, pile);
+        }
+        for (let i = 0; i < k; i++) {
+          let pile = pq.front().element;
+          pq.dequeue();
+          pile -= Math.floor(pile / 2);
+          pq.enqueue(pile, pile);
+        }
+        let sum = 0;
+        while (!pq.isEmpty()) {
+          sum += pq.front().element;
+          pq.dequeue();
+        }
+        return sum;
+      };
+
+      // test
+      let piles = [5, 4, 9],
+        k = 2;
+      console.log(minStoneSum(piles, k));
+    </script>
+  </body>
+</html>
