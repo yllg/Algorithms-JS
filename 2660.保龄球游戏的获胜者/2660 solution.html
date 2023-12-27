@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：模拟
+      // 时间复杂度：O(n)
+      // 空间复杂度：O(1)
+      var isWinner = function (player1, player2) {
+        const score = function (player) {
+          let res = 0;
+          for (let i = 0; i < player.length; i++) {
+            if (
+              (i > 0 && player[i - 1] == 10) ||
+              (i > 1 && player[i - 2] == 10)
+            ) {
+              res += 2 * player[i];
+            } else {
+              res += player[i];
+            }
+          }
+          return res;
+        };
+        const s1 = score(player1);
+        const s2 = score(player2);
+        return s1 == s2 ? 0 : s1 > s2 ? 1 : 2;
+      };
+
+      // test
+      let player1 = [4, 10, 7, 9],
+        player2 = [6, 5, 2, 3];
+      console.log(isWinner(player1, player2));
+    </script>
+  </body>
+</html>
