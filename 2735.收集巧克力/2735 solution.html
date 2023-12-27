@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：枚举收集的次数
+      // 时间复杂度：O(n^2)
+      // 时间复杂度：O(n)
+      var minCost = function (nums, x) {
+        let n = nums.length;
+        const f = [...nums];
+        let ans = nums.reduce(
+          (accumulator, currentValue) => accumulator + currentValue,
+          0
+        );
+
+        for (let k = 1; k < n; k++) {
+          for (let i = 0; i < n; i++) {
+            f[i] = Math.min(f[i], nums[(i + k) % n]);
+          }
+          sum = f.reduce(
+            (accumulator, currentValue) => accumulator + currentValue,
+            0
+          );
+          ans = Math.min(ans, k * x + sum);
+        }
+        return ans;
+      };
+
+      // 方法二：二次差分
+      // 时间复杂度：O(n)
+      // 时间复杂度：O(n)
+      var minCost = function (nums, x) {
+        const n = nums.length;
+        // 找出 nums 中最小的元素，并用其为首元素构造一个新的数组
+        const min_idx = nums.indexOf(Math.min(...nums));
+        let tmp = [];
+        for (let i = 0; i < n; ++i) {
+          tmp.push(nums[(min_idx + i) % n]);
+        }
+        nums = tmp;
+
+        const L = new Array(n).fill(0);
+        const R = new Array(n).fill(0);
+        L[0] = n - 1;
+        // 循环来看，右侧 nums[0] 是更小的元素，但不一定是第一个更小的元素，需要用单调栈计算得到
+        for (let i = 0; i < n; i++) {
+          R[i] = n - i - 1;
+        }
+
+        let s = [0];
+        for (let i = 1; i < n; i++) {
+          while (s.length > 0 && nums[i] < nums[s[s.length - 1]]) {
+            R[s[s.length - 1]] = i - s[s.length - 1] - 1;
+            s.pop();
+          }
+          L[i] = i - s[s.length - 1] - 1;
+          s.push(i);
+        }
+
+        let F = new Array(n).fill(0);
+        // 辅助函数，一次差分，将 F[l..r] 都增加 d
+        const diff_once = function (l, r, d) {
+          if (l > r) {
+            return;
+          }
+          if (l < n) {
+            F[l] += d;
+          }
+          if (r + 1 < n) {
+            F[r + 1] -= d;
+          }
+        };
+
+        // 辅助函数，二次差分，将 F[l..r] 增加 ki + b，i 是下标
+        const diff_twice = function (l, r, k, b) {
+          if (l > r) {
+            return;
+          }
+          diff_once(l, l, k * l + b);
+          diff_once(l + 1, r, k);
+          diff_once(r + 1, r + 1, -(k * r + b));
+        };
+
+        // 进行操作需要的成本
+        diff_twice(0, n - 1, x, 0);
+        for (let i = 0; i < n; i++) {
+          let minv = Math.min(L[i], R[i]);
+          let maxv = Math.max(L[i], R[i]);
+          // 第一种情况，窗口数量 k+1，总和 nums[i] * k + nums[i]
+          diff_twice(0, minv, nums[i], nums[i]);
+          // 第二种情况，窗口数量 minv+1，总和 0 * k + nums[i] * (minv + 1)
+          diff_twice(minv + 1, maxv, 0, nums[i] * (minv + 1));
+          // 第三种情况，窗口数量 L[i]+R[i]-k+1，总和 -nums[i] * k + nums[i] * (L[i] + R[i] + 1)
+          diff_twice(
+            maxv + 1,
+            L[i] + R[i],
+            -nums[i],
+            nums[i] * (L[i] + R[i] + 1)
+          );
+        }
+
+        // 计算两次前缀和
+        for (let i = 0; i < 2; i++) {
+          let G = new Array(n).fill(0);
+          G[0] = F[0];
+          for (let j = 1; j < n; j++) {
+            G[j] = G[j - 1] + F[j];
+          }
+          F = G;
+        }
+        return Math.min(...F);
+      };
+    </script>
+  </body>
+</html>
