@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：二进制枚举
+      // 时间复杂度：O(m * 2^n)
+      // 空间复杂度：O(m)
+      const countOne = function (n) {
+        let res = 0;
+        while (n) {
+          n &= n - 1;
+          res++;
+        }
+        return res;
+      };
+
+      var maximumRows = function (matrix, numSelect) {
+        let m = matrix.length,
+          n = matrix[0].length;
+        const mask = new Array(m).fill(0);
+        for (let i = 0; i < m; i++) {
+          for (let j = 0; j < n; j++) {
+            mask[i] += matrix[i][j] << (n - 1 - j);
+          }
+        }
+        let res = 0,
+          cur = 0;
+        const limit = 1 << n;
+        while (++cur < limit) {
+          if (countOne(cur) != numSelect) {
+            continue;
+          }
+          let t = 0;
+          for (let j = 0; j < m; j++) {
+            if ((mask[j] & cur) == mask[j]) {
+              ++t;
+            }
+          }
+          res = Math.max(res, t);
+        }
+        return res;
+      };
+
+      // 方法二: 二进制枚举的 Gosper's Hack 优化
+      // 时间复杂度：O(m * Cm numSelect)
+      // 空间复杂度：O(m)
+      const countOnes = function (n) {
+        let res = 0;
+        while (n) {
+          n &= n - 1;
+          res++;
+        }
+        return res;
+      };
+
+      const bitLength = function (n) {
+        let res = 0;
+        while (n) {
+          n >>= 1;
+          res++;
+        }
+        return res;
+      };
+
+      const countTrailingZeros = function (n) {
+        return bitLength(n & -n) - 1;
+      };
+
+      var maximumRows = function (matrix, numSelect) {
+        let m = matrix.length,
+          n = matrix[0].length;
+        const mask = new Array(m).fill(0);
+        for (let i = 0; i < m; i++) {
+          for (let j = 0; j < n; j++) {
+            mask[i] += matrix[i][j] << (n - 1 - j);
+          }
+        }
+        let res = 0,
+          cur = (1 << numSelect) - 1;
+        const limit = 1 << n;
+        while (cur < limit) {
+          let t = 0;
+          for (let j = 0; j < m; j++) {
+            if ((mask[j] & cur) == mask[j]) {
+              ++t;
+            }
+          }
+          res = Math.max(res, t);
+          let lb = cur & -cur;
+          let r = cur + lb;
+          cur = ((r ^ cur) >> (countTrailingZeros(lb) + 2)) | r;
+        }
+        return res;
+      };
+
+      // test
+      let matrix = [
+          [0, 0, 0],
+          [1, 0, 1],
+          [0, 1, 1],
+          [0, 0, 1],
+        ],
+        numSelect = 2;
+      console.log(maximumRows(matrix, numSelect));
+    </script>
+  </body>
+</html>
