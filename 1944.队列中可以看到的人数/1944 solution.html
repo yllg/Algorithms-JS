@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：单调栈
+      // 时间复杂度：O(n)
+      // 空间复杂度：O(n)
+      var canSeePersonsCount = function (heights) {
+        const n = heights.length;
+        const stack = [];
+        const res = new Array(n).fill(0);
+
+        for (let i = n - 1; i >= 0; i--) {
+          const h = heights[i];
+          while (stack.length > 0 && stack[stack.length - 1] <= h) {
+            stack.pop();
+            res[i] += 1;
+          }
+          if (stack.length > 0) {
+            res[i] += 1;
+          }
+          stack.push(h);
+        }
+        return res;
+      };
+
+      // test
+      let heights = [10, 6, 8, 5, 11, 9];
+      console.log(canSeePersonsCount(heights));
+    </script>
+  </body>
+</html>
