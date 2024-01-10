@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：栈
+      // 时间复杂度：O(n)
+      // 空间复杂度：O(n)
+      var minLength = function (s) {
+        const st = new Array();
+        for (const c of s) {
+          st.push(c);
+          let m = st.length;
+          if (
+            m >= 2 &&
+            ((st[m - 2] == "A" && st[m - 1] == "B") ||
+              (st[m - 2] == "C" && st[m - 1] == "D"))
+          ) {
+            st.pop();
+            st.pop();
+          }
+        }
+        return st.length;
+      };
+
+      // test
+      let s = "ABFCACDB";
+      console.log(minLength(s));
+    </script>
+  </body>
+</html>
