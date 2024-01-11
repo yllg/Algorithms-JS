@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 字符串可以由 "abc" 串联多次得到，则认为该字符串 有效
+
+      // 方法一：动态规划
+      // 时间复杂度：O(n)
+      // 空间复杂度：O(n)
+      var addMinimum = function (word) {
+        const n = word.length;
+        const d = new Array(n + 1).fill(0);
+        for (let i = 1; i <= n; i++) {
+          d[i] = d[i - 1] + 2;
+          if (i > 1 && word[i - 1] > word[i - 2]) {
+            d[i] = d[i - 1] - 1;
+          }
+        }
+        return d[n];
+      };
+
+      // 方法二：直接拼接
+      // 时间复杂度：O(n)
+      // 空间复杂度：O(1)
+      var addMinimum = function (word) {
+        const n = word.length;
+        let res = word.charCodeAt(0) - word.charCodeAt(n - 1) + 2;
+        for (let i = 1; i < n; i++) {
+          res += (word.charCodeAt(i) - word.charCodeAt(i - 1) + 2) % 3;
+        }
+        return res;
+      };
+
+      // 方法三：计算组数
+      // 时间复杂度：O(n)
+      // 空间复杂度：O(1)
+      var addMinimum = function (word) {
+        const n = word.length;
+        let cnt = 1;
+        for (let i = 1; i < n; i++) {
+          if (word[i] <= word[i - 1]) {
+            cnt++;
+          }
+        }
+        return cnt * 3 - n;
+      };
+
+      // test
+      let word = "b";
+      console.log(addMinimum(word));
+    </script>
+  </body>
+</html>
