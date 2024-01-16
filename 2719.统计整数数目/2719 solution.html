@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // num1 <= x <= num2，min_sum <= x 各位数字之和 <= max_sum
+
+      // 方法一：数位动态规划
+      // 时间复杂度：O(10×nm)
+      // 空间复杂度：O(nm)
+      var count = function (num1, num2, min_sum, max_sum) {
+        const N = 23,
+          M = 401;
+        const MOD = 1000000007;
+        let d = new Array(N).fill(null).map(() => new Array(M).fill(-1));
+
+        function dfs(num, i, j, limit) {
+          if (j > max_sum) {
+            return 0;
+          }
+          if (i === -1) {
+            return j >= min_sum ? 1 : 0;
+          }
+          if (!limit && d[i][j] !== -1) {
+            return d[i][j];
+          }
+
+          let res = 0;
+          const up = limit ? num.charCodeAt(i) - "0".charCodeAt(0) : 9;
+          for (let x = 0; x <= up; x++) {
+            res = (res + dfs(num, i - 1, j + x, limit && x === up)) % MOD;
+          }
+
+          if (!limit) {
+            d[i][j] = res;
+          }
+          return res;
+        }
+
+        function get(num) {
+          num = num.split("").reverse().join("");
+          return dfs(num, num.length - 1, 0, true);
+        }
+
+        // 求解 num - 1，先把最后一个非 0 字符减去 1，再把后面的 0 字符变为 9
+        function sub(num) {
+          let i = num.length - 1;
+          let arr = num.split("");
+          while (arr[i] === "0") {
+            i--;
+          }
+          arr[i] = String.fromCharCode(arr[i].charCodeAt(0) - 1);
+          i++;
+          while (i < num.length) {
+            arr[i] = "9";
+            i++;
+          }
+          return arr.join("");
+        }
+
+        return (get(num2) - get(sub(num1)) + MOD) % MOD;
+      };
+
+      // test
+      let num1 = "1",
+        num2 = "12",
+        min_num = 1,
+        max_num = 8;
+      console.log(count(num1, num2, min_num, max_num));
+    </script>
+  </body>
+</html>
