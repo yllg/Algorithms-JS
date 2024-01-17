@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：两重循环枚举
+      // 时间复杂度：O(n^2)
+      // 时间复杂度：O(1)
+      var maximumNumberOfStringPairs = function (words) {
+        const n = words.length;
+        let ans = 0;
+        for (let i = 0; i < n; ++i) {
+          for (let j = i + 1; j < n; ++j) {
+            if (words[i][0] == words[j][1] && words[i][1] == words[j][0]) {
+              ++ans;
+            }
+          }
+        }
+        return ans;
+      };
+
+      // 方法二：哈希表
+      // 时间复杂度：O(n)
+      // 时间复杂度：O(n)
+      var maximumNumberOfStringPairs = function (words) {
+        const n = words.length;
+        const seen = new Set();
+        let ans = 0;
+        for (const word of words) {
+          if (seen.has(word.charCodeAt(1) * 100 + word.charCodeAt(0))) {
+            ++ans;
+          }
+          seen.add(word.charCodeAt(0) * 100 + word.charCodeAt(1));
+        }
+        return ans;
+      };
+
+      // test
+      let words = ["cd", "ac", "dc", "ca", "zz"];
+      console.log(maximumNumberOfStringPairs(words));
+    </script>
+  </body>
+</html>
