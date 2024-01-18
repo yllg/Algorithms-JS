@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：数学
+      // 时间复杂度：O(nlogn)
+      // 时间复杂度：O(logn)
+      var minimumRemoval = function (beans) {
+        let n = beans.length;
+        beans.sort((a, b) => a - b);
+        let total = beans.reduce((a, b) => a + b, 0); // 豆子总数
+        let res = total; // 最少需要移除的豆子数
+        for (let i = 0; i < n; i++) {
+          res = Math.min(res, total - beans[i] * (n - i));
+        }
+        return res;
+      };
+
+      // test
+      let beans = [4, 1, 6, 5];
+      console.log(minimumRemoval(beans));
+    </script>
+  </body>
+</html>
