@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：动态规划
+      // 时间复杂度：O(n^2)
+      // 时间复杂度：O(n)
+      var minimumTime = function (nums1, nums2, x) {
+        const n = nums1.length;
+        const dp = Array(n + 1).fill(0);
+        const nums = nums1.map((a, i) => ({ a, b: nums2[i] }));
+        nums.sort((a, b) => a.b - b.b);
+
+        for (let j = 1; j <= n; j++) {
+          const { a, b } = nums[j - 1];
+          for (let i = j; i > 0; i--) {
+            dp[i] = Math.max(dp[i], dp[i - 1] + i * b + a);
+          }
+        }
+
+        const s1 = nums1.reduce((sum, num) => sum + num, 0);
+        const s2 = nums2.reduce((sum, num) => sum + num, 0);
+        for (let i = 0; i <= n; i++) {
+          if (s2 * i + s1 - dp[i] <= x) {
+            return i;
+          }
+        }
+        return -1;
+      };
+
+      // test
+      let nums1 = [1, 2, 3],
+        nums2 = [1, 2, 3],
+        x = 4;
+      console.log(minimumTime(nums1, nums2, x));
+    </script>
+  </body>
+</html>
