@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // s[m - 1] - s[m - 2] = (-1)^m
+
+      // 方法一：双层循环
+      // 时间复杂度：O(n^2)
+      // 时间复杂度：O(1)
+      var alternatingSubarray = function (nums) {
+        let res = -1;
+        const n = nums.length;
+        for (let firstIndex = 0; firstIndex < n; firstIndex++) {
+          for (let i = firstIndex + 1; i < n; i++) {
+            const length = i - firstIndex + 1;
+            if (nums[i] - nums[firstIndex] === (length - 1) % 2) {
+              res = Math.max(res, length);
+            } else {
+              break;
+            }
+          }
+        }
+        return res;
+      };
+
+      // 方法二：单层循环
+      // 时间复杂度：O(n)
+      // 时间复杂度：O(1)
+      var alternatingSubarray = function (nums) {
+        let res = -1;
+        const n = nums.length;
+        let firstIndex = 0;
+
+        for (let i = 1; i < n; i++) {
+          const length = i - firstIndex + 1;
+          if (nums[i] - nums[firstIndex] === (length - 1) % 2) {
+            res = Math.max(res, length);
+          } else {
+            if (nums[i] - nums[i - 1] === 1) {
+              firstIndex = i - 1;
+              res = Math.max(res, 2);
+            } else {
+              firstIndex = i;
+            }
+          }
+        }
+        return res;
+      };
+
+      // test
+      let nums = [2, 3, 4, 3, 4];
+      console.log(alternatingSubarray(nums));
+    </script>
+  </body>
+</html>
