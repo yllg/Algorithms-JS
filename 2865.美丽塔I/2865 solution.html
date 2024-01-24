@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：枚举
+      // 时间复杂度：O(n^2)
+      // 时间复杂度：O(1)
+      var maximumSumOfHeights = function (maxHeights) {
+        const n = maxHeights.length;
+        let res = 0;
+        for (let i = 0; i < n; i++) {
+          let pre = maxHeights[i],
+            sum = maxHeights[i];
+          for (let j = i - 1; j >= 0; j--) {
+            pre = Math.min(pre, maxHeights[j]);
+            sum += pre;
+          }
+          let suf = maxHeights[i];
+          for (let j = i + 1; j < n; j++) {
+            suf = Math.min(suf, maxHeights[j]);
+            sum += suf;
+          }
+          res = Math.max(res, sum);
+        }
+        return res;
+      };
+
+      // 方法二：单调栈
+      var maximumSumOfHeights = function (maxHeights) {
+        const n = maxHeights.length;
+        const prefix = new Array(n).fill(0);
+        const suffix = new Array(n).fill(0);
+        const stack1 = [];
+        const stack2 = [];
+        for (let i = 0; i < n; i++) {
+          while (
+            stack1.length > 0 &&
+            maxHeights[i] < maxHeights[stack1[stack1.length - 1]]
+          ) {
+            stack1.pop();
+          }
+          if (stack1.length == 0) {
+            prefix[i] = (i + 1) * maxHeights[i];
+          } else {
+            let last = stack1[stack1.length - 1];
+            prefix[i] = prefix[last] + (i - last) * maxHeights[i];
+          }
+          stack1.push(i);
+        }
+
+        let res = 0;
+        for (let i = n - 1; i >= 0; i--) {
+          while (
+            stack2.length &&
+            maxHeights[i] < maxHeights[stack2[stack2.length - 1]]
+          ) {
+            stack2.pop();
+          }
+          if (stack2.length == 0) {
+            suffix[i] = (n - i) * maxHeights[i];
+          } else {
+            last = stack2[stack2.length - 1];
+            suffix[i] = suffix[last] + (last - i) * maxHeights[i];
+          }
+          stack2.push(i);
+          res = Math.max(res, prefix[i] + suffix[i] - maxHeights[i]);
+        }
+        return res;
+      };
+
+      // test
+      let maxHeights = [5, 3, 4, 1, 1];
+      console.log(maximumSumOfHeights(maxHeights));
+    </script>
+  </body>
+</html>
