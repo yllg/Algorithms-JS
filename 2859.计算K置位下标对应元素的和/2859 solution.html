@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：枚举所有的下标
+      // 时间复杂度：O(nlogn)
+      // 时间复杂度：O(1)
+      var sumIndicesWithKSetBits = function (nums, k) {
+        const bitCount = (x) => {
+          let cnt = 0;
+          while (x) {
+            cnt += x % 2;
+            x >>= 1;
+          }
+          return cnt;
+        };
+
+        let ans = 0;
+        for (let i = 0; i < nums.length; ++i) {
+          if (bitCount(i) == k) {
+            ans += nums[i];
+          }
+        }
+        return ans;
+      };
+
+      // 方法二：对计算置位个数进行优化
+      // 时间复杂度：O(nloglogC)
+      // 时间复杂度：O(1)
+      var sumIndicesWithKSetBits = function (nums, k) {
+        const bitCount = (x) => {
+          x = (x & 0b0101010101) + ((x & 0b1010101010) >> 1);
+          x = ((x & 0b0011001100) >> 2) + (x & 0b1100110011);
+          x = (x >> 8) + ((x >> 4) & 0b1111) + (x & 0b1111);
+          return x;
+        };
+
+        let ans = 0;
+        for (let i = 0; i < nums.length; ++i) {
+          if (bitCount(i) == k) {
+            ans += nums[i];
+          }
+        }
+        return ans;
+      };
+
+      // test
+      let nums = [5, 10, 1, 5, 2],
+        k = 1;
+      console.log(sumIndicesWithKSetBits(nums, k));
+    </script>
+  </body>
+</html>
