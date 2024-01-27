@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：二分查找
+      // 时间复杂度：O(nklogC)
+      // 空间复杂度：O(1)
+      var maxNumberOfAlloys = function (
+        n,
+        k,
+        budget,
+        composition,
+        stock,
+        cost
+      ) {
+        let left = 1,
+          right = 2e8,
+          ans = 0;
+        while (left <= right) {
+          let mid = (left + right) >> 1;
+          let valid = false;
+          for (let i = 0; i < k; ++i) {
+            let spend = 0;
+            for (let j = 0; j < n; ++j) {
+              spend +=
+                Math.max(composition[i][j] * mid - stock[j], 0) * cost[j];
+            }
+            if (spend <= budget) {
+              valid = true;
+              break;
+            }
+          }
+          if (valid) {
+            ans = mid;
+            left = mid + 1;
+          } else {
+            right = mid - 1;
+          }
+        }
+        return ans;
+      };
+
+      // test
+      let n = 3,
+        k = 2,
+        budget = 15,
+        composition = [
+          [1, 1, 1],
+          [1, 1, 10],
+        ],
+        stock = [0, 0, 0],
+        cost = [1, 2, 3];
+      console.log(maxNumberOfAlloys(n, k, budget, composition, stock, cost));
+    </script>
+  </body>
+</html>
