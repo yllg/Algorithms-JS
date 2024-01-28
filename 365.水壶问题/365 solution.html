@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：数学 求解最大公约数
+      var canMeasureWater = function (x, y, z) {
+        if (x + y < z) {
+          return false;
+        }
+        if (x === 0 || y === 0) {
+          return z === 0 || x + y === z;
+        }
+        return z % gcd(x, y) === 0;
+      };
+      function gcd(a, b) {
+        if (b === 0) {
+          return a;
+        }
+        return gcd(b, a % b);
+      }
+
+      // test
+      let jug1Capacity = 3,
+        jug2Capacity = 5,
+        targetCapacity = 4;
+      console.log(canMeasureWater(jug1Capacity, jug2Capacity, targetCapacity));
+    </script>
+  </body>
+</html>
