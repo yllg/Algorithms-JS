@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：哈希表
+      // 时间复杂度 O(n) 空间复杂度 O(n)
+      var minimumSeconds = function (nums) {
+        const mp = new Map();
+        let n = nums.length,
+          res = n;
+        for (let i = 0; i < n; ++i) {
+          if (!mp.has(nums[i])) {
+            mp.set(nums[i], []);
+          }
+          mp.get(nums[i]).push(i);
+        }
+        for (const pos of mp.values()) {
+          let mx = pos[0] + n - pos[pos.length - 1];
+          for (let i = 1; i < pos.length; ++i) {
+            mx = Math.max(mx, pos[i] - pos[i - 1]);
+          }
+          res = Math.min(res, Math.floor(mx / 2));
+        }
+        return res;
+      };
+
+      // test
+      let nums = [1, 2, 1, 2];
+      console.log(minimumSeconds(nums));
+    </script>
+  </body>
+</html>
