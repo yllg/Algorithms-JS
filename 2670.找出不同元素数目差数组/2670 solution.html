@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：哈希表 + 前后缀预处理
+      // 时间复杂度 O(n) 空间复杂度 O(n)
+      var distinctDifferenceArray = function (nums) {
+        let st = new Set();
+        let sufCnt = new Array(nums.length + 1).fill(0);
+        for (let i = nums.length - 1; i > 0; i--) {
+          st.add(nums[i]);
+          sufCnt[i] = st.size;
+        }
+        let res = [];
+        st.clear();
+        for (let i = 0; i < nums.length; i++) {
+          st.add(nums[i]);
+          res.push(st.size - sufCnt[i + 1]);
+        }
+        return res;
+      };
+
+      // test
+      let nums = [1, 2, 3, 4, 5];
+      console.log(distinctDifferenceArray(nums));
+    </script>
+  </body>
+</html>
