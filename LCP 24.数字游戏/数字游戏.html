@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：双优先队列
+      // 时间复杂度 O(nlogn) 空间复杂度 O(n)
+      var numsGame = function (nums) {
+        const n = nums.length;
+        const res = new Array(n).fill(0);
+        const lower = new MaxPriorityQueue();
+        const upper = new MinPriorityQueue();
+        const mod = 1e9 + 7;
+        let lowerSum = 0,
+          upperSum = 0;
+        for (let i = 0; i < n; i++) {
+          const x = nums[i] - i;
+          if (lower.size() == 0 || lower.front().element >= x) {
+            lowerSum += x;
+            lower.enqueue(x);
+            if (lower.size() > upper.size() + 1) {
+              upperSum += lower.front().element;
+              upper.enqueue(lower.front().element);
+              lowerSum -= lower.front().element;
+              lower.dequeue();
+            }
+          } else {
+            upperSum += x;
+            upper.enqueue(x);
+            if (lower.size() < upper.size()) {
+              lowerSum += upper.front().element;
+              lower.enqueue(upper.front().element);
+              upperSum -= upper.front().element;
+              upper.dequeue();
+            }
+          }
+          if ((i + 1) % 2 == 0) {
+            res[i] = (upperSum - lowerSum) % mod;
+          } else {
+            res[i] = (upperSum - lowerSum + lower.front().element) % mod;
+          }
+        }
+        return res;
+      };
+    </script>
+  </body>
+</html>
