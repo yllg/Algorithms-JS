@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 最多可以往前跳 k 步
+
+      // 方法一：动态规划 + 双端队列
+      // 时间复杂度O(n) 空间复杂度O(n)
+      var maxResult = function (nums, k) {
+        const n = nums.length;
+        const dp = new Array(n).fill(0);
+        dp[0] = nums[0];
+        const queue = [];
+        queue.push(0);
+        for (let i = 1; i < n; i++) {
+          while (queue.length > 0 && queue[0] < i - k) {
+            queue.shift();
+          }
+          dp[i] = dp[queue[0]] + nums[i];
+          while (queue.length > 0 && dp[queue[queue.length - 1]] <= dp[i]) {
+            queue.pop();
+          }
+          queue.push(i);
+        }
+        return dp[n - 1];
+      };
+
+      // test
+      let nums = [1, -1, -2, 4, -7, 3],
+        k = 2;
+      console.log(maxResult(nums, k));
+    </script>
+  </body>
+</html>
