@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：贪心 + 优先队列
+      // 时间复杂度O(nlogn) 空间复杂度O(n)
+      var magicTower = function (nums) {
+        const q = new MinPriorityQueue();
+        let ans = 0;
+        let hp = 1,
+          delay = 0;
+        for (const num of nums) {
+          if (num < 0) {
+            q.enqueue(num);
+          }
+          hp += num;
+          if (hp <= 0) {
+            ++ans;
+            delay += q.front().element;
+            hp -= q.front().element;
+            q.dequeue();
+          }
+        }
+        hp += delay;
+        return hp <= 0 ? -1 : ans;
+      };
+
+      // test
+      let nums = [100, 100, 100, -250, -60, -140, -50, -50, 100, 150];
+      console.log(magicTower(nums));
+    </script>
+  </body>
+</html>
