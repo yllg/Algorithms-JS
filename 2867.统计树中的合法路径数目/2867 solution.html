@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 在节点 a 到节点 b 之间 恰好有一个 节点的编号是质数，那么我们称路径 (a, b) 是 合法的
+
+      // 方法一：埃氏筛 + 深度优先搜索
+      // 对于埃氏筛
+      // 时间复杂度：O(n×loglogn)，其中 n 是要筛查的数字范围。
+      // 空间复杂度：O(n)，其中 n 是要筛查的数字范围。
+      // 对于其余算法部分
+
+      // 时间复杂度：O(n)，其中 n 是树的大小。
+      // 空间复杂度：O(n)，其中 n 是树的大小。
+
+      const N = 100001;
+      let isPrime = new Array(N).fill(true);
+      isPrime[1] = false;
+      for (let i = 2; i * i < N; i++) {
+        if (isPrime[i]) {
+          for (let j = i * i; j < N; j += i) {
+            isPrime[j] = false;
+          }
+        }
+      }
+
+      var countPaths = function (n, edges) {
+        let G = new Array(n + 1).fill(null).map(() => []);
+        for (const [i, j] of edges) {
+          G[i].push(j);
+          G[j].push(i);
+        }
+
+        function dfs(i, pre) {
+          seen.push(i);
+          for (const j of G[i]) {
+            if (j !== pre && !isPrime[j]) {
+              dfs(j, i);
+            }
+          }
+        }
+
+        let seen = [];
+        let res = 0;
+        let count = new Array(n + 1).fill(0);
+        for (let i = 1; i <= n; i++) {
+          if (!isPrime[i]) {
+            continue;
+          }
+          let cur = 0;
+          for (const j of G[i]) {
+            if (isPrime[j]) {
+              continue;
+            }
+            if (count[j] === 0) {
+              seen = [];
+              dfs(j, 0);
+              let cnt = seen.length;
+              for (const k of seen) {
+                count[k] = cnt;
+              }
+            }
+            res += count[j] * cur;
+            cur += count[j];
+          }
+          res += cur;
+        }
+        return res;
+      };
+    </script>
+  </body>
+</html>
