@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：自底向上 + 贪心
+      // 时间复杂度：O(n)
+      // 空间复杂度：O(1)
+      var minIncrements = function (n, cost) {
+        let ans = 0;
+        for (let i = n - 2; i > 0; i -= 2) {
+          ans += Math.abs(cost[i] - cost[i + 1]);
+          // 叶节点 i 和 i+1 的双亲节点下标为 i/2（整数除法）
+          cost[i >> 1] += Math.max(cost[i], cost[i + 1]);
+        }
+        return ans;
+      };
+    </script>
+  </body>
+</html>
