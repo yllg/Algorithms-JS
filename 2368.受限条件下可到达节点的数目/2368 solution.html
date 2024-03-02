@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：深度优先搜索
+      // 时间复杂度：O(n)
+      // 空间复杂度：O(n)
+      var reachableNodes = function (n, edges, restricted) {
+        const isRestricted = new Array(n).fill(0);
+        for (const x of restricted) {
+          isRestricted[x] = 1;
+        }
+
+        const g = new Array(n).fill(null).map(() => []);
+        for (const [u, v] of edges) {
+          g[u].push(v);
+          g[v].push(u);
+        }
+
+        let cnt = 0;
+        const dfs = (x, f) => {
+          cnt++;
+          for (const y of g[x]) {
+            if (y !== f && !isRestricted[y]) {
+              dfs(y, x);
+            }
+          }
+        };
+        dfs(0, -1);
+        return cnt;
+      };
+
+      // 方法二：并查集
+      // 时间复杂度：O(n×α(n))
+      // 空间复杂度：O(n)
+      class UnionFind {
+        constructor(n) {
+          this.f = Array.from({ length: n }, (_, i) => i);
+          this.rank = new Array(n).fill(0);
+        }
+
+        merge(x, y) {
+          let rx = this.find(x);
+          let ry = this.find(y);
+          if (rx !== ry) {
+            if (this.rank[rx] > this.rank[ry]) {
+              this.f[ry] = rx;
+            } else if (this.rank[rx] < this.rank[ry]) {
+              this.f[rx] = ry;
+            } else {
+              this.f[ry] = rx;
+              this.rank[rx]++;
+            }
+          }
+        }
+
+        find(x) {
+          if (x !== this.f[x]) {
+            this.f[x] = this.find(this.f[x]);
+          }
+          return this.f[x];
+        }
+
+        count() {
+          let cnt = 0;
+          let rt = this.find(0);
+          for (let i = 0; i < this.f.length; i++) {
+            if (rt === this.find(i)) {
+              cnt++;
+            }
+          }
+          return cnt;
+        }
+      }
+
+      var reachableNodes = function (n, edges, restricted) {
+        const isRestricted = new Array(n).fill(0);
+        for (const x of restricted) {
+          isRestricted[x] = 1;
+        }
+
+        const uf = new UnionFind(n);
+        for (const [u, v] of edges) {
+          if (isRestricted[u] === 1 || isRestricted[v] === 1) {
+            continue;
+          }
+          uf.merge(u, v);
+        }
+        return uf.count();
+      };
+
+      // test
+      let n = 7,
+        edges = [
+          [0, 1],
+          [1, 2],
+          [3, 1],
+          [4, 0],
+          [0, 5],
+          [5, 6],
+        ],
+        restricted = [4, 5];
+      console.log(reachableNodes(n, edges, restricted));
+    </script>
+  </body>
+</html>
