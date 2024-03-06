@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：枚举每一个二进制位
+      // 时间复杂度 O(n*logC); 其中 n是数组 nums 的长度，C 是数组 nums 中元素的范围
+      // 空间复杂度 O(1)
+      var findKOr = function (nums, k) {
+        let ans = 0;
+        for (let i = 0; i < 31; ++i) {
+          let cnt = 0;
+          for (const num of nums) {
+            if ((num >> i) & 1) {
+              ++cnt;
+            }
+          }
+          if (cnt >= k) {
+            ans |= 1 << i;
+          }
+        }
+        return ans;
+      };
+    </script>
+  </body>
+</html>
