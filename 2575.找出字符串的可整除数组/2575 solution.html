@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：模运算
+      // 时间复杂度 O(n) 空间复杂度 O(1)
+      var divisibilityArray = function (word, m) {
+        const res = [];
+        let cur = 0;
+        for (const c of word) {
+          cur = (cur * 10 + (c.charCodeAt(0) - "0".charCodeAt(0))) % m;
+          res.push(cur === 0 ? 1 : 0);
+        }
+        return res;
+      };
+
+      // test
+      let word = "998244353",
+        m = 3;
+      console.log(divisibilityArray(word, m));
+    </script>
+  </body>
+</html>
