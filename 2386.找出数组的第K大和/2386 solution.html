@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：优先队列
+      // 时间复杂度：O(nlogn+klogk)
+      // 空间复杂度：O(k+logn)
+      var kSum = function (nums, k) {
+        const n = nums.length;
+        let total = 0;
+        for (let i = 0; i < nums.length; i++) {
+          const x = nums[i];
+          if (x >= 0) {
+            total += x;
+          } else {
+            nums[i] = -x;
+          }
+        }
+
+        nums.sort((a, b) => a - b);
+        let ret = 0;
+        const pq = new MinPriorityQueue();
+        pq.enqueue([nums[0], 0], nums[0]);
+        for (let j = 2; j <= k; j++) {
+          const [t, i] = pq.front().element;
+          pq.dequeue();
+          ret = t;
+          if (i == n - 1) {
+            continue;
+          }
+          pq.enqueue([t + nums[i + 1], i + 1], t + nums[i + 1]);
+          pq.enqueue(
+            [t - nums[i] + nums[i + 1], i + 1],
+            t - nums[i] + nums[i + 1]
+          );
+        }
+        return total - ret;
+      };
+
+      // 方法二: 二分法
+      // 时间复杂度：O(nlogn+klogS)
+      // 空间复杂度：O(min(n,k))
+      var kSum = function (nums, k) {
+        let n = nums.length;
+        let total = 0,
+          total2 = 0;
+        for (let i = 0; i < n; i++) {
+          if (nums[i] < 0) {
+            nums[i] = -nums[i];
+          } else {
+            total += nums[i];
+          }
+          total2 += Math.abs(nums[i]);
+        }
+
+        nums.sort((a, b) => a - b);
+        const dfs = (i, t, limit) => {
+          if (i === n || cnt >= k - 1 || t + nums[i] > limit) {
+            return;
+          }
+          cnt++;
+          dfs(i + 1, t + nums[i], limit, cnt);
+          dfs(i + 1, t, limit, cnt);
+        };
+
+        let left = 0,
+          right = total2;
+        let cnt = 0;
+        while (left <= right) {
+          let mid = Math.floor((left + right) / 2);
+          cnt = 0;
+          dfs(0, 0, mid);
+          if (cnt >= k - 1) {
+            right = mid - 1;
+          } else {
+            left = mid + 1;
+          }
+        }
+
+        return total - left;
+      };
+
+      // test
+      let nums = [2, 4, -2],
+        k = 5;
+      console.log(kSum(nums, k));
+    </script>
+  </body>
+</html>
