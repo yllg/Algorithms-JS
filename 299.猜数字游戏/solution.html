@@ -1,34 +1,39 @@
 <!DOCTYPE html>
 <html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
 
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
-</head>
-
-<body>
-  <script>
-    // 方法一：遍历
-    var getHint = function (secret, guess) {
-      let bulls = 0;
-      const cntS = new Array(10).fill(0);
-      const cntG = new Array(10).fill(0);
-      for (let i = 0; i < secret.length; ++i) {
-        if (secret[i] == guess[i]) {
-          ++bulls;
-        } else {
-          ++cntS[secret[i].charCodeAt() - '0'.charCodeAt()];
-          ++cntG[guess[i].charCodeAt() - '0'.charCodeAt()];
+  <body>
+    <script>
+      // 方法一：遍历
+      // 时间复杂度：O(N)，其中 N 是字符串 secret 的长度。
+      // 空间复杂度：O(C)，需要常数个空间统计字符出现次数，由于我们统计的是数字字符，因此 C=10。
+      var getHint = function (secret, guess) {
+        let bulls = 0;
+        const cntS = new Array(10).fill(0);
+        const cntG = new Array(10).fill(0);
+        for (let i = 0; i < secret.length; ++i) {
+          if (secret[i] == guess[i]) {
+            ++bulls;
+          } else {
+            ++cntS[secret[i].charCodeAt() - "0".charCodeAt()];
+            ++cntG[guess[i].charCodeAt() - "0".charCodeAt()];
+          }
         }
-      }
-      let cows = 0;
-      for (let i = 0; i < 10; ++i) {
-        cows += Math.min(cntS[i], cntG[i]);
-      }
-      return '' + bulls + "A" + '' + cows + "B";
-    };
-  </script>
-</body>
+        let cows = 0;
+        for (let i = 0; i < 10; ++i) {
+          cows += Math.min(cntS[i], cntG[i]);
+        }
+        return "" + bulls + "A" + "" + cows + "B";
+      };
 
+      // test
+      let secret = "1807",
+        guess = "7810";
+      console.log(getHint(secret, guess));
+    </script>
+  </body>
 </html>
