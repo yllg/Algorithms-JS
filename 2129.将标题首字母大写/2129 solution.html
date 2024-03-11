@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：按要求遍历
+      // 时间复杂度：O(n)
+      // 空间复杂度：O(n)
+      var capitalizeTitle = function (title) {
+        return title
+          .split(" ")
+          .map((s) => {
+            if (s.length > 2) {
+              return s.charAt(0).toUpperCase() + s.slice(1).toLowerCase();
+            }
+            return s.toLowerCase();
+          })
+          .join(" ");
+      };
+
+      // test
+      let title = "capiTalIze tHe titLe";
+      console.log(capitalizeTitle(title));
+    </script>
+  </body>
+</html>
