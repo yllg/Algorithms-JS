@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：深度优先搜索 + 哈希表
+      // 时间复杂度：O(n)
+      // 空间复杂度：O(1)
+      var FindElements = function (root) {
+        this.valSet = new Set();
+        const dfs = (node, val) => {
+          if (node == null) {
+            return;
+          }
+          node.val = val;
+          this.valSet.add(val);
+          dfs(node.left, val * 2 + 1);
+          dfs(node.right, val * 2 + 2);
+        };
+        dfs(root, 0);
+      };
+
+      FindElements.prototype.find = function (target) {
+        return this.valSet.has(target);
+      };
+
+      // 方法二：深度优先搜索 + 位运算
+      // 时间复杂度：O(n)
+      // 空间复杂度：O(1)
+      var FindElements = function (root) {
+        const dfs = (node, val) => {
+          if (node == null) {
+            return;
+          }
+          node.val = val;
+          dfs(node.left, val * 2 + 1);
+          dfs(node.right, val * 2 + 2);
+        };
+        dfs(root, 0);
+        this.root = root;
+      };
+
+      FindElements.prototype.find = function (target) {
+        target++;
+        let k = 30 - numberOfLeadingZeros(target);
+        let node = this.root;
+        while (k >= 0 && node != null) {
+          if ((target & (1 << k)) == 0) {
+            node = node.left;
+          } else {
+            node = node.right;
+          }
+          k--;
+        }
+        return node != null;
+      };
+
+      function numberOfLeadingZeros(value) {
+        let count = 0;
+        while (value > 0) {
+          value = value >>> 1;
+          count++;
+        }
+        return 32 - count;
+      }
+    </script>
+  </body>
+</html>
