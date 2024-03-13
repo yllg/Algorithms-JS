@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：贪心
+      // 时间复杂度 O(n)
+      // 空间复杂度 O(1)
+      var maximumOddBinaryNumber = function (s) {
+        let cnt = 0;
+        for (let i = 0; i < s.length; i++) {
+          if (s[i] == "1") {
+            cnt++;
+          }
+        }
+        return "1".repeat(cnt - 1) + "0".repeat(s.length - cnt) + "1";
+      };
+
+      // test
+      let s = "0101";
+      console.log(maximumOddBinaryNumber(s));
+    </script>
+  </body>
+</html>
