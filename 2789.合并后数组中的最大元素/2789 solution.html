@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：贪心 + 倒序遍历数组
+      // 时间复杂度 O(n)
+      // 空间复杂度 O(1)
+      var maxArrayValue = function (nums) {
+        let sum = nums[nums.length - 1];
+        for (let i = nums.length - 2; i >= 0; i--) {
+          sum = nums[i] <= sum ? nums[i] + sum : nums[i];
+        }
+        return sum;
+      };
+
+      // test
+      let nums = [2, 3, 7, 9, 3];
+      console.log(maxArrayValue(nums));
+    </script>
+  </body>
+</html>
