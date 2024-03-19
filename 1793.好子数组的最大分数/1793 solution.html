@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：双指针
+      // 时间复杂度：O(n+C)
+      // 时间复杂度：O(1)
+      var maximumScore = function (nums, k) {
+        let n = nums.length;
+        let left = k - 1,
+          right = k + 1;
+        let ans = 0;
+        for (let i = nums[k]; ; --i) {
+          while (left >= 0 && nums[left] >= i) {
+            --left;
+          }
+          while (right < n && nums[right] >= i) {
+            ++right;
+          }
+          ans = Math.max(ans, (right - left - 1) * i);
+          if (left === -1 && right === n) {
+            break;
+          }
+        }
+        return ans;
+      };
+
+      // 方法二：优化的双指针
+      // 时间复杂度：O(n)
+      // 时间复杂度：O(1)
+      var maximumScore = function (nums, k) {
+        let n = nums.length;
+        let left = k - 1,
+          right = k + 1;
+        let ans = 0;
+        for (let i = nums[k]; ; ) {
+          while (left >= 0 && nums[left] >= i) {
+            --left;
+          }
+          while (right < n && nums[right] >= i) {
+            ++right;
+          }
+          ans = Math.max(ans, (right - left - 1) * i);
+          if (left === -1 && right === n) {
+            break;
+          }
+          i = Math.max(
+            left === -1 ? -1 : nums[left],
+            right === n ? -1 : nums[right]
+          );
+          if (i === -1) {
+            break;
+          }
+        }
+        return ans;
+      };
+
+      // test
+      let nums = [1, 4, 3, 7, 4, 5],
+        k = 3;
+      console.log(maximumScore(nums, k));
+    </script>
+  </body>
+</html>
