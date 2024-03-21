@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：哈希表
+      // 时间复杂度：O(q)
+      // 时间复杂度：O(m)
+      var FrequencyTracker = function () {
+        this.freq = new Map();
+        this.freq_cnt = new Map();
+      };
+
+      FrequencyTracker.prototype.add = function (number) {
+        if (!this.freq.has(number)) {
+          this.freq.set(number, 0);
+          this.freq_cnt.set(0, (this.freq_cnt.get(0) || 0) + 1);
+        }
+        const prev = this.freq.get(number);
+        this.freq_cnt.set(prev, (this.freq_cnt.get(prev) || 0) - 1);
+        this.freq.set(number, prev + 1);
+        this.freq_cnt.set(prev + 1, (this.freq_cnt.get(prev + 1) || 0) + 1);
+      };
+
+      FrequencyTracker.prototype.deleteOne = function (number) {
+        if (!this.freq.has(number) || this.freq.get(number) === 0) {
+          return;
+        }
+        let prev = this.freq.get(number);
+        this.freq_cnt.set(prev, (this.freq_cnt.get(prev) || 0) - 1);
+        this.freq.set(number, prev - 1);
+        this.freq_cnt.set(prev - 1, (this.freq_cnt.get(prev - 1) || 0) + 1);
+      };
+
+      FrequencyTracker.prototype.hasFrequency = function (frequency) {
+        return this.freq_cnt.get(frequency) > 0;
+      };
+    </script>
+  </body>
+</html>
