@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：模拟
+      // 时间复杂度：O(n^3)
+      // 空间复杂度：O(n)
+      var distinctIntegers = function (n) {
+        let nums = new Array(n + 1).fill(0);
+        nums[n] = 1;
+        for (let k = 0; k < n; k++) {
+          for (let x = 1; x <= n; x++) {
+            if (nums[x] == 0) {
+              continue;
+            }
+            for (let i = 1; i <= n; i++) {
+              if (x % i == 1) {
+                nums[i] = 1;
+              }
+            }
+          }
+        }
+        return nums.reduce(function (t, x) {
+          return t + x;
+        });
+      };
+
+      // 方法二：数学
+      // 时间复杂度：O(1)
+      // 空间复杂度：O(1)
+      var distinctIntegers = function (n) {
+        return n == 1 ? 1 : n - 1;
+      };
+
+      // test
+      let n = 5;
+      console.log(distinctIntegers(n));
+    </script>
+  </body>
+</html>
