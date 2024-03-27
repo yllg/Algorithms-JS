@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：区间合并
+      // 时间复杂度：O(nlogn)
+      // 空间复杂度：O(logn)
+      var countWays = function (ranges) {
+        const mod = 1e9 + 7;
+        ranges.sort((a, b) => a[0] - b[0]);
+
+        let n = ranges.length;
+        let res = 1;
+        for (let i = 0; i < n; ) {
+          let r = ranges[i][1];
+          let j = i + 1;
+          while (j < n && ranges[j][0] <= r) {
+            r = Math.max(r, ranges[j][1]);
+            j++;
+          }
+          res = (res * 2) % mod;
+          i = j;
+        }
+        return res;
+      };
+
+      // test
+      let ranges = [
+        [6, 10],
+        [5, 15],
+      ];
+      console.log(countWays(ranges));
+    </script>
+  </body>
+</html>
