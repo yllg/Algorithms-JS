@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：动态规划
+      // 时间复杂度：O(n)
+      // 空间复杂度：O(C=n^max)
+      var firstDayBeenInAllRooms = function (nextVisit) {
+        const mod = 1e9 + 7;
+        const len = nextVisit.length;
+        const dp = new Array(len).fill(0);
+
+        // 初始化原地待一天 + 访问下一个房间一天
+        dp[0] = 2;
+        for (let i = 1; i < len; i++) {
+          const to = nextVisit[i];
+          dp[i] = 2 + dp[i - 1];
+          if (to) {
+            // 避免负数
+            dp[i] = (dp[i] - dp[to - 1] + mod) % mod;
+          }
+          dp[i] = (dp[i] + dp[i - 1]) % mod;
+        }
+        return dp[len - 2]; //题目保证n >= 2
+      };
+
+      // test
+      let nextVisit = [0, 0];
+      console.log(firstDayBeenInAllRooms(nextVisit));
+    </script>
+  </body>
+</html>
