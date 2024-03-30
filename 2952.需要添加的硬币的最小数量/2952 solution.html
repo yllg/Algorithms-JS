@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：贪心
+      // 时间复杂度：O(nlogn+logtarget)
+      // 空间复杂度：O(logn)
+      var minimumAddedCoins = function (coins, target) {
+        coins.sort((x, y) => x - y);
+        let ans = 0;
+        let x = 1;
+        const length = coins.length;
+        let index = 0;
+        while (x <= target) {
+          if (index < length && coins[index] <= x) {
+            x += coins[index];
+            index++;
+          } else {
+            x *= 2;
+            ans++;
+          }
+        }
+        return ans;
+      };
+
+      // test
+      let coins = [1, 4, 10],
+        target = 19;
+      console.log(minimumAddedCoins(coins, target));
+    </script>
+  </body>
+</html>
