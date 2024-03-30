@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：枚举
+      // 时间复杂度：O(n^3)
+      // 空间复杂度：O(1)
+      var minimumSum = function (nums) {
+        const n = nums.length;
+        let res = 1000;
+        for (let i = 0; i < n; i++) {
+          for (let j = i + 1; j < n; j++) {
+            for (let k = j + 1; k < n; k++) {
+              if (nums[i] < nums[j] && nums[k] < nums[j]) {
+                res = Math.min(res, nums[i] + nums[j] + nums[k]);
+              }
+            }
+          }
+        }
+        return res < 1000 ? res : -1;
+      };
+
+      // 方法二：数组
+      // 时间复杂度：O(n)
+      // 空间复杂度：O(n)
+      var minimumSum = function (nums) {
+        let n = nums.length,
+          res = 1000,
+          mn = 1000;
+        const left = [0];
+        for (let i = 1; i < n; i++) {
+          left[i] = mn = Math.min(nums[i - 1], mn);
+        }
+
+        let right = nums[n - 1];
+        for (let i = n - 2; i > 0; i--) {
+          if (left[i] < nums[i] && nums[i] > right) {
+            res = Math.min(res, left[i] + nums[i] + right);
+          }
+          right = Math.min(right, nums[i]);
+        }
+
+        return res < 1000 ? res : -1;
+      };
+
+      // test
+      let nums = [8, 6, 1, 5, 3];
+      console.log(minimumSum(nums));
+    </script>
+  </body>
+</html>
