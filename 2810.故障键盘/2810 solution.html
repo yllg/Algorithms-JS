@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 输入字符 'i' 时，它会反转你所写的字符串; 返回输出结果
+
+      // 方法一：使用双端队列进行模拟
+      // 时间复杂度：O(n)
+      // 空间复杂度：O(n)
+      var finalString = function (s) {
+        let q = [];
+        let head = false;
+        for (let ch of s) {
+          if (ch !== "i") {
+            if (head) {
+              q.unshift(ch);
+            } else {
+              q.push(ch);
+            }
+          } else {
+            head = !head;
+          }
+        }
+        let ans = head ? q.reverse().join("") : q.join("");
+        return ans;
+      };
+
+      // test
+      let s = "string";
+      console.log(finalString(s));
+    </script>
+  </body>
+</html>
