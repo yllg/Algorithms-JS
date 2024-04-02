@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // Definition for a binary tree node.
+      function TreeNode(val, left, right) {
+        this.val = val === undefined ? 0 : val;
+        this.left = left === undefined ? null : left;
+        this.right = right === undefined ? null : right;
+      }
+
+      // 方法一：分治
+      // 时间复杂度：O(2^n/sqrt{n})
+      // 空间复杂度：O(n)
+      var allPossibleFBT = function (n) {
+        let fullBinaryTrees = [];
+        if (n % 2 === 0) {
+          return fullBinaryTrees;
+        }
+        if (n === 1) {
+          fullBinaryTrees.push(new TreeNode(0));
+          return fullBinaryTrees;
+        }
+        for (let i = 1; i < n; i += 2) {
+          let leftSubtrees = allPossibleFBT(i);
+          let rightSubtrees = allPossibleFBT(n - 1 - i);
+          for (let leftSubtree of leftSubtrees) {
+            for (let rightSubtree of rightSubtrees) {
+              let root = new TreeNode(0, leftSubtree, rightSubtree);
+              fullBinaryTrees.push(root);
+            }
+          }
+        }
+        return fullBinaryTrees;
+      };
+
+      // 方法二：动态规划
+      // 时间复杂度：O(2^n/sqrt{n})
+      // 空间复杂度：O(1)
+      var allPossibleFBT = function (n) {
+        if (n % 2 === 0) {
+          return [];
+        }
+
+        const dp = Array(n + 1)
+          .fill()
+          .map(() => []);
+        dp[1] = [new TreeNode(0)];
+        for (let i = 3; i <= n; i += 2) {
+          for (let j = 1; j < i; j += 2) {
+            for (let leftSubtree of dp[j]) {
+              for (let rightSubtree of dp[i - 1 - j]) {
+                const root = new TreeNode(0, leftSubtree, rightSubtree);
+                dp[i].push(root);
+              }
+            }
+          }
+        }
+        return dp[n];
+      };
+
+      // test
+      let n = 7;
+      console.log(allPossibleFBT(n));
+    </script>
+  </body>
+</html>
