@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：去重 + 排序 + 滑动窗口
+      // 时间复杂度：O(n×logn)
+      // 空间复杂度：O(n)
+      var minOperations = function (nums) {
+        const n = nums.length;
+        const sortedUniqueNums = [...new Set(nums)];
+        sortedUniqueNums.sort((a, b) => a - b);
+        let res = n;
+        let j = 0;
+        for (let i = 0; i < sortedUniqueNums.length; i++) {
+          const left = sortedUniqueNums[i];
+          const right = left + n - 1;
+          while (j < sortedUniqueNums.length && sortedUniqueNums[j] <= right) {
+            res = Math.min(res, n - (j - i + 1));
+            j++;
+          }
+        }
+        return res;
+      };
+
+      // test
+      let nums = [1, 2, 3, 5, 6];
+      console.log(minOperations(nums));
+    </script>
+  </body>
+</html>
