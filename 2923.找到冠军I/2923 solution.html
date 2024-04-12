@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：每行求和
+      // 时间复杂度：O(n^2)
+      // 空间复杂度：O(1)
+      var findChampion = function (grid) {
+        const n = grid.length;
+        for (let i = 0; i < n; i++) {
+          const sum = grid[i].reduce((acc, val) => acc + val, 0);
+          if (sum === n - 1) {
+            return i;
+          }
+        }
+        return -1;
+      };
+
+      // test
+      let grid = [
+        [0, 1],
+        [0, 0],
+      ];
+      console.log(findChampion(grid));
+    </script>
+  </body>
+</html>
