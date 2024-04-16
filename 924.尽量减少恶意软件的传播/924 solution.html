@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：枚举每一个连通分量
+      // 时间复杂度 O(n^2)
+      // 空间复杂度 O(n)
+      var minMalwareSpread = function (graph, initial) {
+        const n = graph.length;
+        let ids = new Array(n).fill(0);
+        let idToSize = new Map();
+        let id = 0;
+        for (let i = 0; i < n; ++i) {
+          if (!ids[i]) {
+            ++id;
+            let size = 1;
+            let q = [i];
+            ids[i] = id;
+            while (q.length > 0) {
+              let u = q.shift();
+              for (let v = 0; v < n; ++v) {
+                if (!ids[v] && graph[u][v] === 1) {
+                  ++size;
+                  q.push(v);
+                  ids[v] = id;
+                }
+              }
+            }
+            idToSize.set(id, size);
+          }
+        }
+        let idToInitials = new Map();
+        for (const u of initial) {
+          if (!idToInitials.has(ids[u])) {
+            idToInitials.set(ids[u], 0);
+          }
+          idToInitials.set(ids[u], idToInitials.get(ids[u]) + 1);
+        }
+        let ans = n + 1,
+          ansRemoved = 0;
+        for (const u of initial) {
+          let removed =
+            idToInitials.get(ids[u]) === 1 ? idToSize.get(ids[u]) : 0;
+          if (removed > ansRemoved || (removed === ansRemoved && u < ans)) {
+            ans = u;
+            ansRemoved = removed;
+          }
+        }
+        return ans;
+      };
+
+      // test
+      let graph = [
+          [1, 1, 0],
+          [1, 1, 0],
+          [0, 0, 1],
+        ],
+        initial = [0, 1];
+      console.log(minMalwareSpread(graph, initial));
+    </script>
+  </body>
+</html>
