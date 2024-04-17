@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一： 深度优先搜索
+      // 时间复杂度：O(n^3)
+      // 空间复杂度：O(n^2)
+      var minMalwareSpread = function (graph, initial) {
+        const n = graph.length;
+        const initialSet = new Array(n).fill(0);
+        for (const v of initial) {
+          initialSet[v] = 1;
+        }
+
+        const infectedBy = new Array(n).fill(0).map(() => new Array());
+        for (const v of initial) {
+          const infectedSet = new Array(n).fill(0);
+          dfs(graph, initialSet, infectedSet, v);
+          for (let u = 0; u < n; u++) {
+            if (infectedSet[u] == 1) {
+              infectedBy[u].push(v);
+            }
+          }
+        }
+
+        const count = new Array(n).fill(0);
+        for (let u = 0; u < n; u++) {
+          if (infectedBy[u].length == 1) {
+            count[infectedBy[u][0]]++;
+          }
+        }
+        let res = initial[0];
+        for (const v of initial) {
+          if (count[v] > count[res] || (count[v] == count[res] && v < res)) {
+            res = v;
+          }
+        }
+        return res;
+      };
+
+      const dfs = (graph, initialSet, infectedSet, v) => {
+        const n = graph.length;
+        for (let u = 0; u < n; u++) {
+          if (graph[v][u] == 0 || initialSet[u] == 1 || infectedSet[u] == 1) {
+            continue;
+          }
+          infectedSet[u] = 1;
+          dfs(graph, initialSet, infectedSet, u);
+        }
+      };
+
+      // 方法二：并查集
+      // 时间复杂度：O(n^2logn)
+      // 空间复杂度：O(n^2)
+      function find(uf, u) {
+        if (uf[u] === u) {
+          return u;
+        }
+        uf[u] = find(uf, uf[u]);
+        return uf[u];
+      }
+
+      function merge(uf, u, v) {
+        const ru = find(uf, u);
+        const rv = find(uf, v);
+        if (ru !== rv) {
+          uf[ru] = rv;
+        }
+      }
+
+      var minMalwareSpread = function (graph, initial) {
+        const n = graph.length;
+        const initialSet = new Array(n).fill(0);
+        for (const v of initial) {
+          initialSet[v] = 1;
+        }
+        const uf = new Array(n).fill(0).map((_, i) => i);
+        for (let u = 0; u < n; u++) {
+          if (initialSet[u]) {
+            continue;
+          }
+          for (let v = 0; v < n; v++) {
+            if (initialSet[v]) {
+              continue;
+            }
+            if (graph[u][v] === 1) {
+              merge(uf, u, v);
+            }
+          }
+        }
+
+        const infectedBy = new Array(n).fill(0).map(() => []);
+        for (const v of initial) {
+          const infectedSet = new Array(n).fill(0);
+          for (let u = 0; u < n; u++) {
+            if (initialSet[u]) {
+              continue;
+            }
+            if (graph[u][v] === 1) {
+              infectedSet[find(uf, u)] = 1;
+            }
+          }
+          for (let u = 0; u < n; u++) {
+            if (infectedSet[u] === 1) {
+              infectedBy[u].push(v);
+            }
+          }
+        }
+
+        const count = new Array(n).fill(0);
+        for (let u = 0; u < n; u++) {
+          if (infectedBy[u].length !== 1) {
+            continue;
+          }
+          const v = infectedBy[u][0];
+          for (let w = 0; w < n; w++) {
+            if (find(uf, w) === find(uf, u)) {
+              count[v]++;
+            }
+          }
+        }
+        let res = initial[0];
+        for (const v of initial) {
+          if (count[v] > count[res] || (count[v] === count[res] && v < res)) {
+            res = v;
+          }
+        }
+        return res;
+      };
+
+      // test
+      let graph = [
+          [1, 1, 0],
+          [1, 1, 0],
+          [0, 0, 1],
+        ],
+        initial = [0, 1];
+      console.log(minMalwareSpread(graph, initial));
+    </script>
+  </body>
+</html>
