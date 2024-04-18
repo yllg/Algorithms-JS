@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：排序
+      // 时间复杂度：O(nlogn)
+      // 空间复杂度：O(n)
+      var findOriginalArray = function (changed) {
+        changed.sort((a, b) => a - b);
+        const count = {};
+        for (const num of changed) {
+          count[num] = (count[num] || 0) + 1;
+        }
+        const res = [];
+        for (const a of changed) {
+          if (count[a] === 0) {
+            continue;
+          }
+          count[a]--;
+          if (!count[a * 2]) {
+            return [];
+          }
+          count[a * 2]--;
+          res.push(a);
+        }
+        return res;
+      };
+
+      // test
+      let changed = [1, 3, 4, 2, 6, 8];
+      console.log(findOriginalArray(changed));
+    </script>
+  </body>
+</html>
