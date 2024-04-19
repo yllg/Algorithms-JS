@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：动态规划
+      // 时间复杂度：O(n^2)
+      // 空间复杂度：O(n^2)
+      var minSkips = function (dist, speed, hoursBefore) {
+        // 可忽略误差
+        const EPS = 1e-7;
+        const n = dist.length;
+        const f = new Array(n + 1)
+          .fill(0)
+          .map(() => new Array(n + 1).fill(Infinity));
+        f[0][0] = 0;
+        for (let i = 1; i <= n; i++) {
+          for (let j = 0; j <= i; j++) {
+            if (j !== i) {
+              f[i][j] = Math.min(
+                f[i][j],
+                Math.ceil(f[i - 1][j] + dist[i - 1] / speed - EPS)
+              );
+            }
+            if (j !== 0) {
+              f[i][j] = Math.min(
+                f[i][j],
+                f[i - 1][j - 1] + dist[i - 1] / speed
+              );
+            }
+          }
+        }
+
+        for (let j = 0; j <= n; j++) {
+          if (f[n][j] < hoursBefore + EPS) {
+            return j;
+          }
+        }
+        return -1;
+      };
+
+      // 方法二：动态规划 + 将所有运算变为整数运算
+      // 时间复杂度：O(n^2)
+      // 空间复杂度：O(n^2)
+      var minSkips = function (dist, speed, hoursBefore) {
+        const n = dist.length;
+        const f = new Array(n + 1)
+          .fill(0)
+          .map(() => new Array(n + 1).fill(Number.MAX_SAFE_INTEGER / 2));
+        f[0][0] = 0;
+        for (let i = 1; i <= n; i++) {
+          for (let j = 0; j <= i; j++) {
+            if (j !== i) {
+              f[i][j] = Math.min(
+                f[i][j],
+                Math.floor((f[i - 1][j] + dist[i - 1] - 1) / speed + 1) * speed
+              );
+            }
+            if (j !== 0) {
+              f[i][j] = Math.min(f[i][j], f[i - 1][j - 1] + dist[i - 1]);
+            }
+          }
+        }
+        for (let j = 0; j <= n; j++) {
+          if (f[n][j] <= hoursBefore * speed) {
+            return j;
+          }
+        }
+        return -1;
+      };
+
+      // test
+      let dist = [1, 3, 2],
+        speed = 4,
+        hoursBefore = 2;
+      console.log(minSkips(dist, speed, hoursBefore));
+    </script>
+  </body>
+</html>
