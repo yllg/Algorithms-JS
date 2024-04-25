@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：模拟
+      var distanceTraveled = function (mainTank, additionalTank) {
+        let ans = 0;
+        while (mainTank >= 5) {
+          mainTank -= 5;
+          ans += 50;
+          if (additionalTank > 0) {
+            additionalTank--;
+            mainTank++;
+          }
+        }
+        return ans + mainTank * 10;
+      };
+
+      // 方法二：数学
+      // 时间复杂度 O(1) 空间复杂度 O(1)
+      var distanceTraveled = function (mainTank, additionalTank) {
+        return (
+          10 *
+          (mainTank + Math.min(Math.floor((mainTank - 1) / 4), additionalTank))
+        );
+      };
+    </script>
+  </body>
+</html>
