@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：模拟
+      // 时间复杂度：O(n^2)
+      // 空间复杂度：O(1)
+      var countTestedDevices = function (batteryPercentages) {
+        let n = batteryPercentages.length;
+        let need = 0;
+        for (let i = 0; i < n; i++) {
+          if (batteryPercentages[i] > 0) {
+            need++;
+            for (let j = i + 1; j < n; j++) {
+              batteryPercentages[j] = Math.max(batteryPercentages[j] - 1, 0);
+            }
+          }
+        }
+        return need;
+      };
+
+      // 方法二：差分
+      // 时间复杂度：O(n)
+      // 空间复杂度：O(1)
+      var countTestedDevices = function (batteryPercentages) {
+        let need = 0;
+        for (let battery of batteryPercentages) {
+          if (battery > need) {
+            need++;
+          }
+        }
+        return need;
+      };
+
+      // test
+      let batteryPercentages = [1, 1, 2, 1, 3];
+      console.log(countTestedDevices(batteryPercentages));
+    </script>
+  </body>
+</html>
