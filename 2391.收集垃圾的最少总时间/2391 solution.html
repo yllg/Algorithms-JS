@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：一次遍历
+      // 时间复杂度：O(mn)
+      // 空间复杂度：O(C)
+      var garbageCollection = function (garbage, travel) {
+        const distance = new Map();
+        let res = 0,
+          curDis = 0;
+        for (let i = 0; i < garbage.length; i++) {
+          res += garbage[i].length;
+          if (i > 0) {
+            curDis += travel[i - 1];
+          }
+          for (const c of garbage[i]) {
+            distance.set(c, curDis);
+          }
+        }
+        for (const [k, v] of distance) {
+          res += v;
+        }
+        return res;
+      };
+
+      // test
+      let garbage = ["G", "P", "GP", "GG"],
+        travel = [2, 4, 3];
+      console.log(garbageCollection(garbage, travel));
+    </script>
+  </body>
+</html>
