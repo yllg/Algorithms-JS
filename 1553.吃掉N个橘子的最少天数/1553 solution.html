@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：记忆化搜索
+      // 时间复杂度：O(log^2 n)
+      // 空间复杂度：O(log^2 n)
+      var minDays = function (n) {
+        const memo = new Map([
+          [0, 0],
+          [1, 1],
+        ]);
+
+        function helper(n) {
+          if (memo.has(n)) {
+            return memo.get(n);
+          }
+          memo.set(
+            n,
+            Math.min(
+              (n % 2) + 1 + helper(Math.floor(n / 2)),
+              (n % 3) + 1 + helper(Math.floor(n / 3))
+            )
+          );
+          return memo.get(n);
+        }
+        return helper(n);
+      };
+
+      // 方法二：最短路
+      // 时间复杂度：O(\log^2 * n *loglog n)
+      // 空间复杂度：O(log^2 n)
+      var minDays = function (n) {
+        const q = new MinPriorityQueue();
+        q.enqueue([0, n], 0);
+        const visited = new Set();
+        let ans = 0;
+        while (true) {
+          [days, rest] = q.dequeue().element;
+          console.log(days, rest);
+          if (visited.has(rest)) {
+            continue;
+          }
+          visited.add(rest);
+          if (rest == 1) {
+            ans = days + 1;
+            break;
+          }
+          q.enqueue(
+            [days + (rest % 2) + 1, Math.floor(rest / 2)],
+            days + (rest % 2) + 1
+          );
+          q.enqueue(
+            [days + (rest % 3) + 1, Math.floor(rest / 3)],
+            days + (rest % 3) + 1
+          );
+        }
+        return ans;
+      };
+
+      // 方法三：启发式搜索
+      var minDays = function (n) {
+        const getHeuristicValue = (rest) => {
+          return rest == 0 ? 0 : Math.floor(Math.log(rest) / Math.log(3.0)) + 1;
+        };
+
+        const q = new MinPriorityQueue();
+        const visited = new Set();
+        q.enqueue([0, getHeuristicValue(n), n], 0 + getHeuristicValue(n));
+        let ans = 0;
+        while (true) {
+          const [days, _, rest] = q.dequeue().element;
+          if (visited.has(rest)) {
+            continue;
+          }
+          visited.add(rest);
+          if (rest == 1) {
+            ans = days + 1;
+            break;
+          }
+          const n2 = Math.floor(rest / 2);
+          const n3 = Math.floor(rest / 3);
+          const cost2 = days + (rest % 2) + 1;
+          const cost3 = days + (rest % 3) + 1;
+          q.enqueue(
+            [cost2, getHeuristicValue(n2), n2],
+            cost2 + getHeuristicValue(n2)
+          );
+          q.enqueue(
+            [cost3, getHeuristicValue(n3), n3],
+            cost3 + getHeuristicValue(n3)
+          );
+        }
+        return ans;
+      };
+    </script>
+  </body>
+</html>
