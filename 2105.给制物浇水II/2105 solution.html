@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：模拟
+      // 时间复杂度：O(n)
+      // 空间复杂度：O(1)
+      var minimumRefill = function (plants, capacityA, capacityB) {
+        let res = 0; // 灌满水罐次数
+        let n = plants.length;
+        let posa = 0,
+          posb = n - 1; // 两人位置
+        let vala = capacityA,
+          valb = capacityB; // 两人剩余水量
+        // 模拟相遇前的浇水过程
+        while (posa < posb) {
+          if (vala < plants[posa]) {
+            ++res;
+            vala = capacityA - plants[posa];
+          } else {
+            vala -= plants[posa];
+          }
+          ++posa;
+          if (valb < plants[posb]) {
+            ++res;
+            valb = capacityB - plants[posb];
+          } else {
+            valb -= plants[posb];
+          }
+          --posb;
+        }
+        // 模拟相遇后可能的浇水过程
+        if (posa === posb) {
+          if (vala >= valb && vala < plants[posa]) {
+            ++res;
+          }
+          if (vala < valb && valb < plants[posb]) {
+            ++res;
+          }
+        }
+        return res;
+      };
+
+      // test
+      let plants = [2, 2, 3, 3],
+        capacityA = 5,
+        capacityB = 5;
+      console.log(minimumRefill(plants, capacityA, capacityB));
+    </script>
+  </body>
+</html>

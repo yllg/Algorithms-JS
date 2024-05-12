@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      /**
+       * 拍一次照，复制出一个新数组，set 都在这个新的上面进行
+       * get 目标是得到第 id 个数组的特定位置的值
+       */
+
+      // 方法一：二分查找
+      // 时间复杂度：O(logS)
+      // 空间复杂度：O(S)
+      var SnapshotArray = function (length) {
+        this.snap_cnt = 0;
+        this.data = Array.from({ length }, () => []);
+      };
+
+      SnapshotArray.prototype.set = function (index, val) {
+        this.data[index].push([this.snap_cnt, val]);
+      };
+
+      SnapshotArray.prototype.snap = function () {
+        return this.snap_cnt++;
+      };
+
+      SnapshotArray.prototype.get = function (index, snap_id) {
+        const idx = binarySearch(index, snap_id, this.data);
+        if (idx === 0) {
+          return 0;
+        }
+        return this.data[index][idx - 1][1];
+      };
+
+      const binarySearch = (index, snap_id, data) => {
+        let low = 0,
+          high = data[index].length;
+        while (low < high) {
+          const mid = low + Math.floor((high - low) / 2);
+          const [x, y] = data[index][mid];
+          if (x > snap_id + 1 || (x == snap_id + 1 && y >= 0)) {
+            high = mid;
+          } else {
+            low = mid + 1;
+          }
+        }
+        return low;
+      };
+    </script>
+  </body>
+</html>

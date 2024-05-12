@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：模拟, 依次遍历矩阵，将同一条对角线上的元素放在相同的数组内，对所有数组进行倒序排序，再重新遍历矩阵，将排序好的元素放回矩阵内。
+      // 时间复杂度：O(mnlogmn)
+      // 空间复杂度：O(mn)
+      var diagonalSort = function (mat) {
+        const n = mat.length;
+        const m = mat[0].length;
+        const diag = new Array(m + n).fill().map(() => []);
+        for (let i = 0; i < n; i++) {
+          for (let j = 0; j < m; j++) {
+            diag[i - j + m].push(mat[i][j]);
+          }
+        }
+        diag.forEach((d) => d.sort((a, b) => b - a));
+        for (let i = 0; i < n; i++) {
+          for (let j = 0; j < m; j++) {
+            mat[i][j] = diag[i - j + m].pop();
+          }
+        }
+        return mat;
+      };
+
+      // test
+      let mat = [
+        [3, 3, 1, 1],
+        [2, 2, 1, 2],
+        [1, 1, 1, 2],
+      ];
+      console.log(diagonalSort(mat));
+    </script>
+  </body>
+</html>

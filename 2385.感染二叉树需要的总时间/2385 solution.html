@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：深度优先搜索建图 + 广度优先搜索求感染时间
+      // 时间复杂度 O(n) 空间复杂度 O(n)
+      var amountOfTime = function (root, start) {
+        const graph = new Map();
+        const dfs = (node) => {
+          [node.left, node.right].forEach((child) => {
+            if (child !== null) {
+              graph.has(node.val)
+                ? graph.get(node.val).push(child.val)
+                : graph.set(node.val, [child.val]);
+              graph.has(child.val)
+                ? graph.get(child.val).push(node.val)
+                : graph.set(child.val, [node.val]);
+              dfs(child);
+            }
+          });
+        };
+
+        dfs(root);
+        const q = [[start, 0]];
+        visited = new Set([start]);
+        let time = 0;
+        while (q.length > 0) {
+          const [nodeVal, currTime] = q.shift();
+          time = currTime;
+          if (graph.has(nodeVal)) {
+            graph.get(nodeVal).forEach((childVal) => {
+              if (!visited.has(childVal)) {
+                q.push([childVal, time + 1]);
+                visited.add(childVal);
+              }
+            });
+          }
+        }
+        return time;
+      };
+    </script>
+  </body>
+</html>
