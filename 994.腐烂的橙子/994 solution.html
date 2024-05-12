@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：多源广度优先搜索
+      // 时间复杂度 O(nm)
+      // 空间复杂度 O(nm)
+      var orangesRotting = function (grid) {
+        const R = grid.length,
+          C = grid[0].length;
+        const dr = [-1, 0, 1, 0];
+        const dc = [0, -1, 0, 1];
+        const queue = [];
+        const depth = new Map();
+
+        for (let r = 0; r < R; ++r) {
+          for (let c = 0; c < C; ++c) {
+            if (grid[r][c] === 2) {
+              const code = r * C + c;
+              queue.push(code);
+              depth.set(code, 0);
+            }
+          }
+        }
+
+        let ans = 0;
+        while (queue.length !== 0) {
+          const code = queue.shift();
+          const r = Math.floor(code / C),
+            c = code % C;
+          for (let k = 0; k < 4; ++k) {
+            const nr = r + dr[k];
+            const nc = c + dc[k];
+            if (0 <= nr && nr < R && 0 <= nc && nc < C && grid[nr][nc] === 1) {
+              grid[nr][nc] = 2;
+              const ncode = nr * C + nc;
+              queue.push(ncode);
+              depth.set(ncode, depth.get(code) + 1);
+              ans = depth.get(ncode);
+            }
+          }
+        }
+
+        const freshOrangesCount = grid.reduce(
+          (acc, row) =>
+            acc + row.reduce((acc, v) => acc + (v === 1 ? 1 : 0), 0),
+          0
+        );
+        return freshOrangesCount > 0 ? -1 : ans;
+      };
+
+      // test
+      let grid = [
+        [2, 1, 1],
+        [1, 1, 0],
+        [0, 1, 1],
+      ];
+      console.log(orangesRotting(grid));
+    </script>
+  </body>
+</html>
