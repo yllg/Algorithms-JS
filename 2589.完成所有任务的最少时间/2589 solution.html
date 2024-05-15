@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：贪心
+      // 时间复杂度：O(n*M)
+      // 空间复杂度：O(M+logn)
+      var findMinimumTime = function (tasks) {
+        const n = tasks.length;
+        tasks.sort((t1, t2) => t1[1] - t2[1]);
+        const run = new Array(tasks[n - 1][1] + 1).fill(0);
+        let res = 0;
+        for (let i = 0; i < n; i++) {
+          let start = tasks[i][0],
+            end = tasks[i][1],
+            duration = tasks[i][2];
+          duration -= run
+            .slice(start, end + 1)
+            .reduce((acc, val) => acc + val, 0);
+          res += Math.max(duration, 0);
+          for (let j = end; j >= start && duration > 0; j--) {
+            if (run[j] === 0) {
+              duration--;
+              run[j] = 1;
+            }
+          }
+        }
+        return res;
+      };
+
+      // 方法二：贪心 + 扫描线
+      // 时间复杂度：O(n*M)
+      // 空间复杂度：O(1)
+      var findMinimumTime = function (tasks) {
+        let res = 0;
+        for (let i = 1; ; i++) {
+          let finished = true,
+            run = false;
+          for (const task of tasks) {
+            if (task[2] > 0 && task[1] - i + 1 === task[2]) {
+              run = true;
+            }
+            if (i <= task[1]) {
+              finished = false;
+            }
+          }
+          if (finished) {
+            break;
+          }
+
+          if (run) {
+            for (const task of tasks) {
+              if (i >= task[0] && i <= task[1] && task[2] > 0) {
+                task[2]--;
+              }
+            }
+            res++;
+          }
+        }
+        return res;
+      };
+      
+      // 方法三：贪心 + 二分查找 + 栈
+      // 时间复杂度：O(nlogn)
+      // 空间复杂度：O(n)
+      var findMinimumTime = function (tasks) {
+        tasks.sort((t1, t2) => t1[1] - t2[1]);
+        const stack = [[-1, -1, 0]];
+        for (let [start, end, duration] of tasks) {
+          const k = binarySearch(stack, start);
+          duration -= stack[stack.length - 1][2] - stack[k - 1][2];
+          if (start <= stack[k - 1][1]) {
+            duration -= stack[k - 1][1] - start + 1;
+          }
+          if (duration <= 0) {
+            continue;
+          }
+          while (end - stack[stack.length - 1][1] <= duration) {
+            duration +=
+              stack[stack.length - 1][1] - stack[stack.length - 1][0] + 1;
+            stack.pop();
+          }
+          stack.push([
+            end - duration + 1,
+            end,
+            stack[stack.length - 1][2] + duration,
+          ]);
+          console.log(stack);
+        }
+        return stack[stack.length - 1][2];
+      };
+
+      const binarySearch = (stack, target) => {
+        let low = 0,
+          high = stack.length;
+        while (low < high) {
+          const mid = low + Math.floor((high - low) / 2);
+          if (stack[mid][0] > target) {
+            high = mid;
+          } else {
+            low = mid + 1;
+          }
+        }
+        return low;
+      };
+
+      // test
+      let tasks = [
+        [2, 3, 1],
+        [4, 5, 1],
+        [1, 5, 2],
+      ];
+      console.log(findMinimumTime(tasks));
+    </script>
+  </body>
+</html>
