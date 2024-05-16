@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：贪心
+      // 时间复杂度：O(n)
+      // 空间复杂度：O(1)
+      var numberOfWeeks = function (milestones) {
+        // 耗时最长工作所需周数
+        const longest = Math.max(...milestones);
+        // 其余工作共计所需周数
+        const rest = milestones.reduce((acc, cur) => acc + cur, 0) - longest;
+        if (longest > rest + 1) {
+          // 此时无法完成所耗时最长的工作
+          return rest * 2 + 1;
+        } else {
+          // 此时可以完成所有工作
+          return longest + rest;
+        }
+      };
+
+      // test
+      let milestones = [1, 2, 3];
+      console.log(numberOfWeeks(milestones));
+    </script>
+  </body>
+</html>
