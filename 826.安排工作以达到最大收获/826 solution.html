@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：排序 + 双指针
+      // 时间复杂度：O(nlogn+mlogm)
+      // 空间复杂度：O(n+logm)
+      var maxProfitAssignment = function (difficulty, profit, worker) {
+        const jobs = difficulty
+          .map((d, i) => [d, profit[i]])
+          .sort((a, b) => a[0] - b[0]);
+        let res = 0,
+          i = 0,
+          best = 0;
+        for (const w of worker.sort((a, b) => a - b)) {
+          while (i < jobs.length && w >= jobs[i][0]) {
+            best = Math.max(best, jobs[i][1]);
+            i++;
+          }
+          res += best;
+        }
+        return res;
+      };
+
+      // test
+      let difficulty = [2, 4, 6, 8, 10],
+        profit = [10, 20, 30, 40, 50],
+        worker = [4, 5, 6, 7];
+      console.log(maxProfitAssignment(difficulty, profit, worker));
+    </script>
+  </body>
+</html>
