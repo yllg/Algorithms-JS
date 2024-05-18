@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：两次遍历
+      // 时间复杂度：O(n*m)
+      // 空间复杂度：O(1)
+      var maxDivScore = function (nums, divisors) {
+        cnt = -1;
+        ans = 0;
+
+        for (let i = 0; i < divisors.length; i++) {
+          tmp = 0;
+          for (let j = 0; j < nums.length; j++) {
+            if (nums[j] % divisors[i] == 0) {
+              tmp++;
+            }
+          }
+
+          if (tmp > cnt || (tmp == cnt && divisors[i] < ans)) {
+            cnt = tmp;
+            ans = divisors[i];
+          }
+        }
+        return ans;
+      };
+
+      // test
+      let nums = [4, 7, 9, 3, 9],
+        divisors = [5, 2, 3];
+      console.log(maxDivScore(nums, divisors));
+    </script>
+  </body>
+</html>
