@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 超赞字符串：进行任意次数的字符交换后，该字符串可以变成一个回文字符串
+
+      // 方法一：状态压缩 + 哈希表
+      var longestAwesome = function (s) {
+        let prefix = new Map([[0, -1]]);
+        let ans = 0;
+        let sequence = 0;
+        for (let j = 0; j < s.length; ++j) {
+          let digit = parseInt(s[j]);
+          sequence ^= 1 << digit;
+          if (prefix.has(sequence)) {
+            ans = Math.max(ans, j - prefix.get(sequence));
+          } else {
+            prefix.set(sequence, j);
+          }
+          for (let k = 0; k < 10; ++k) {
+            if (prefix.has(sequence ^ (1 << k))) {
+              ans = Math.max(ans, j - prefix.get(sequence ^ (1 << k)));
+            }
+          }
+        }
+        return ans;
+      };
+
+      // test
+      let s = "3242415";
+      console.log(longestAwesome(s));
+    </script>
+  </body>
+</html>
