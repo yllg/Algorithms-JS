@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：滑动窗口
+      // 时间复杂度：O(n)
+      // 空间复杂度：O(n)
+      var longestEqualSubarray = function (nums, k) {
+        let n = nums.length;
+        let pos = new Map();
+        for (let i = 0; i < n; i++) {
+          if (!pos.has(nums[i])) {
+            pos.set(nums[i], []);
+          }
+          pos.get(nums[i]).push(i);
+        }
+        let ans = 0;
+        for (let vec of pos.values()) {
+          for (let i = 0, j = 0; i < vec.length; i++) {
+            /* 缩小窗口，直到不同元素数量小于等于 k */
+            while (vec[i] - vec[j] - (i - j) > k) {
+              j++;
+            }
+            ans = Math.max(ans, i - j + 1);
+          }
+        }
+        return ans;
+      };
+
+      // 方法二：一次遍历优化
+      // 时间复杂度：O(n)
+      // 空间复杂度：O(n)
+      var longestEqualSubarray = function (nums, k) {
+        let n = nums.length;
+        let ans = 0;
+        let cnt = new Map();
+        for (let i = 0, j = 0; j < n; j++) {
+          cnt.set(nums[j], (cnt.get(nums[j]) || 0) + 1);
+          /*当前区间中，无法以 nums[i] 为等值元素构成合法等值数组*/
+          while (j - i + 1 - cnt.get(nums[i]) > k) {
+            cnt.set(nums[i], cnt.get(nums[i]) - 1);
+            i++;
+          }
+          ans = Math.max(ans, cnt.get(nums[j]));
+        }
+        return ans;
+      };
+
+      // test
+      let nums = [1, 3, 2, 3, 1, 3],
+        k = 3;
+      console.log(longestEqualSubarray(nums, k));
+    </script>
+  </body>
+</html>
