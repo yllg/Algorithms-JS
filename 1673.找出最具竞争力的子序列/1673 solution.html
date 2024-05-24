@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：贪心 + 单调栈
+      // 时间复杂度：O(n)
+      // 空间复杂度：O(1)
+      var mostCompetitive = function (nums, k) {
+        const res = [];
+        const n = nums.length;
+        for (let i = 0; i < n; i++) {
+          while (
+            res.length > 0 &&
+            n - i + res.length > k &&
+            res[res.length - 1] > nums[i]
+          ) {
+            res.pop();
+          }
+          res.push(nums[i]);
+        }
+        res.length = k;
+        return res;
+      };
+
+      // test
+      let nums = [3, 5, 2, 6],
+        k = 2;
+      console.log(mostCompetitive(nums, k));
+    </script>
+  </body>
+</html>
