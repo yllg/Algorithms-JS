@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：模拟
+      // 时间复杂度：O(n)
+      // 空间复杂度：O(1)
+      var findPeaks = function (mountain) {
+        const res = [];
+        for (let i = 1; i < mountain.length - 1; i++) {
+          if (mountain[i - 1] < mountain[i] && mountain[i] > mountain[i + 1]) {
+            res.push(i);
+          }
+        }
+        return res;
+      };
+
+      // test
+      let mountain = [2, 4, 4];
+      console.log(findPeaks(mountain));
+    </script>
+  </body>
+</html>
