@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：二分查找
+      // 时间复杂度：O(nlogn)
+      // 空间复杂度：O(n)
+      var maximumLength = function (s) {
+        const n = s.length;
+        const cnt = new Map();
+
+        for (let i = 0, j = 0; i < n; i = j) {
+          while (j < n && s[j] === s[i]) {
+            j++;
+          }
+          const len = j - i;
+          if (!cnt.has(s[i])) {
+            cnt.set(s[i], []);
+          }
+          cnt.get(s[i]).push(len);
+        }
+
+        let res = -1;
+        for (const vec of cnt.values()) {
+          let lo = 1,
+            hi = n - 2;
+          while (lo <= hi) {
+            const mid = (lo + hi) >> 1;
+            let count = 0;
+            for (const x of vec) {
+              if (x >= mid) {
+                count += x - mid + 1;
+              }
+            }
+            if (count >= 3) {
+              res = Math.max(res, mid);
+              lo = mid + 1;
+            } else {
+              hi = mid - 1;
+            }
+          }
+        }
+        return res;
+      };
+
+      // 方法二：一次遍历
+      // 时间复杂度：O(n)
+      // 空间复杂度：O(∣Σ∣)
+      var maximumLength = function (s) {
+        const n = s.length;
+        const cnt = Array.from({ length: 26 }, () => Array(3).fill(0));
+
+        let i = 0;
+        while (i < n) {
+          let j = i;
+          while (j < n && s[j] === s[i]) {
+            j++;
+          }
+          const index = s.charCodeAt(i) - 97;
+          const len = j - i;
+          if (len > cnt[index][0]) {
+            [cnt[index][0], cnt[index][1], cnt[index][2]] = [
+              len,
+              cnt[index][0],
+              cnt[index][1],
+            ];
+          } else if (len > cnt[index][1]) {
+            [cnt[index][1], cnt[index][2]] = [len, cnt[index][1]];
+          } else if (len > cnt[index][2]) {
+            cnt[index][2] = len;
+          }
+          i = j;
+        }
+
+        let res = 0;
+        for (const vec of cnt) {
+          res = Math.max(
+            ...[res, vec[0] - 2, Math.min(vec[0] - 1, vec[1])],
+            vec[2]
+          );
+        }
+        return res !== 0 ? res : -1;
+      };
+    </script>
+  </body>
+</html>
