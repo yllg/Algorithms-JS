@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：遍历
+      // 时间复杂度：O(n)
+      // 空间复杂度：O(1)
+      var maxOperations = function (nums) {
+        let n = nums.length,
+          t = 0;
+        for (let i = 1; i < n; i += 2) {
+          if (nums[i] + nums[i - 1] != nums[1] + nums[0]) {
+            break;
+          }
+          t++;
+        }
+        return t;
+      };
+
+      // test
+      let nums = [3, 2, 1, 4, 5];
+      console.log(maxOperations(nums));
+    </script>
+  </body>
+</html>
