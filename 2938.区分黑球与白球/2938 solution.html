@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：贪心
+      // 时间复杂度：O(n)
+      // 空间复杂度：O(1)
+      var minimumSteps = function (s) {
+        var ans = 0;
+        var sum = 0;
+        for (var i = 0; i < s.length; i++) {
+          if (s[i] === "1") {
+            sum++;
+          } else {
+            ans += sum;
+          }
+        }
+        return ans;
+      };
+
+      // test
+      let s = "101";
+      console.log(minimumSteps(s));
+    </script>
+  </body>
+</html>
