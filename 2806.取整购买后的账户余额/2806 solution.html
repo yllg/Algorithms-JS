@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：分类讨论
+      // 时间复杂度：O(1)
+      // 空间复杂度：O(1)
+      var accountBalanceAfterPurchase = function (purchaseAmount) {
+        const r = purchaseAmount % 10;
+        if (r < 5) {
+          purchaseAmount -= r;
+        } else {
+          purchaseAmount += 10 - r;
+        }
+        return 100 - purchaseAmount;
+      };
+
+      // 方法二：四舍五入
+      // 时间复杂度：O(1)
+      // 空间复杂度：O(1)
+      var accountBalanceAfterPurchase = function (purchaseAmount) {
+        return 100 - Math.floor((purchaseAmount + 5) / 10) * 10;
+      };
+
+      // test
+      let purchaseAmount = 9;
+      console.log(accountBalanceAfterPurchase(purchaseAmount));
+    </script>
+  </body>
+</html>
