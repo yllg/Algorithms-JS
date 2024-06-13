@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：贪心
+      // 时间复杂度：O(nlogn)
+      // 空间复杂度：O(n)
+      var findMaximumElegance = function (items, k) {
+        items.sort((item0, item1) => item1[0] - item0[0]);
+        let categorySet = new Set();
+        let profit = 0,
+          res = 0;
+        let st = [];
+        for (let i = 0; i < items.length; i++) {
+          if (i < k) {
+            profit += items[i][0];
+            if (!categorySet.has(items[i][1])) {
+              categorySet.add(items[i][1]);
+            } else {
+              st.push(items[i][0]);
+            }
+          } else if (st.length > 0 && !categorySet.has(items[i][1])) {
+            profit += items[i][0] - st.pop();
+            categorySet.add(items[i][1]);
+          }
+          res = Math.max(res, profit + categorySet.size * categorySet.size);
+        }
+        return res;
+      };
+
+      // test
+      let items = [
+          [3, 2],
+          [5, 1],
+          [10, 1],
+        ],
+        k = 2;
+      console.log(findMaximumElegance(items, k));
+    </script>
+  </body>
+</html>
