@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      const storage = {
+        prefix: "fatFish",
+        timeSign: "|fatFish|",
+        setItem(key, value, time) {
+          // Protect the key from being overwritten
+          key = `${this.prefix}${key}`;
+          // There is no incoming time, the default expiration time is one month, of course, it can be other times or not set
+          time = time
+            ? new Date(time).getTime()
+            : Date.now() + 24 * 60 * 60 * 31 * 1000;
+          // Constructs a string of the form 1646094676134|fatFish|"Front-end Fat Fish"
+          window.localStorage.setItem(
+            key,
+            `${time}${this.timeSign}${JSON.stringify(value)}`
+          );
+        },
+        getItem(key) {
+          key = `${this.prefix}${key}`;
+          let value = window.localStorage.getItem(key);
+          if (value) {
+            let index = value.indexOf(this.timeSign);
+            let time = +value.slice(0, index);
+            // Determine if time has expired
+            if (time > Date.now()) {
+              value = JSON.parse(value.slice(index + this.timeSign.length));
+            } else {
+              value = null;
+              window.localStorage.removeItem(key);
+            }
+          }
+          return value;
+        },
+      };
+
+      // test
+      storage.setItem("name", "front-end-fat-head", Date.now() + 100 * 1000); // fatFishname  1646095230191|fatFish|"front-end-fat-head"
+      storage.getItem("name"); // front-end-fat-head
+      // 100s later
+      storage.getItem("name"); // null
+      storage.setItem(
+        "obj",
+        { name: "front-end-fat-head", age: 100 },
+        Date.now() + 100 * 1000
+      ); // fatFishobj  1646095311366|fatFish|{"name":"front-end-fat-head","age":100}
+      storage.getItem("obj"); // {name: 'front-end-fat-head', age: 100}
+    </script>
+  </body>
+</html>
+l
