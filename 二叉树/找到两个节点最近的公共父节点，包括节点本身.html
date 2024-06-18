@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：递归
+      function findCommonParent(oNode1, oNode2) {
+        // Cases 1 and 2
+        if (oNode1.contains(oNode2)) {
+          return oNode1;
+          // Cases 1 and 2
+        } else if (oNode2.contains(oNode1)) {
+          return oNode2;
+        } else {
+          // Case 3, if you look up one of the nodes, you will find a common ancestor node
+          return findCommonParent(oNode1.parentNode, oNode2);
+        }
+      }
+
+      // 方法二：遍历
+      function findCommonParent(oNode1, oNode2) {
+        // Using oNode2 here is the same
+        // If a node contains another node, return directly, otherwise keep looking up
+        while (!oNode1.contains(oNode2)) {
+          oNode1 = oNode1.parentNode;
+        }
+        return oNode1;
+      }
+    </script>
+  </body>
+</html>
