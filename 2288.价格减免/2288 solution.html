@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：模拟
+      // 时间复杂度：O(n)
+      // 空间复杂度：O(n)
+      var discountPrices = function (sentence, discount) {
+        let words = sentence.split(" ");
+        for (let i = 0; i < words.length; i++) {
+          let word = words[i];
+          if (word.charAt(0) === "$" && isNumeric(word.substring(1))) {
+            let price = parseInt(word.substring(1)) * (1 - discount / 100.0);
+            words[i] = "$" + price.toFixed(2);
+          }
+        }
+        let result = words.join(" ");
+        return result;
+      };
+
+      const isNumeric = (s) => {
+        return /^\d+$/.test(s);
+      };
+
+      // test
+      let sentence = "there are $1 $2 and 5$ candies in the shop",
+        discount = 50;
+      console.log(discountPrices(sentence, discount));
+    </script>
+  </body>
+</html>
