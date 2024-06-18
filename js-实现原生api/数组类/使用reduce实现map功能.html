@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      Array.prototype.map2 = function (callback, ctx = null) {
+        if (typeof callback !== "function") {
+          throw "callback must be a function";
+        }
+        return this.reduce((result, cur, index, array) => {
+          return result.concat(callback.call(ctx, cur, index, array));
+        }, []);
+      };
+
+      // test
+      let arr = [1, 2];
+      let arr2 = arr.map2(
+        function (it, i, array) {
+          // console.log(it, i, array, this);
+          return it * 2;
+        },
+        { name: "fatfish" }
+      );
+      console.log(arr2);
+    </script>
+  </body>
+</html>
