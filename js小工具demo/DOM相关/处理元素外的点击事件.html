@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div id="my-element">my-element</div>
+    <script>
+      const onClickOutside = (element, callback) => {
+        document.addEventListener("click", (e) => {
+          if (!element.contains(e.target)) callback();
+        });
+      };
+
+      onClickOutside(document.getElementById("my-element"), () => console.log("Hello"));
+      // Will log 'Hello' whenever the user clicks outside of #my-element
+    </script>
+  </body>
+</html>
