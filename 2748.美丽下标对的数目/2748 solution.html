@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：暴力枚举
+      // 时间复杂度：O(n*(n+logC))
+      // 空间复杂度：O(1)
+      var countBeautifulPairs = function (nums) {
+        let res = 0;
+        let n = nums.length;
+
+        for (let i = 0; i < n; i++) {
+          while (nums[i] >= 10) {
+            nums[i] = Math.floor(nums[i] / 10);
+          }
+          for (let j = i + 1; j < n; j++) {
+            if (gcd(nums[i], nums[j] % 10) === 1) {
+              res++;
+            }
+          }
+        }
+        return res;
+      };
+
+      function gcd(a, b) {
+        return b === 0 ? a : gcd(b, a % b);
+      }
+
+      // 方法二：哈希表
+      // 时间复杂度：O(n*(10+logC))
+      // 空间复杂度：O(10)
+      var countBeautifulPairs = function (nums) {
+        let res = 0;
+        let cnt = new Array(10).fill(0);
+
+        for (let x of nums) {
+          for (let y = 1; y <= 9; y++) {
+            if (gcd(x % 10, y) === 1) {
+              res += cnt[y];
+            }
+          }
+          while (x >= 10) {
+            x = Math.floor(x / 10);
+          }
+          cnt[x]++;
+        }
+        return res;
+      };
+
+      function gcd(a, b) {
+        return b === 0 ? a : gcd(b, a % b);
+      }
+
+      // test
+      let nums = [2, 5, 1, 4];
+      console.log(countBeautifulPairs(nums));
+    </script>
+  </body>
+</html>
