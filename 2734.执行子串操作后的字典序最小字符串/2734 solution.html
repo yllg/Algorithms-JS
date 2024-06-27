@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      //对于大多数字符来说，会使字典序变小，除了字符 ‘a’ 用 ‘z’ 这一替换，会使字典序变大。因此，我们要找到第一个非 ‘a’ 字符
+
+      // 方法一：贪心
+      // 时间复杂度：O(n)
+      // 空间复杂度：O(n)
+      var smallestString = function (s) {
+        let target = "a";
+        let indexOfFirstNonA = s.indexOf(s.split("").find((c) => c !== target));
+        if (indexOfFirstNonA === -1) {
+          return s.substr(0, s.length - 1) + "z";
+        }
+        let indexOfFirstA_AfterFirstNonA = s.indexOf("a", indexOfFirstNonA);
+        if (indexOfFirstA_AfterFirstNonA === -1) {
+          indexOfFirstA_AfterFirstNonA = s.length;
+        }
+        let res = "";
+        for (let i = 0; i < s.length; ++i) {
+          if (indexOfFirstNonA <= i && i < indexOfFirstA_AfterFirstNonA) {
+            res += String.fromCharCode(s.charCodeAt(i) - 1);
+          } else {
+            res += s[i];
+          }
+        }
+        return res;
+      };
+
+      // test
+      let s = "cbabc";
+      console.log(smallestString(s));
+    </script>
+  </body>
+</html>
