@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：动态规划
+      // 时间复杂度：O(n^2)
+      // 空间复杂度：O(n)
+      var paintWalls = function (cost, time) {
+        let n = cost.length;
+        let f = new Array(n * 2 + 1).fill(Number.MAX_SAFE_INTEGER / 2);
+        f[n] = 0;
+        for (let i = 0; i < n; ++i) {
+          let g = new Array(n * 2 + 1).fill(Number.MAX_SAFE_INTEGER / 2);
+          for (let j = 0; j <= n * 2; ++j) {
+            // 付费
+            g[Math.min(j + time[i], n * 2)] = Math.min(
+              g[Math.min(j + time[i], n * 2)],
+              f[j] + cost[i]
+            );
+            // 免费
+            if (j > 0) {
+              g[j - 1] = Math.min(g[j - 1], f[j]);
+            }
+          }
+          f = g.slice();
+        }
+        return Math.min(...f.slice(n));
+      };
+
+      // 方法二：额外的空间优化
+      // 时间复杂度：O(n^2)
+      // 空间复杂度：O(n)
+      var paintWalls = function (cost, time) {
+        let n = cost.length;
+        let f = new Array(n + 2).fill(Number.MAX_SAFE_INTEGER / 2);
+        f[0] = 0;
+        for (let i = 0; i < n; ++i) {
+          for (let j = n + 1; j >= 0; --j) {
+            f[Math.min(j + time[i], n) + 1] = Math.min(
+              f[Math.min(j + time[i], n) + 1],
+              f[j] + cost[i]
+            );
+          }
+        }
+        return Math.min(f[n], f[n + 1]);
+      };
+
+      // test
+      let cost = [1, 2, 3, 2],
+        time = [1, 2, 3, 2];
+      console.log(paintWalls(cost, time));
+    </script>
+  </body>
+</html>
