@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 两个（不一定不同的）质数在 nums 中 下标 的 最大距离
+
+      // 方法一：一次遍历
+      // 时间复杂度：O(n+K)
+      // 空间复杂度: O(C)
+      var maximumPrimeDifference = function (nums) {
+        const primes = new Set([
+          2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61,
+          67, 71, 73, 79, 83, 89, 97,
+        ]);
+
+        const n = nums.length;
+        let first = -1,
+          ans = 0;
+        for (let i = 0; i < n; ++i) {
+          if (primes.has(nums[i])) {
+            if (first !== -1) {
+              ans = Math.max(ans, i - first);
+            } else {
+              first = i;
+            }
+          }
+        }
+        return ans;
+      };
+
+      // test
+      let nums = [4, 2, 9, 5, 3];
+      console.log(maximumPrimeDifference(nums));
+    </script>
+  </body>
+</html>
