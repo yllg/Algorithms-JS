@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：遍历
+      // 时间复杂度 O(n*m)
+      // 空间复杂度 O(1)
+      var modifiedMatrix = function (matrix) {
+        let n = matrix.length;
+        let m = matrix[0].length;
+        for (let j = 0; j < m; j++) {
+          let zd = -1;
+          for (let i = 0; i < n; i++) {
+            zd = Math.max(zd, matrix[i][j]);
+          }
+          for (let i = 0; i < n; i++) {
+            if (matrix[i][j] == -1) {
+              matrix[i][j] = zd;
+            }
+          }
+        }
+        return matrix;
+      };
+
+      // test
+      let matrix = [
+        [1, 2, -1],
+        [4, -1, 6],
+        [7, 8, 9],
+      ];
+      console.log(modifiedMatrix(matrix));
+    </script>
+  </body>
+</html>
