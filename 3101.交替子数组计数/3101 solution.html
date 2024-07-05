@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：遍历
+      // 时间复杂度 O(n)
+      // 空间复杂度 O(1)
+      var countAlternatingSubarrays = function (nums) {
+        let res = 0,
+          cur = 0,
+          pre = -1;
+        for (const a of nums) {
+          cur = pre != a ? cur + 1 : 1;
+          pre = a;
+          res += cur;
+        }
+        return res;
+      };
+
+      // test
+      let nums = [0, 1, 1, 1];
+      console.log(countAlternatingSubarrays(nums));
+    </script>
+  </body>
+</html>
