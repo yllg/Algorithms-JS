@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：枚举所有的点
+
+      // 方法二：枚举最大值与最小值
+      // 时间复杂度 O(nlogn), 空间复杂度 O(n)
+      var minimumDistance = function (points) {
+        const n = points.length;
+        const sx = [];
+        const sy = [];
+
+        for (let i = 0; i < n; i++) {
+          const [x, y] = points[i];
+          sx.push([x - y, i]);
+          sy.push([x + y, i]);
+        }
+        sx.sort((a, b) => a[0] - b[0]);
+        sy.sort((a, b) => a[0] - b[0]);
+        const maxVal1 = sx[n - 1][0] - sx[0][0];
+        const maxVal2 = sy[n - 1][0] - sy[0][0];
+        let res = Infinity;
+        if (maxVal1 >= maxVal2) {
+          const i = sx[0][1],
+            j = sx[n - 1][1];
+          // 去掉 i 后的最大曼哈顿距离
+          res = Math.min(res, Math.max(remove(sx, i), remove(sy, i)));
+          // 去掉 j 后的最大曼哈顿距离
+          res = Math.min(res, Math.max(remove(sx, j), remove(sy, j)));
+        } else {
+          const i = sy[0][1],
+            j = sy[n - 1][1];
+          // 去掉 i 后的最大曼哈顿距离
+          res = Math.min(res, Math.max(remove(sx, i), remove(sy, i)));
+          // 去掉 j 后的最大曼哈顿距离
+          res = Math.min(res, Math.max(remove(sx, j), remove(sy, j)));
+        }
+        return res;
+      };
+
+      function remove(arr, i) {
+        const n = arr.length;
+        if (arr[0][1] === i) {
+          return arr[n - 1][0] - arr[1][0];
+        } else if (arr[n - 1][1] === i) {
+          return arr[n - 2][0] - arr[0][0];
+        } else {
+          return arr[n - 1][0] - arr[0][0];
+        }
+      }
+
+      // test
+      let points = [
+        [1, 1],
+        [1, 1],
+        [1, 1],
+      ];
+      console.log(minimumDistance(points));
+    </script>
+  </body>
+</html>
