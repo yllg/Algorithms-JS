@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：枚举
+      // 时间复杂度 O(n^3), 空间复杂度 O(1)
+      var incremovableSubarrayCount = function (nums) {
+        let res = 0;
+        for (let i = 0; i < nums.length; i++) {
+          for (let j = i; j < nums.length; j++) {
+            if (isIncreasing(nums, i, j)) {
+              res++;
+            }
+          }
+        }
+        return res;
+      };
+
+      function isIncreasing(nums, l, r) {
+        for (let i = 1; i < nums.length; i++) {
+          if (i >= l && i <= r + 1) {
+            continue;
+          }
+          if (nums[i] <= nums[i - 1]) {
+            return false;
+          }
+        }
+        if (l - 1 >= 0 && r + 1 < nums.length && nums[r + 1] <= nums[l - 1]) {
+          return false;
+        }
+        return true;
+      }
+
+      // 方法二：双指针
+      // 时间复杂度 O(n), 空间复杂度 O(1)
+      var incremovableSubarrayCount = function (nums) {
+        const n = nums.length;
+        let res = 0;
+        let l = 1;
+        while (l < n && nums[l - 1] < nums[l]) {
+          l++;
+        }
+        res += l + (l < n ? 1 : 0);
+        for (let r = n - 2; r >= 0; r--) {
+          while (l > 0 && nums[l - 1] >= nums[r + 1]) {
+            l--;
+          }
+          res += l + (l <= r ? 1 : 0);
+          if (nums[r] >= nums[r + 1]) {
+            break;
+          }
+        }
+        return res;
+      };
+
+      // test
+      let nums = [8, 7, 6, 6];
+      console.log(incremovableSubarrayCount(nums));
+    </script>
+  </body>
+</html>
