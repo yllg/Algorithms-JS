@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：双指针
+      // 时间复杂度 O(n), 空间复杂度 O(1)
+      var incremovableSubarrayCount = function (nums) {
+        let ans = 0;
+        const length = nums.length;
+        let l = 0;
+
+        while (l < length - 1) {
+          if (nums[l] >= nums[l + 1]) {
+            break;
+          }
+          l++;
+        }
+        if (l === length - 1) {
+          return (1 * length * (length + 1)) / 2;
+        }
+
+        ans += l + 2;
+        for (let r = length - 1; r > 0; r--) {
+          if (r < length - 1 && nums[r] >= nums[r + 1]) {
+            break;
+          }
+          while (l >= 0 && nums[l] >= nums[r]) {
+            l--;
+          }
+          ans += l + 2;
+        }
+
+        return ans;
+      };
+    </script>
+  </body>
+</html>
