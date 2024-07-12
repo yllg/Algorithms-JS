@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 对原数组排序，再将每对相邻元素对调，最后返回数组
+
+      // 方法一：排序
+      var numberGame = function (nums) {
+        nums.sort((a, b) => a - b);
+        for (let i = 0; i < nums.length; i += 2) {
+          [nums[i], nums[i + 1]] = [nums[i + 1], nums[i]];
+        }
+        return nums;
+      };
+
+      // test
+      let nums = [5, 4, 2, 3];
+      console.log(numberGame(nums));
+    </script>
+  </body>
+</html>
