@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：遍历
+      // 时间复杂度 O(mn), 空间复杂度 O(1)
+      var findIntersectionValues = function (nums1, nums2) {
+        let res = new Array(2).fill(0);
+        for (let i = 0; i < nums1.length; i++) {
+          for (let j = 0; j < nums2.length; j++) {
+            if (nums1[i] == nums2[j]) {
+              res[0]++;
+              break;
+            }
+          }
+        }
+        for (let i = 0; i < nums2.length; i++) {
+          for (let j = 0; j < nums1.length; j++) {
+            if (nums2[i] == nums1[j]) {
+              res[1]++;
+              break;
+            }
+          }
+        }
+        return res;
+      };
+
+      // 方法二：哈希表
+      // 时间复杂度 O(m+n), 空间复杂度 O(m+n)
+      var findIntersectionValues = function (nums1, nums2) {
+        let s1 = new Set(nums1);
+        let s2 = new Set(nums2);
+
+        let res = new Array(2).fill(0);
+        for (let i = 0; i < nums1.length; i++) {
+          if (s2.has(nums1[i])) {
+            res[0]++;
+          }
+        }
+        for (let i = 0; i < nums2.length; i++) {
+          if (s1.has(nums2[i])) {
+            res[1]++;
+          }
+        }
+        return res;
+      };
+
+      // test
+      let nums1 = [4, 3, 2, 3, 1],
+        nums2 = [2, 2, 5, 2, 3, 6];
+      console.log(findIntersectionValues(nums1, nums2));
+    </script>
+  </body>
+</html>
