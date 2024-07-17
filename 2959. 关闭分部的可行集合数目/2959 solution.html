@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：Floyd最短路径算法
+      // 时间复杂度 O(2^n * n^3), 空间复杂度 O(n^2)
+      function numberOfSets(n, maxDistance, roads) {
+        let res = 0;
+        let opened = new Array(n).fill(0);
+
+        for (let mask = 0; mask < 1 << n; mask++) {
+          for (let i = 0; i < n; i++) {
+            opened[i] = mask & (1 << i);
+          }
+          let d = new Array(n).fill(0).map(() => new Array(n).fill(1000000));
+
+          for (let [i, j, r] of roads) {
+            if (opened[i] > 0 && opened[j] > 0) {
+              d[i][j] = d[j][i] = Math.min(d[i][j], r);
+            }
+          }
+
+          // Floyd-Warshall algorithm
+          for (let k = 0; k < n; k++) {
+            if (opened[k] > 0) {
+              for (let i = 0; i < n; i++) {
+                if (opened[i] > 0) {
+                  for (let j = i + 1; j < n; j++) {
+                    if (opened[j] > 0) {
+                      d[i][j] = d[j][i] = Math.min(d[i][j], d[i][k] + d[k][j]);
+                    }
+                  }
+                }
+              }
+            }
+          }
+
+          // Validate
+          let good = 1;
+          for (let i = 0; i < n; i++) {
+            if (opened[i] > 0) {
+              for (let j = i + 1; j < n; j++) {
+                if (opened[j] > 0 && d[i][j] > maxDistance) {
+                  good = 0;
+                  break;
+                }
+              }
+              if (good == 0) {
+                break;
+              }
+            }
+          }
+          res += good;
+        }
+        return res;
+      }
+
+      // test
+      let n = 3,
+        maxDistance = 5,
+        roads = [
+          [0, 1, 2],
+          [1, 2, 10],
+          [0, 2, 10],
+        ];
+      console.log(numberOfSets(n, maxDistance, roads));
+    </script>
+  </body>
+</html>
