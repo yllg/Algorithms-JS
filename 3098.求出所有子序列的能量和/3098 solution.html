@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：动态规划
+      // 时间复杂度：O(n^4*k)
+      // 空间复杂度：O(n^3*k)
+      var mod = 1e9 + 7;
+      var inf = 0x3f3f3f3f;
+
+      var sumOfPowers = function (nums, k) {
+        const n = nums.length;
+        let res = 0;
+        const d = Array.from({ length: n }, () =>
+          Array.from({ length: k + 1 }, () => new Map())
+        );
+        nums.sort((a, b) => a - b);
+
+        for (let i = 0; i < n; i++) {
+          d[i][1].set(inf, 1);
+          for (let j = 0; j < i; j++) {
+            const diff = Math.abs(nums[i] - nums[j]);
+            for (let p = 2; p <= k; p++) {
+              for (const [v, cnt] of d[j][p - 1].entries()) {
+                const key = Math.min(diff, v);
+                d[i][p].set(key, (d[i][p].get(key) || 0) + (cnt % mod));
+              }
+            }
+          }
+          for (const [v, cnt] of d[i][k].entries()) {
+            res = (res + ((v * cnt) % mod)) % mod;
+          }
+        }
+        return res;
+      };
+
+      // 方法二：前缀和优化
+      // 时间复杂度：O(n^3*k+n^2logn^2)
+      // 空间复杂度：O(n^3*k)
+      var mod = 1e9 + 7;
+      var inf = 0x3f3f3f3f;
+
+      var sumOfPowers = function (nums, k) {
+        const n = nums.length;
+        nums.sort((a, b) => a - b);
+
+        const vals = [];
+        for (let i = 0; i < n; i++) {
+          for (let j = 0; j < i; j++) {
+            vals.push(nums[i] - nums[j]);
+          }
+        }
+        vals.push(inf);
+        vals.sort((a, b) => a - b);
+        const uniqueVals = [...new Set(vals)];
+
+        const d = Array.from({ length: n }, () =>
+          Array.from({ length: k + 1 }, () => Array(uniqueVals.length).fill(0))
+        );
+        const border = Array.from({ length: n }, () => Array(k + 1).fill(0));
+        const sum = Array.from({ length: k + 1 }, () =>
+          Array(uniqueVals.length).fill(0)
+        );
+        const suf = Array.from({ length: n }, () => Array(k + 1).fill(0));
+
+        for (let i = 0; i < n; i++) {
+          for (let j = 0; j < i; j++) {
+            const pos = binarySearch(uniqueVals, nums[i] - nums[j]);
+            for (let p = 1; p <= k; p++) {
+              while (border[j][p] < pos) {
+                sum[p][border[j][p]] =
+                  (sum[p][border[j][p]] - suf[j][p] + mod) % mod;
+                sum[p][border[j][p]] =
+                  (sum[p][border[j][p]] + d[j][p][border[j][p]]) % mod;
+                suf[j][p] = (suf[j][p] - d[j][p][border[j][p]] + mod) % mod;
+                border[j][p]++;
+                sum[p][border[j][p]] = (sum[p][border[j][p]] + suf[j][p]) % mod;
+              }
+            }
+          }
+
+          d[i][1][uniqueVals.length - 1] = 1;
+          for (let p = 2; p <= k; p++) {
+            for (let v = 0; v < uniqueVals.length; v++) {
+              d[i][p][v] = sum[p - 1][v];
+            }
+          }
+          for (let p = 1; p <= k; p++) {
+            for (let v = 0; v < uniqueVals.length; v++) {
+              suf[i][p] = (suf[i][p] + d[i][p][v]) % mod;
+            }
+            sum[p][0] = (sum[p][0] + suf[i][p]) % mod;
+          }
+        }
+
+        let res = 0;
+        for (let i = 0; i < n; i++) {
+          for (let v = 0; v < uniqueVals.length; v++) {
+            res = (res + ((uniqueVals[v] * d[i][k][v]) % mod)) % mod;
+          }
+        }
+        return res;
+      };
+
+      const binarySearch = (vals, target) => {
+        let low = 0,
+          high = vals.length;
+        while (low < high) {
+          let mid = Math.floor(low + (high - low) / 2);
+          if (vals[mid] >= target) {
+            high = mid;
+          } else {
+            low = mid + 1;
+          }
+        }
+        return low;
+      };
+    </script>
+  </body>
+</html>
