@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：哈希表
+      // 时间复杂度：O(nlogn+m)
+      // 空间复杂度：O(n)
+      var relocateMarbles = function (nums, moveFrom, moveTo) {
+        let mp = new Map();
+        let ans = [];
+
+        nums.forEach((num) => mp.set(num, true));
+        for (let i = 0; i < moveFrom.length; i++) {
+          mp.delete(moveFrom[i]);
+          mp.set(moveTo[i], true);
+        }
+        mp.forEach((_, key) => ans.push(key));
+        ans.sort((a, b) => a - b);
+        return ans;
+      };
+
+      // test
+      let nums = [1, 6, 7, 8],
+        moveFrom = [1, 7, 2],
+        moveTo = [2, 9, 5];
+      console.log(relocateMarbles(nums, moveFrom, moveTo));
+    </script>
+  </body>
+</html>
