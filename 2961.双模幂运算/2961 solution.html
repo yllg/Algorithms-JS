@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：快速幂
+      // 时间复杂度 O(nlogv);其中 n 为数组的长度，v 为元素的取值，在本题中最大为 1000
+      // 空间复杂度 O(1)
+      var getGoodIndices = function (variables, target) {
+        const ans = [];
+        for (let i = 0; i < variables.length; i++) {
+          const v = variables[i];
+          if (powMod(powMod(v[0], v[1], 10), v[2], v[3]) === target) {
+            ans.push(i);
+          }
+        }
+        return ans;
+      };
+
+      function powMod(x, y, mod) {
+        let res = 1;
+        while (y > 0) {
+          if ((y & 1) === 1) {
+            res = (res * x) % mod;
+          }
+          x = (x * x) % mod;
+          y >>= 1;
+        }
+        return res;
+      }
+
+      // test
+      let variables = [
+          [2, 3, 3, 10],
+          [3, 3, 3, 1],
+          [6, 1, 1, 4],
+        ],
+        target = 2;
+      console.log(getGoodIndices(variables, target));
+    </script>
+  </body>
+</html>
