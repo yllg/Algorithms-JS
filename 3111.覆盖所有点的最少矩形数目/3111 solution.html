@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：贪心
+      // 时间复杂度 O(nlogn)
+      // 空间复杂度 O(logn)
+      var minRectanglesToCoverPoints = function (points, w) {
+        points.sort((a, b) => a[0] - b[0]);
+        let res = 0;
+        let bound = -1;
+        for (let p of points) {
+          if (p[0] > bound) {
+            bound = p[0] + w;
+            res++;
+          }
+        }
+        return res;
+      };
+
+      // test
+      let points = [
+          [2, 1],
+          [1, 0],
+          [1, 4],
+          [1, 8],
+          [3, 5],
+          [4, 6],
+        ],
+        w = 1;
+      console.log(minRectanglesToCoverPoints(points, w));
+    </script>
+  </body>
+</html>
