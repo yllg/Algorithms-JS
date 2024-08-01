@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：一次遍历
+      // 时间复杂度 O(nlogn)
+      // 空间复杂度 O(1)
+      var maxmiumScore = function (cards, cnt) {
+        cards.sort((a, b) => b - a);
+        let ans = 0;
+        let tmp = 0;
+        let odd = -1,
+          even = -1;
+        for (let i = 0; i < cnt; i++) {
+          tmp += cards[i];
+          if (cards[i] % 2 === 1) {
+            odd = cards[i];
+          } else {
+            even = cards[i];
+          }
+        }
+
+        if (tmp % 2 === 0) {
+          return tmp;
+        }
+        for (let i = cnt; i < cards.length; i++) {
+          if (cards[i] % 2 === 1) {
+            if (even !== -1) {
+              ans = Math.max(ans, tmp - even + cards[i]);
+            }
+          } else {
+            if (odd !== -1) {
+              ans = Math.max(ans, tmp - odd + cards[i]);
+            }
+          }
+        }
+        return ans;
+      };
+
+      // 方法二：哈希
+      // 时间复杂度 O(n)
+      // 空间复杂度 O(C)
+      var maxmiumScore = function (cards, cnt) {
+        const val = new Array(1005).fill(0);
+        for (let card of cards) {
+          val[card]++;
+        }
+        let ans = 0;
+        let tmp = 0;
+        let ed = -1;
+        let odd = -1,
+          even = -1;
+        for (let i = 1000; i >= 1; i--) {
+          if (val[i] === 0) {
+            continue;
+          }
+
+          if (val[i] > cnt) {
+            tmp += cnt * i;
+            cnt = 0;
+          } else {
+            tmp += val[i] * i;
+            cnt -= val[i];
+            val[i] = 0;
+          }
+          if (i % 2 === 1) {
+            odd = i;
+          } else {
+            even = i;
+          }
+          if (cnt === 0) {
+            if (val[i] > 0) {
+              ed = i;
+            } else {
+              ed = i - 1;
+            }
+            break;
+          }
+        }
+
+        if (tmp % 2 === 0) {
+          return tmp;
+        }
+        for (let i = ed; i >= 1; i--) {
+          if (val[i] === 0) {
+            continue;
+          }
+          if (i % 2 === 1) {
+            if (even !== -1) {
+              ans = Math.max(ans, tmp - even + i);
+            }
+          } else {
+            if (odd !== -1) {
+              ans = Math.max(ans, tmp - odd + i);
+            }
+          }
+        }
+
+        return ans;
+      };
+
+      // test
+      let cards = [1, 2, 8, 9],
+        cnt = 3;
+      console.log(maxmiumScore(cards, cnt));
+    </script>
+  </body>
+</html>
