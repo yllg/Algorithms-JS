@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：枚举
+      // 时间复杂度：O(nm)
+      // 空间复杂度: O(m)
+      var numberOfRightTriangles = function (grid) {
+        const n = grid.length;
+        const m = grid[0].length;
+        const col = Array(m).fill(0);
+
+        for (let i = 0; i < n; i++) {
+          for (let j = 0; j < m; j++) {
+            col[j] += grid[i][j];
+          }
+        }
+
+        let res = 0;
+        for (let i = 0; i < n; i++) {
+          let row = grid[i].reduce((a, b) => a + b, 0);
+          for (let j = 0; j < m; j++) {
+            if (grid[i][j] === 1) {
+              res += (row - 1) * (col[j] - 1);
+            }
+          }
+        }
+
+        return res;
+      };
+
+      // test
+      let grid = [
+        [0, 1, 0],
+        [0, 1, 1],
+        [0, 1, 0],
+      ];
+      console.log(numberOfRightTriangles(grid));
+    </script>
+  </body>
+</html>
