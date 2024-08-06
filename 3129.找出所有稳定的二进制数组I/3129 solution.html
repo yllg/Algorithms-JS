@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：动态规划
+      // 时间复杂度：O(zero×one)
+      // 空间复杂度: O(zero×one)
+      const MOD = 1000000007;
+
+      var numberOfStableArrays = function (zero, one, limit) {
+        const dp = Array.from({ length: zero + 1 }, () =>
+          Array.from({ length: one + 1 }, () => [0, 0])
+        );
+
+        for (let i = 0; i <= Math.min(zero, limit); i++) {
+          dp[i][0][0] = 1;
+        }
+        for (let j = 0; j <= Math.min(one, limit); j++) {
+          dp[0][j][1] = 1;
+        }
+
+        for (let i = 1; i <= zero; i++) {
+          for (let j = 1; j <= one; j++) {
+            if (i > limit) {
+              dp[i][j][0] =
+                dp[i - 1][j][0] + dp[i - 1][j][1] - dp[i - limit - 1][j][1];
+            } else {
+              dp[i][j][0] = dp[i - 1][j][0] + dp[i - 1][j][1];
+            }
+            dp[i][j][0] = ((dp[i][j][0] % MOD) + MOD) % MOD;
+            if (j > limit) {
+              dp[i][j][1] =
+                dp[i][j - 1][1] + dp[i][j - 1][0] - dp[i][j - limit - 1][0];
+            } else {
+              dp[i][j][1] = dp[i][j - 1][1] + dp[i][j - 1][0];
+            }
+            dp[i][j][1] = ((dp[i][j][1] % MOD) + MOD) % MOD;
+          }
+        }
+        return (dp[zero][one][0] + dp[zero][one][1]) % MOD;
+      };
+
+      // test
+      let zero = 1,
+        one = 1,
+        limit = 2;
+      console.log(numberOfStableArrays(zero, one, limit));
+    </script>
+  </body>
+</html>
