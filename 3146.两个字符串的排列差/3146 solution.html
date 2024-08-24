@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：哈希表
+      // 时间复杂度 O(n)
+      // 空间复杂度 O(n)
+      var findPermutationDifference = function (s, t) {
+        const char2index = {};
+        for (let i = 0; i < s.length; i++) {
+          char2index[s[i]] = i;
+        }
+        let sum = 0;
+        for (let i = 0; i < t.length; i++) {
+          sum += Math.abs(i - char2index[t[i]]);
+        }
+
+        return sum;
+      };
+
+      // test
+      let s = "abc",
+        t = "bac";
+      console.log(findPermutationDifference(s, t));
+    </script>
+  </body>
+</html>
