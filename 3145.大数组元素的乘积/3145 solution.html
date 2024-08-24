@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：二分查找 + 计数
+      // 时间复杂度：O(m*lognlogn)
+      // 空间复杂度: O(1)
+      var findProductsOfElements = function (queries) {
+        let ans = [];
+        for (let query of queries) {
+          // 偏移让数组下标从1开始
+          query[0]++;
+          query[1]++;
+          let l = midCheck(BigInt(query[0]));
+          let r = midCheck(BigInt(query[1]));
+          let mod = query[2];
+
+          let res = 1n;
+          let pre = countOne(l - 1n);
+          for (let j = 0; j < 60; j++) {
+            if ((1n << BigInt(j)) & l) {
+              pre++;
+              if (pre >= BigInt(query[0]) && pre <= BigInt(query[1])) {
+                res = (res * (1n << BigInt(j))) % BigInt(mod);
+              }
+            }
+          }
+
+          if (r > l) {
+            let bac = countOne(r - 1n);
+            for (let j = 0; j < 60; j++) {
+              if ((1n << BigInt(j)) & r) {
+                bac++;
+                if (bac >= BigInt(query[0]) && bac <= BigInt(query[1])) {
+                  res = (res * (1n << BigInt(j))) % BigInt(mod);
+                }
+              }
+            }
+          }
+
+          if (r - l > 1n) {
+            let xs = countPow(r - 1n) - countPow(l);
+            res = (res * powMod(2n, xs, mod)) % BigInt(mod);
+          }
+          ans.push(Number(res));
+        }
+
+        return ans;
+      };
+
+      // 计算 <= x 所有数的数位1的和
+      function countOne(x) {
+        let res = 0n;
+        let sum = 0;
+
+        for (let i = 60; i >= 0; i--) {
+          if ((1n << BigInt(i)) & x) {
+            res += BigInt(sum) * (1n << BigInt(i));
+            sum++;
+
+            if (i > 0) {
+              res += BigInt(i) * (1n << BigInt(i - 1));
+            }
+          }
+        }
+        res += BigInt(sum);
+        return res;
+      }
+
+      // 计算 <= x 所有数的数位对幂的贡献之和
+      function countPow(x) {
+        let res = 0n;
+        let sum = 0;
+
+        for (let i = 60; i >= 0; i--) {
+          if ((1n << BigInt(i)) & x) {
+            res += BigInt(sum) * (1n << BigInt(i));
+            sum += i;
+
+            if (i > 0) {
+              res += ((BigInt(i) * BigInt(i - 1)) / 2n) * (1n << BigInt(i - 1));
+            }
+          }
+        }
+        res += BigInt(sum);
+        return res;
+      }
+
+      function powMod(x, y, mod) {
+        let res = 1n;
+        while (y) {
+          if (y & 1n) {
+            res = (res * x) % BigInt(mod);
+          }
+          x = (x * x) % BigInt(mod);
+          y >>= 1n;
+        }
+        return res;
+      }
+
+      function midCheck(x) {
+        let l = 1n,
+          r = 1000000000000000n;
+        while (l < r) {
+          let mid = (l + r) >> 1n;
+          if (countOne(mid) >= x) {
+            r = mid;
+          } else {
+            l = mid + 1n;
+          }
+        }
+        return r;
+      }
+
+      // test
+      let queries = [[1, 3, 7]];
+      console.log(findProductsOfElements(queries));
+    </script>
+  </body>
+</html>

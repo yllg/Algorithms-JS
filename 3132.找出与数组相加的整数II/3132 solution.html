@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：排序 + 枚举三种情况
+      // 时间复杂度：O(nlogn)
+      // 空间复杂度: O(logn)
+      var minimumAddedInteger = function (nums1, nums2) {
+        nums1.sort((a, b) => a - b);
+        nums2.sort((a, b) => a - b);
+        for (let i = 2; i >= 0; i--) {
+          let left = i + 1,
+            right = 1;
+          while (left < nums1.length && right < nums2.length) {
+            if (nums1[left] - nums2[right] === nums1[i] - nums2[0]) {
+              right++;
+            }
+            left++;
+          }
+          if (right === nums2.length) {
+            return nums2[0] - nums1[i];
+          }
+        }
+        return 0;
+      };
+
+      // test
+      let nums1 = [4, 20, 16, 12, 8],
+        nums2 = [14, 18, 10];
+      console.log(minimumAddedInteger(nums1, nums2));
+    </script>
+  </body>
+</html>

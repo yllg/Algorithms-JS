@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：枚举向上走的次数
+      // 时间复杂度：O(logk)
+      // 空间复杂度: O(1)
+      var waysToReachStair = function (k) {
+        let n = 0,
+          npow = 1,
+          ans = 0;
+        while (true) {
+          if (npow - n - 1 <= k && k <= npow) {
+            ans += comb(n + 1, npow - k);
+          } else if (npow - n - 1 > k) {
+            break;
+          }
+          n++;
+          npow *= 2;
+        }
+        return ans;
+      };
+
+      function comb(n, k) {
+        let ans = 1;
+        for (let i = n; i >= n - k + 1; --i) {
+          ans *= i;
+          ans /= n - i + 1;
+        }
+        return ans;
+      }
+
+      // test
+      let k = 0;
+      console.log(waysToReachStair(k));
+    </script>
+  </body>
+</html>

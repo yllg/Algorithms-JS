@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：二分查找
+      // 时间复杂度：O(x(log^2*k))
+      // 空间复杂度: O(1)
+      var findMaximumNumber = function (k, x) {
+        let l = 1n,
+          r = (BigInt(k) + 1n) << BigInt(x);
+        while (l < r) {
+          let m = (l + r + 1n) / 2n;
+          if (accumulatedPrice(x, m) > k) {
+            r = m - 1n;
+          } else {
+            l = m;
+          }
+        }
+        return Number(l);
+      };
+
+      function accumulatedBitPrice(x, num) {
+        const period = 1n << BigInt(x);
+        let res = (period / 2n) * (num / period);
+        if (num % period >= period / 2n) {
+          res += (num % period) - (period / 2n - 1n);
+        }
+        return res;
+      }
+
+      function accumulatedPrice(x, num) {
+        let res = 0n;
+        const length = 64 - Math.clz32(Number(num >> 32n));
+        for (let i = x; i <= length; i += x) {
+          res += accumulatedBitPrice(i, num);
+        }
+        return res;
+      }
+
+      // test
+      let k = 9,
+        x = 1;
+      console.log(findMaximumNumber(k, x));
+    </script>
+  </body>
+</html>

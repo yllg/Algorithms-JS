@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一
+      function chunk(list, size) {
+        const l = [];
+        for (let i = 0; i < list.length; i++) {
+          const index = Math.floor(i / size);
+          l[index] ??= [];
+          l[index].push(list[i]);
+        }
+        return l;
+      }
+
+      // 方法二
+      function chunk(list, size) {
+        const l = [];
+        for (let i = 0; i < list.length; i += size) {
+          const chunk = list.slice(i, i + size);
+          l.push(chunk);
+        }
+        return l;
+      }
+
+      // test
+      let list = [1, 2, 3, 4, 5, 6, 7],
+        size = 3;
+      console.log(chunk(list, size));
+    </script>
+  </body>
+</html>
