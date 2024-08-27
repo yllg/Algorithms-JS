@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：动态规划
+      // 时间复杂度O(n^2) 空间复杂度O(n+C)
+      const inf = 0x3f3f3f3f;
+
+      var minimumSubstringsInPartition = function (s) {
+        const n = s.length;
+        const d = new Array(n + 1).fill(inf);
+        d[0] = 0;
+
+        for (let i = 1; i <= n; i++) {
+          let maxCnt = 0;
+          const occCnt = new Map();
+          for (let j = i; j >= 1; j--) {
+            const char = s[j - 1];
+            occCnt.set(char, (occCnt.get(char) || 0) + 1);
+            maxCnt = Math.max(maxCnt, occCnt.get(char));
+            if (maxCnt * occCnt.size === i - j + 1 && d[j - 1] !== inf) {
+              d[i] = Math.min(d[i], d[j - 1] + 1);
+            }
+          }
+        }
+        return d[n];
+      };
+
+      // test
+      let s = "fabccddg";
+      console.log(minimumSubstringsInPartition(s));
+    </script>
+  </body>
+</html>
