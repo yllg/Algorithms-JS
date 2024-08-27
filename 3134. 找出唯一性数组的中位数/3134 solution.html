@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：二分查找
+      // 时间复杂度：O(n*logn)
+      // 空间复杂度: O(n)
+      var medianOfUniquenessArray = function (nums) {
+        const n = nums.length;
+        const median = Math.floor(((n * (n + 1)) / 2 + 1) / 2);
+
+        // 检测数组中不同元素数目小于等于 t 的连续子数组数目是否大于等于 median
+        function check(t) {
+          const cnt = new Map();
+          let tot = 0;
+          for (let i = 0, j = 0; i < n; i++) {
+            cnt.set(nums[i], (cnt.get(nums[i]) || 0) + 1);
+            while (cnt.size > t) {
+              cnt.set(nums[j], cnt.get(nums[j]) - 1);
+              if (cnt.get(nums[j]) === 0) {
+                cnt.delete(nums[j]);
+              }
+              j++;
+            }
+            tot += i - j + 1;
+          }
+          return tot >= median;
+        }
+
+        let res = 0;
+        let lo = 1,
+          hi = n;
+        while (lo <= hi) {
+          const mid = Math.floor((lo + hi) / 2);
+          if (check(mid)) {
+            res = mid;
+            hi = mid - 1;
+          } else {
+            lo = mid + 1;
+          }
+        }
+
+        return res;
+      };
+
+      // test
+      let nums = [1, 2, 3];
+      console.log(medianOfUniquenessArray(nums));
+    </script>
+  </body>
+</html>
