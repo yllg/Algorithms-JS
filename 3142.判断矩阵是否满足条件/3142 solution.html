@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 跟下面元素相等，跟右边不相等
+
+      // 方法一：直接模拟
+      // 时间复杂度O(mn) 空间复杂度O(1)
+      var satisfiesConditions = function (grid) {
+        for (let i = 0; i < grid.length; ++i) {
+          for (let j = 0; j < grid[0].length; ++j) {
+            if (i + 1 < grid.length && grid[i][j] !== grid[i + 1][j]) {
+              return false;
+            }
+            if (j + 1 < grid[0].length && grid[i][j] === grid[i][j + 1]) {
+              return false;
+            }
+          }
+        }
+        return true;
+      };
+
+      // test
+      let grid = [
+        [1, 0, 2],
+        [1, 0, 2],
+      ];
+      console.log(satisfiesConditions(grid));
+    </script>
+  </body>
+</html>
