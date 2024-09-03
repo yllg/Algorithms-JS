@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：分类讨论
+      // 时间复杂度：O(n)
+      // 空间复杂度：O(1)
+      var maxStrength = function (nums) {
+        let negativeCount = 0,
+          zeroCount = 0,
+          positiveCount = 0;
+        let prod = 1;
+        let maxNegative = -Number.MAX_VALUE;
+
+        for (let num of nums) {
+          if (num < 0) {
+            negativeCount++;
+            prod *= num;
+            maxNegative = Math.max(maxNegative, num);
+          } else if (num === 0) {
+            zeroCount++;
+          } else {
+            prod *= num;
+            positiveCount++;
+          }
+        }
+        if (negativeCount === 1 && zeroCount === 0 && positiveCount === 0) {
+          return nums[0];
+        }
+        if (negativeCount <= 1 && positiveCount === 0) {
+          return 0;
+        }
+        if (prod < 0) {
+          return Math.floor(prod / maxNegative);
+        } else {
+          return prod;
+        }
+      };
+
+      // test
+      let nums = [3, -1, -5, 2, 5, -9];
+      console.log(maxStrength(nums));
+    </script>
+  </body>
+</html>
