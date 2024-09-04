@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：枚举
+      // 时间复杂度：O(nlogn)
+      // 空间复杂度：O(logn)
+      var countWays = function (nums) {
+        const n = nums.length;
+        let res = 0;
+        nums.sort((a, b) => a - b);
+        for (let k = 0; k <= n; k++) {
+          // 前 k 个元素的最大值是否小于 k
+          if (k > 0 && nums[k - 1] >= k) {
+            continue;
+          }
+          // 后 n - k 个元素的最小值是否大于 k
+          if (k < n && nums[k] <= k) {
+            continue;
+          }
+          res++;
+        }
+        return res;
+      };
+
+      // test
+      let nums = [1, 1];
+      console.log(countWays(nums));
+    </script>
+  </body>
+</html>
