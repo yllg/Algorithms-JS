@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 删除 第一个数字字符 以及它左边 最近 的 非数字 字符。
+
+      // 方法一：栈
+      // 时间复杂度：O(n)
+      // 空间复杂度：O(n)
+      var clearDigits = function (s) {
+        let res = [];
+        for (let c of s) {
+          if (c >= "0" && c <= "9") {
+            res.pop();
+          } else {
+            res.push(c);
+          }
+        }
+        return res.join("");
+      };
+
+      //  test
+      let s = "acb34";
+      console.log(clearDigits(s));
+    </script>
+  </body>
+</html>
