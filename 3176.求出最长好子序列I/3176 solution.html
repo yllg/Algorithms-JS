@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：动态规划
+      // 时间复杂度：O(n^2*k)
+      // 空间复杂度：O(n*k)
+      var maximumLength = function (nums, k) {
+        const dp = Array.from({ length: nums.length }, () =>
+          Array(51).fill(-1)
+        );
+        let ans = 0;
+
+        for (let i = 0; i < nums.length; i++) {
+          dp[i][0] = 1;
+          for (let l = 0; l <= k; l++) {
+            for (let j = 0; j < i; j++) {
+              const add = nums[i] !== nums[j] ? 1 : 0;
+              if (l - add >= 0 && dp[j][l - add] !== -1) {
+                dp[i][l] = Math.max(dp[i][l], dp[j][l - add] + 1);
+              }
+            }
+            ans = Math.max(ans, dp[i][l]);
+          }
+        }
+
+        return ans;
+      };
+
+      // test
+      let nums = [1, 2, 1, 1, 3],
+        k = 2;
+      console.log(maximumLength(nums, k));
+    </script>
+  </body>
+</html>
