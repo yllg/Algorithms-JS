@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：动态规划
+      // 时间复杂度：O(n*k)
+      // 空间复杂度：O(n*k)
+      var maximumLength = function (nums, k) {
+        const dp = new Map();
+        const zd = Array(k + 1).fill(0);
+        nums.forEach((v) => {
+          if (!dp.has(v)) {
+            dp.set(v, Array(k + 1).fill(0));
+          }
+
+          const tmp = dp.get(v);
+          for (let j = 0; j <= k; j++) {
+            tmp[j]++;
+            if (j > 0) {
+              tmp[j] = Math.max(tmp[j], zd[j - 1] + 1);
+            }
+          }
+
+          for (let j = 0; j <= k; j++) {
+            zd[j] = Math.max(zd[j], tmp[j]);
+          }
+        });
+
+        return zd[k];
+      };
+
+      // test
+      let nums = [1, 2, 1, 1, 3],
+        k = 2;
+      console.log(maximumLength(nums, k));
+    </script>
+  </body>
+</html>
