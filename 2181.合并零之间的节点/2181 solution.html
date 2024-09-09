@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：模拟
+      // 时间复杂度：O(n)
+      // 空间复杂度：O(1)
+      var mergeNodes = function (head) {
+        const dummy = new ListNode();
+        let tail = dummy;
+        let total = 0;
+        for (let cur = head.next; cur !== null; cur = cur.next) {
+          if (cur.val === 0) {
+            const node = new ListNode(total);
+            tail.next = node;
+            tail = tail.next;
+            total = 0;
+          } else {
+            total += cur.val;
+          }
+        }
+
+        return dummy.next;
+      };
+    </script>
+  </body>
+</html>
