@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：枚举四元组的中间两项
+
+      /**
+       * @param {number[]} nums
+       * @return {number}
+       */
+      var countQuadruplets = function (nums) {
+        const n = nums.length;
+        const pre = new Array(n + 1).fill(0);
+        let res = 0;
+        for (let j = 0; j < n; j++) {
+          let suf = 0;
+          // pre[nums[k]]是前面比nums[k]小的数目
+          // suf是后面比nums[j]大的数目
+          // nums[j] > nums[k]，比nums[k]小的肯定比nums[j]小
+          // nums[j] > nums[k]，比nums[j]大的肯定比nums[k]大
+          for (let k = n - 1; k > j; k--) {
+            if (nums[j] > nums[k]) {
+              res += pre[nums[k]] * suf;
+            } else {
+              suf++;
+            }
+          }
+          // 更新pre[x]
+          for (let x = nums[j] + 1; x <= n; x++) pre[x]++;
+        }
+        return res;
+      };
+
+      // test
+      let nums = [1, 3, 2, 4, 5];
+      console.log(countQuadruplets(nums));
+    </script>
+  </body>
+</html>
