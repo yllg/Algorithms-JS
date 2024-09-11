@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：二分查找
+      // 时间复杂度：O(nlogn)
+      // 空间复杂度：O(n)
+      var maximizeWin = function (prizePositions, k) {
+        const n = prizePositions.length;
+        const dp = new Array(n + 1).fill(0);
+        let ans = 0;
+        for (let i = 0; i < n; i++) {
+          let x = binarySearch(prizePositions, prizePositions[i] - k);
+          ans = Math.max(ans, i - x + 1 + dp[x]);
+          dp[i + 1] = Math.max(dp[i], i - x + 1);
+        }
+        return ans;
+      };
+
+      const binarySearch = (arr, target) => {
+        let left = 0;
+        let right = arr.length - 1;
+        while (left <= right) {
+          let mid = Math.floor((left + right) / 2);
+          if (arr[mid] < target) {
+            left = mid + 1;
+          } else {
+            right = mid - 1;
+          }
+        }
+        return left;
+      };
+
+      // 方法二：双指针
+      // 时间复杂度：O(n)
+      // 空间复杂度：O(n)
+      var maximizeWin = function (prizePositions, k) {
+        const n = prizePositions.length;
+        const dp = new Array(n + 1).fill(0);
+        let ans = 0;
+
+        for (let left = 0, right = 0; right < n; right++) {
+          while (prizePositions[right] - prizePositions[left] > k) {
+            left++;
+          }
+          ans = Math.max(ans, right - left + 1 + dp[left]);
+          dp[right + 1] = Math.max(dp[right], right - left + 1);
+        }
+
+        return ans;
+      };
+
+      // test
+      let prizePositions = [1, 1, 2, 2, 3, 3, 5],
+        k = 2;
+      console.log(maximizeWin(prizePositions, k));
+    </script>
+  </body>
+</html>
