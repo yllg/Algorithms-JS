@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：二分查找
+      // 时间复杂度：O(nlogn)
+      // 空间复杂度：O(logn)
+      var maxNumOfMarkedIndices = function (nums) {
+        nums.sort((a, b) => a - b);
+        const n = nums.length;
+        let l = 0,
+          r = Math.floor(n / 2);
+        const check = (m) => {
+          for (let i = 0; i < m; i++) {
+            if (nums[i] * 2 > nums[n - m + i]) {
+              return false;
+            }
+          }
+          return true;
+        };
+        while (l < r) {
+          const m = Math.floor((l + r + 1) / 2);
+          if (check(m)) {
+            l = m;
+          } else {
+            r = m - 1;
+          }
+        }
+        return l * 2;
+      };
+
+      // 方法二：双指针
+      // 时间复杂度：O(nlogn)
+      // 空间复杂度：O(logn)
+      var maxNumOfMarkedIndices = function (nums) {
+        nums.sort((a, b) => a - b);
+        const n = nums.length;
+        const m = Math.floor(n / 2);
+        let res = 0;
+
+        for (let i = 0, j = m; i < m && j < n; i++) {
+          while (j < n && 2 * nums[i] > nums[j]) {
+            j++;
+          }
+          if (j < n) {
+            res += 2;
+            j++;
+          }
+        }
+
+        return res;
+      };
+
+      // test
+      let nums = [3, 5, 2, 4];
+      console.log(maxNumOfMarkedIndices(nums));
+    </script>
+  </body>
+</html>
