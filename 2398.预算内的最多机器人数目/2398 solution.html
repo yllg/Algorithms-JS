@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：双指针 + 单调队列
+      // 时间复杂度：O(n)
+      // 空间复杂度：O(n)
+      var maximumRobots = function (chargeTimes, runningCosts, budget) {
+        let res = 0;
+        let n = chargeTimes.length;
+        let runningCostSum = 0;
+        const q = [];
+        for (let i = 0, j = 0; i < n; i++) {
+          runningCostSum += runningCosts[i];
+          while (q.length && chargeTimes[q[q.length - 1]] <= chargeTimes[i]) {
+            q.pop();
+          }
+          q.push(i);
+          while (
+            j <= i &&
+            (i - j + 1) * runningCostSum + chargeTimes[q[0]] > budget
+          ) {
+            if (q.length && q[0] === j) {
+              q.shift();
+            }
+            runningCostSum -= runningCosts[j];
+            j++;
+          }
+          res = Math.max(res, i - j + 1);
+        }
+        return res;
+      };
+
+      // test
+      let chargeTimes = [3, 6, 1, 3, 4],
+        runningCosts = [2, 1, 3, 4, 5],
+        budget = 25;
+      console.log(maximumRobots(chargeTimes, runningCosts, budget));
+    </script>
+  </body>
+</html>
