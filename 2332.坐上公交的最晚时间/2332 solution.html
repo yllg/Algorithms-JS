@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：模拟
+      // 时间复杂度：O(nlogn+mlogm)
+      // 空间复杂度：O(logn+logm)
+      var latestTimeCatchTheBus = function (buses, passengers, capacity) {
+        buses.sort((a, b) => a - b);
+        passengers.sort((a, b) => a - b);
+        let pos = 0;
+        let space = 0;
+
+        for (const arrive of buses) {
+          space = capacity;
+          while (
+            space > 0 &&
+            pos < passengers.length &&
+            passengers[pos] <= arrive
+          ) {
+            space--;
+            pos++;
+          }
+        }
+
+        pos--;
+        let lastCatchTime =
+          space > 0 ? buses[buses.length - 1] : passengers[pos];
+        while (pos >= 0 && passengers[pos] === lastCatchTime) {
+          pos--;
+          lastCatchTime--;
+        }
+
+        return lastCatchTime;
+      };
+
+      // test
+      let buses = [10, 20],
+        passengers = [2, 17, 18, 19],
+        capacity = 2;
+      console.log(latestTimeCatchTheBus(buses, passengers, capacity));
+    </script>
+  </body>
+</html>
