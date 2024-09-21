@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：模拟
+      // 时间复杂度：O(n)
+      // 空间复杂度：O(n)
+      var edgeScore = function (edges) {
+        const n = edges.length;
+        const points = new Array(n).fill(0);
+        for (let i = 0; i < n; i++) {
+          points[edges[i]] += i;
+        }
+        let maxPoints = -1;
+        let res = -1;
+        for (let i = 0; i < n; i++) {
+          if (points[i] > maxPoints) {
+            maxPoints = points[i];
+            res = i;
+          }
+        }
+        return res;
+      };
+
+      // test
+      let edges = [1, 0, 0, 0, 0, 7, 7, 5];
+      console.log(edgeScore(edges));
+    </script>
+  </body>
+</html>
