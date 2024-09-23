@@ -13,7 +13,7 @@
       //景点 j 的答案即为 mx+A[j]−j 。而 mx 的值我们只要从前往后枚举 j 的时候同时维护即可，
       //这样每次枚举景点 j 的时候，寻找使得得分最大的 i 就能从 O(n) 降至 O(1) 的时间复杂度，总时间复杂度就能从 O(n^2) 降至 O(n)。
 
-      const maxScoreSightseeingPair = (A) => {
+      var maxScoreSightseeingPair = (A) => {
         const dp = new Array(A.length);
         let res = 0;
         dp[0] = 0;
@@ -23,6 +23,21 @@
         }
         return res;
       };
+
+      // 方法一：遍历
+      // 时间复杂度：O(n)
+      // 空间复杂度：O(1)
+      var maxScoreSightseeingPair = function (values) {
+        let ans = 0;
+        let mx = values[0] + 0;
+        for (let j = 1; j < values.length; ++j) {
+          ans = Math.max(ans, mx + values[j] - j);
+          // 边遍历边维护
+          mx = Math.max(mx, values[j] + j);
+        }
+        return ans;
+      };
+
       // test
       var A = [8, 1, 5, 2, 6];
       console.log(maxScoreSightseeingPair(A));
