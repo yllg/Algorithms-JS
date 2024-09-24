@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：遍历 + 统计频数
+      // 时间复杂度：O(n)
+      // 空间复杂度：O(1)
+      var maximumSubsequenceCount = function (text, pattern) {
+        let res = 0,
+          cnt1 = 0,
+          cnt2 = 0;
+        for (let c of text) {
+          if (c == pattern[1]) {
+            res += cnt1;
+            cnt2++;
+          }
+          if (c == pattern[0]) {
+            cnt1++;
+          }
+        }
+        return res + Math.max(cnt1, cnt2);
+      };
+
+      // test
+      let text = "abdcdbc",
+        pattern = "ac";
+      console.log(maximumSubsequenceCount(text, pattern));
+    </script>
+  </body>
+</html>
