@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：按照首字母进行分组
+      // 时间复杂度：O(nl∣Σ∣)
+      // 空间复杂度：O(nl)
+      var distinctNames = function (ideas) {
+        const names = new Map();
+
+        for (const idea of ideas) {
+          const suffix = idea.slice(1);
+          if (!names.has(idea[0])) {
+            names.set(idea[0], new Set());
+          }
+          names.get(idea[0]).add(suffix);
+        }
+
+        const getIntersectSize = (a, b) => {
+          let count = 0;
+          for (const s of a) {
+            if (b.has(s)) count++;
+          }
+          return count;
+        };
+
+        let ans = 0;
+        for (const [preA, setA] of names) {
+          for (const [preB, setB] of names) {
+            if (preA === preB) continue;
+            const intersect = getIntersectSize(setA, setB);
+            ans += (setA.size - intersect) * (setB.size - intersect);
+          }
+        }
+        return ans;
+      };
+
+      // test
+      let ideas = ["coffee", "donuts", "time", "toffee"];
+      console.log(distinctNames(ideas));
+    </script>
+  </body>
+</html>
