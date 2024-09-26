@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 由于元素值一定不小于其数位和，所以答案就是元素和减去数位和，无需取绝对值。
+      var differenceOfSum = function (nums) {
+        let ans = 0;
+        for (let x of nums) {
+          ans += x; // 累加元素和
+          while (x) {
+            ans -= x % 10; // 减去数位和
+            x = Math.floor(x / 10);
+          }
+        }
+        return ans;
+      };
+
+      // test
+      let nums = [1, 15, 6, 3];
+      console.log(differenceOfSum(nums));
+    </script>
+  </body>
+</html>
