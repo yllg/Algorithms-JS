@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：线段树
+      // 时间复杂度：O(n)
+      // 空间复杂度：O(logn)
+      var BookMyShow = function (n, m) {
+        this.n = n;
+        this.m = m;
+        this.minTree = new Array(4 * n).fill(0);
+        this.sumTree = new Array(4 * n).fill(0);
+      };
+
+      BookMyShow.prototype.modify = function (i, l, r, index, val) {
+        if (l === r) {
+          this.minTree[i] = val;
+          this.sumTree[i] = val;
+          return;
+        }
+        var mid = Math.floor((l + r) / 2);
+        if (index <= mid) {
+          this.modify(i * 2, l, mid, index, val);
+        } else {
+          this.modify(i * 2 + 1, mid + 1, r, index, val);
+        }
+        this.minTree[i] = Math.min(
+          this.minTree[i * 2],
+          this.minTree[i * 2 + 1]
+        );
+        this.sumTree[i] = this.sumTree[i * 2] + this.sumTree[i * 2 + 1];
+      };
+
+      BookMyShow.prototype.queryMinRow = function (i, l, r, val) {
+        if (l === r) {
+          if (this.minTree[i] > val) {
+            return this.n;
+          }
+          return l;
+        }
+        var mid = Math.floor((l + r) / 2);
+        if (this.minTree[i * 2] <= val) {
+          return this.queryMinRow(i * 2, l, mid, val);
+        } else {
+          return this.queryMinRow(i * 2 + 1, mid + 1, r, val);
+        }
+      };
+
+      BookMyShow.prototype.querySum = function (i, l, r, l2, r2) {
+        if (r < l2 || l > r2) {
+          return 0;
+        }
+        if (l >= l2 && r <= r2) {
+          return this.sumTree[i];
+        }
+        var mid = Math.floor((l + r) / 2);
+        return (
+          this.querySum(i * 2, l, mid, l2, r2) +
+          this.querySum(i * 2 + 1, mid + 1, r, l2, r2)
+        );
+      };
+
+      BookMyShow.prototype.gather = function (k, maxRow) {
+        var i = this.queryMinRow(1, 0, this.n - 1, this.m - k);
+        if (i > maxRow) {
+          return [];
+        }
+        var used = this.querySum(1, 0, this.n - 1, i, i);
+        this.modify(1, 0, this.n - 1, i, used + k);
+        return [i, used];
+      };
+
+      BookMyShow.prototype.scatter = function (k, maxRow) {
+        var usedTotal = this.querySum(1, 0, this.n - 1, 0, maxRow);
+        if ((maxRow + 1) * this.m - usedTotal < k) {
+          return false;
+        }
+        var i = this.queryMinRow(1, 0, this.n - 1, this.m - 1);
+        while (true) {
+          var used = this.querySum(1, 0, this.n - 1, i, i);
+          if (this.m - used >= k) {
+            this.modify(1, 0, this.n - 1, i, used + k);
+            break;
+          }
+          k -= this.m - used;
+          this.modify(1, 0, this.n - 1, i, this.m);
+          i++;
+        }
+        return true;
+      };
+    </script>
+  </body>
+</html>
