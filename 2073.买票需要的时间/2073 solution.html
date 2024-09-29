@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：计算每个人需要的时间
+      // 时间复杂度：O(n)
+      // 空间复杂度：O(1)
+      var timeRequiredToBuy = function (tickets, k) {
+        const n = tickets.length;
+        let res = 0;
+        for (let i = 0; i < n; i++) {
+          // 遍历计算每个人所需时间
+          if (i <= k) {
+            res += Math.min(tickets[i], tickets[k]);
+          } else {
+            res += Math.min(tickets[i], tickets[k] - 1);
+          }
+        }
+        return res;
+      };
+
+      // test
+      let tickets = [2, 3, 2],
+        k = 2;
+      console.log(timeRequiredToBuy(tickets, k));
+    </script>
+  </body>
+</html>
