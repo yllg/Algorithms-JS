@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：最小堆（优先队列）
+      // 时间复杂度：O(n+(q1+q2)logn)
+      // 空间复杂度：O(n)
+      var SeatManager = function (n) {
+        this.available = new MinPriorityQueue();
+        for (let i = 1; i <= n; i++) {
+          this.available.enqueue(i, i);
+        }
+      };
+
+      SeatManager.prototype.reserve = function () {
+        return this.available.dequeue().element;
+      };
+
+      SeatManager.prototype.unreserve = function (seatNumber) {
+        this.available.enqueue(seatNumber);
+      };
+    </script>
+  </body>
+</html>
