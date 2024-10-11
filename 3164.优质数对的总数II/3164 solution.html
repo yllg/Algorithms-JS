@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：枚举倍数
+      // 时间复杂度：O(n+m+v/k*logm)
+      // 空间复杂度: O(n+m)
+      var numberOfPairs = function (nums1, nums2, k) {
+        const count = {};
+        const count2 = {};
+        let res = 0,
+          max1 = 0;
+        for (let num of nums1) {
+          count[num] = (count[num] || 0) + 1;
+          max1 = Math.max(max1, num);
+        }
+        for (let num of nums2) {
+          count2[num] = (count2[num] || 0) + 1;
+        }
+        for (let a in count2) {
+          let cnt = count2[a];
+          for (let b = a * k; b <= max1; b += a * k) {
+            if (b in count) {
+              res += count[b] * cnt;
+            }
+          }
+        }
+        return res;
+      };
+
+      // test
+      let nums1 = [1, 2, 4, 12],
+        nums2 = [2, 4],
+        k = 3;
+      console.log(numberOfPairs(nums1, nums2, k));
+    </script>
+  </body>
+</html>
