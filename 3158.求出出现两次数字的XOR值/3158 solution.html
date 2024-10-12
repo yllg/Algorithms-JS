@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // XOR 异或
+
+      // 方法一：模拟
+      // 时间复杂度：O(n)
+      // 空间复杂度: O(n)
+      var duplicateNumbersXOR = function (nums) {
+        const cnt = new Set();
+        let res = 0;
+        for (const num of nums) {
+          if (cnt.has(num)) {
+            res ^= num;
+          } else {
+            cnt.add(num);
+          }
+        }
+        return res;
+      };
+
+      // test
+      let nums = [1, 2, 2, 1];
+      console.log(duplicateNumbersXOR(nums));
+    </script>
+  </body>
+</html>
