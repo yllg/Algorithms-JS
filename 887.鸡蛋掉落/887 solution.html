@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：动态规划 + 二分查找
+      var superEggDrop = function (K, N) {
+        // 不选择dp[K][M]的原因是dp[M][K]可以简化操作
+        const dp = Array(N + 1)
+          .fill(0)
+          .map((_) => Array(K + 1).fill(0));
+
+        let m = 0;
+        while (dp[m][K] < N) {
+          m++;
+          for (let k = 1; k <= K; ++k)
+            dp[m][k] = dp[m - 1][k - 1] + 1 + dp[m - 1][k];
+        }
+        return m;
+      };
+
+      // 方法二：决策单调性
+      // 方法三：数学法
+
+      // test
+      let k = 1,
+        n = 2;
+      console.log(superEggDrop(k, n));
+    </script>
+  </body>
+</html>
