@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：枚举高度
+      // 时间复杂度：O(n开根号) 空间复杂度: O(1)
+      var maxHeightOfTriangle = function (red, blue) {
+        const maxHeight = (x, y) => {
+          for (let i = 1; ; i++) {
+            if (i % 2 === 1) {
+              x -= i;
+              if (x < 0) {
+                return i - 1;
+              }
+            } else {
+              y -= i;
+              if (y < 0) {
+                return i - 1;
+              }
+            }
+          }
+        };
+
+        return Math.max(maxHeight(red, blue), maxHeight(blue, red));
+      };
+
+      // 方法二：直接计算出高度
+      // 时间复杂度：O(1) 空间复杂度: O(1)
+      var maxHeightOfTriangle = function (red, blue) {
+        return Math.max(maxHeight(red, blue), maxHeight(blue, red));
+      };
+
+      function maxHeight(x, y) {
+        const odd = 2 * Math.floor(Math.sqrt(x)) - 1;
+        const even = 2 * Math.floor(Math.floor(-1 + Math.sqrt(1 + 4 * y)) / 2);
+        return Math.min(odd, even) + 1;
+      }
+
+      // test
+      let red = 2,
+        blue = 4;
+      console.log(maxHeightOfTriangle(red, blue));
+    </script>
+  </body>
+</html>
