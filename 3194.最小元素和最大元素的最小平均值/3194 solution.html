@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：排序
+      // 时间复杂度：O（nlogn) 空间复杂度: O(logn)
+      var minimumAverage = function (nums) {
+        nums.sort((a, b) => a - b);
+        const n = nums.length;
+        let res = Number.MAX_VALUE;
+        for (let i = 0; i < Math.floor(n / 2); i++) {
+          res = Math.min(res, (nums[i] + nums[n - 1 - i]) / 2);
+        }
+        return res;
+      };
+
+      // test
+      let nums = [7, 8, 3, 4, 15, 13, 4, 1];
+      console.log(minimumAverage(nums));
+    </script>
+  </body>
+</html>
