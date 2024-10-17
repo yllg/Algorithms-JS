@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：模拟
+      // 时间复杂度：O(n)
+      // 空间复杂度：O(1)
+      var minOperations = function (nums) {
+        let n = nums.length;
+        let ans = 0;
+        for (let i = 0; i < n; i++) {
+          if (nums[i] === 0) {
+            if (i > n - 3) {
+              return -1;
+            }
+            nums[i] ^= 1;
+            nums[i + 1] ^= 1;
+            nums[i + 2] ^= 1;
+            ans++;
+          }
+        }
+
+        return ans;
+      };
+
+      // test
+      let nums = [0, 1, 1, 1, 0, 0];
+      console.log(minOperations(nums));
+    </script>
+  </body>
+</html>
