@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 用数字1～n构建一个长度为N的数组，数组满足题目给出的0～end之间恰好存在cnt个逆序对，求数组有多少种排列方式
+
+      // 方法一：记忆化搜索
+      // 时间复杂度：O(m×n×min(m,n))
+      // 空间复杂度：O(m×n)
+      var MOD = 1e9 + 7;
+
+      var numberOfPermutations = function (n, requirements) {
+        const reqMap = { 0: 0 };
+        let maxCnt = 0;
+        requirements.forEach(([end, cnt]) => {
+          reqMap[end] = cnt;
+          maxCnt = Math.max(maxCnt, cnt);
+        });
+        if (reqMap[0] !== 0) {
+          return 0;
+        }
+        const dp = Array.from({ length: n }, () => Array(maxCnt + 1).fill(-1));
+
+        function dfs(end, cnt) {
+          if (end === 0) {
+            return 1;
+          }
+          if (dp[end][cnt] !== -1) {
+            return dp[end][cnt];
+          }
+          if (reqMap.hasOwnProperty(end - 1)) {
+            const r = reqMap[end - 1];
+            if (r <= cnt && cnt <= end + r) {
+              dp[end][cnt] = dfs(end - 1, r);
+              return dp[end][cnt];
+            }
+            return 0;
+          }
+
+          let totSum = 0;
+          for (let i = 0; i <= Math.min(end, cnt); i++) {
+            totSum = (totSum + dfs(end - 1, cnt - i)) % MOD;
+          }
+          dp[end][cnt] = totSum;
+          return dp[end][cnt];
+        }
+
+        return dfs(n - 1, reqMap[n - 1]);
+      };
+
+      // 方法二：优化时间复杂度的记忆化搜索
+      // 时间复杂度：O(mxn)
+      // 空间复杂度：O(m×n)
+      var MOD = 1e9 + 7;
+
+      var numberOfPermutations = function (n, requirements) {
+        const reqMap = { 0: 0 };
+        let maxCnt = 0;
+        requirements.forEach(([end, cnt]) => {
+          reqMap[end] = cnt;
+          maxCnt = Math.max(maxCnt, cnt);
+        });
+        if (reqMap[0] !== 0) {
+          return 0;
+        }
+        const dp = Array.from({ length: n }, () => Array(maxCnt + 1).fill(-1));
+
+        function dfs(end, cnt) {
+          if (cnt < 0) {
+            return 0;
+          }
+          if (end === 0) {
+            return 1;
+          }
+          if (dp[end][cnt] !== -1) {
+            return dp[end][cnt];
+          }
+          if (reqMap.hasOwnProperty(end - 1)) {
+            const r = reqMap[end - 1];
+            if (r <= cnt && cnt <= end + r) {
+              dp[end][cnt] = dfs(end - 1, r);
+              return dp[end][cnt];
+            }
+            return 0;
+          } else {
+            if (cnt > end) {
+              dp[end][cnt] =
+                (dfs(end, cnt - 1) -
+                  dfs(end - 1, cnt - 1 - end) +
+                  dfs(end - 1, cnt) +
+                  MOD) %
+                MOD;
+            } else {
+              dp[end][cnt] = (dfs(end, cnt - 1) + dfs(end - 1, cnt)) % MOD;
+            }
+            return dp[end][cnt];
+          }
+        }
+
+        return dfs(n - 1, reqMap[n - 1]);
+      };
+
+      // test
+      let n = 3,
+        requirements = [
+          [2, 2],
+          [0, 0],
+        ];
+      console.log(numberOfPermutations(n, requirements));
+    </script>
+  </body>
+</html>
