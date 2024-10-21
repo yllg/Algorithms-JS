@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法 1：线性扫描
+      // 时间复杂度：O(nlogn)
+      // 空间复杂度：O(1)
+      var smallestRangeII = function (nums, k) {
+        nums.sort((a, b) => a - b);
+        const mi = nums[0],
+          ma = nums[nums.length - 1];
+        let res = ma - mi;
+        for (let i = 0; i < nums.length - 1; i++) {
+          const a = nums[i],
+            b = nums[i + 1];
+          res = Math.min(
+            res,
+            Math.max(ma - k, a + k) - Math.min(mi + k, b - k)
+          );
+        }
+        return res;
+      };
+
+      // test
+      let nums = [1, 3, 6],
+        k = 3;
+      console.log(smallestRangeII(nums, k));
+    </script>
+  </body>
+</html>
