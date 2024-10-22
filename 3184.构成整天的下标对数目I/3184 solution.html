@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：暴力
+      // 时间复杂度：O(n^2)
+      // 空间复杂度：O(1)
+      var countCompleteDayPairs = function (hours) {
+        let ans = 0;
+        for (let i = 1; i < hours.length; i++) {
+          for (let j = 0; j < i; j++) {
+            if ((hours[i] + hours[j]) % 24 === 0) {
+              ans++;
+            }
+          }
+        }
+        return ans;
+      };
+
+      // test
+      let hours = [12, 12, 30, 24, 24];
+      console.log(countCompleteDayPairs(hours));
+    </script>
+  </body>
+</html>
