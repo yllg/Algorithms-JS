@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：哈希表
+      // 时间复杂度：O(n)
+      // 空间复杂度：O(24)
+      var countCompleteDayPairs = function (hours) {
+        let ans = 0;
+        let cnt = new Array(24).fill(0);
+        for (let hour of hours) {
+          ans += cnt[(24 - (hour % 24)) % 24];
+          cnt[hour % 24]++;
+        }
+        return ans;
+      };
+
+      // test
+      let hours = [12, 12, 30, 24, 24];
+      console.log(countCompleteDayPairs(hours));
+    </script>
+  </body>
+</html>
