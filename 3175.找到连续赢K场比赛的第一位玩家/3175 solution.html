@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：双指针
+      // 时间复杂度：O(n)
+      // 空间复杂度：O(1)
+      var findWinningPlayer = function (skills, k) {
+        const n = skills.length;
+        let cnt = 0;
+        let i = 0,
+          last_i = 0;
+
+        while (i < n) {
+          let j = i + 1;
+          while (j < n && skills[j] < skills[i] && cnt < k) {
+            j++;
+            cnt++;
+          }
+          if (cnt === k) {
+            return i;
+          }
+          cnt = 1;
+          last_i = i;
+          i = j;
+        }
+        return last_i;
+      };
+
+      // test
+      let skills = [4, 2, 6, 3, 9],
+        k = 2;
+      console.log(findWinningPlayer(skills, k));
+    </script>
+  </body>
+</html>
