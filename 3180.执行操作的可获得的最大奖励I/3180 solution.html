@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：动态规划
+      // 时间复杂度：O(n(m+logn))
+      // 空间复杂度：O(m+logn)
+      var maxTotalReward = function (rewardValues) {
+        rewardValues.sort((a, b) => a - b);
+        const m = rewardValues[rewardValues.length - 1];
+        const dp = Array(2 * m).fill(0);
+        dp[0] = 1;
+        for (let x of rewardValues) {
+          for (let k = 2 * x - 1; k >= x; k--) {
+            if (dp[k - x] === 1) {
+              dp[k] = 1;
+            }
+          }
+        }
+        let res = 0;
+        for (let i = 0; i < dp.length; i++) {
+          if (dp[i] === 1) {
+            res = i;
+          }
+        }
+        return res;
+      };
+
+      // 方法二：位运算优化 + 动态规划
+      // 时间复杂度: O(n( m/w+logn))
+      // 空间复杂度: O(m/w+logn)
+      var maxTotalReward = function (rewardValues) {
+        rewardValues.sort((a, b) => a - b);
+        let f = BigInt(1);
+        for (let x of rewardValues) {
+          let mask = (BigInt(1) << BigInt(x)) - BigInt(1);
+          f = f | ((f & mask) << BigInt(x));
+        }
+        return f.toString(2).length - 1;
+      };
+
+      // test
+      let rewardValues = [1, 1, 3, 3];
+      console.log(maxTotalReward(rewardValues));
+    </script>
+  </body>
+</html>
