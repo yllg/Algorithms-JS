@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：回溯
+      // 时间复杂度：
+      // 空间复杂度：O(n)
+      var validStrings = function (n) {
+        const res = [];
+        function dfs(arr) {
+          if (arr.length === n) {
+            res.push(arr.join(""));
+            return;
+          }
+          if (arr.length === 0 || arr[arr.length - 1] === "1") {
+            arr.push("0");
+            dfs(arr);
+            arr.pop();
+          }
+          arr.push("1");
+          dfs(arr);
+          arr.pop();
+        }
+        dfs([]);
+        return res;
+      };
+
+      // 方法二：位运算
+
+      // test
+      let n = 3;
+      console.log(validStrings(n));
+    </script>
+  </body>
+</html>
