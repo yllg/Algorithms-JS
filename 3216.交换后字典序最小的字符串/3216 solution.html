@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：枚举
+      // 时间复杂度 O(n)
+      // 空间复杂度 O(1)
+      var getSmallestString = function (s) {
+        let arr = s.split("");
+        for (let i = 0; i + 1 < arr.length; i++) {
+          if (
+            arr[i] > arr[i + 1] &&
+            arr[i].charCodeAt(0) % 2 === arr[i + 1].charCodeAt(0) % 2
+          ) {
+            [arr[i], arr[i + 1]] = [arr[i + 1], arr[i]];
+            break;
+          }
+        }
+        return arr.join("");
+      };
+
+      // test
+      let s = "45320";
+      console.log(getSmallestString(s));
+    </script>
+  </body>
+</html>
