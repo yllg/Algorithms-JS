@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：使用 sqrt 函数
+      // 时间复杂度：O(根号c)
+      // 空间复杂度：O(1)
+      var judgeSquareSum = function (c) {
+        for (let a = 0; a * a <= c; a++) {
+          const b = Math.sqrt(c - a * a);
+          if (b === parseInt(b)) {
+            return true;
+          }
+        }
+        return false;
+      };
+
+      //  方法二：双指针
+      // 时间复杂度：O(根号c)
+      // 空间复杂度：O(1)
+      var judgeSquareSum = function (c) {
+        let left = 0;
+        let right = Math.floor(Math.sqrt(c));
+        while (left <= right) {
+          const sum = left * left + right * right;
+          if (sum === c) {
+            return true;
+          } else if (sum > c) {
+            right--;
+          } else {
+            left++;
+          }
+        }
+        return false;
+      };
+
+      // 方法三：数学
+      // 时间复杂度：O(根号c)
+      // 空间复杂度：O(1)
+      var judgeSquareSum = function (c) {
+        for (let base = 2; base * base <= c; base++) {
+          // 如果不是因子，枚举下一个
+          if (c % base !== 0) {
+            continue;
+          }
+
+          // 计算 base 的幂
+          let exp = 0;
+          while (c % base == 0) {
+            c /= base;
+            exp++;
+          }
+
+          // 根据 Sum of two squares theorem 验证
+          if (base % 4 === 3 && exp % 2 !== 0) {
+            return false;
+          }
+        }
+
+        // 例如 11 这样的用例，由于上面的 for 循环里 base * base <= c ，base == 11 的时候不会进入循环体
+        // 因此在退出循环以后需要再做一次判断
+        return c % 4 !== 3;
+      };
+
+      // test
+      let c = 5;
+      console.log(judgeSquareSum(c));
+    </script>
+  </body>
+</html>
