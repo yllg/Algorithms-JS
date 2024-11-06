@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：枚举
+      // 时间复杂度：O(nxk)
+      // 空间复杂度：O(1)
+      var resultsArray = function (nums, k) {
+        const n = nums.length;
+        const ans = new Array(n - k + 1).fill(-1);
+        for (let i = 0; i <= n - k; i++) {
+          let valid = true;
+          for (let j = i + 1; j < i + k; j++) {
+            if (nums[j] - nums[j - 1] !== 1) {
+              valid = false;
+              break;
+            }
+          }
+          if (valid) {
+            ans[i] = nums[i + k - 1];
+          }
+        }
+        return ans;
+      };
+
+      // 方法二：统计长度
+      // 时间复杂度：O(n)
+      // 空间复杂度：O(1)
+      var resultsArray = function (nums, k) {
+        const n = nums.length;
+        let cnt = 0;
+        const ans = new Array(n - k + 1).fill(-1);
+        for (let i = 0; i < n; i++) {
+          cnt = i === 0 || nums[i] - nums[i - 1] !== 1 ? 1 : cnt + 1;
+          if (cnt >= k) {
+            ans[i - k + 1] = nums[i];
+          }
+        }
+        return ans;
+      };
+
+      // test
+      let nums = [1, 2, 3, 4, 3, 2, 5],
+        k = 3;
+      console.log(resultsArray(nums, k));
+    </script>
+  </body>
+</html>
