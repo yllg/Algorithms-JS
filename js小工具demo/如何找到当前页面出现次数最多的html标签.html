@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 实现一个 maxBy 方便找出出现次数最多的 HTML 标签
+      const maxBy = (list, keyBy) =>
+        list.reduce((x, y) => (keyBy(x) > keyBy(y) ? x : y));
+
+      function getFrequentTag() {
+        const tags = [...document.querySelectorAll("*")]
+          .map((x) => x.tagName)
+          .reduce((o, tag) => {
+            o[tag] = o[tag] ? o[tag] + 1 : 1;
+            return o;
+          }, {});
+        return maxBy(Object.entries(tags), (tag) => tag[1]);
+      }
+
+      // test
+      console.log(getFrequentTag());
+    </script>
+  </body>
+</html>
