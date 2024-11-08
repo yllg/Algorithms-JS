@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：将每个元素的位置放入哈希表
+      // 时间复杂度：O(n^2)
+      // 空间复杂度：O(n^2)
+      var NeighborSum = function (grid) {
+        this.grid = grid;
+        this.pos = {};
+        for (let i = 0; i < grid.length; i++) {
+          for (let j = 0; j < grid[0].length; j++) {
+            this.pos[grid[i][j]] = [i, j];
+          }
+        }
+      };
+
+      const dirs = [
+        [
+          [-1, 0],
+          [1, 0],
+          [0, -1],
+          [0, 1],
+        ],
+        [
+          [-1, -1],
+          [-1, 1],
+          [1, -1],
+          [1, 1],
+        ],
+      ];
+
+      NeighborSum.prototype.adjacentSum = function (value) {
+        return this.getSum(value, 0);
+      };
+
+      NeighborSum.prototype.diagonalSum = function (value) {
+        return this.getSum(value, 1);
+      };
+
+      NeighborSum.prototype.getSum = function (value, idx) {
+        const [x, y] = this.pos[value];
+        let sum = 0;
+        for (const [dx, dy] of dirs[idx]) {
+          const nx = x + dx;
+          const ny = y + dy;
+          if (
+            nx >= 0 &&
+            nx < this.grid.length &&
+            ny >= 0 &&
+            ny < this.grid[0].length
+          ) {
+            sum += this.grid[nx][ny];
+          }
+        }
+        return sum;
+      };
+    </script>
+  </body>
+</html>
