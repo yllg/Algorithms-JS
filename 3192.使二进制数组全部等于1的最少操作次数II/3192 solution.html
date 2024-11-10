@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：枚举
+      // 时间复杂度：O(n)
+      // 空间复杂度：O(1)
+      var minOperations = function (nums) {
+        let operation = 0;
+        for (let num of nums) {
+          if (num === operation % 2) {
+            operation++;
+          }
+        }
+        return operation;
+      };
+
+      // 方法二：动态规划
+      // 时间复杂度：O(n)
+      // 空间复杂度：O(1)
+      var minOperations = function (nums) {
+        let operation = 0;
+        for (let i = nums.length - 2; i >= 0; i--) {
+          if (nums[i] !== nums[i + 1]) {
+            operation++;
+          }
+        }
+        return nums[0] === 1 ? operation : operation + 1;
+      };
+
+      // test
+      let nums = [0, 1, 1, 0, 1];
+      console.log(minOperations(nums));
+    </script>
+  </body>
+</html>
