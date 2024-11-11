@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：动态规划
+      // 时间复杂度：O(m^3)
+      // 空间复杂度：O(m^2)
+      var minCost = function (n, cuts) {
+        cuts.push(0);
+        cuts.push(n);
+        cuts.sort((a, b) => a - b);
+        const m = cuts.length;
+        const f = Array.from({ length: m }, () => Array(m).fill(0));
+
+        for (let i = m - 3; i >= 0; i--) {
+          for (let j = i + 2; j < m; j++) {
+            let minCost = Infinity;
+            for (let k = i + 1; k < j; k++) {
+              minCost = Math.min(minCost, f[i][k] + f[k][j]);
+            }
+            f[i][j] = minCost + (cuts[j] - cuts[i]);
+          }
+        }
+
+        return f[0][m - 1];
+      };
+
+      // test
+      let n = 9,
+        cuts = [5, 6, 1, 4, 2];
+      console.log(minCost(n, cuts));
+    </script>
+  </body>
+</html>
