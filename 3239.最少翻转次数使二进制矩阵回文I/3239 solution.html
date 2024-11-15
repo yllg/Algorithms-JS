@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：双指针
+      // 时间复杂度：O(m*n)
+      // 空间复杂度：O(1)
+      var minFlips = function (grid) {
+        let rowCnt = 0;
+        let colCnt = 0;
+        const m = grid.length;
+        const n = grid[0].length;
+        for (let i = 0; i < m; i++) {
+          for (let j1 = 0; j1 < Math.floor(n / 2); j1++) {
+            const j2 = n - 1 - j1;
+            if (grid[i][j1] !== grid[i][j2]) {
+              rowCnt++;
+            }
+          }
+        }
+        for (let j = 0; j < n; j++) {
+          for (let i1 = 0; i1 < Math.floor(m / 2); i1++) {
+            const i2 = m - 1 - i1;
+            if (grid[i1][j] !== grid[i2][j]) {
+              colCnt++;
+            }
+          }
+        }
+        return Math.min(colCnt, rowCnt);
+      };
+
+      // test
+      let grid = [
+        [1, 0, 0],
+        [0, 0, 0],
+        [0, 0, 1],
+      ];
+      console.log(minFlips(grid));
+    </script>
+  </body>
+</html>
