@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：贪心
+      // 时间复杂度：O(n+q)
+      // 空间复杂度：O(n)
+      var shortestDistanceAfterQueries = function (n, queries) {
+        let roads = new Array(n).fill(0).map((_, i) => i + 1);
+        let res = [];
+        let dist = n - 1;
+        for (let i = 0; i < queries.length; i++) {
+          let k = roads[queries[i][0]];
+          roads[queries[i][0]] = queries[i][1];
+          while (k !== -1 && k < queries[i][1]) {
+            let t = roads[k];
+            roads[k] = -1;
+            k = t;
+            dist--;
+          }
+          res.push(dist);
+        }
+        return res;
+      };
+
+      // test
+      let n = 5,
+        queries = [
+          [2, 4],
+          [0, 2],
+          [0, 4],
+        ];
+      console.log(shortestDistanceAfterQueries(n, queries));
+    </script>
+  </body>
+</html>
