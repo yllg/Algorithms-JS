@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：模拟
+      // 时间复杂度：O(L)
+      // 空间复杂度：O(1)
+      var finalPositionOfSnake = function (n, commands) {
+        let ans = 0;
+        for (const c of commands) {
+          if (c[0] === "U") {
+            ans -= n;
+          } else if (c[0] === "D") {
+            ans += n;
+          } else if (c[0] === "L") {
+            ans--;
+          } else {
+            ans++;
+          }
+        }
+        return ans;
+      };
+
+      // test
+      let n = 2,
+        commands = ["RIGHT", "DOWN"];
+      console.log(finalPositionOfSnake(n, commands));
+    </script>
+  </body>
+</html>
