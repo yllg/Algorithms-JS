@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：质数筛
+      // 时间复杂度：O(nlognlogn)
+      // 空间复杂度：O(n)
+      var nonSpecialCount = function (l, r) {
+        const n = Math.floor(Math.sqrt(r));
+        const v = new Array(n + 1).fill(0);
+        let res = r - l + 1;
+        for (let i = 2; i <= n; i++) {
+          if (v[i] === 0) {
+            if (i * i >= l && i * i <= r) {
+              res--;
+            }
+            for (let j = i * 2; j <= n; j += i) {
+              v[j] = 1;
+            }
+          }
+        }
+        return res;
+      };
+
+      // test
+      let l = 5,
+        r = 7;
+      console.log(nonSpecialCount(l, r));
+    </script>
+  </body>
+</html>
