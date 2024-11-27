@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：模拟
+      // 时间复杂度：O(n)
+      // 空间复杂度：O(1)
+      var numberOfAlternatingGroups = function (colors, k) {
+        const n = colors.length;
+        let res = 0,
+          cnt = 1;
+        for (let i = -k + 2; i < n; i++) {
+          if (colors[(i + n) % n] !== colors[(i - 1 + n) % n]) {
+            cnt++;
+          } else {
+            cnt = 1;
+          }
+          if (cnt >= k) {
+            res++;
+          }
+        }
+        return res;
+      };
+
+      // test
+      let colors = [0, 1, 0, 1, 0],
+        k = 3;
+      console.log(numberOfAlternatingGroups(colors, k));
+    </script>
+  </body>
+</html>
