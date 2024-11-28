@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：动态规划
+      // 时间复杂度：O(nm^2)
+      // 空间复杂度：O(nm)
+      var countOfPairs = function (nums) {
+        const n = nums.length;
+        const dp = Array(n)
+          .fill(0)
+          .map(() => Array(51).fill(0));
+        const mod = 10 ** 9 + 7;
+        for (let v = 0; v <= nums[0]; v++) {
+          dp[0][v] = 1;
+        }
+
+        for (let i = 1; i < n; i++) {
+          for (let v2 = 0; v2 <= nums[i]; v2++) {
+            for (let v1 = 0; v1 <= v2; v1++) {
+              if (nums[i - 1] - v1 >= nums[i] - v2 && nums[i] - v2 >= 0) {
+                dp[i][v2] = (dp[i][v2] + dp[i - 1][v1]) % mod;
+              }
+            }
+          }
+        }
+
+        return dp[n - 1].reduce((sum, v) => (sum + v) % mod, 0);
+      };
+
+      // 方法二：动态规划
+      // 时间复杂度：O(nm)
+      // 空间复杂度：O(nm)
+      var countOfPairs = function (nums) {
+        const n = nums.length;
+        const m = Math.max(...nums);
+        const mod = 1e9 + 7;
+        const dp = Array(n)
+          .fill(0)
+          .map(() => Array(m + 1).fill(0));
+        for (let a = 0; a <= nums[0]; a++) {
+          dp[0][a] = 1;
+        }
+        for (let i = 1; i < n; i++) {
+          const d = Math.max(0, nums[i] - nums[i - 1]);
+          for (let j = d; j <= nums[i]; j++) {
+            if (j == 0) {
+              dp[i][j] = dp[i - 1][j - d];
+            } else {
+              dp[i][j] = (dp[i][j - 1] + dp[i - 1][j - d]) % mod;
+            }
+          }
+        }
+        let res = 0;
+        for (let num of dp[n - 1]) {
+          res = (res + num) % mod;
+        }
+        return res;
+      };
+
+      // test
+      let nums = [2, 3, 2];
+      console.log(countOfPairs(nums));
+    </script>
+  </body>
+</html>
