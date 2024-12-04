@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：枚举
+      // 时间复杂度：O(n^2*m^n)
+      // 空间复杂度：O(n)
+
+      // 定义车、象、后棋子的方向
+      const rookDirections = [
+        [1, 0],
+        [-1, 0],
+        [0, 1],
+        [0, -1],
+      ];
+      const bishopDirections = [
+        [1, 1],
+        [1, -1],
+        [-1, 1],
+        [-1, -1],
+      ];
+      const queenDirections = [
+        [1, 0],
+        [-1, 0],
+        [0, 1],
+        [0, -1],
+        [1, 1],
+        [1, -1],
+        [-1, 1],
+        [-1, -1],
+      ];
+
+      // Movement 类表示棋子的一个移动
+      class Movement {
+        constructor(startX, startY, endX, endY, dx, dy) {
+          this.startX = startX;
+          this.startY = startY;
+          this.endX = endX;
+          this.endY = endY;
+          this.dx = dx;
+          this.dy = dy;
+          this.curX = startX;
+          this.curY = startY;
+        }
+
+        reset() {
+          this.curX = this.startX;
+          this.curY = this.startY;
+        }
+
+        stopped() {
+          return this.curX === this.endX && this.curY === this.endY;
+        }
+
+        advance() {
+          if (!this.stopped()) {
+            this.curX += this.dx;
+            this.curY += this.dy;
+          }
+        }
+
+        // 每次判断是否相遇时需要重置 cur
+        cross(other) {
+          this.reset();
+          other.reset();
+          while (!this.stopped() || !other.stopped()) {
+            this.advance();
+            other.advance();
+            if (this.curX === other.curX && this.curY === other.curY) {
+              return true;
+            }
+          }
+          return false;
+        }
+      }
+
+      var countCombinations = function (pieces, positions) {
+        let res = 0;
+        const stack = [];
+
+        const check = (u) => {
+          for (let v = 0; v < u; v++) {
+            if (stack[u].cross(stack[v])) {
+              return false;
+            }
+          }
+          return true;
+        };
+
+        const dfs = (u) => {
+          if (u === pieces.length) {
+            res++;
+            return;
+          }
+          let directions;
+          if (pieces[u] === "rook") {
+            directions = rookDirections;
+          } else if (pieces[u] === "queen") {
+            directions = queenDirections;
+          } else {
+            directions = bishopDirections;
+          }
+
+          // 处理第 u 个棋子原地不动的情况
+          stack.push(
+            new Movement(
+              positions[u][0],
+              positions[u][1],
+              positions[u][0],
+              positions[u][1],
+              0,
+              0
+            )
+          );
+          if (check(u)) {
+            dfs(u + 1);
+          }
+          stack.pop();
+          // 枚举第 u 个棋子在所有方向、所有步数的情况
+          for (const dir of directions) {
+            for (let j = 1; j < 8; j++) {
+              const x = positions[u][0] + dir[0] * j;
+              const y = positions[u][1] + dir[1] * j;
+              if (x < 1 || x > 8 || y < 1 || y > 8) {
+                break;
+              }
+              stack.push(
+                new Movement(
+                  positions[u][0],
+                  positions[u][1],
+                  x,
+                  y,
+                  dir[0],
+                  dir[1]
+                )
+              );
+              if (check(u)) {
+                dfs(u + 1);
+              }
+              stack.pop();
+            }
+          }
+        };
+
+        dfs(0);
+        return res;
+      };
+
+      // test
+      let pieces = ["rook"],
+        positions = [[1, 1]];
+
+      console.log(countCombinations(pieces, positions));
+    </script>
+  </body>
+</html>
