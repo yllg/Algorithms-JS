@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：分类讨论
+      // 时间复杂度：O(1)
+      // 空间复杂度：O(1)
+      var minMovesToCaptureTheQueen = function (a, b, c, d, e, f) {
+        // 车与皇后处在同一行，且中间没有象
+        if (
+          a === e &&
+          (c !== a || d <= Math.min(b, f) || d >= Math.max(b, f))
+        ) {
+          return 1;
+        }
+        // 车与皇后处在同一列，且中间没有象
+        if (
+          b === f &&
+          (d !== b || c <= Math.min(a, e) || c >= Math.max(a, e))
+        ) {
+          return 1;
+        }
+        // 象、皇后处在同一条对角线，且中间没有车
+        if (
+          Math.abs(c - e) === Math.abs(d - f) &&
+          ((c - e) * (b - f) !== (a - e) * (d - f) ||
+            a < Math.min(c, e) ||
+            a > Math.max(c, e))
+        ) {
+          return 1;
+        }
+        return 2;
+      };
+
+      // test
+      let a = 1,
+        b = 1,
+        c = 8,
+        d = 8,
+        e = 2,
+        f = 3;
+      console.log(minMovesToCaptureTheQueen(a, b, c, d, e, f));
+    </script>
+  </body>
+</html>
