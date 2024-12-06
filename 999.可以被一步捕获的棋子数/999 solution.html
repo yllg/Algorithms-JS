@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：模拟
+      // 时间复杂度：O(n^2)
+      // 空间复杂度：O(1)
+      var numRookCaptures = function (board) {
+        let cnt = 0,
+          st = 0,
+          ed = 0;
+        const dx = [0, 1, 0, -1];
+        const dy = [1, 0, -1, 0];
+
+        for (let i = 0; i < 8; ++i) {
+          for (let j = 0; j < 8; ++j) {
+            if (board[i][j] == "R") {
+              st = i;
+              ed = j;
+              break;
+            }
+          }
+        }
+        for (let i = 0; i < 4; ++i) {
+          for (let step = 0; ; ++step) {
+            const tx = st + step * dx[i];
+            const ty = ed + step * dy[i];
+            if (
+              tx < 0 ||
+              tx >= 8 ||
+              ty < 0 ||
+              ty >= 8 ||
+              board[tx][ty] == "B"
+            ) {
+              break;
+            }
+            if (board[tx][ty] == "p") {
+              cnt++;
+              break;
+            }
+          }
+        }
+        return cnt;
+      };
+
+      // test
+      let board = [
+        [".", ".", ".", ".", ".", ".", ".", "."],
+        [".", ".", ".", "p", ".", ".", ".", "."],
+        [".", ".", ".", "R", ".", ".", ".", "p"],
+        [".", ".", ".", ".", ".", ".", ".", "."],
+        [".", ".", ".", ".", ".", ".", ".", "."],
+        [".", ".", ".", "p", ".", ".", ".", "."],
+        [".", ".", ".", ".", ".", ".", ".", "."],
+        [".", ".", ".", ".", ".", ".", ".", "."],
+      ];
+
+      console.log(numRookCaptures(board));
+    </script>
+  </body>
+</html>
