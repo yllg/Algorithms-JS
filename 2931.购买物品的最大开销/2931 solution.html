@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：排序不等式 + 小根堆
+      // 时间复杂度：O(mnlogm)
+      // 空间复杂度：O(m)
+      var maxSpending = function (values) {
+        const m = values.length,
+          n = values[0].length;
+        const pq = new MinPriorityQueue();
+        for (let i = 0; i < m; i++) {
+          pq.enqueue([values[i][n - 1], i, n - 1], values[i][n - 1]);
+        }
+
+        let ans = 0;
+        for (let turn = 1; turn <= m * n; turn++) {
+          const [val, i, j] = pq.dequeue().element;
+          ans += val * turn;
+          if (j > 0) {
+            pq.enqueue([values[i][j - 1], i, j - 1], values[i][j - 1]);
+          }
+        }
+        return ans;
+      };
+
+      // test
+      //   let values = [
+      //     [8, 5, 2],
+      //     [6, 4, 1],
+      //     [9, 7, 3],
+      //   ];
+      //   console.log(maxSpending(values));
+    </script>
+  </body>
+</html>
