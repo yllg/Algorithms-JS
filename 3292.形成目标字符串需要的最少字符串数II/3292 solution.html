@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：KMP + 动态规划
+      // 时间复杂度：O(k*(m+n))
+      // 空间复杂度：O(m+n)
+      var minValidStrings = function (words, target) {
+        const prefixFunction = (word, target) => {
+          const s = word + "#" + target;
+          const n = s.length;
+          const pi = new Array(n).fill(0);
+          for (let i = 1; i < n; i++) {
+            let j = pi[i - 1];
+            while (j > 0 && s[i] !== s[j]) {
+              j = pi[j - 1];
+            }
+            if (s[i] === s[j]) {
+              j++;
+            }
+            pi[i] = j;
+          }
+          return pi;
+        };
+
+        const n = target.length;
+        const back = new Array(n).fill(0);
+        for (const word of words) {
+          const pi = prefixFunction(word, target);
+          const m = word.length;
+          for (let i = 0; i < n; i++) {
+            back[i] = Math.max(back[i], pi[m + 1 + i]);
+          }
+        }
+
+        const dp = new Array(n + 1).fill(0);
+        for (let i = 1; i <= n; i++) {
+          dp[i] = 1e9;
+        }
+        for (let i = 0; i < n; i++) {
+          dp[i + 1] = dp[i + 1 - back[i]] + 1;
+          if (dp[i + 1] > n) {
+            return -1;
+          }
+        }
+        return dp[n];
+      };
+
+      // test
+      let words = ["abc", "aaaaa", "bcdef"],
+        target = "aabcdabc";
+      console.log(minValidStrings(words, target));
+    </script>
+  </body>
+</html>
