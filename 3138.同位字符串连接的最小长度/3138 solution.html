@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：枚举
+      // 时间复杂度：O(nXT)
+      // 空间复杂度：O(|Σ|)，其中 ∣Σ∣=26 表示字符集的大小。
+      var check = function (s, m) {
+        let count0 = new Array(26).fill(0);
+        for (let j = 0; j < s.length; j += m) {
+          let count1 = new Array(26).fill(0);
+          for (let k = j; k < j + m; k++) {
+            count1[s.charCodeAt(k) - "a".charCodeAt(0)]++;
+          }
+          if (j > 0 && !count0.every((val, index) => val === count1[index])) {
+            return false;
+          }
+          count0 = count1.slice();
+        }
+        return true;
+      };
+
+      var minAnagramLength = function (s) {
+        let n = s.length;
+        for (let i = 1; i < n; i++) {
+          if (n % i !== 0) {
+            continue;
+          }
+          if (check(s, i)) {
+            return i;
+          }
+        }
+        return n;
+      };
+
+      // test
+      let s = "abba";
+      console.log(minAnagramLength(s));
+    </script>
+  </body>
+</html>
