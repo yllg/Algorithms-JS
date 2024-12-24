@@ -1,97 +1,144 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
-</head>
+  </head>
 
-<body>
+  <body>
     <script>
-        // 方法一：小顶堆
-        /**
-         * @param {number[]} apples
-         * @param {number[]} days
-         * @return {number}
-         */
-        var eatenApples = function (apples, days) {
-            class MinHeap {
-                constructor() {
-                    this.heap = [];
-                }
-                size() {
-                    return this.heap.length;
-                }
-                top() {
-                    return this.heap[0];
-                }
-                swap(i, j) {
-                    [this.heap[i], this.heap[j]] = [this.heap[j], this.heap[i]];
-                }
-                removeTop() {
-                    if (this.size() === 0) return;
-                    this.swap(0, this.size() - 1);
-                    this.heap.pop();
-                    this.down(0);
-                }
-                down(i, rightBorder = this.size() - 1) {
-                    let l = 2 * i + 1,
-                        r = 2 * i + 2;
-                    let smaller = i;
-                    if (l <= rightBorder && this.heap[l][0] < this.heap[smaller][0]) smaller = l;
-                    if (r <= rightBorder && this.heap[r][0] < this.heap[smaller][0]) smaller = r;
-                    if (smaller !== i) {
-                        this.swap(smaller, i);
-                        this.down(smaller, rightBorder);
-                    }
-                }
-                add(value) {
-                    this.heap.push(value);
-                    this.up(this.size() - 1);
-                }
-                up(i) {
-                    let p = Math.floor((i - 1) / 2);
-                    let larger = i;
-                    if (p >= 0 && this.heap[p][0] > this.heap[larger][0]) larger = p;
-                    if (larger !== i) {
-                        this.swap(i, larger);
-                        this.up(larger);
-                    }
-                }
+      // 方法一：小顶堆
+      /**
+       * @param {number[]} apples
+       * @param {number[]} days
+       * @return {number}
+       */
+      var eatenApples = function (apples, days) {
+        class MinHeap {
+          constructor() {
+            this.heap = [];
+          }
+          size() {
+            return this.heap.length;
+          }
+          top() {
+            return this.heap[0];
+          }
+          swap(i, j) {
+            [this.heap[i], this.heap[j]] = [this.heap[j], this.heap[i]];
+          }
+          removeTop() {
+            if (this.size() === 0) return;
+            this.swap(0, this.size() - 1);
+            this.heap.pop();
+            this.down(0);
+          }
+          down(i, rightBorder = this.size() - 1) {
+            let l = 2 * i + 1,
+              r = 2 * i + 2;
+            let smaller = i;
+            if (l <= rightBorder && this.heap[l][0] < this.heap[smaller][0])
+              smaller = l;
+            if (r <= rightBorder && this.heap[r][0] < this.heap[smaller][0])
+              smaller = r;
+            if (smaller !== i) {
+              this.swap(smaller, i);
+              this.down(smaller, rightBorder);
             }
-            let heap = new MinHeap();
-            let cur = 0;
-            let canEat = true;
-            let eaten = 0;
-            // expireDay, num
-            while (canEat) {
-                if (cur < apples.length) {
-                    heap.add([cur + days[cur], apples[cur]]);
-                }
-                while (heap.size() > 0 && (heap.top()[0] <= cur || heap.top()[1] <= 0)) {
-                    heap.removeTop();
-                }
-                if (heap.size() === 0 && cur >= apples.length) {
-                    canEat = false;
-                    continue;
-                }
-                if (heap.size() === 0) {
-                    cur += 1;
-                    continue;
-                }
-                heap.top()[1] -= 1;
-                eaten += 1;
-                cur += 1;
+          }
+          add(value) {
+            this.heap.push(value);
+            this.up(this.size() - 1);
+          }
+          up(i) {
+            let p = Math.floor((i - 1) / 2);
+            let larger = i;
+            if (p >= 0 && this.heap[p][0] > this.heap[larger][0]) larger = p;
+            if (larger !== i) {
+              this.swap(i, larger);
+              this.up(larger);
             }
-            return eaten;
-        };
+          }
+        }
+        let heap = new MinHeap();
+        let cur = 0;
+        let canEat = true;
+        let eaten = 0;
+        // expireDay, num
+        while (canEat) {
+          if (cur < apples.length) {
+            heap.add([cur + days[cur], apples[cur]]);
+          }
+          while (
+            heap.size() > 0 &&
+            (heap.top()[0] <= cur || heap.top()[1] <= 0)
+          ) {
+            heap.removeTop();
+          }
+          if (heap.size() === 0 && cur >= apples.length) {
+            canEat = false;
+            continue;
+          }
+          if (heap.size() === 0) {
+            cur += 1;
+            continue;
+          }
+          heap.top()[1] -= 1;
+          eaten += 1;
+          cur += 1;
+        }
+        return eaten;
+      };
 
-        // test
-        let apples = [1, 2, 3, 5, 2],
-            days = [3, 2, 1, 4, 2];
-        console.log(eatenApples(apples, days))
+      // 方法二：贪心 + 优先队列
+      // 时间复杂度：O(nlogn)
+      // 空间复杂度：O(n)
+      var eatenApples = function (apples, days) {
+        let ans = 0;
+        let pq = new MinPriorityQueue();
+        const n = apples.length;
+        let i = 0;
+        while (i < n) {
+          while (!pq.isEmpty() && pq.front().element[0] <= i) {
+            pq.dequeue();
+          }
+          let rottenDay = i + days[i];
+          let count = apples[i];
+          if (count > 0) {
+            pq.enqueue([rottenDay, count], rottenDay);
+          }
+          if (!pq.isEmpty()) {
+            [rottenDay, count] = pq.dequeue().element;
+            count--;
+            if (count != 0) {
+              pq.enqueue([rottenDay, count], rottenDay);
+            }
+            ans++;
+          }
+          i++;
+        }
+
+        while (!pq.isEmpty()) {
+          while (!pq.isEmpty() && pq.front().element[0] <= i) {
+            pq.dequeue();
+          }
+          if (pq.isEmpty()) {
+            break;
+          }
+          [rottenDay, count] = pq.dequeue().element;
+          const num = Math.min(rottenDay - i, count);
+          ans += num;
+          i += num;
+        }
+
+        return ans;
+      };
+
+      // test
+      let apples = [1, 2, 3, 5, 2],
+        days = [3, 2, 1, 4, 2];
+      console.log(eatenApples(apples, days));
     </script>
-</body>
-
+  </body>
 </html>
