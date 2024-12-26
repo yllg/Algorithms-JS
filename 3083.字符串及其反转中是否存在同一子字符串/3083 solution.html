@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：一次遍历
+      // 时间复杂度：O(n^2)
+      // 空间复杂度：O(1)
+      var isSubstringPresent = function (s) {
+        for (let i = 0; i < s.length - 1; i++) {
+          let substr = s[i + 1] + s[i];
+          if (s.includes(substr)) {
+            return true;
+          }
+        }
+        return false;
+      };
+
+      // 方法二：哈希表 + 位运算优化
+      // 时间复杂度：O(n+C)
+      // 空间复杂度：O(C)
+      var isSubstringPresent = function (s) {
+        let h = new Array(26).fill(0);
+        for (let i = 0; i + 1 < s.length; i++) {
+          let x = s.charCodeAt(i) - "a".charCodeAt(0);
+          let y = s.charCodeAt(i + 1) - "a".charCodeAt(0);
+          h[x] |= 1 << y;
+          if ((h[y] >> x) & 1) {
+            return true;
+          }
+        }
+        return false;
+      };
+
+      // test
+      let s = "leetcode";
+      console.log(isSubstringPresent(s));
+    </script>
+  </body>
+</html>
