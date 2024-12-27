@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：哈希表
+      // 时间复杂度为 O(n)
+      // 空间复杂度:  O(n)
+      var isPossibleToSplit = function (nums) {
+        const count = {};
+        for (const num of nums) {
+          count[num] = (count[num] || 0) + 1;
+          if (count[num] > 2) {
+            return false;
+          }
+        }
+        return true;
+      };
+
+      // test
+      let nums = [1, 1, 2, 2, 3, 4];
+      console.log(isPossibleToSplit(nums));
+    </script>
+  </body>
+</html>
