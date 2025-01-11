@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：逐位计算
+      // 时间复杂度：O(nlogM)
+      // 空间复杂度：O(1)
+      var largestCombination = function (candidates) {
+        // 计算从低到高第 k 个二进制位数值为 1 的元素个数
+        const maxlen = (k) => {
+          let res = 0;
+          for (let num of candidates) {
+            if (num & (1 << k)) {
+              res++;
+            }
+          }
+          return res;
+        };
+
+        let res = 0;
+        for (let i = 0; i < 24; i++) {
+          // 遍历二进制位
+          res = Math.max(res, maxlen(i));
+        }
+        return res;
+      };
+
+      // test
+      let candidates = [16, 17, 71, 62, 12, 24, 14];
+      console.log(largestCombination(candidates));
+    </script>
+  </body>
+</html>
