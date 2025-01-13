@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：枚举 + 前缀和
+      // 时间复杂度：O(n)
+      // 空间复杂度：O(1)
+      var waysToSplitArray = function (nums) {
+        let n = nums.length;
+        let left = 0,
+          right = nums.reduce((a, b) => a + b, 0);
+        let ans = 0;
+        for (let i = 0; i < n - 1; i++) {
+          left += nums[i];
+          right -= nums[i];
+          if (left >= right) {
+            ans++;
+          }
+        }
+        return ans;
+      };
+
+      // test
+      let nums = [10, 4, -8, 7];
+      console.log(waysToSplitArray(nums));
+    </script>
+  </body>
+</html>
