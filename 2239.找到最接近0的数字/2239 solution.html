@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：遍历
+      // 时间复杂度：O(n)
+      // 空间复杂度：O(1)
+      var findClosestNumber = function (nums) {
+        let res = nums[0]; // 已遍历元素中绝对值最小且数值最大的元素
+        let dis = Math.abs(nums[0]); // 已遍历元素的最小绝对值
+        for (let num of nums) {
+          if (Math.abs(num) < dis) {
+            dis = Math.abs(num);
+            res = num;
+          } else if (Math.abs(num) === dis) {
+            res = Math.max(res, num);
+          }
+        }
+        return res;
+      };
+
+      // test
+      let nums = [-4, -2, 1, 4, 8];
+      console.log(findClosestNumber(nums));
+    </script>
+  </body>
+</html>
