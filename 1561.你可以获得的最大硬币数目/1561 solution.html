@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：贪心
+      // 时间复杂度：O(nlogn)
+      // 空间复杂度：O(logn)
+      var maxCoins = function (piles) {
+        piles.sort((a, b) => a - b);
+        let length = piles.length;
+        let rounds = Math.floor(length / 3);
+        let coins = 0;
+        let index = length - 2;
+        for (let i = 0; i < rounds; i++) {
+          coins += piles[index];
+          index -= 2;
+        }
+        return coins;
+      };
+
+      // test
+      let piles = [2, 4, 1, 2, 7, 8];
+      console.log(maxCoins(piles));
+    </script>
+  </body>
+</html>
