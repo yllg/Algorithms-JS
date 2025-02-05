@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：枚举
+      // 时间复杂度：O(n^2) ；n 表示给定数组 nums 的长度
+      // 空间复杂度：O(1)
+      var minimumSubarrayLength = function (nums, k) {
+        let n = nums.length;
+        let res = Number.MAX_VALUE;
+        for (let i = 0; i < n; i++) {
+          let value = 0;
+          for (let j = i; j < n; j++) {
+            value |= nums[j];
+            if (value >= k) {
+              res = Math.min(res, j - i + 1);
+              break;
+            }
+          }
+        }
+        return res === Number.MAX_VALUE ? -1 : res;
+      };
+
+      // 方法二：滑动窗口
+      // 时间复杂度：O(nlogU)；n 表示给定数组 nums 的长度，U 表示数组中的最大的元素
+      // 空间复杂度：O（logU)
+      var minimumSubarrayLength = function (nums, k) {
+        const n = nums.length;
+        const bits = new Array(30).fill(0);
+        let res = Number.MAX_SAFE_INTEGER;
+
+        const calc = (bits) => {
+          let ans = 0;
+          for (let i = 0; i < bits.length; i++) {
+            if (bits[i] > 0) {
+              ans |= 1 << i;
+            }
+          }
+          return ans;
+        };
+
+        let left = 0;
+        for (let right = 0; right < n; right++) {
+          for (let i = 0; i < 30; i++) {
+            bits[i] += (nums[right] >> i) & 1;
+          }
+          while (left <= right && calc(bits) >= k) {
+            res = Math.min(res, right - left + 1);
+            for (let i = 0; i < 30; i++) {
+              bits[i] -= (nums[left] >> i) & 1;
+            }
+            left++;
+          }
+        }
+
+        return res === Number.MAX_SAFE_INTEGER ? -1 : res;
+      };
+
+      // test
+      let nums = [1, 2, 3],
+        k = 2;
+      console.log(minimumSubarrayLength(nums, k));
+    </script>
+  </body>
+</html>

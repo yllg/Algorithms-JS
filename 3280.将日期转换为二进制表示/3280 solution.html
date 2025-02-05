@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：模拟
+      // 时间复杂度：O(1)
+      // 空间复杂度：O(1)
+      function binary(x) {
+        let s = "";
+        while (x !== 0) {
+          s += x & 1;
+          x >>= 1;
+        }
+        return s.split("").reverse().join("");
+      }
+
+      var convertDateToBinary = function (date) {
+        const year = parseInt(date.substring(0, 4), 10);
+        const month = parseInt(date.substring(5, 7), 10);
+        const day = parseInt(date.substring(8, 10), 10);
+        return binary(year) + "-" + binary(month) + "-" + binary(day);
+      };
+
+      // test
+      let date = "2080-02-29";
+      console.log(convertDateToBinary(date));
+    </script>
+  </body>
+</html>

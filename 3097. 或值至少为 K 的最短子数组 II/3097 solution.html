@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：滑动窗口
+      // 时间复杂度：O(nlogU)
+      // 空间复杂度：O(logU)
+      var minimumSubarrayLength = function (nums, k) {
+        const n = nums.length;
+        const bits = new Array(30).fill(0);
+        let res = Number.MAX_SAFE_INTEGER;
+
+        const calc = (bits) => {
+          let ans = 0;
+          for (let i = 0; i < bits.length; i++) {
+            if (bits[i] > 0) {
+              ans |= 1 << i;
+            }
+          }
+          return ans;
+        };
+
+        let left = 0;
+        for (let right = 0; right < n; right++) {
+          for (let i = 0; i < 30; i++) {
+            bits[i] += (nums[right] >> i) & 1;
+          }
+          while (left <= right && calc(bits) >= k) {
+            res = Math.min(res, right - left + 1);
+            for (let i = 0; i < 30; i++) {
+              bits[i] -= (nums[left] >> i) & 1;
+            }
+            left++;
+          }
+        }
+
+        return res === Number.MAX_SAFE_INTEGER ? -1 : res;
+      };
+
+      // test
+      let nums = [1, 2, 3],
+        k = 2;
+      console.log(minimumSubarrayLength(nums, k));
+    </script>
+  </body>
+</html>

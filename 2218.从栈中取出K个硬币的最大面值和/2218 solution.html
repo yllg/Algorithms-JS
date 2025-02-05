@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：转化为背包问题
+      // 时间复杂度：O(nkl)
+      // 空间复杂度：O(k)
+      var maxValueOfCoins = function (piles, k) {
+        let f = new Array(k + 1).fill(-1);
+        f[0] = 0;
+        for (let pile of piles) {
+          for (let i = k; i > 0; i--) {
+            let value = 0;
+            for (let t = 1; t <= pile.length; t++) {
+              value += pile[t - 1];
+              if (i >= t && f[i - t] !== -1) {
+                f[i] = Math.max(f[i], f[i - t] + value);
+              }
+            }
+          }
+        }
+        return f[k];
+      };
+
+      // test
+      let piles = [
+          [1, 100, 3],
+          [7, 8, 9],
+        ],
+        k = 2;
+      console.log(maxValueOfCoins(piles, k));
+    </script>
+  </body>
+</html>
