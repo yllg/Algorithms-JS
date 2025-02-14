@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：二分查找
+      // 时间复杂度：O(nlog(nS))
+      // 空间复杂度：O(logn)
+      const check = (x, position, m) => {
+        let pre = position[0],
+          cnt = 1;
+        for (let i = 1; i < position.length; ++i) {
+          if (position[i] - pre >= x) {
+            pre = position[i];
+            cnt += 1;
+          }
+        }
+        return cnt >= m;
+      };
+      var maxDistance = function (position, m) {
+        position.sort((x, y) => x - y);
+        let left = 1,
+          right = position[position.length - 1] - position[0],
+          ans = -1;
+        while (left <= right) {
+          const mid = Math.floor((left + right) / 2);
+          if (check(mid, position, m)) {
+            ans = mid;
+            left = mid + 1;
+          } else {
+            right = mid - 1;
+          }
+        }
+        return ans;
+      };
+
+      // test
+      let position = [1, 2, 3, 4, 7],
+        m = 3;
+      console.log(maxDistance(position, m));
+    </script>
+  </body>
+</html>
