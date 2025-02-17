@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：遍历
+      // 时间复杂度：O(n))
+      // 空间复杂度：O(1)
+      var findSpecialInteger = function (arr) {
+        let n = arr.length;
+        let cur = arr[0],
+          cnt = 0;
+        for (let i = 0; i < n; ++i) {
+          if (arr[i] === cur) {
+            ++cnt;
+            if (cnt * 4 > n) {
+              return cur;
+            }
+          } else {
+            cur = arr[i];
+            cnt = 1;
+          }
+        }
+        return -1;
+      };
+
+      // 方法二：二分查找
+      // 时间复杂度：O(logn))
+      // 空间复杂度：O(1)
+      var findSpecialInteger = function (arr) {
+        const n = arr.length;
+        const span = Math.floor(n / 4) + 1;
+        for (let i = 0; i < n; i += span) {
+          const start = binarySearch(arr, arr[i]);
+          const end = binarySearch(arr, arr[i] + 1);
+          if (end - start >= span) {
+            return arr[i];
+          }
+        }
+        return -1;
+      };
+
+      const binarySearch = (arr, target) => {
+        let lo = 0,
+          hi = arr.length - 1;
+        let res = arr.length;
+        while (lo <= hi) {
+          let mid = Math.floor((lo + hi) / 2);
+          if (arr[mid] >= target) {
+            res = mid;
+            hi = mid - 1;
+          } else {
+            lo = mid + 1;
+          }
+        }
+        return res;
+      };
+
+      // test
+      let arr = [1, 2, 2, 6, 6, 6, 6, 7, 10];
+      console.log(findSpecialInteger(arr));
+    </script>
+  </body>
+</html>
