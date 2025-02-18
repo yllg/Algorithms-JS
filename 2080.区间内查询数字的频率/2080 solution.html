@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：哈希表 + 二分查找
+      // 时间复杂度：O(n+q*logn))
+      // 空间复杂度：O(n)
+      var RangeFreqQuery = function (arr) {
+        // 数值为键，出现下标数组为值的哈希表
+        this.occurrence = {};
+        // 顺序遍历数组初始化哈希表
+        for (let i = 0; i < arr.length; ++i) {
+          if (!this.occurrence[arr[i]]) {
+            this.occurrence[arr[i]] = [];
+          }
+          this.occurrence[arr[i]].push(i);
+        }
+      };
+
+      RangeFreqQuery.prototype.query = function (left, right, value) {
+        // 查找对应的出现下标数组，不存在则为空
+        const pos = this.occurrence[value] || [];
+        // 两次二分查找计算子数组内出现次数
+        const l = lowerBound(pos, left);
+        const r = upperBound(pos, right);
+        return r - l;
+      };
+
+      const lowerBound = (pos, target) => {
+        let low = 0,
+          high = pos.length - 1;
+        while (low <= high) {
+          const mid = low + Math.floor((high - low) / 2);
+          if (pos[mid] < target) {
+            low = mid + 1;
+          } else {
+            high = mid - 1;
+          }
+        }
+        return low;
+      };
+
+      const upperBound = (pos, target) => {
+        let low = 0,
+          high = pos.length - 1;
+        while (low <= high) {
+          const mid = low + Math.floor((high - low) / 2);
+          if (pos[mid] <= target) {
+            low = mid + 1;
+          } else {
+            high = mid - 1;
+          }
+        }
+        return low;
+      };
+    </script>
+  </body>
+</html>
