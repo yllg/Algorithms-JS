@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法 1 暴力解法（超时）
+      var maxDistance = function (arrays) {
+        let res = 0;
+        let n = arrays.length;
+        for (let i = 0; i < n - 1; i++) {
+          for (let j = 0; j < arrays[i].length; j++) {
+            for (let k = i + 1; k < n; k++) {
+              for (let l = 0; l < arrays[k].length; l++) {
+                res = Math.max(res, Math.abs(arrays[i][j] - arrays[k][l]));
+              }
+            }
+          }
+        }
+        return res;
+      };
+
+      // 方法 2 更好的暴力解法（超时）
+      var maxDistance = function (arrays) {
+        let res = 0;
+        let n = arrays.length;
+        for (let i = 0; i < n - 1; i++) {
+          for (let j = i + 1; j < n; j++) {
+            let array1 = arrays[i];
+            let array2 = arrays[j];
+            res = Math.max(
+              res,
+              Math.abs(array1[0] - array2[array2.length - 1])
+            );
+            res = Math.max(
+              res,
+              Math.abs(array2[0] - array1[array1.length - 1])
+            );
+          }
+        }
+        return res;
+      };
+
+      // 方法 3 单次扫描
+      // 时间复杂度：O(n))
+      // 空间复杂度：O(1)
+      var maxDistance = function (arrays) {
+        let res = 0;
+        let n = arrays[0].length;
+        let minVal = arrays[0][0];
+        let maxVal = arrays[0][n - 1];
+        for (let i = 1; i < arrays.length; i++) {
+          n = arrays[i].length;
+          res = Math.max(
+            res,
+            Math.max(
+              Math.abs(arrays[i][n - 1] - minVal),
+              Math.abs(maxVal - arrays[i][0])
+            )
+          );
+          minVal = Math.min(minVal, arrays[i][0]);
+          maxVal = Math.max(maxVal, arrays[i][n - 1]);
+        }
+        return res;
+      };
+
+      // test
+      let arrays = [
+        [1, 2, 3],
+        [4, 5],
+        [1, 2, 3],
+      ];
+      console.log(maxDistance(arrays));
+    </script>
+  </body>
+</html>
