@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：位运算
+      // 时间复杂度：O(logn))
+      // 空间复杂度：O(1)
+      var evenOddBit = function (n) {
+        const res = [0, 0];
+        let i = 0;
+        while (n > 0) {
+          res[i] += n & 1;
+          n >>= 1;
+          i ^= 1;
+        }
+        return res;
+      };
+
+      // test
+      let n = 50;
+      console.log(evenOddBit(n));
+    </script>
+  </body>
+</html>
