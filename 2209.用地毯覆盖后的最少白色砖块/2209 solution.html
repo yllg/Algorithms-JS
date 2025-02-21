@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：滚动数组优化
+      // 时间复杂度：O(mn))
+      // 空间复杂度：O(n)
+      const INF = 0x3f3f3f3f;
+
+      var minimumWhiteTiles = function (floor, numCarpets, carpetLen) {
+        let n = floor.length;
+        let d = new Array(n + 1).fill(INF);
+        let f = new Array(n + 1).fill(INF);
+        d[0] = 0;
+
+        for (let i = 1; i <= n; i++) {
+          d[i] = d[i - 1] + (floor[i - 1] === "1" ? 1 : 0);
+        }
+
+        for (let j = 1; j <= numCarpets; j++) {
+          f[0] = 0;
+          for (let i = 1; i <= n; i++) {
+            f[i] = f[i - 1] + (floor[i - 1] === "1" ? 1 : 0);
+            f[i] = Math.min(f[i], d[Math.max(0, i - carpetLen)]);
+          }
+          [d, f] = [f, d];
+        }
+
+        return d[n];
+      };
+
+      // test
+      let floor = "10110101",
+        numCarpets = 2,
+        carpetLen = 2;
+      console.log(minimumWhiteTiles(floor, numCarpets, carpetLen));
+    </script>
+  </body>
+</html>
