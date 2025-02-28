@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      /**
+       * 题目：
+       * 如何让 var [a, b] = {a: 1, b: 2} 解构赋值成功？
+       *
+       * 解析，其实就要要能把遍历对象，然后结构赋值
+       * */
+
+      // 正常情况下，for of 对象会报错
+      let obj = {
+        a: 1,
+        b: 2,
+      };
+
+      //   for (let item of obj) {
+      //     console.log(item);
+      //   }
+
+      // 给对象添加迭代器
+      Object.prototype[Symbol.iterator] = function () {
+        // 使用 Object.values(this) 方法获取对象的所有值，并返回这些值的迭代器对象
+        return Object.values(this)[Symbol.iterator]();
+      };
+      // 再试试
+      for (let item of obj) {
+        console.log(item);
+      }
+
+      var [a, b] = { a: 1, b: 2 };
+      console.log("a", a);
+      console.log("b", b);
+    </script>
+  </body>
+</html>
