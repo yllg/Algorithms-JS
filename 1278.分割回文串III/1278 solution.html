@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：动态规划
+      // 时间复杂度：O(N^3*K)
+      // 空间复杂度：O(N*K)
+      var palindromePartition = function (s, k) {
+        const n = s.length;
+        const cost = (l, r) => {
+          let ret = 0;
+          let i = l,
+            j = r;
+          while (i < j) {
+            ret += s[i] === s[j] ? 0 : 1;
+            i++;
+            j--;
+          }
+          return ret;
+        };
+        const f = Array.from({ length: n + 1 }, () =>
+          Array(k + 1).fill(1000000000)
+        );
+        f[0][0] = 0;
+        for (let i = 1; i <= n; i++) {
+          for (let j = 1; j <= Math.min(k, i); j++) {
+            if (j === 1) {
+              f[i][j] = cost(0, i - 1);
+            } else {
+              for (let i0 = j - 1; i0 < i; i0++) {
+                f[i][j] = Math.min(f[i][j], f[i0][j - 1] + cost(i0, i - 1));
+              }
+            }
+          }
+        }
+        return f[n][k];
+      };
+
+      // 方法二：动态规划 + 预处理
+      // 时间复杂度：O(N^2*K)
+      // 空间复杂度：O(N^2+NK)
+      var palindromePartition = function (s, k) {
+        const n = s.length;
+        const cost = Array.from({ length: n }, () => Array(n).fill(0));
+        for (let span = 2; span <= n; ++span) {
+          for (let i = 0; i <= n - span; ++i) {
+            const j = i + span - 1;
+            cost[i][j] = cost[i + 1][j - 1] + (s[i] === s[j] ? 0 : 1);
+          }
+        }
+        const f = Array.from({ length: n + 1 }, () =>
+          Array(k + 1).fill(Infinity)
+        );
+        f[0][0] = 0;
+        for (let i = 1; i <= n; ++i) {
+          for (let j = 1; j <= Math.min(k, i); ++j) {
+            if (j === 1) {
+              f[i][j] = cost[0][i - 1];
+            } else {
+              for (let i0 = j - 1; i0 < i; ++i0) {
+                f[i][j] = Math.min(f[i][j], f[i0][j - 1] + cost[i0][i - 1]);
+              }
+            }
+          }
+        }
+
+        return f[n][k];
+      };
+    </script>
+  </body>
+</html>
