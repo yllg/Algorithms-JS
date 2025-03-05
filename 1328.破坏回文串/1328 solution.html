@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：贪心
+      // 时间复杂度：O(n)
+      // 空间复杂度：O(n)
+      var breakPalindrome = function (palindrome) {
+        let n = palindrome.length;
+        if (n === 1) {
+          return "";
+        }
+        let data = palindrome.split("");
+        for (let i = 0; i * 2 + 1 < n; i++) {
+          if (data[i] !== "a") {
+            data[i] = "a";
+            return data.join("");
+          }
+        }
+        data[n - 1] = "b";
+        return data.join("");
+      };
+
+      // test
+      let palindrome = "abccba";
+      console.log(breakPalindrome(palindrome));
+    </script>
+  </body>
+</html>
