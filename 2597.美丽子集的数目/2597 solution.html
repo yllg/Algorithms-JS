@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：回溯
+      // 时间复杂度：O(2^n)
+      // 空间复杂度：O(n)
+      var beautifulSubsets = function (nums, k) {
+        let ans = 0;
+        const cnt = new Map();
+        function dfs(i) {
+          if (i === nums.length) {
+            ans++;
+            return;
+          }
+          dfs(i + 1);
+          if (
+            (!cnt.has(nums[i] - k) || cnt.get(nums[i] - k) === 0) &&
+            (!cnt.has(nums[i] + k) || cnt.get(nums[i] + k) === 0)
+          ) {
+            cnt.set(nums[i], (cnt.get(nums[i]) || 0) + 1);
+            dfs(i + 1);
+            cnt.set(nums[i], (cnt.get(nums[i]) || 0) - 1);
+          }
+        }
+        dfs(0);
+        return ans - 1;
+      };
+
+      // 方法二：动态规划
+      // 时间复杂度：O(nlogn)
+      // 空间复杂度：O(n)
+      function beautifulSubsets(nums, k) {
+        const groups = new Map();
+        for (const a of nums) {
+          const mod = a % k;
+          if (!groups.has(mod)) {
+            groups.set(mod, new Map());
+          }
+          const group = groups.get(mod);
+          group.set(a, (group.get(a) || 0) + 1);
+        }
+        let ans = 1;
+        for (const g of groups.values()) {
+          const sortedKeys = Array.from(g.keys()).sort((a, b) => a - b);
+          const m = sortedKeys.length;
+          const f = Array.from({ length: m }, () => [0, 0]);
+          f[0][0] = 1;
+          f[0][1] = (1 << g.get(sortedKeys[0])) - 1;
+          for (let i = 1; i < m; i++) {
+            f[i][0] = f[i - 1][0] + f[i - 1][1];
+            if (sortedKeys[i] - sortedKeys[i - 1] === k) {
+              f[i][1] = f[i - 1][0] * ((1 << g.get(sortedKeys[i])) - 1);
+            } else {
+              f[i][1] =
+                (f[i - 1][0] + f[i - 1][1]) * ((1 << g.get(sortedKeys[i])) - 1);
+            }
+          }
+          ans *= f[m - 1][0] + f[m - 1][1];
+        }
+        return ans - 1;
+      }
+
+      // test
+      let nums = [2, 4, 6],
+        k = 2;
+      console.log(beautifulSubsets(nums, k));
+    </script>
+  </body>
+</html>
