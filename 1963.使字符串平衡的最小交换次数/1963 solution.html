@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：猜测结论 + 构造答案
+      // 时间复杂度：O(n)
+      // 空间复杂度：O(1)
+      var minSwaps = function (s) {
+        let cnt = 0,
+          mincnt = 0;
+        for (let ch of s) {
+          if (ch === "[") {
+            cnt += 1;
+          } else {
+            cnt -= 1;
+            mincnt = Math.min(mincnt, cnt);
+          }
+        }
+        return Math.floor((-mincnt + 1) / 2);
+      };
+
+      // test
+      let s = "][][";
+      console.log(minSwaps(s));
+    </script>
+  </body>
+</html>
