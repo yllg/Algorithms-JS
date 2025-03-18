@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：哈希表
+      // 时间复杂度: O(n)
+      // 空间复杂度：O(n)
+      var findMatrix = function (nums) {
+        let cnt = new Map();
+        for (let x of nums) {
+          cnt.set(x, (cnt.get(x) || 0) + 1);
+        }
+
+        let ans = [];
+        while (cnt.size > 0) {
+          let arr = [];
+          for (let [key, value] of cnt) {
+            cnt.set(key, value - 1);
+            arr.push(key);
+            if (cnt.get(key) === 0) {
+              cnt.delete(key);
+            }
+          }
+          ans.push(arr);
+        }
+
+        return ans;
+      };
+
+      // test
+      let nums = [1, 3, 4, 1, 2, 3, 1];
+      console.log(findMatrix(nums));
+    </script>
+  </body>
+</html>
