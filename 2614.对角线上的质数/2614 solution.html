@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：模拟 + 判断质数
+      // 时间复杂度：O(n × 根号m)
+      // 空间复杂度：O(1)
+      var diagonalPrime = function (nums) {
+        let n = nums.length,
+          res = 0;
+        for (let i = 0; i < n; i++) {
+          if (isPrime(nums[i][i])) {
+            res = Math.max(res, nums[i][i]);
+          }
+          if (isPrime(nums[i][n - i - 1])) {
+            res = Math.max(res, nums[i][n - i - 1]);
+          }
+        }
+        return res;
+      };
+
+      var isPrime = function (num) {
+        if (num === 1) {
+          return false;
+        }
+        let factor = 2;
+        while (factor * factor <= num) {
+          if (num % factor === 0) {
+            return false;
+          }
+          factor++;
+        }
+        return true;
+      };
+
+      // test
+      let nums = [
+        [1, 2, 3],
+        [5, 6, 7],
+        [9, 10, 11],
+      ];
+      console.log(diagonalPrime(nums));
+    </script>
+  </body>
+</html>
