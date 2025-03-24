@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：遍历判断
+      // 时间复杂度：O(mn)
+      // 空间复杂度：O(1)
+      var countPrefixes = function (words, s) {
+        let res = 0;
+        for (let word of words) {
+          if (s.startsWith(word)) {
+            res++;
+          }
+        }
+        return res;
+      };
+
+      // test
+      let words = ["a", "b", "c", "ab", "bc", "abc"],
+        s = "abc";
+      console.log(countPrefixes(words, s));
+    </script>
+  </body>
+</html>
