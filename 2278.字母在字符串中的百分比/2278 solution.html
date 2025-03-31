@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：遍历统计
+      // 时间复杂度：O(n)
+      // 空间复杂度：O(1)
+      var percentageLetter = function (s, letter) {
+        return Math.floor(((s.split(letter).length - 1) * 100) / s.length);
+      };
+
+      // test
+      let s = "foobar",
+        letter = "o";
+      console.log(percentageLetter(s, letter));
+    </script>
+  </body>
+</html>
