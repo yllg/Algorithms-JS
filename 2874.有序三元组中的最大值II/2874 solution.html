@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：贪心 + 前后缀数组
+      // 时间复杂度：O(n)
+      // 空间复杂度：O(n)
+      var maximumTripletValue = function (nums) {
+        const n = nums.length;
+        const leftMax = new Array(n).fill(0);
+        const rightMax = new Array(n).fill(0);
+        for (let i = 1; i < n; i++) {
+          leftMax[i] = Math.max(leftMax[i - 1], nums[i - 1]);
+          rightMax[n - 1 - i] = Math.max(rightMax[n - i], nums[n - i]);
+        }
+        let res = 0;
+        for (let j = 1; j < n - 1; j++) {
+          res = Math.max(res, (leftMax[j] - nums[j]) * rightMax[j]);
+        }
+        return res;
+      };
+
+      // 方法二：贪心
+      // 时间复杂度：O(n)
+      // 空间复杂度：O(1)
+      var maximumTripletValue = function (nums) {
+        const n = nums.length;
+        let res = 0,
+          imax = 0,
+          dmax = 0;
+        for (let k = 0; k < n; k++) {
+          res = Math.max(res, dmax * nums[k]);
+          dmax = Math.max(dmax, imax - nums[k]);
+          imax = Math.max(imax, nums[k]);
+        }
+        return res;
+      };
+
+      // test
+      let nums = [12, 6, 1, 2, 7];
+      console.log(maximumTripletValue(nums));
+    </script>
+  </body>
+</html>
