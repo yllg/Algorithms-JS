@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：模拟
+      // 时间复杂度：O(n^2)
+      // 空间复杂度：O(n)
+      var minimumOperations = function (nums) {
+        let ans = 0;
+        for (let i = 0; i < nums.length; i += 3, ans++) {
+          if (checkUnique(nums, i)) {
+            return ans;
+          }
+        }
+        return ans;
+      };
+
+      const checkUnique = (nums, start) => {
+        let seen = new Set();
+        for (let i = start; i < nums.length; i++) {
+          if (seen.has(nums[i])) {
+            return false;
+          }
+          seen.add(nums[i]);
+        }
+        return true;
+      };
+
+      // 方法二：倒序遍历
+      // 时间复杂度：O(n)
+      // 空间复杂度：O(n)
+      var minimumOperations = function (nums) {
+        const seen = new Array(128).fill(false);
+        for (let i = nums.length - 1; i >= 0; i--) {
+          if (seen[nums[i]]) {
+            return Math.floor(i / 3) + 1;
+          }
+          seen[nums[i]] = true;
+        }
+        return 0;
+      };
+
+      // test
+      let nums = [1, 2, 3, 4, 2, 3, 3, 5, 7];
+      console.log(minimumOperations(nums));
+    </script>
+  </body>
+</html>
