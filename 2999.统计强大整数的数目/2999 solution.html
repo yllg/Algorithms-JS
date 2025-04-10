@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：数位动态规划
+      // 时间复杂度：O(log(finish)×10)
+      // 空间复杂度：O(log(finish))
+      var numberOfPowerfulInt = function (start, finish, limit, s) {
+        let low = start.toString();
+        let high = finish.toString();
+        const n = high.length;
+        low = low.padStart(n, "0"); // 对齐位数
+        const pre_len = n - s.length; // 前缀长度
+        const memo = new Array(n).fill(-1);
+
+        function dfs(i, limit_low, limit_high) {
+          // 递归边界
+          if (i === n) {
+            return 1;
+          }
+          if (!limit_low && !limit_high && memo[i] !== -1) {
+            return memo[i];
+          }
+
+          const lo = limit_low ? parseInt(low[i]) : 0;
+          const hi = limit_high ? parseInt(high[i]) : 9;
+          let res = 0;
+          if (i < pre_len) {
+            for (let digit = lo; digit <= Math.min(hi, limit); digit++) {
+              res += dfs(
+                i + 1,
+                limit_low && digit === lo,
+                limit_high && digit === hi
+              );
+            }
+          } else {
+            const x = parseInt(s[i - pre_len]);
+            if (lo <= x && x <= Math.min(hi, limit)) {
+              res = dfs(i + 1, limit_low && x === lo, limit_high && x === hi);
+            }
+          }
+          if (!limit_low && !limit_high) {
+            memo[i] = res;
+          }
+
+          return res;
+        }
+
+        return dfs(0, true, true);
+      };
+
+      // 方法二：组合数学
+      // 时间复杂度：O(log(finish))
+      // 空间复杂度：O(log(finish))
+      var numberOfPowerfulInt = function (start, finish, limit, s) {
+        const start_ = (start - 1).toString();
+        const finish_ = finish.toString();
+        return calculate(finish_, s, limit) - calculate(start_, s, limit);
+      };
+
+      function calculate(x, s, limit) {
+        if (x.length < s.length) {
+          return 0;
+        }
+        if (x.length === s.length) {
+          return x >= s ? 1 : 0;
+        }
+
+        const suffix = x.slice(-s.length);
+        let count = 0;
+        const preLen = x.length - s.length;
+
+        for (let i = 0; i < preLen; i++) {
+          const digit = parseInt(x[i]);
+          if (limit < digit) {
+            count += Math.pow(limit + 1, preLen - i);
+            return count;
+          }
+          count += digit * Math.pow(limit + 1, preLen - 1 - i);
+        }
+        if (suffix >= s) {
+          count++;
+        }
+        return count;
+      }
+
+      // test
+      let start = 1,
+        finish = 6000,
+        limit = 4,
+        s = "124";
+      console.log(numberOfPowerfulInt(start, finish, limit, s));
+    </script>
+  </body>
+</html>
