@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：双指针
+      // 时间复杂度：O(n)
+      // 时间复杂度：O(n)
+      var countGood = function (nums, k) {
+        const n = nums.length;
+        let same = 0,
+          right = -1;
+        const cnt = new Map();
+        let ans = 0;
+        for (let left = 0; left < n; ++left) {
+          while (same < k && right + 1 < n) {
+            ++right;
+            same += cnt.get(nums[right]) || 0;
+            cnt.set(nums[right], (cnt.get(nums[right]) || 0) + 1);
+          }
+          if (same >= k) {
+            ans += n - right;
+          }
+          cnt.set(nums[left], cnt.get(nums[left]) - 1);
+          same -= cnt.get(nums[left]);
+        }
+        return ans;
+      };
+
+      // test
+      let nums = [1, 1, 1, 1, 1],
+        k = 10;
+
+      console.log(countGood(nums, k));
+    </script>
+  </body>
+</html>
