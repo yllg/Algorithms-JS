@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：记忆化搜索
+      // 时间复杂度：O(n^2⋅S)
+      // 时间复杂度：O(n^2+n*D*S)
+      var MOD = BigInt(1e9 + 7);
+
+      var countBalancedPermutations = function (num) {
+        let tot = 0,
+          n = num.length;
+        const cnt = new Array(10).fill(0);
+        for (const ch of num) {
+          const d = parseInt(ch);
+          cnt[d]++;
+          tot += d;
+        }
+        if (tot % 2 !== 0) {
+          return 0;
+        }
+
+        const target = tot / 2;
+        const maxOdd = Math.floor((n + 1) / 2);
+
+        /* 预计算组合数 */
+        const comb = new Array(maxOdd + 1);
+        for (let i = 0; i <= maxOdd; i++) {
+          comb[i] = new Array(maxOdd + 1).fill(0n);
+          comb[i][i] = comb[i][0] = 1n;
+          for (let j = 1; j < i; j++) {
+            comb[i][j] = (comb[i - 1][j] + comb[i - 1][j - 1]) % MOD;
+          }
+        }
+
+        const psum = new Array(11).fill(0);
+        for (let i = 9; i >= 0; i--) {
+          psum[i] = psum[i + 1] + cnt[i];
+        }
+
+        const memo = new Array(10);
+        for (let i = 0; i < 10; i++) {
+          memo[i] = new Array(target + 1);
+          for (let j = 0; j <= target; j++) {
+            memo[i][j] = new Array(maxOdd + 1).fill(-1n);
+          }
+        }
+
+        function dfs(pos, curr, oddCnt) {
+          /* 如果剩余位置无法合法填充，或者当前奇数位置元素和大于目标值 */
+          if (oddCnt < 0 || psum[pos] < oddCnt || curr > target) {
+            return 0n;
+          }
+          if (pos > 9) {
+            return curr === target && oddCnt === 0 ? 1n : 0n;
+          }
+          if (memo[pos][curr][oddCnt] !== -1n) {
+            return memo[pos][curr][oddCnt];
+          }
+
+          /* 偶数位剩余需要填充的位数 */
+          const evenCnt = psum[pos] - oddCnt;
+          let res = 0n;
+          const start = Math.max(0, cnt[pos] - evenCnt);
+          const end = Math.min(cnt[pos], oddCnt);
+          for (let i = start; i <= end; i++) {
+            /* 当前数字在奇数位填充 i 位，偶数位填充 cnt[pos] - i 位 */
+            const ways = (comb[oddCnt][i] * comb[evenCnt][cnt[pos] - i]) % MOD;
+            res =
+              (res +
+                ((ways * dfs(pos + 1, curr + i * pos, oddCnt - i)) % MOD)) %
+              MOD;
+          }
+          memo[pos][curr][oddCnt] = res;
+          return res;
+        }
+
+        return Number(dfs(0, 0, maxOdd));
+      };
+
+      // 方法二：动态规划
+      // 时间复杂度：O(n^2⋅S)
+      // 时间复杂度：O(n^2+n*S)
+      var MOD = BigInt(1e9 + 7);
+
+      var countBalancedPermutations = function (num) {
+        let tot = 0;
+        const n = num.length;
+        const cnt = new Array(10).fill(0);
+        for (const ch of num) {
+          const d = parseInt(ch);
+          cnt[d]++;
+          tot += d;
+        }
+        if (tot % 2 !== 0) {
+          return 0;
+        }
+
+        const target = tot / 2;
+        const maxOdd = Math.floor((n + 1) / 2);
+        const comb = new Array(maxOdd + 1);
+        for (let i = 0; i <= maxOdd; i++) {
+          comb[i] = new Array(maxOdd + 1).fill(0n);
+          comb[i][i] = comb[i][0] = 1n;
+          for (let j = 1; j < i; j++) {
+            comb[i][j] = (comb[i - 1][j] + comb[i - 1][j - 1]) % MOD;
+          }
+        }
+
+        const f = new Array(Number(target) + 1);
+        for (let i = 0; i <= Number(target); i++) {
+          f[i] = new Array(maxOdd + 1).fill(0n);
+        }
+        f[0][0] = 1n;
+
+        let psum = 0,
+          totSum = 0;
+        for (let i = 0; i <= 9; i++) {
+          /* 前 i 个数字的数目之和 */
+          psum += cnt[i];
+          /* 前 i 个数字的元素之和 */
+          totSum += i * cnt[i];
+          for (
+            let oddCnt = Math.min(psum, maxOdd);
+            oddCnt >= Math.max(0, psum - (n - maxOdd));
+            oddCnt--
+          ) {
+            /* 偶数位需要填充的位数 */
+            const evenCnt = psum - oddCnt;
+            for (
+              let curr = Math.min(totSum, target);
+              curr >= Math.max(0, totSum - target);
+              curr--
+            ) {
+              let res = 0n;
+              for (
+                let j = Math.max(0, cnt[i] - evenCnt);
+                j <= Math.min(cnt[i], oddCnt) && i * j <= curr;
+                j++
+              ) {
+                /* 当前数字在奇数位填充 j 位，偶数位填充 cnt[i] - j 位 */
+                const ways =
+                  (comb[oddCnt][j] * comb[evenCnt][cnt[i] - j]) % MOD;
+                res =
+                  (res + ((ways * f[curr - i * j][oddCnt - j]) % MOD)) % MOD;
+              }
+              f[curr][oddCnt] = res % MOD;
+            }
+          }
+        }
+
+        return Number(f[target][maxOdd]);
+      };
+    </script>
+  </body>
+</html>
