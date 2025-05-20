@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：差分数组
+      // 时间复杂度：O(n+m)
+      // 空间复杂度：O(n)
+      var isZeroArray = function (nums, queries) {
+        const deltaArray = new Array(nums.length + 1).fill(0);
+        for (const [left, right] of queries) {
+          deltaArray[left] += 1;
+          deltaArray[right + 1] -= 1;
+        }
+        const operationCounts = [];
+        let currentOperations = 0;
+        for (const delta of deltaArray) {
+          currentOperations += delta;
+          operationCounts.push(currentOperations);
+        }
+        for (let i = 0; i < nums.length; i++) {
+          if (operationCounts[i] < nums[i]) {
+            return false;
+          }
+        }
+        return true;
+      };
+
+      // test
+      let nums = [1, 0, 1],
+        queries = [[0, 2]];
+
+      console.log(isZeroArray(nums, queries));
+    </script>
+  </body>
+</html>
