@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：差分数组 + 二分查找
+      // 时间复杂度：O((m+n)×logn)
+      // 空间复杂度：O(n)
+      var minZeroArray = function (nums, queries) {
+        let left = 0,
+          right = queries.length;
+        if (!check(nums, queries, right)) {
+          return -1;
+        }
+        while (left < right) {
+          const k = Math.floor((left + right) / 2);
+          if (check(nums, queries, k)) {
+            right = k;
+          } else {
+            left = k + 1;
+          }
+        }
+        return left;
+      };
+
+      const check = (nums, queries, k) => {
+        const deltaArray = new Array(nums.length + 1).fill(0);
+        for (let i = 0; i < k; i++) {
+          const left = queries[i][0];
+          const right = queries[i][1];
+          const value = queries[i][2];
+          deltaArray[left] += value;
+          deltaArray[right + 1] -= value;
+        }
+        const operationCounts = [];
+        let currentOperations = 0;
+        for (const delta of deltaArray) {
+          currentOperations += delta;
+          operationCounts.push(currentOperations);
+        }
+        for (let i = 0; i < nums.length; i++) {
+          if (operationCounts[i] < nums[i]) {
+            return false;
+          }
+        }
+        return true;
+      };
+
+      // 方法二：双指针
+      // 时间复杂度：O(m+n)
+      // 空间复杂度：O(n)
+      var minZeroArray = function (nums, queries) {
+        const n = nums.length;
+        const deltaArray = new Array(n + 1).fill(0);
+        let operations = 0;
+        let k = 0;
+        for (let i = 0; i < n; i++) {
+          const num = nums[i];
+          operations += deltaArray[i];
+          while (k < queries.length && operations < num) {
+            const [left, right, value] = queries[k];
+            deltaArray[left] += value;
+            deltaArray[right + 1] -= value;
+            if (left <= i && i <= right) {
+              operations += value;
+            }
+            k++;
+          }
+          if (operations < num) {
+            return -1;
+          }
+        }
+        return k;
+      };
+
+      // test
+      let nums = [2, 0, 2],
+        queries = [
+          [0, 2, 1],
+          [0, 2, 1],
+          [1, 1, 3],
+        ];
+      console.log(minZeroArray(nums, queries));
+    </script>
+  </body>
+</html>
