@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：广度优先搜索
+      // 时间复杂度：O(N)
+      // 空间复杂度：O(N)
+      var maxCandies = function (
+        status,
+        candies,
+        keys,
+        containedBoxes,
+        initialBoxes
+      ) {
+        const n = status.length;
+        const canOpen = new Array(n).fill(false);
+        const hasBox = new Array(n).fill(false);
+        const used = new Array(n).fill(false);
+
+        for (let i = 0; i < n; ++i) {
+          canOpen[i] = status[i] === 1;
+        }
+        const q = [];
+        let ans = 0;
+        for (const box of initialBoxes) {
+          hasBox[box] = true;
+          if (canOpen[box]) {
+            q.push(box);
+            used[box] = true;
+            ans += candies[box];
+          }
+        }
+        while (q.length > 0) {
+          const bigBox = q.shift();
+          for (const key of keys[bigBox]) {
+            canOpen[key] = true;
+            if (!used[key] && hasBox[key]) {
+              q.push(key);
+              used[key] = true;
+              ans += candies[key];
+            }
+          }
+          for (const box of containedBoxes[bigBox]) {
+            hasBox[box] = true;
+            if (!used[box] && canOpen[box]) {
+              q.push(box);
+              used[box] = true;
+              ans += candies[box];
+            }
+          }
+        }
+
+        return ans;
+      };
+
+      // test
+      let status = [1, 0, 1, 0],
+        candies = [7, 5, 4, 100],
+        keys = [[], [], [1], []],
+        containedBoxes = [[1, 2], [3], [], []],
+        initialBoxes = [0];
+
+      console.log(
+        maxCandies(status, candies, keys, containedBoxes, initialBoxes)
+      );
+    </script>
+  </body>
+</html>
