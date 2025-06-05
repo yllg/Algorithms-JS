@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：并查集
+      // 时间复杂度：O((n+m)logC)
+      // 空间复杂度：O(C)
+      class UnionFind {
+        constructor(n) {
+          this.parent = Array.from({ length: n }, (_, i) => i);
+        }
+
+        find(x) {
+          if (this.parent[x] !== x) {
+            this.parent[x] = this.find(this.parent[x]);
+          }
+          return this.parent[x];
+        }
+
+        unite(x, y) {
+          x = this.find(x);
+          y = this.find(y);
+          if (x === y) {
+            return;
+          }
+          if (x > y) {
+            [x, y] = [y, x];
+          }
+          // 总是让字典序更小的作为集合代表字符
+          this.parent[y] = x;
+        }
+      }
+
+      var smallestEquivalentString = function (s1, s2, baseStr) {
+        const uf = new UnionFind(26);
+        for (let i = 0; i < s1.length; i++) {
+          uf.unite(s1.charCodeAt(i) - 97, s2.charCodeAt(i) - 97);
+        }
+        return [...baseStr]
+          .map((c) => String.fromCharCode(uf.find(c.charCodeAt(0) - 97) + 97))
+          .join("");
+      };
+    </script>
+  </body>
+</html>
