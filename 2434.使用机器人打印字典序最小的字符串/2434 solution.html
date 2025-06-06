@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：贪心 + 栈
+      // 时间复杂度：O(n+∣Σ∣)
+      // 空间复杂度：O(n)
+      var robotWithString = function (s) {
+        let cnt = new Array(26).fill(0);
+        for (let c of s) {
+          cnt[c.charCodeAt(0) - "a".charCodeAt(0)]++;
+        }
+
+        let stack = [];
+        let res = [];
+        let minCharacter = "a";
+        for (let c of s) {
+          stack.push(c);
+          cnt[c.charCodeAt(0) - "a".charCodeAt(0)]--;
+          while (
+            minCharacter !== "z" &&
+            cnt[minCharacter.charCodeAt(0) - "a".charCodeAt(0)] === 0
+          ) {
+            minCharacter = String.fromCharCode(minCharacter.charCodeAt(0) + 1);
+          }
+          while (stack.length > 0 && stack[stack.length - 1] <= minCharacter) {
+            res.push(stack.pop());
+          }
+        }
+
+        return res.join("");
+      };
+
+      // test
+      let s = "bac";
+      console.log(robotWithString(s));
+    </script>
+  </body>
+</html>
