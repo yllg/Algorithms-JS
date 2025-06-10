@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：统计每个字符出现的次数
+      // 时间复杂度：O(n)
+      // 空间复杂度：O(∣Σ∣)
+      var maxDifference = function (s) {
+        const c = new Map();
+        for (const ch of s) {
+          c.set(ch, (c.get(ch) || 0) + 1);
+        }
+        let maxOdd = 1,
+          minEven = s.length;
+        for (const [_, value] of c) {
+          if (value % 2 === 1) {
+            maxOdd = Math.max(maxOdd, value);
+          } else {
+            minEven = Math.min(minEven, value);
+          }
+        }
+        return maxOdd - minEven;
+      };
+    </script>
+  </body>
+</html>
