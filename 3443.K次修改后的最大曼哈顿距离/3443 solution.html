@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：分步求解
+      // 时间复杂度：O(n)
+      // 空间复杂度：O(1)
+      var maxDistance = function (s, k) {
+        let ans = 0;
+        let north = 0,
+          south = 0,
+          east = 0,
+          west = 0;
+        for (const it of s) {
+          switch (it) {
+            case "N":
+              north++;
+              break;
+            case "S":
+              south++;
+              break;
+            case "E":
+              east++;
+              break;
+            case "W":
+              west++;
+              break;
+          }
+
+          const count = (drt1, drt2, times) => {
+            return Math.abs(drt1 - drt2) + times * 2; // Calculate modified Manhattan distance
+          };
+
+          let times1 = Math.min(north, south, k); // modification times for N and S
+          let times2 = Math.min(east, west, k - times1); // modification times for E and W
+          ans = Math.max(
+            ans,
+            count(north, south, times1) + count(east, west, times2)
+          );
+        }
+        return ans;
+      };
+
+      // 方法二：整体求解
+      // 时间复杂度：O(n)
+      // 空间复杂度：O(1)
+      var maxDistance = function (s, k) {
+        let latitude = 0,
+          longitude = 0,
+          ans = 0;
+        const n = s.length;
+        for (let i = 0; i < n; i++) {
+          switch (s[i]) {
+            case "N":
+              latitude++;
+              break;
+            case "S":
+              latitude--;
+              break;
+            case "E":
+              longitude++;
+              break;
+            case "W":
+              longitude--;
+              break;
+          }
+          ans = Math.max(
+            ans,
+            Math.min(Math.abs(latitude) + Math.abs(longitude) + k * 2, i + 1)
+          );
+        }
+        return ans;
+      };
+
+      // test
+      let s = "NSWWEW",
+        k = 3;
+      console.log(maxDistance(s, k));
+    </script>
+  </body>
+</html>
