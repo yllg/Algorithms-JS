@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      //
+      var longestSubsequenceRepeatedK = function (s, k) {
+        class MyMap extends Map {
+          get(x) {
+            return super.has(x) ? super.get(x) : 0;
+          }
+        }
+
+        let mp = new MyMap();
+        for (let x of s) mp.set(x, mp.get(x) + 1);
+        let chs = [];
+        for (let x of mp) if (x[1] >= k) chs.push(x[0]);
+        chs.sort();
+        // console.log(chs)//
+        let m = chs.length;
+        let isSub = (t) => {
+          for (let i = 0, j = 0; i < s.length; ++i) {
+            if (s[i] === t[j]) {
+              ++j;
+              if (j >= t.length) return true;
+            }
+          }
+          return false;
+        };
+        let lenMx = 0;
+        for (let x of mp) lenMx += Math.floor(x[1] / k);
+        lenMx = Math.min(7, lenMx);
+
+        let dfs = (dep, s, cnt, lim) => {
+          if (dep === lim) {
+            s = s.join("");
+            if (isSub(s.repeat(k))) return s;
+            return;
+          }
+          for (let i = m - 1; ~i; --i) {
+            s.push(chs[i]);
+            cnt[i]++;
+            if (cnt[i] * k <= mp.get(chs[i])) {
+              let ret = dfs(dep + 1, s, cnt, lim);
+              if (ret) return ret;
+            }
+            s.pop();
+            cnt[i]--;
+          }
+        };
+
+        let solve = () => {
+          for (let i = lenMx; i; --i) {
+            let ret = dfs(0, [], new Array(m).fill(0), i);
+            if (ret) return ret;
+          }
+          return "";
+        };
+        return solve();
+      };
+
+      // test
+      let s = "letsleetcode",
+        k = 2;
+      console.log(longestSubsequenceRepeatedK(s, k));
+    </script>
+  </body>
+</html>
