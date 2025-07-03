@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：迭代
+      // 时间复杂度：O(logk)
+      // 空间复杂度：O(1)
+      var kthCharacter = function (k) {
+        let ans = 0;
+        while (k !== 1) {
+          let t = 31 - Math.clz32(k);
+          if (1 << t === k) {
+            t--;
+          }
+          k -= 1 << t;
+          ans++;
+        }
+        return String.fromCharCode("a".charCodeAt(0) + ans);
+      };
+
+      // test
+      let k = 5;
+      console.log(kthCharacter(k));
+    </script>
+  </body>
+</html>
