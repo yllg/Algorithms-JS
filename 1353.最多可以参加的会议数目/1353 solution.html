@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：贪心
+      // 时间复杂度：O((T+n)logn)
+      // 空间复杂度：O(n)
+      var maxEvents = function (events) {
+        const n = events.length;
+        let maxDay = 0;
+        for (const e of events) {
+          maxDay = Math.max(maxDay, e[1]);
+        }
+        events.sort((a, b) => a[0] - b[0]);
+        const pq = new MinPriorityQueue();
+        let ans = 0;
+        for (let i = 1, j = 0; i <= maxDay; i++) {
+          while (j < n && events[j][0] <= i) {
+            pq.enqueue(events[j][1]);
+            j++;
+          }
+          while (!pq.isEmpty() && pq.front() < i) {
+            pq.dequeue();
+          }
+          if (!pq.isEmpty()) {
+            pq.dequeue();
+            ans++;
+          }
+        }
+        return ans;
+      };
+
+      // test
+      let events = [
+        [1, 2],
+        [2, 3],
+        [3, 4],
+      ];
+      console.log(maxEvents(events));
+    </script>
+  </body>
+</html>
