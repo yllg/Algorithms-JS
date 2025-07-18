@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：优先队列
+      // 时间复杂度：O(nlogn)
+      // 空间复杂度: O(n)
+      var minimumDifference = function (nums) {
+        const n3 = nums.length,
+          n = Math.floor(n3 / 3);
+        const part1 = new Array(n + 1).fill(0);
+        let sum = 0;
+        // 大根堆（用相反数模拟）
+        const ql = new MaxPriorityQueue();
+        for (let i = 0; i < n; ++i) {
+          sum += nums[i];
+          ql.enqueue(nums[i]);
+        }
+
+        part1[0] = sum;
+        for (let i = n; i < n * 2; ++i) {
+          sum += nums[i];
+          ql.enqueue(nums[i]);
+          sum -= ql.dequeue();
+          part1[i - (n - 1)] = sum;
+        }
+        let part2 = 0;
+        // 小根堆
+        const qr = new MinPriorityQueue();
+        for (let i = n * 3 - 1; i >= n * 2; --i) {
+          part2 += nums[i];
+          qr.enqueue(nums[i]);
+        }
+
+        let ans = part1[n] - part2;
+        for (let i = n * 2 - 1; i >= n; --i) {
+          part2 += nums[i];
+          qr.enqueue(nums[i]);
+          part2 -= qr.dequeue();
+          ans = Math.min(ans, part1[i - n] - part2);
+        }
+        return ans;
+      };
+
+      // test
+      let nums = [3, 1, 2];
+      console.log(minimumDifference(nums));
+    </script>
+  </body>
+</html>
