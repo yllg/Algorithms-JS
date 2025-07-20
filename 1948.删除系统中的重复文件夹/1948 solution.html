@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：子树的序列化表示
+      var deleteDuplicateFolder = function (paths) {
+        class Trie {
+          constructor() {
+            this.serial = ""; // 当前节点结构的序列化表示
+            this.children = new Map(); // 当前节点的子节点
+          }
+        }
+
+        const root = new Trie(); // 根节点
+        // 构建字典树
+        for (const path of paths) {
+          let cur = root;
+          for (const node of path) {
+            if (!cur.children.has(node)) {
+              cur.children.set(node, new Trie());
+            }
+            cur = cur.children.get(node);
+          }
+        }
+
+        const freq = new Map(); // 哈希表记录每一种序列化表示的出现次数
+        // 基于深度优先搜索的后序遍历，计算每一个节点结构的序列化表示
+        function construct(node) {
+          if (node.children.size === 0) return; // 如果是叶节点，无需操作
+          const v = [];
+          for (const [folder, child] of node.children) {
+            construct(child);
+            v.push(`${folder}(${child.serial})`);
+          }
+          v.sort();
+          node.serial = v.join("");
+          freq.set(node.serial, (freq.get(node.serial) || 0) + 1);
+        }
+        construct(root);
+
+        const ans = [];
+        const path = [];
+        // 操作字典树，删除重复文件夹
+        function operate(node) {
+          if ((freq.get(node.serial) || 0) > 1) return; // 如果序列化表示出现超过1次，需要删除
+          if (path.length > 0) {
+            ans.push([...path]);
+          }
+          for (const [folder, child] of node.children) {
+            path.push(folder);
+            operate(child);
+            path.pop();
+          }
+        }
+        operate(root);
+
+        return ans;
+      };
+    </script>
+  </body>
+</html>
