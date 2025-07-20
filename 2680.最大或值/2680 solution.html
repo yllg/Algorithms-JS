@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：贪心 + 前缀和
+      // 时间复杂度：O(n)
+      // 空间复杂度：O(n)
+      var maximumOr = function (nums, k) {
+        let n = nums.length;
+        let suf = new Array(n + 1).fill(0n);
+        for (let i = n - 1; i >= 0; i--) {
+          suf[i] = suf[i + 1] | BigInt(nums[i]);
+        }
+
+        let res = 0n,
+          pre = 0n;
+        for (let i = 0; i < n; i++) {
+          res = Math.max(
+            Number(res),
+            Number(pre | (BigInt(nums[i]) << BigInt(k)) | suf[i + 1])
+          );
+          pre |= BigInt(nums[i]);
+        }
+        return Number(res);
+      };
+
+      // 方法二：位运算
+      // 时间复杂度：O(n)
+      // 空间复杂度：O(1)
+      var maximumOr = function (nums, k) {
+        let orSum = 0n,
+          multiBits = 0n;
+        for (let x of nums) {
+          multiBits |= BigInt(x) & orSum;
+          orSum |= BigInt(x);
+        }
+
+        let res = 0n;
+        for (let x of nums) {
+          res = Math.max(
+            Number(res),
+            Number((orSum ^ BigInt(x)) | (BigInt(x) << BigInt(k)) | multiBits)
+          );
+        }
+        return Number(res);
+      };
+
+      // test
+      let nums = [12, 9],
+        k = 1;
+      console.log(maximumOr(nums, k));
+    </script>
+  </body>
+</html>

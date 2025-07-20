@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：确定隐藏数组上下界的差值
+      // 时间复杂度：O(n)
+      // 时间复杂度：O(1)
+      var numberOfArrays = function (differences, lower, upper) {
+        let x = 0,
+          y = 0,
+          cur = 0;
+        for (let d of differences) {
+          cur += d;
+          x = Math.min(x, cur);
+          y = Math.max(y, cur);
+          if (y - x > upper - lower) {
+            return 0;
+          }
+        }
+        return upper - lower - (y - x) + 1;
+      };
+    </script>
+  </body>
+</html>

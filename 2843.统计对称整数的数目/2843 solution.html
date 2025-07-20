@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：枚举
+      // 时间复杂度：O(high-low)
+      // 空间复杂度：O(1)
+      var countSymmetricIntegers = function (low, high) {
+        let res = 0;
+        for (let a = low; a <= high; ++a) {
+          if (a < 100 && a % 11 === 0) {
+            res++;
+          } else if (1000 <= a && a < 10000) {
+            const left = Math.floor(a / 1000) + Math.floor((a % 1000) / 100);
+            const right = Math.floor((a % 100) / 10) + (a % 10);
+            if (left === right) {
+              res++;
+            }
+          }
+        }
+        return res;
+      };
+
+      // test
+      let low = 1,
+        high = 100;
+      console.log(countSymmetricIntegers(low, high));
+    </script>
+  </body>
+</html>

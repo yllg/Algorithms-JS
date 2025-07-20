@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：组合数学
+      // 时间复杂度：O((n+ω(m))⋅ω(m)+mω(m))
+      // 空间复杂度：O((n+log(m))⋅log(m))
+      const MOD = 1e9 + 7;
+      const MAX_N = 10010;
+      const MAX_P = 15; // 最多有 15 个质因子
+      const c = Array.from({ length: MAX_N + MAX_P }, () =>
+        Array(MAX_P + 1).fill(0)
+      );
+      const sieve = Array(MAX_N).fill(0); // 最小质因子
+      const ps = Array.from({ length: MAX_N }, () => []); // 质因子个数列表
+
+      (function init() {
+        for (let i = 2; i < MAX_N; i++) {
+          if (sieve[i] === 0) {
+            for (let j = i; j < MAX_N; j += i) {
+              if (sieve[j] === 0) {
+                sieve[j] = i;
+              }
+            }
+          }
+        }
+
+        for (let i = 2; i < MAX_N; i++) {
+          let x = i;
+          while (x > 1) {
+            const p = sieve[x];
+            let cnt = 0;
+            while (x % p === 0) {
+              x = Math.floor(x / p);
+              cnt++;
+            }
+            ps[i].push(cnt);
+          }
+        }
+
+        c[0][0] = 1;
+        for (let i = 1; i < MAX_N + MAX_P; i++) {
+          c[i][0] = 1;
+          for (let j = 1; j <= Math.min(i, MAX_P); j++) {
+            c[i][j] = (c[i - 1][j] + c[i - 1][j - 1]) % MOD;
+          }
+        }
+      })();
+
+      function idealArrays(n, maxValue) {
+        let ans = 0n;
+        for (let x = 1; x <= maxValue; x++) {
+          let mul = 1n;
+          for (const p of ps[x]) {
+            mul = (mul * BigInt(c[n + p - 1][p])) % BigInt(MOD);
+          }
+          ans = (ans + mul) % BigInt(MOD);
+        }
+        return Number(ans);
+      }
+
+      // test
+      let n = 2,
+        maxValue = 5;
+      console.log(idealArrays(n, maxValue));
+    </script>
+  </body>
+</html>

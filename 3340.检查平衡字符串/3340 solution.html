@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：模拟
+      // 时间复杂度：O(n)
+      // 空间复杂度：O(1)
+      var isBalanced = function (num) {
+        let diff = 0,
+          sign = 1;
+        for (let c of num) {
+          let d = parseInt(c);
+          diff += d * sign;
+          sign = -sign;
+        }
+        return diff === 0;
+      };
+
+      // test
+      let num = "1234";
+      console.log(isBalanced(num));
+    </script>
+  </body>
+</html>

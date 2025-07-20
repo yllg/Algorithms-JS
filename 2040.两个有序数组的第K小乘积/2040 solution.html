@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：二分 + 二分
+      // 时间复杂度：O(n1*logn2*logC)
+      // 空间复杂度：O(1)
+      var f = function (nums2, x1, v) {
+        let n2 = nums2.length;
+        let left = 0,
+          right = n2 - 1;
+        while (left <= right) {
+          let mid = Math.floor((left + right) / 2);
+          let prod = nums2[mid] * x1;
+          if ((x1 >= 0 && prod <= v) || (x1 < 0 && prod > v)) {
+            left = mid + 1;
+          } else {
+            right = mid - 1;
+          }
+        }
+        if (x1 >= 0) {
+          return left;
+        } else {
+          return n2 - left;
+        }
+      };
+
+      var kthSmallestProduct = function (nums1, nums2, k) {
+        let n1 = nums1.length;
+        let left = -1e10,
+          right = 1e10;
+        while (left <= right) {
+          let mid = Math.floor((left + right) / 2);
+          let count = 0;
+          for (let i = 0; i < n1; i++) {
+            count += f(nums2, nums1[i], mid);
+          }
+          if (count < k) {
+            left = mid + 1;
+          } else {
+            right = mid - 1;
+          }
+        }
+        return left;
+      };
+
+      // 方法二：二分 + 分治
+      // 时间复杂度：O((n1+n2)*logC)
+      // 空间复杂度：O(1)
+      var kthSmallestProduct = function (nums1, nums2, k) {
+        const n1 = nums1.length,
+          n2 = nums2.length;
+        let pos1 = 0,
+          pos2 = 0;
+        while (pos1 < n1 && nums1[pos1] < 0) {
+          pos1++;
+        }
+        while (pos2 < n2 && nums2[pos2] < 0) {
+          pos2++;
+        }
+        let left = -1e10,
+          right = 1e10;
+        while (left <= right) {
+          const mid = Math.floor((left + right) / 2);
+          let count = 0;
+          let i1 = 0,
+            i2 = pos2 - 1;
+          while (i1 < pos1 && i2 >= 0) {
+            if (nums1[i1] * nums2[i2] > mid) {
+              i1++;
+            } else {
+              count += pos1 - i1;
+              i2--;
+            }
+          }
+          i1 = pos1;
+          i2 = n2 - 1;
+          while (i1 < n1 && i2 >= pos2) {
+            if (nums1[i1] * nums2[i2] > mid) {
+              i2--;
+            } else {
+              count += i2 - pos2 + 1;
+              i1++;
+            }
+          }
+          i1 = 0;
+          i2 = pos2;
+          while (i1 < pos1 && i2 < n2) {
+            if (nums1[i1] * nums2[i2] > mid) {
+              i2++;
+            } else {
+              count += n2 - i2;
+              i1++;
+            }
+          }
+          i1 = pos1;
+          i2 = 0;
+          while (i1 < n1 && i2 < pos2) {
+            if (nums1[i1] * nums2[i2] > mid) {
+              i1++;
+            } else {
+              count += n1 - i1;
+              i2++;
+            }
+          }
+          if (count < k) {
+            left = mid + 1;
+          } else {
+            right = mid - 1;
+          }
+        }
+        return left;
+      };
+
+      // test
+      let nums1 = [-2, -1, 0, 1, 2],
+        nums2 = [-3, -1, 2, 4, 5],
+        k = 3;
+      console.log(kthSmallestProduct(nums1, nums2, k));
+    </script>
+  </body>
+</html>

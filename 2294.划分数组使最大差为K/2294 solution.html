@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 时间复杂度：O(nlogn)
+      // 空间复杂度：O(1)
+      var partitionArray = function (nums, k) {
+        nums.sort((a, b) => a - b);
+        let ans = 0;
+        let mn = -Infinity;
+        for (const x of nums) {
+          if (x - mn > k) {
+            // 必须分割
+            ans++;
+            mn = x; // mn 是下一段的最小值
+          }
+        }
+        return ans;
+      };
+    </script>
+  </body>
+</html>

@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：枚举
+      // 时间复杂度：O(nk)
+      // 空间复杂度：O(n)
+      var divisorSubstrings = function (num, k) {
+        let s = num.toString(); // num 十进制表示字符串
+        let n = s.length;
+        let res = 0;
+        for (let i = 0; i <= n - k; ++i) {
+          // 枚举所有长度为 k 的子串
+          let tmp = parseInt(s.substring(i, i + k));
+          if (tmp !== 0 && num % tmp === 0) {
+            ++res;
+          }
+        }
+        return res;
+      };
+
+      // test
+      let num = 240,
+        k = 2;
+      console.log(divisorSubstrings(num, k));
+    </script>
+  </body>
+</html>

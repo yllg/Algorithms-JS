@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：双向链表
+      var Node = function (val) {
+        this.val = val;
+        this.prev = null;
+        this.next = null;
+      };
+
+      Node.prototype.insert = function (val) {
+        var node = new Node(val);
+        node.next = this;
+        node.prev = this.prev;
+        if (this.prev) {
+          this.prev.next = node;
+        }
+        this.prev = node;
+      };
+
+      Node.prototype.remove = function () {
+        var node = this.prev;
+        this.prev = node.prev;
+        if (node.prev) {
+          node.prev.next = this;
+        }
+      };
+
+      Node.prototype.range = function (end) {
+        var result = "";
+        var node = this;
+        while (node !== end) {
+          result += node.val;
+          node = node.next;
+        }
+        return result;
+      };
+
+      var TextEditor = function () {
+        this.cursor = new Node("\0"); // 初始光标节点
+      };
+
+      TextEditor.prototype.addText = function (text) {
+        for (let i = 0; i < text.length; i++) {
+          this.cursor.insert(text[i]);
+        }
+      };
+
+      TextEditor.prototype.deleteText = function (k) {
+        var count = 0;
+        while (k > 0 && this.cursor.prev) {
+          this.cursor.remove();
+          k--;
+          count++;
+        }
+        return count;
+      };
+
+      TextEditor.prototype.cursorLeft = function (k) {
+        while (k > 0 && this.cursor.prev) {
+          this.cursor = this.cursor.prev;
+          k--;
+        }
+        var head = this.cursor;
+        for (let i = 0; i < 10 && head.prev; i++) {
+          head = head.prev;
+        }
+        return head.range(this.cursor);
+      };
+
+      TextEditor.prototype.cursorRight = function (k) {
+        while (k > 0 && this.cursor.next) {
+          this.cursor = this.cursor.next;
+          k--;
+        }
+        var head = this.cursor;
+        for (let i = 0; i < 10 && head.prev; i++) {
+          head = head.prev;
+        }
+        return head.range(this.cursor);
+      };
+
+      // 方法二：栈
+      // 时间复杂度：
+      // addText：O(n)，其中 n 是字符串 text 的长度。
+      // deleteText：O(k)，其中 k 是输入参数。
+      // cursorLeft：O(k)，其中 k 是输入参数。
+      // cursorRight：O(k)，其中 k 是输入参数。
+      // 空间复杂度：
+      // addText：O(n)，其中 n 是字符串 text 的长度。
+      // deleteText：O(1)，其中 k 是输入参数。
+      // cursorLeft：O(1)，其中 k 是输入参数。
+      // cursorRight：O(1)，其中 k 是输入参数。
+
+      var TextEditor = function () {
+        this.left = [];
+        this.right = [];
+      };
+
+      TextEditor.prototype.addText = function (text) {
+        for (let i = 0; i < text.length; i++) {
+          this.left.push(text[i]);
+        }
+      };
+
+      TextEditor.prototype.deleteText = function (k) {
+        let count = Math.min(k, this.left.length);
+        for (let i = 0; i < count; i++) {
+          this.left.pop();
+        }
+        return count;
+      };
+
+      TextEditor.prototype.cursorLeft = function (k) {
+        let move = Math.min(k, this.left.length);
+        for (let i = 0; i < move; i++) {
+          this.right.push(this.left.pop());
+        }
+        return this.getLeftText();
+      };
+
+      TextEditor.prototype.cursorRight = function (k) {
+        let move = Math.min(k, this.right.length);
+        for (let i = 0; i < move; i++) {
+          this.left.push(this.right.pop());
+        }
+        return this.getLeftText();
+      };
+
+      TextEditor.prototype.getLeftText = function () {
+        return this.left.slice(-10).join("");
+      };
+    </script>
+  </body>
+</html>

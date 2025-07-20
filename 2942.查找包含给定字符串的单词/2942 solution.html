@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：模拟
+      // 时间复杂度：O(n*m)
+      // 空间复杂度：O(1)
+      var findWordsContaining = function (words, x) {
+        const res = [];
+        const n = words.length;
+        for (let i = 0; i < n; i++) {
+          if (words[i].includes(x)) {
+            res.push(i);
+          }
+        }
+        return res;
+      };
+
+      // test
+      let words = ["leet", "code"],
+        x = "e";
+      console.log(findWordsContaining(words, x));
+    </script>
+  </body>
+</html>

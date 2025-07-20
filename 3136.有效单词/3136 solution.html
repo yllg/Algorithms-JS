@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：一次遍历
+      // 时间复杂度：O(n)
+      // 空间复杂度：O(1)
+      var isValid = function (word) {
+        if (word.length < 3) {
+          return false;
+        }
+        let hasVowel = false;
+        let hasConsonant = false;
+        for (const c of word) {
+          if (/[a-zA-Z]/.test(c)) {
+            const ch = c.toLowerCase();
+            if (
+              ch === "a" ||
+              ch === "e" ||
+              ch === "i" ||
+              ch === "o" ||
+              ch === "u"
+            ) {
+              hasVowel = true;
+            } else {
+              hasConsonant = true;
+            }
+          } else if (!/\d/.test(c)) {
+            return false;
+          }
+        }
+        return hasVowel && hasConsonant;
+      };
+
+      // test
+      let word = "234Adas";
+      console.log(isValid(word));
+    </script>
+  </body>
+</html>

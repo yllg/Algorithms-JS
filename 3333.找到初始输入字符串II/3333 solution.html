@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：动态规划 + 前缀和优化
+      // 时间复杂度：O(n+k^2)
+      // 空间复杂度：O(k)
+      var possibleStringCount = function (word, k) {
+        const mod = 1000000007;
+        const n = word.length;
+        let cnt = 1;
+        const freq = [];
+
+        for (let i = 1; i < n; ++i) {
+          if (word[i] === word[i - 1]) {
+            ++cnt;
+          } else {
+            freq.push(cnt);
+            cnt = 1;
+          }
+        }
+        freq.push(cnt);
+
+        let ans = 1;
+        for (const o of freq) {
+          ans = (ans * o) % mod;
+        }
+
+        if (freq.length >= k) {
+          return ans;
+        }
+
+        let f = new Array(k).fill(0);
+        let g = new Array(k).fill(1);
+        f[0] = 1;
+
+        for (let i = 0; i < freq.length; ++i) {
+          const f_new = new Array(k).fill(0);
+          for (let j = 1; j < k; ++j) {
+            f_new[j] = g[j - 1];
+            if (j - freq[i] - 1 >= 0) {
+              f_new[j] = (f_new[j] - g[j - freq[i] - 1] + mod) % mod;
+            }
+          }
+          const g_new = new Array(k).fill(0);
+          g_new[0] = f_new[0];
+          for (let j = 1; j < k; ++j) {
+            g_new[j] = (g_new[j - 1] + f_new[j]) % mod;
+          }
+          f = f_new;
+          g = g_new;
+        }
+        return (ans - g[k - 1] + mod) % mod;
+      };
+
+      // test
+      let word = "aabbccdd",
+        k = 7;
+      console.log(possibleStringCount(word, k));
+    </script>
+  </body>
+</html>

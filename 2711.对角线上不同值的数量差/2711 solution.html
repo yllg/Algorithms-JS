@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：模拟
+      // 时间复杂度：O(m×n×min(m,n))
+      // 空间复杂度：O(min(m,n))
+      var differenceOfDistinctValues = function (grid) {
+        const m = grid.length,
+          n = grid[0].length;
+        const res = Array(m)
+          .fill(null)
+          .map(() => Array(n).fill(0));
+        for (let i = 0; i < m; ++i) {
+          for (let j = 0; j < n; ++j) {
+            const s1 = new Set();
+            let x = i + 1,
+              y = j + 1;
+            while (x < m && y < n) {
+              s1.add(grid[x][y]);
+              x += 1;
+              y += 1;
+            }
+            const s2 = new Set();
+            (x = i - 1), (y = j - 1);
+            while (x >= 0 && y >= 0) {
+              s2.add(grid[x][y]);
+              x -= 1;
+              y -= 1;
+            }
+            res[i][j] = Math.abs(s1.size - s2.size);
+          }
+        }
+        return res;
+      };
+
+      // 方法二：前缀和
+      // 时间复杂度：O(mXn)
+      // 空间复杂度：O(min(m,n))
+      var differenceOfDistinctValues = function (grid) {
+        const m = grid.length;
+        const n = grid[0].length;
+        const res = Array(m)
+          .fill(null)
+          .map(() => Array(n).fill(0));
+
+        for (let i = 0; i < m; ++i) {
+          let x = i,
+            y = 0;
+          const s = new Set();
+          while (x < m && y < n) {
+            res[x][y] += s.size;
+            s.add(grid[x][y]);
+            x += 1;
+            y += 1;
+          }
+        }
+
+        for (let j = 1; j < n; ++j) {
+          let x = 0,
+            y = j;
+          const s = new Set();
+          while (x < m && y < n) {
+            res[x][y] += s.size;
+            s.add(grid[x][y]);
+            x += 1;
+            y += 1;
+          }
+        }
+
+        for (let i = 0; i < m; ++i) {
+          let x = i,
+            y = n - 1;
+          const s = new Set();
+          while (x >= 0 && y >= 0) {
+            res[x][y] -= s.size;
+            res[x][y] = Math.abs(res[x][y]);
+            s.add(grid[x][y]);
+            x -= 1;
+            y -= 1;
+          }
+        }
+
+        for (let j = n - 2; j >= 0; --j) {
+          let x = m - 1,
+            y = j;
+          const s = new Set();
+          while (x >= 0 && y >= 0) {
+            res[x][y] -= s.size;
+            res[x][y] = Math.abs(res[x][y]);
+            s.add(grid[x][y]);
+            x -= 1;
+            y -= 1;
+          }
+        }
+
+        return res;
+      };
+
+      // test
+      let grid = [
+        [1, 2, 3],
+        [3, 1, 5],
+        [3, 2, 1],
+      ];
+      console.log(differenceOfDistinctValues(grid));
+    </script>
+  </body>
+</html>

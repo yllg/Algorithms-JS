@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      //方法一：按要求构建
+      // 时间复杂度：O(n)
+      // 空间复杂度：O(1)
+      var buildArray = function (nums) {
+        const n = nums.length;
+        const ans = [];
+        for (let i = 0; i < n; ++i) {
+          ans.push(nums[nums[i]]);
+        }
+        return ans;
+      };
+
+      // 方法二：原地构建
+      // 时间复杂度：O(n)
+      // 空间复杂度：O(1)
+      var buildArray = function (nums) {
+        const n = nums.length;
+        // 第一次遍历编码最终值
+        for (let i = 0; i < n; ++i) {
+          nums[i] += 1000 * (nums[nums[i]] % 1000);
+        }
+        // 第二次遍历修改为最终值
+        for (let i = 0; i < n; ++i) {
+          nums[i] = Math.floor(nums[i] / 1000);
+        }
+        return nums;
+      };
+
+      // test
+      let nums = [0, 2, 1, 5, 3, 4];
+      console.log(buildArray(nums));
+    </script>
+  </body>
+</html>

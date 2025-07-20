@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：哈希表
+      // 时间复杂度：O(nlogn)
+      // 空间复杂度：O(logn)
+      var countLargestGroup = function (n) {
+        let hashMap = {};
+        let maxValue = 0;
+        for (let i = 1; i <= n; ++i) {
+          let key = 0,
+            i0 = i;
+          while (i0) {
+            key += i0 % 10;
+            i0 = Math.floor(i0 / 10);
+          }
+          hashMap[key] = (hashMap[key] || 0) + 1;
+          maxValue = Math.max(maxValue, hashMap[key]);
+        }
+
+        let count = 0;
+        for (let value of Object.values(hashMap)) {
+          if (value === maxValue) {
+            count++;
+          }
+        }
+        return count;
+      };
+
+      // test
+      let n = 13;
+      console.log(countLargestGroup(n));
+    </script>
+  </body>
+</html>

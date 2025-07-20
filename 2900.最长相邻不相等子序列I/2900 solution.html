@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一： 动态规划
+      // 时间复杂度：O(n^2)
+      // 空间复杂度：O(n)
+      var getLongestSubsequence = function (words, groups) {
+        const n = words.length;
+        const dp = new Array(n).fill(1);
+        const prev = new Array(n).fill(-1);
+        let maxLen = 1,
+          endIndex = 0;
+
+        for (let i = 1; i < n; i++) {
+          let bestLen = 1;
+          let bestPrev = -1;
+          for (let j = i - 1; j >= 0; j--) {
+            if (groups[i] !== groups[j] && dp[j] + 1 > bestLen) {
+              bestLen = dp[j] + 1;
+              bestPrev = j;
+            }
+          }
+          dp[i] = bestLen;
+          prev[i] = bestPrev;
+          if (dp[i] > maxLen) {
+            maxLen = dp[i];
+            endIndex = i;
+          }
+        }
+
+        const res = [];
+        for (let i = endIndex; i !== -1; i = prev[i]) {
+          res.push(words[i]);
+        }
+        return res.reverse();
+      };
+
+      // 方法二： 贪心
+      // 时间复杂度：O(n)
+      // 空间复杂度：O(1)
+      var getLongestSubsequence = function (words, groups) {
+        let ans = [];
+        let n = words.length;
+        for (let i = 0; i < n; i++) {
+          if (i === 0 || groups[i] !== groups[i - 1]) {
+            ans.push(words[i]);
+          }
+        }
+        return ans;
+      };
+
+      // test
+      let words = ["e", "a", "b"],
+        groups = [0, 0, 1];
+      console.log(getLongestSubsequence(words, groups));
+    </script>
+  </body>
+</html>

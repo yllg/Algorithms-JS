@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：枚举元素的奇偶性
+      // 时间复杂度：O(ns)
+      // 空间复杂度: O(1)
+      var maximumLength = function (nums) {
+        let res = 0;
+        const patterns = [
+          [0, 0],
+          [0, 1],
+          [1, 0],
+          [1, 1],
+        ];
+        for (const pattern of patterns) {
+          let cnt = 0;
+          for (const num of nums) {
+            if (num % 2 === pattern[cnt % 2]) {
+              cnt++;
+            }
+          }
+          res = Math.max(res, cnt);
+        }
+        return res;
+      };
+
+      // test
+      let nums = [1, 2, 3, 4];
+      console.log(maximumLength(nums));
+    </script>
+  </body>
+</html>

@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 虽然标准的Promise没有内置取消功能，但可以通过这些方法来实现取消逻辑，根据实际需求选择合适的方案。
+
+      // 一.对于Fetch API，可以使用 AbortController 来取消请求：
+      const controller = new AbortController();
+      const signal = controller.signal;
+
+      fetch("https://www.baidu.com", { signal })
+        .then((response) => response)
+        .then((data) => console.log(data))
+        .catch((err) => {
+          if (err.name === "AbortError") {
+            console.log("Fetch aborted");
+          } else {
+            console.error("Fetch error:", err);
+          }
+        });
+
+      // 取消请求
+      controller.abort();
+
+      // 二.自定义Promise包装器
+      class CancellablePromise {
+        constructor(executor) {
+          this._hasCanceled = false;
+
+          this._promise = newPromise((resolve, reject) => {
+            executor(
+              (value) =>
+                this._hasCanceled ? reject({ canceled: true }) : resolve(value),
+              (reason) =>
+                this._hasCanceled ? reject({ canceled: true }) : reject(reason)
+            );
+          });
+        }
+
+        cancel() {
+          this._hasCanceled = true;
+        }
+
+        then(onFulfilled, onRejected) {
+          returnthis._promise.then(onFulfilled, onRejected);
+        }
+
+        catch(onRejected) {
+          returnthis._promise.catch(onRejected);
+        }
+      }
+
+      // 使用自定义的CancellablePromise
+      const cancellablePromise = new CancellablePromise((resolve, reject) => {
+        setTimeout(() => resolve("Completed!"), 1000);
+      });
+
+      cancellablePromise.then(
+        (result) => console.log(result),
+        (err) => {
+          if (err.canceled) {
+            console.log("Promise was canceled");
+          } else {
+            console.error("Promise error:", err);
+          }
+        }
+      );
+
+      // 取消Promise
+      cancellablePromise.cancel();
+    </script>
+  </body>
+</html>

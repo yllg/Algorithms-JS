@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：循环计算可达性 + 一次遍历
+      // 时间复杂度：O(n)
+      // 空间复杂度：O(n)
+      var closestMeetingNode = function (edges, node1, node2) {
+        const n = edges.length;
+        const get = (node) => {
+          const dist = new Array(n).fill(-1);
+          let distance = 0;
+          while (node !== -1 && dist[node] === -1) {
+            dist[node] = distance++;
+            node = edges[node];
+          }
+          return dist;
+        };
+
+        const d1 = get(node1);
+        const d2 = get(node2);
+
+        let res = -1;
+        for (let i = 0; i < n; i++) {
+          if (d1[i] !== -1 && d2[i] !== -1) {
+            if (
+              res === -1 ||
+              Math.max(d1[res], d2[res]) > Math.max(d1[i], d2[i])
+            ) {
+              res = i;
+            }
+          }
+        }
+        return res;
+      };
+
+      // test
+      let edges = [2, 2, 3, -1],
+        node1 = 0,
+        node2 = 1;
+      console.log(closestMeetingNode(edges, node1, node2));
+    </script>
+  </body>
+</html>

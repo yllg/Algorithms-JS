@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：拓扑排序 + 动态规划
+      // 时间复杂度：时间复杂度：O((n+m)∣Σ∣)
+      // 空间复杂度：O(n∣Σ∣+m)
+      var largestPathValue = function (colors, edges) {
+        const n = colors.length;
+        // 邻接表
+        const g = Array.from({ length: n }, () => []);
+        // 节点的入度统计，用于找出拓扑排序中最开始的节点
+        const indeg = Array(n).fill(0);
+        for (const [u, v] of edges) {
+          indeg[v]++;
+          g[u].push(v);
+        }
+        // 记录拓扑排序过程中遇到的节点个数
+        // 如果最终 found 的值不为 n，说明图中存在环
+        let found = 0;
+        const f = Array.from({ length: n }, () => Array(26).fill(0));
+        const q = [];
+        for (let i = 0; i < n; i++) {
+          if (indeg[i] === 0) {
+            q.push(i);
+          }
+        }
+        while (q.length > 0) {
+          found++;
+          const u = q.shift();
+          // 将节点 u 对应的颜色增加 1
+          f[u][colors.charCodeAt(u) - "a".charCodeAt(0)]++;
+          // 枚举 u 的后继节点 v
+          for (const v of g[u]) {
+            indeg[v]--;
+            // 将 f(v,c) 更新为其与 f(u,c) 的较大值
+            for (let c = 0; c < 26; c++) {
+              f[v][c] = Math.max(f[v][c], f[u][c]);
+            }
+            if (indeg[v] === 0) {
+              q.push(v);
+            }
+          }
+        }
+        if (found !== n) {
+          return -1;
+        }
+        let ans = 0;
+        for (let i = 0; i < n; i++) {
+          ans = Math.max(ans, ...f[i]);
+        }
+        return ans;
+      };
+
+      // test
+      let colors = "abaca",
+        edges = [
+          [0, 1],
+          [0, 2],
+          [2, 3],
+          [3, 4],
+        ];
+      console.log(largestPathValue(colors, edges));
+    </script>
+  </body>
+</html>

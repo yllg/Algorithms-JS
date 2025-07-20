@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：标记每个单元所属的 mID
+      var Allocator = function (n) {
+        this.n = n;
+        this.memory = new Array(n).fill(0);
+      };
+
+      Allocator.prototype.allocate = function (size, mID) {
+        let count = 0;
+        for (let i = 0; i < this.n; ++i) {
+          if (this.memory[i] !== 0) {
+            count = 0;
+          } else {
+            ++count;
+            if (count === size) {
+              for (let j = i - count + 1; j <= i; ++j) {
+                this.memory[j] = mID;
+              }
+              return i - count + 1;
+            }
+          }
+        }
+        return -1;
+      };
+
+      Allocator.prototype.freeMemory = function (mID) {
+        let count = 0;
+        for (let i = 0; i < this.n; ++i) {
+          if (this.memory[i] === mID) {
+            ++count;
+            this.memory[i] = 0;
+          }
+        }
+        return count;
+      };
+    </script>
+  </body>
+</html>

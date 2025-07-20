@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：贪心
+      // 时间复杂度：O(nlogn)
+      // 空间复杂度：O(n)
+      var maximumValueSum = function (nums, k, edges) {
+        let res = nums.reduce((a, b) => a + b, 0);
+        let diff = nums.map((x) => (x ^ k) - x);
+        diff.sort((a, b) => a - b);
+        for (
+          let i = diff.length - 1;
+          i > 0 && diff[i] + diff[i - 1] >= 0;
+          i -= 2
+        ) {
+          res += diff[i] + diff[i - 1];
+        }
+        return res;
+      };
+
+      // 方法二：树形动态规划
+      // 时间复杂度：O(n)
+      // 空间复杂度：O(n)
+      var maximumValueSum = function (nums, k, edges) {
+        const n = nums.length;
+        const g = Array.from({ length: n }, () => []);
+
+        for (const [u, v] of edges) {
+          g[u].push(v);
+          g[v].push(u);
+        }
+
+        const dfs = (u, fa) => {
+          let f0 = 0,
+            f1 = -Infinity;
+          for (const v of g[u]) {
+            if (v !== fa) {
+              const [r0, r1] = dfs(v, u);
+              let t = Math.max(f1 + r0, f0 + r1);
+              f0 = Math.max(f0 + r0, f1 + r1);
+              f1 = t;
+            }
+          }
+          const x = nums[u],
+            y = nums[u] ^ k;
+          return [Math.max(f0 + x, f1 + y), Math.max(f1 + x, f0 + y)];
+        };
+
+        return dfs(0, -1)[0];
+      };
+
+      // 方法三：状态机动态规划
+      // 时间复杂度：O(n)
+      // 空间复杂度：O(1)
+      var maximumValueSum = function (nums, k, edges) {
+        let f0 = 0,
+          f1 = -Infinity;
+        for (const x of nums) {
+          const t = Math.max(f1 + x, f0 + (x ^ k));
+          f0 = Math.max(f0 + x, f1 + (x ^ k));
+          f1 = t;
+        }
+        return f0;
+      };
+
+      // test
+      let nums = [1, 2, 1],
+        k = 3,
+        edges = [
+          [0, 1],
+          [0, 2],
+        ];
+      console.log(maximumValueSum(nums, k, edges));
+    </script>
+  </body>
+</html>

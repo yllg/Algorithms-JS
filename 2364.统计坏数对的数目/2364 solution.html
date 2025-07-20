@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：哈希表
+      // 时间复杂度：O(n)
+      // 时间复杂度：O(n)
+      var countBadPairs = function (nums) {
+        const mp = new Map();
+        let res = 0;
+        for (let i = 0; i < nums.length; i++) {
+          const key = nums[i] - i;
+          res += i - (mp.get(key) || 0);
+          mp.set(key, (mp.get(key) || 0) + 1);
+        }
+        return res;
+      };
+
+      // test
+      let nums = [4, 1, 3, 3];
+      console.log(countBadPairs(nums));
+    </script>
+  </body>
+</html>

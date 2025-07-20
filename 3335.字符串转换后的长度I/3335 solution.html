@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：递推
+      // 时间复杂度：O(n+t∣Σ∣)
+      // 空间复杂度：O(∣Σ∣)
+      var lengthAfterTransformations = function (s, t) {
+        const MOD = 1000000007;
+        let cnt = new Array(26).fill(0);
+        for (const ch of s) {
+          cnt[ch.charCodeAt(0) - "a".charCodeAt(0)]++;
+        }
+        for (let round = 0; round < t; round++) {
+          let nxt = new Array(26).fill(0);
+          nxt[0] = cnt[25];
+          nxt[1] = (cnt[25] + cnt[0]) % MOD;
+          for (let i = 2; i < 26; i++) {
+            nxt[i] = cnt[i - 1];
+          }
+          cnt = nxt;
+        }
+        let ans = 0;
+        for (let i = 0; i < 26; i++) {
+          ans = (ans + cnt[i]) % MOD;
+        }
+        return ans;
+      };
+
+      // test
+      let s = "abcyy",
+        t = 2;
+      console.log(lengthAfterTransformations(s, t));
+    </script>
+  </body>
+</html>

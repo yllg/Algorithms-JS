@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：前缀和
+      // 时间复杂度：O(n)
+      // 空间复杂度：O(n)
+      var beautifulSubarrays = function (nums) {
+        const cnt = new Map();
+        cnt.set(0, 1);
+        let mask = 0,
+          ans = 0;
+        for (const x of nums) {
+          mask ^= x;
+          ans += cnt.get(mask) || 0;
+          cnt.set(mask, (cnt.get(mask) || 0) + 1);
+        }
+        return ans;
+      };
+
+      // test
+      let nums = [4, 3, 1, 2, 4];
+      console.log(beautifulSubarrays(nums));
+    </script>
+  </body>
+</html>

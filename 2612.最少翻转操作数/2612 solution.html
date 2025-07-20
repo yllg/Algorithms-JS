@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：广度优先搜索 + 平衡树
+
+      // 方法二：广度优先搜索 + 并查集
+      // 时间复杂度：O(nα(n))
+      // 空间复杂度：O(n)
+      const find = (f, x) => {
+        if (f[x] === x) {
+          return x;
+        }
+        return (f[x] = find(f, f[x]));
+      };
+
+      const merge = (f, x, y) => {
+        const fx = find(f, x),
+          fy = find(f, y);
+        f[fx] = fy;
+      };
+
+      var minReverseOperations = function (n, p, banned, k) {
+        const fa = Array.from({ length: 2 }, () =>
+          Array.from({ length: n + 2 }, (_, i) => i)
+        );
+        for (const ban of banned) {
+          merge(fa[ban % 2], ban, ban + 2);
+        }
+        const ans = Array(n).fill(-1);
+        const q = new Deque();
+        q.pushBack(p);
+        ans[p] = 0;
+        merge(fa[p % 2], p, p + 2);
+        while (!q.isEmpty()) {
+          const i = q.popFront();
+          const mn = Math.max(i - k + 1, k - i - 1);
+          const mx = Math.min(i + k - 1, n * 2 - k - i - 1);
+          for (let j = mn; j <= mx; ) {
+            const fi = find(fa[mn % 2], j);
+            if (fi > mx) {
+              break;
+            }
+            ans[fi] = ans[i] + 1;
+            q.pushBack(fi);
+            merge(fa[mn % 2], fi, fi + 2);
+            j = fi + 2;
+          }
+        }
+        return ans;
+      };
+
+    //   // test
+    //   let n = 4,
+    //     p = 0,
+    //     banned = [1, 2],
+    //     k = 4;
+    //   console.log(minReverseOperations(n, p, banned, k));
+    </script>
+  </body>
+</html>
