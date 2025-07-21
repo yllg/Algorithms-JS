@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：模拟
+      // 时间复杂度：O(n)
+      // 空间复杂度: O(1)
+      var makeFancyString = function (s) {
+        let res = []; // 删除后的字符串
+        // 遍历 s 模拟删除过程
+        for (const ch of s) {
+          const n = res.length;
+          if (n >= 2 && res[n - 1] === ch && res[n - 2] === ch) {
+            // 如果 res 最后两个字符与当前字符均相等，则不添加
+            continue;
+          }
+          // 反之则添加
+          res.push(ch);
+        }
+        return res.join("");
+      };
+
+      // test
+      let s = "leeetcode";
+      console.log(makeFancyString(s));
+    </script>
+  </body>
+</html>
