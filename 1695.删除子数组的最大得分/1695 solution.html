@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：哈希表 + 前缀和
+      // 时间复杂度：O(n)
+      // 空间复杂度: O(n)
+      var maximumUniqueSubarray = function (nums) {
+        const n = nums.length;
+        const psum = new Array(n + 1).fill(0);
+        const cnt = new Map();
+        let ans = 0,
+          pre = 0;
+        for (let i = 0; i < n; ++i) {
+          psum[i + 1] = psum[i] + nums[i];
+          pre = Math.max(pre, cnt.get(nums[i]) || 0);
+          ans = Math.max(ans, psum[i + 1] - psum[pre]);
+          cnt.set(nums[i], i + 1);
+        }
+        return ans;
+      };
+
+      // 方法二：滑动窗口
+      // 时间复杂度：O(n)
+      // 空间复杂度: O(n)
+      var maximumUniqueSubarray = function (nums) {
+        const n = nums.length;
+        const seen = new Set();
+        let ans = 0,
+          psum = 0;
+        for (let i = 0, j = 0; i < n; ++i) {
+          psum += nums[i];
+          while (seen.has(nums[i])) {
+            seen.delete(nums[j]);
+            psum -= nums[j];
+            j++;
+          }
+          seen.add(nums[i]);
+          ans = Math.max(ans, psum);
+        }
+        return ans;
+      };
+
+      // test
+      let nums = [4, 2, 4, 5, 6];
+      console.log(maximumUniqueSubarray(nums));
+    </script>
+  </body>
+</html>
