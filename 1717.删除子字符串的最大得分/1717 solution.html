@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：贪心
+      // 时间复杂度：O(n)
+      // 空间复杂度: O(1)
+      function maximumGain(s, x, y) {
+        let [a, b] = ["a", "b"];
+        if (x < y) {
+          [x, y] = [y, x];
+          [a, b] = [b, a];
+        }
+
+        let [ans, cnt1, cnt2] = [0, 0, 0];
+        for (let c of s) {
+          if (c === a) {
+            cnt1++;
+          } else if (c === b) {
+            if (cnt1) {
+              ans += x;
+              cnt1--;
+            } else {
+              cnt2++;
+            }
+          } else {
+            ans += Math.min(cnt1, cnt2) * y;
+            cnt1 = 0;
+            cnt2 = 0;
+          }
+        }
+        ans += Math.min(cnt1, cnt2) * y;
+        return ans;
+      }
+
+      // test
+      let s = "cdbcbbaaabab",
+        x = 4,
+        y = 5;
+      console.log(maximumGain(s, x, y));
+    </script>
+  </body>
+</html>
