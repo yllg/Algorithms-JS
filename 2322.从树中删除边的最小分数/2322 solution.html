@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：双重 DFS 划分连通块
+      // 时间复杂度：O(n^2)
+      // 空间复杂度: O(n)
+      var minimumScore = function (nums, edges) {
+        const n = nums.length;
+        const e = Array.from({ length: n }, () => []);
+        for (const [u, v] of edges) {
+          e[u].push(v);
+          e[v].push(u);
+        }
+
+        let sum = 0;
+        for (const x of nums) {
+          sum ^= x;
+        }
+        let res = Infinity;
+
+        function dfs2(x, f, oth, anc) {
+          let son = nums[x];
+          for (const y of e[x]) {
+            if (y === f) {
+              continue;
+            }
+            son ^= dfs2(y, x, oth, anc);
+          }
+          if (f === anc) {
+            return son;
+          }
+          res = Math.min(res, calc(oth, son, sum ^ oth ^ son));
+          return son;
+        }
+
+        function dfs(x, f) {
+          let son = nums[x];
+          for (const y of e[x]) {
+            if (y === f) {
+              continue;
+            }
+            son ^= dfs(y, x);
+          }
+
+          for (const y of e[x]) {
+            if (y === f) {
+              dfs2(y, x, son, x);
+            }
+          }
+          return son;
+        }
+
+        dfs(0, -1);
+        return res;
+      };
+
+      function calc(part1, part2, part3) {
+        return (
+          Math.max(part1, Math.max(part2, part3)) -
+          Math.min(part1, Math.min(part2, part3))
+        );
+      }
+
+      // 方法二：在 DFS 序上枚举
+      // 时间复杂度：O(n^2)
+      // 空间复杂度: O(n)
+      var minimumScore = function (nums, edges) {
+        const n = nums.length;
+        const adj = Array.from({ length: n }, () => []);
+        for (const [u, v] of edges) {
+          adj[u].push(v);
+          adj[v].push(u);
+        }
+
+        const sum = new Array(n).fill(0);
+        const in_ = new Array(n).fill(0);
+        const out = new Array(n).fill(0);
+        let cnt = 0;
+
+        function dfs(x, fa) {
+          in_[x] = cnt++;
+          sum[x] = nums[x];
+          for (const y of adj[x]) {
+            if (y === fa) continue;
+            dfs(y, x);
+            sum[x] ^= sum[y];
+          }
+          out[x] = cnt;
+        }
+
+        dfs(0, -1);
+
+        let res = Infinity;
+        for (let u = 1; u < n; u++) {
+          for (let v = u + 1; v < n; v++) {
+            if (in_[v] > in_[u] && in_[v] < out[u]) {
+              res = Math.min(
+                res,
+                calc(sum[0] ^ sum[u], sum[u] ^ sum[v], sum[v])
+              );
+            } else if (in_[u] > in_[v] && in_[u] < out[v]) {
+              res = Math.min(
+                res,
+                calc(sum[0] ^ sum[v], sum[v] ^ sum[u], sum[u])
+              );
+            } else {
+              res = Math.min(
+                res,
+                calc(sum[0] ^ sum[u] ^ sum[v], sum[u], sum[v])
+              );
+            }
+          }
+        }
+        return res;
+      };
+
+      const calc = (part1, part2, part3) => {
+        return (
+          Math.max(part1, Math.max(part2, part3)) -
+          Math.min(part1, Math.min(part2, part3))
+        );
+      };
+
+      // test
+      let nums = [1, 5, 5, 4, 11],
+        edges = [
+          [0, 1],
+          [1, 2],
+          [1, 3],
+          [3, 4],
+        ];
+      console.log(minimumScore(nums, edges));
+    </script>
+  </body>
+</html>
