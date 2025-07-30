@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      /**
+       * 由于这是按位与，一个数与任何其他数字做按位与都只会更小不会更大，
+       * 因此翻译成人话就是：找到由数组最大值构成的连续子序列的最长长度
+       * */
+
+      // 方法一：线性扫描
+      var longestSubarray = function (nums) {
+        let maxValue = nums[0];
+        let ans = 1,
+          cnt = 1;
+        for (let i = 1; i < nums.length; i++) {
+          if (nums[i] > maxValue) {
+            ans = cnt = 1;
+            maxValue = nums[i];
+          } else if (nums[i] < maxValue) {
+            cnt = 0;
+          } else if (nums[i] === maxValue) {
+            cnt++;
+          }
+          ans = Math.max(cnt, ans);
+        }
+        return ans;
+      };
+
+      let nums = [1, 2, 3, 3, 2, 2];
+      console.log(longestSubarray(nums));
+    </script>
+  </body>
+</html>
