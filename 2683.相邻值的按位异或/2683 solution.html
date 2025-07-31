@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 解
+      var doesValidArrayExist = function (derived) {
+        return derived.reduce((xor, x) => xor ^ x, 0) === 0;
+      };
+
+      // test
+      let derived = [1, 1, 0];
+      console.log(doesValidArrayExist(derived));
+    </script>
+  </body>
+</html>
