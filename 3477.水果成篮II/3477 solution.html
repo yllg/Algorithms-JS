@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：模拟
+      // 时间复杂度：O(n^2)
+      // 空间复杂度：O(1)
+      var numOfUnplacedFruits = function (fruits, baskets) {
+        let count = 0;
+        const n = baskets.length;
+        for (const fruit of fruits) {
+          let unset = 1;
+          for (let i = 0; i < n; i++) {
+            if (fruit <= baskets[i]) {
+              baskets[i] = 0;
+              unset = 0;
+              break;
+            }
+          }
+          count += unset;
+        }
+        return count;
+      };
+
+      // test
+      let fruits = [4, 2, 5],
+        baskets = [3, 5, 4];
+      console.log(numOfUnplacedFruits(fruits, baskets));
+    </script>
+  </body>
+</html>
