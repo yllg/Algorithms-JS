@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：动态规划
+      // 时间复杂度：O(n x n开X次方)
+      // 空间复杂度：O(n)
+      var numberOfWays = function (n, x) {
+        const MOD = 1e9 + 7;
+        const dp = Array.from({ length: n + 1 }, () => Array(n + 1).fill(0));
+        dp[0][0] = 1;
+        for (let i = 1; i <= n; i++) {
+          const val = Math.pow(i, x);
+          for (let j = 0; j <= n; j++) {
+            dp[i][j] = dp[i - 1][j];
+            if (j >= val) {
+              dp[i][j] = (dp[i][j] + dp[i - 1][j - val]) % MOD;
+            }
+          }
+        }
+        return dp[n][n];
+      };
+
+      // test
+      let n = 10,
+        x = 2;
+      console.log(numberOfWays(n, x));
+    </script>
+  </body>
+</html>
