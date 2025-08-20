@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：动态规划
+      // 时间复杂度：O(mXn)
+      // 空间复杂度：O(mXn)
+      var countSquares = function (matrix) {
+        const m = matrix.length,
+          n = matrix[0].length;
+        const f = new Array(m).fill(0).map(() => new Array(n).fill(0));
+        let ans = 0;
+        for (let i = 0; i < m; ++i) {
+          for (let j = 0; j < n; ++j) {
+            if (i === 0 || j === 0) {
+              f[i][j] = matrix[i][j];
+            } else if (matrix[i][j] === 0) {
+              f[i][j] = 0;
+            } else {
+              f[i][j] = Math.min(f[i][j - 1], f[i - 1][j], f[i - 1][j - 1]) + 1;
+            }
+            ans += f[i][j];
+          }
+        }
+        return ans;
+      };
+
+      // test
+      let matrix = [
+        [0, 1, 1, 1],
+        [1, 1, 1, 1],
+        [0, 1, 1, 1],
+      ];
+      console.log(countSquares(matrix));
+    </script>
+  </body>
+</html>
