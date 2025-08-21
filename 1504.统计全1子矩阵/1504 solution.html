@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：枚举
+      // 时间复杂度：O(m^2 * n)
+      // 空间复杂度：O(m * n)
+      var numSubmat = function (mat) {
+        const m = mat.length,
+          n = mat[0].length;
+        let res = 0;
+        const row = new Array(m);
+        for (let i = 0; i < m; i++) {
+          row[i] = new Array(n).fill(0);
+        }
+
+        for (let i = 0; i < m; i++) {
+          for (let j = 0; j < n; j++) {
+            if (j === 0) {
+              row[i][j] = mat[i][j];
+            } else {
+              row[i][j] = mat[i][j] === 0 ? 0 : row[i][j - 1] + 1;
+            }
+            let cur = row[i][j];
+            for (let k = i; k >= 0; k--) {
+              cur = Math.min(cur, row[k][j]);
+              if (cur === 0) {
+                break;
+              }
+              res += cur;
+            }
+          }
+        }
+        return res;
+      };
+
+      // 方法二：单调栈
+      // 时间复杂度：O(m * n)
+      // 空间复杂度：O(n)
+      var numSubmat = function (mat) {
+        const n = mat[0].length;
+        const heights = new Array(n).fill(0);
+        let res = 0;
+        for (const row of mat) {
+          for (let i = 0; i < n; i++) {
+            heights[i] = row[i] === 0 ? 0 : heights[i] + 1;
+          }
+          const stack = [[-1, 0, -1]];
+          for (let i = 0; i < n; i++) {
+            const h = heights[i];
+            while (stack[stack.length - 1][2] >= h) {
+              stack.pop();
+            }
+            const [j, prev] = stack[stack.length - 1];
+            const cur = prev + (i - j) * h;
+            stack.push([i, cur, h]);
+            res += cur;
+          }
+        }
+        return res;
+      };
+
+      // test
+      let mat = [
+        [1, 0, 1],
+        [1, 1, 0],
+        [1, 1, 0],
+      ];
+      console.log(numSubmat(mat));
+    </script>
+  </body>
+</html>
