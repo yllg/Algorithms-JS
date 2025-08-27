@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：记忆化搜索
+      // 时间复杂度：O(mn)
+      // 空间复杂度：O(mn)
+      var lenOfVDiagonal = function (grid) {
+        const DIRS = [
+          [1, 1],
+          [1, -1],
+          [-1, -1],
+          [-1, 1],
+        ];
+        const m = grid.length,
+          n = grid[0].length;
+        const memo = new Array(m * n * 8).fill(-1);
+
+        function dfs(cx, cy, direction, turn, target) {
+          const nx = cx + DIRS[direction][0];
+          const ny = cy + DIRS[direction][1];
+          /* 如果超出边界或者下一个节点值不是目标值，则返回 */
+          if (
+            nx < 0 ||
+            ny < 0 ||
+            nx >= m ||
+            ny >= n ||
+            grid[nx][ny] != target
+          ) {
+            return 0;
+          }
+
+          const turnInt = turn ? 1 : 0;
+          const index = nx * n * 8 + ny * 8 + direction * 2 + turnInt;
+          if (memo[index] !== -1) {
+            return memo[index];
+          }
+
+          /* 按照原来的方向继续行走 */
+          let maxStep = dfs(nx, ny, direction, turn, 2 - target);
+          if (turn) {
+            /* 顺时针旋转 90 度转向 */
+            maxStep = Math.max(
+              maxStep,
+              dfs(nx, ny, (direction + 1) % 4, false, 2 - target)
+            );
+          }
+          memo[index] = maxStep + 1;
+          return maxStep + 1;
+        }
+
+        let res = 0;
+        for (let i = 0; i < m; i++) {
+          for (let j = 0; j < n; j++) {
+            if (grid[i][j] === 1) {
+              for (let direction = 0; direction < 4; direction++) {
+                res = Math.max(res, dfs(i, j, direction, true, 2) + 1);
+              }
+            }
+          }
+        }
+        return res;
+      };
+
+      // test
+      let grid = [
+        [2, 2, 1, 2, 2],
+        [2, 0, 2, 2, 0],
+        [2, 0, 1, 1, 0],
+        [1, 0, 2, 2, 2],
+        [2, 0, 0, 2, 2],
+      ];
+      console.log(lenOfVDiagonal(grid));
+    </script>
+  </body>
+</html>
