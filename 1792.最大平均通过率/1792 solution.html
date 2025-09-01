@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：优先队列
+      // 时间复杂度：O((n+m)logn)
+      // 空间复杂度：O(n) 或 O(1)
+      var maxAverageRatio = function (classes, extraStudents) {
+        const pq = new PriorityQueue((a, b) => {
+          const val1 = (b[1] + 1) * b[1] * (a[1] - a[0]);
+          const val2 = (a[1] + 1) * a[1] * (b[1] - b[0]);
+          return val1 < val2 ? 1 : -1;
+        });
+
+        for (const c of classes) {
+          pq.enqueue([c[0], c[1]]);
+        }
+
+        for (let i = 0; i < extraStudents; i++) {
+          const arr = pq.dequeue();
+          const pass = arr[0],
+            total = arr[1];
+          pq.enqueue([pass + 1, total + 1]);
+        }
+
+        let res = 0;
+        const count = classes.length;
+        while (!pq.isEmpty()) {
+          const arr = pq.dequeue();
+          const pass = arr[0],
+            total = arr[1];
+          res += pass / total;
+        }
+        return res / count;
+      };
+
+      // test
+      let classes = [
+          [1, 2],
+          [3, 5],
+          [2, 2],
+        ],
+        extraStudents = 2;
+      console.log(maxAverageRatio(classes, extraStudents));
+    </script>
+  </body>
+</html>
