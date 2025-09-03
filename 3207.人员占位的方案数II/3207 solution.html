@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：排序 + 二重循环枚举
+      // 时间复杂度：O(n^2)
+      // 空间复杂度：O(n)
+      var numberOfPairs = function (points) {
+        let ans = 0;
+
+        points.sort((a, b) => a[0] - b[0] || b[1] - a[1]);
+
+        for (let i = 0; i < points.length - 1; i++) {
+          const pointA = points[i];
+          const xRange = [pointA[0] - 1, Infinity];
+          const yRange = [-Infinity, pointA[1] + 1];
+
+          for (let j = i + 1; j < points.length; j++) {
+            const pointB = points[j];
+
+            if (
+              pointB[0] > xRange[0] &&
+              pointB[0] < xRange[1] &&
+              pointB[1] > yRange[0] &&
+              pointB[1] < yRange[1]
+            ) {
+              ans++;
+              xRange[0] = pointB[0];
+              yRange[0] = pointB[1];
+            }
+          }
+        }
+
+        return ans;
+      };
+
+      // 方法二：二维前缀和 + 离散化
+      // 时间复杂度：O(n^2)
+      // 空间复杂度：O(n)
+      var numberOfPairs = function (points) {
+        const col = new Map();
+        const row = new Map();
+        const coordinatesMap = new Map();
+
+        for (const [x, y] of points) {
+          col.set(x, 0);
+          row.set(y, 0);
+        }
+
+        function mapKeysToOrder(m) {
+          const sortedKeys = Array.from(m.keys()).sort((a, b) => a - b);
+          sortedKeys.forEach((key, index) => {
+            m.set(key, index + 1);
+          });
+        }
+
+        mapKeysToOrder(col);
+        mapKeysToOrder(row);
+
+        const nc = col.size + 1;
+        const nr = row.size + 1;
+
+        const m = Array.from({ length: nc }, () => new Array(nr).fill(0));
+
+        for (const point of points) {
+          const [c, r] = [col.get(point[0]), row.get(point[1])];
+          coordinatesMap.set(point, [c, r]);
+          m[c][r] = 1;
+        }
+
+        const prefixSum = Array.from({ length: nc }, () =>
+          new Array(nr).fill(0)
+        );
+
+        for (let i = 1; i < nc; i++) {
+          for (let j = 1; j < nr; j++) {
+            prefixSum[i][j] =
+              prefixSum[i - 1][j] +
+              prefixSum[i][j - 1] -
+              prefixSum[i - 1][j - 1] +
+              m[i][j];
+          }
+        }
+
+        let ans = 0;
+
+        points.sort((a, b) => a[0] - b[0] || b[1] - a[1]);
+
+        for (let i = 0; i < points.length - 1; i++) {
+          for (let j = i + 1; j < points.length; j++) {
+            if (points[i][1] >= points[j][1]) {
+              const [c1, r1] = coordinatesMap.get(points[i]);
+              const [c2, r2] = coordinatesMap.get(points[j]);
+
+              const cnt =
+                prefixSum[c2][r1] -
+                prefixSum[c1 - 1][r1] -
+                prefixSum[c2][r2 - 1] +
+                prefixSum[c1 - 1][r2 - 1];
+
+              if (cnt === 2) ans++;
+            }
+          }
+        }
+
+        return ans;
+      };
+
+      // test
+      let points = [
+        [1, 1],
+        [2, 2],
+        [3, 3],
+      ];
+      console.log(numberOfPairs(points));
+    </script>
+  </body>
+</html>
