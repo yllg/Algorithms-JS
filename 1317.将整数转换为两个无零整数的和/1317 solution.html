@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：枚举
+      // 时间复杂度：O(NlogN)
+      // 空间复杂度：O(1)
+      var getNoZeroIntegers = function (n) {
+        for (let A = 1; A < n; A++) {
+          const B = n - A;
+          if (!A.toString().includes("0") && !B.toString().includes("0")) {
+            return [A, B];
+          }
+        }
+        return [];
+      };
+
+      // test
+      let n = 2;
+      console.log(getNoZeroIntegers(n));
+    </script>
+  </body>
+</html>
