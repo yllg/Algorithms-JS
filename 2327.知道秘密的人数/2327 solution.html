@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：模拟 + 双端队列
+      // 时间复杂度：O(n)
+      // 空间复杂度：O(n)
+      var peopleAwareOfSecret = function (n, delay, forget) {
+        const MOD = 1000000007;
+        const know = new Deque();
+        const share = new Deque();
+        know.pushBack({ day: 1, count: 1 });
+        let knowCnt = 1,
+          shareCnt = 0;
+
+        for (let i = 2; i <= n; i++) {
+          if (!know.isEmpty() && know.front().day === i - delay) {
+            const first = know.popFront();
+            knowCnt = (knowCnt - first.count + MOD) % MOD;
+            shareCnt = (shareCnt + first.count) % MOD;
+            share.pushBack(first);
+          }
+          if (!share.isEmpty() && share.front().day === i - forget) {
+            const first = share.popFront();
+            shareCnt = (shareCnt - first.count + MOD) % MOD;
+          }
+          if (!share.isEmpty()) {
+            knowCnt = (knowCnt + shareCnt) % MOD;
+            know.pushBack({ day: i, count: shareCnt });
+          }
+        }
+        return (knowCnt + shareCnt) % MOD;
+      };
+
+      // test
+      let n = 6,
+        delay = 2,
+        forget = 4;
+      console.log(peopleAwareOfSecret(n, delay, forget));
+    </script>
+  </body>
+</html>
