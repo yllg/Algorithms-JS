@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：模拟 + 排序
+      // 时间复杂度：O(n*logn)
+      // 空间复杂度：O(n)
+      var sortVowels = function (s) {
+        const vowels = new Set([
+          "a",
+          "e",
+          "i",
+          "o",
+          "u",
+          "A",
+          "E",
+          "I",
+          "O",
+          "U",
+        ]);
+
+        const tmp = [];
+        for (const ch of s) {
+          if (vowels.has(ch)) {
+            tmp.push(ch);
+          }
+        }
+
+        tmp.sort();
+
+        let idx = 0;
+        let result = "";
+        for (const ch of s) {
+          if (vowels.has(ch)) {
+            result += tmp[idx++];
+          } else {
+            result += ch;
+          }
+        }
+
+        return result;
+      };
+
+      // 方法二：计数 + 排序
+      // 时间复杂度：O(n)
+      // 空间复杂度：O(1)
+      var sortVowels = function (s) {
+        const vowels = new Set([
+          "a",
+          "e",
+          "i",
+          "o",
+          "u",
+          "A",
+          "E",
+          "I",
+          "O",
+          "U",
+        ]);
+        const cnt = new Array(58).fill(-1);
+        for (const ch of vowels) {
+          const idx = ch.charCodeAt(0) - "A".charCodeAt(0);
+          cnt[idx] = 0;
+        }
+
+        for (const ch of s) {
+          const idx = ch.charCodeAt(0) - "A".charCodeAt(0);
+          if (cnt[idx] !== -1) {
+            cnt[idx]++;
+          }
+        }
+
+        const arr = s.split("");
+        let idx = 0;
+        for (let i = 0; i < arr.length; i++) {
+          const pos = arr[i].charCodeAt(0) - "A".charCodeAt(0);
+          if (cnt[pos] !== -1) {
+            while (cnt[idx] <= 0) {
+              idx++;
+            }
+            arr[i] = String.fromCharCode(idx + "A".charCodeAt(0));
+            cnt[idx]--;
+          }
+        }
+
+        return arr.join("");
+      };
+
+      // test
+      let s = "lEetcOde";
+      console.log(sortVowels(s));
+    </script>
+  </body>
+</html>
