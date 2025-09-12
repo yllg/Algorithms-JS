@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：贪心
+      // 时间复杂度：O(n)
+      // 空间复杂度：O(1)
+      var doesAliceWin = function (s) {
+        return [...s].some((c) => "aeiou".includes(c));
+      };
+
+      // test
+      let s = "leetcoder";
+      console.log(doesAliceWin(s));
+    </script>
+  </body>
+</html>
