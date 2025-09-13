@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：遍历
+      // 时间复杂度：O(n)
+      // 空间复杂度：O(C)
+      var maxFreqSum = function (s) {
+        const isVowel = (c) => {
+          return c === "a" || c === "e" || c === "i" || c === "o" || c === "u";
+        };
+
+        const mp = {};
+        for (const ch of s) {
+          mp[ch] = (mp[ch] || 0) + 1;
+        }
+
+        let vowel = 0,
+          consonant = 0;
+        for (let ch = "a".charCodeAt(0); ch <= "z".charCodeAt(0); ch++) {
+          const char = String.fromCharCode(ch);
+          const count = mp[char] || 0;
+          if (isVowel(char)) {
+            vowel = Math.max(vowel, count);
+          } else {
+            consonant = Math.max(consonant, count);
+          }
+        }
+        return vowel + consonant;
+      };
+
+      // test
+      let s = "successes";
+      console.log(maxFreqSum(s));
+    </script>
+  </body>
+</html>
