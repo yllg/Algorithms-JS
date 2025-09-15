@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：遍历 + 哈希表
+      // 时间复杂度：O(n+m)
+      // 空间复杂度：O(1)
+      var canBeTypedWords = function (text, brokenLetters) {
+        const broken = new Set(); // 无法输入的字符集合
+        for (const ch of brokenLetters) {
+          broken.add(ch);
+        }
+        let res = 0; // 可以完全输入的单词数目
+        let flag = true; // 当前字符所在单词是否可被完全输入
+        for (const ch of text) {
+          if (ch === " ") {
+            // 当前字符为空格，检查上一个单词状态，更新数目并初始化 flag
+            if (flag) {
+              ++res;
+            }
+            flag = true;
+          } else if (broken.has(ch)) {
+            // 当前字符不可被输入，所在单词无法被完全输入，更新 flag
+            flag = false;
+          }
+        }
+        // 判断最后一个单词状态并更新数目
+        if (flag) {
+          ++res;
+        }
+        return res;
+      };
+
+      // test
+      let text = "hello world",
+        brokenLetters = "ad";
+      console.log(canBeTypedWords(text, brokenLetters));
+    </script>
+  </body>
+</html>
