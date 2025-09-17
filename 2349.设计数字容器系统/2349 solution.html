@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：优先队列 + 惰性删除
+      // 时间复杂度： change函数 O(logn)，find函数 O(logn)
+      // 空间复杂度：O(n)
+      var NumberContainers = function () {
+        this.nums = new Map();
+        this.heaps = new Map();
+      };
+
+      NumberContainers.prototype.change = function (index, number) {
+        const oldNumber = this.nums.get(index);
+        this.nums.set(index, number);
+        if (!this.heaps.has(number)) {
+          this.heaps.set(number, new MinPriorityQueue());
+        }
+        this.heaps.get(number).enqueue(index);
+      };
+
+      NumberContainers.prototype.find = function (number) {
+        if (!this.heaps.has(number)) {
+          return -1;
+        }
+        const heap = this.heaps.get(number);
+        while (!heap.isEmpty() && this.nums.get(heap.front()) !== number) {
+          heap.dequeue();
+        }
+        return heap.isEmpty() ? -1 : heap.front();
+      };
+
+      // 方法二：有序集合
+
+    </script>
+  </body>
+</html>
