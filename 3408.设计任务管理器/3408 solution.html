@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：优先队列 + 哈希表
+      // 时间复杂度：O(log(n+m))
+      // 空间复杂度：O(n+m)
+      var TaskManager = function (tasks) {
+        this.taskInfo = new Map();
+        this.heap = new PriorityQueue((a, b) => {
+          if (a[0] === b[0]) {
+            return a[1] > b[1] ? -1 : 1;
+          }
+          return a[0] > b[0] ? -1 : 1;
+        });
+
+        for (const [userId, taskId, priority] of tasks) {
+          this.taskInfo.set(taskId, [priority, userId]);
+          this.heap.enqueue([priority, taskId]);
+        }
+      };
+
+      TaskManager.prototype.add = function (userId, taskId, priority) {
+        this.taskInfo.set(taskId, [priority, userId]);
+        this.heap.enqueue([priority, taskId]);
+      };
+
+      TaskManager.prototype.edit = function (taskId, newPriority) {
+        if (this.taskInfo.has(taskId)) {
+          const [priority, userId] = this.taskInfo.get(taskId);
+          this.taskInfo.delete(taskId);
+          this.taskInfo.set(taskId, [newPriority, userId]);
+          this.heap.enqueue([newPriority, taskId]);
+        }
+      };
+
+      TaskManager.prototype.rmv = function (taskId) {
+        this.taskInfo.delete(taskId);
+      };
+
+      TaskManager.prototype.execTop = function () {
+        while (!this.heap.isEmpty()) {
+          const [priority, taskId] = this.heap.dequeue();
+          if (
+            this.taskInfo.has(taskId) &&
+            this.taskInfo.get(taskId)[0] == priority
+          ) {
+            const userId = this.taskInfo.get(taskId)[1];
+            this.taskInfo.delete(taskId);
+            return userId;
+          }
+        }
+        return -1;
+      };
+    </script>
+  </body>
+</html>
