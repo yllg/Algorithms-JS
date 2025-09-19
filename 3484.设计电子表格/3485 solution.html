@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：模拟
+      var Spreadsheet = function (rows) {
+        this.grid = Array.from({ length: rows + 1 }, () =>
+          new Array(27).fill(0)
+        );
+      };
+
+      Spreadsheet.prototype.setCell = function (cell, value) {
+        const [x, y] = this.getPos(cell);
+        this.grid[x][y] = value;
+      };
+
+      Spreadsheet.prototype.resetCell = function (cell) {
+        const [x, y] = this.getPos(cell);
+        this.grid[x][y] = 0;
+      };
+
+      Spreadsheet.prototype.getValue = function (formula) {
+        const i = formula.indexOf("+");
+        const cell1 = formula.substring(1, i);
+        const cell2 = formula.substring(i + 1);
+        return this.getCellVal(cell1) + this.getCellVal(cell2);
+      };
+
+      Spreadsheet.prototype.getPos = function (cell) {
+        const x = parseInt(cell.substring(1));
+        const y = cell.charCodeAt(0) - "A".charCodeAt(0);
+        return [x, y];
+      };
+
+      Spreadsheet.prototype.getCellVal = function (cell) {
+        if (/[A-Z]/.test(cell[0])) {
+          const [x, y] = this.getPos(cell);
+          return this.grid[x][y];
+        } else {
+          return parseInt(cell);
+        }
+      };
+
+      // 方法二：哈希表
+      // 时间复杂度：O(1)
+      // 空间复杂度：O(cellsCount)
+      var Spreadsheet = function (rows) {
+        this.cellValues = {};
+      };
+
+      Spreadsheet.prototype.setCell = function (cell, value) {
+        this.cellValues[cell] = value;
+      };
+
+      Spreadsheet.prototype.resetCell = function (cell) {
+        delete this.cellValues[cell];
+      };
+
+      Spreadsheet.prototype.getValue = function (formula) {
+        const i = formula.indexOf("+");
+        const cell1 = formula.substring(1, i);
+        const cell2 = formula.substring(i + 1);
+        const val1 = /[a-z]/i.test(cell1[0])
+          ? this.cellValues[cell1] || 0
+          : parseInt(cell1);
+        const val2 = /[a-z]/i.test(cell2[0])
+          ? this.cellValues[cell2] || 0
+          : parseInt(cell2);
+        return val1 + val2;
+      };
+    </script>
+  </body>
+</html>
