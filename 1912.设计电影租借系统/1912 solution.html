@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：使用合适的数据结构
+      // 时间复杂度：O(mlogm)
+      // 空间复杂度：O(m)
+      const { AvlTree } = require("datastructures-js");
+
+      class MovieRentingSystem {
+        constructor(_, entries) {
+          // (shop, movie) -> price
+          this.shopMovieToPrice = new Map();
+
+          // movie -> {(price, shop)}
+          this.unrentedMovieToPriceShop = new Map();
+
+          // {(price, shop, movie)}
+          this.rentedMovies = new AvlTree(
+            (a, b) => a[0] - b[0] || a[1] - b[1] || a[2] - b[2]
+          );
+
+          for (const [shop, movie, price] of entries) {
+            this.shopMovieToPrice.set(`${shop},${movie}`, price);
+            if (!this.unrentedMovieToPriceShop.has(movie)) {
+              this.unrentedMovieToPriceShop.set(
+                movie,
+                new AvlTree((a, b) => a[0] - b[0] || a[1] - b[1])
+              );
+            }
+            this.unrentedMovieToPriceShop.get(movie).insert([price, shop]);
+          }
+        }
+
+        // 获取 unrentedMovieToPriceShop[movie] 的前 5 个 shop
+        search(movie) {
+          const t = this.unrentedMovieToPriceShop.get(movie);
+          if (t === undefined) {
+            return [];
+          }
+          const ans = [];
+          t.traverseInOrder(
+            (node) => ans.push(node.getValue()[1]),
+            () => ans.length === 5
+          );
+          return ans;
+        }
+
+        // 借电影
+        rent(shop, movie) {
+          const price = this.shopMovieToPrice.get(`${shop},${movie}`);
+          // 从 unrentedMovieToPriceShop 移到 rentedMovies
+          this.unrentedMovieToPriceShop.get(movie).remove([price, shop]);
+          this.rentedMovies.insert([price, shop, movie]);
+        }
+
+        // 还电影
+        drop(shop, movie) {
+          const price = this.shopMovieToPrice.get(`${shop},${movie}`);
+          // 从 rentedMovies 移到 unrentedMovieToPriceShop
+          this.rentedMovies.remove([price, shop, movie]);
+          this.unrentedMovieToPriceShop.get(movie).insert([price, shop]);
+        }
+
+        // 获取 rentedMovies 的前 5 个 shop 和 movie
+        report() {
+          const ans = [];
+          this.rentedMovies.traverseInOrder(
+            (node) => ans.push(node.getValue().slice(1)),
+            () => ans.length === 5
+          );
+          return ans;
+        }
+      }
+    </script>
+  </body>
+</html>
