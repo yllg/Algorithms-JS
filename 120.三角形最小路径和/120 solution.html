@@ -51,8 +51,22 @@
         return dp[0];
       };
 
-      // 解法3： 递归，递归+备忘录
-      // 会超时，略
+      // 解法3：官方解法
+      // 时间复杂度O(n^2) 空间复杂度O(n)
+      // 虽然空间复杂度仍然为 O(n)，但我们只使用了 n 的空间存储状态，减少了一半的空间消耗。
+      var minimumTotal = function (triangle) {
+        const n = triangle.length;
+        const f = new Array(n).fill(0);
+        f[0] = triangle[0][0];
+        for (let i = 1; i < n; ++i) {
+          f[i] = f[i - 1] + triangle[i][i];
+          for (let j = i - 1; j > 0; --j) {
+            f[j] = Math.min(f[j - 1], f[j]) + triangle[i][j];
+          }
+          f[0] += triangle[i][0];
+        }
+        return Math.min(...f);
+      };
 
       // 测试
       let test_triangle1 = [[2], [3, 4], [6, 5, 7], [4, 1, 8, 3]];
