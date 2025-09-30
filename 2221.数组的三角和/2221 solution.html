@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：模拟
+      // 时间复杂度：O(n^2)
+      // 空间复杂度：O(n)
+      var triangularSum = function (nums) {
+        let current = nums;
+        while (current.length > 1) {
+          const newNums = [];
+          for (let i = 0; i < current.length - 1; i++) {
+            newNums.push((current[i] + current[i + 1]) % 10);
+          }
+          current = newNums;
+        }
+        return current[0];
+      };
+
+      // test
+      let nums = [1, 2, 3, 4, 5];
+      console.log(triangularSum(nums));
+    </script>
+  </body>
+</html>
