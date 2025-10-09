@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：动态规划
+      // 时间复杂度：O(mn)
+      // 空间复杂度：O(n)
+      var minTime = function (skill, mana) {
+        const n = skill.length,
+          m = mana.length;
+        const times = new Array(n).fill(0);
+
+        for (let j = 0; j < m; j++) {
+          let curTime = 0;
+          for (let i = 0; i < n; i++) {
+            curTime = Math.max(curTime, times[i]) + skill[i] * mana[j];
+          }
+          times[n - 1] = curTime;
+          for (let i = n - 2; i >= 0; i--) {
+            times[i] = times[i + 1] - skill[i + 1] * mana[j];
+          }
+        }
+        return times[n - 1];
+      };
+
+      // test
+      let skill = [1, 5, 2, 4],
+        mana = [5, 1, 4, 2];
+      console.log(minTime(skill, mana));
+    </script>
+  </body>
+</html>
