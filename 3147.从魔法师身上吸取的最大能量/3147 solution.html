@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：逆序遍历
+      // 时间复杂度：O(mn)
+      // 空间复杂度：O(n)
+      var maximumEnergy = function (energy, k) {
+        const n = energy.length;
+        let ans = -Number.MAX_SAFE_INTEGER;
+
+        for (let i = n - k; i < n; i++) {
+          let sum = 0;
+          for (let j = i; j >= 0; j -= k) {
+            sum += energy[j];
+            ans = Math.max(ans, sum);
+          }
+        }
+        return ans;
+      };
+
+      // test
+      let energy = [5, 2, -10, -5, 1],
+        k = 3;
+      console.log(maximumEnergy(energy, k));
+    </script>
+  </body>
+</html>
