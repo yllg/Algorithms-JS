@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：逐个判断
+      // 时间复杂度：O(mn)
+      // 空间复杂度：O(∣Σ∣)
+      var removeAnagrams = function (words) {
+        let res = [words[0]]; // 结果数组
+        let n = words.length;
+
+        for (let i = 1; i < n; i++) {
+          if (!compare(words[i], words[i - 1])) {
+            res.push(words[i]);
+          }
+        }
+        return res;
+      };
+
+      // 判断两个单词是否为字母异位词
+      function compare(word1, word2) {
+        let freq = new Array(26).fill(0);
+        for (let ch of word1) {
+          freq[ch.charCodeAt(0) - "a".charCodeAt(0)]++;
+        }
+        for (let ch of word2) {
+          freq[ch.charCodeAt(0) - "a".charCodeAt(0)]--;
+        }
+        return freq.every((x) => x === 0);
+      }
+
+      // test
+      let words = ["abba", "baba", "bbaa", "cd", "cd"];
+      console.log(removeAnagrams(words));
+    </script>
+  </body>
+</html>
