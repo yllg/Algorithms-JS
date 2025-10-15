@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：一次遍历
+      // 时间复杂度：O(n)
+      // 空间复杂度：O(1)
+      var maxIncreasingSubarrays = function (nums) {
+        const n = nums.length;
+        let cnt = 1,
+          precnt = 0,
+          ans = 0;
+        for (let i = 1; i < n; ++i) {
+          if (nums[i] > nums[i - 1]) {
+            ++cnt;
+          } else {
+            precnt = cnt;
+            cnt = 1;
+          }
+          ans = Math.max(ans, Math.min(precnt, cnt));
+          ans = Math.max(ans, Math.floor(cnt / 2));
+        }
+        return ans;
+      };
+
+      // test
+      let nums = [2, 5, 7, 8, 9, 2, 3, 4, 3, 1];
+      console.log(maxIncreasingSubarrays(nums));
+    </script>
+  </body>
+</html>
