@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：模拟
+      // 时间复杂度：O(n^2*m)
+      // 空间复杂度：O(n)
+      var countValidSelections = function (nums) {
+        let count = 0,
+          nonZeros = nums.filter((x) => x > 0).length,
+          n = nums.length;
+        for (let i = 0; i < n; i++) {
+          if (nums[i] === 0) {
+            if (isValid([...nums], nonZeros, i, -1)) {
+              count++;
+            }
+            if (isValid([...nums], nonZeros, i, 1)) {
+              count++;
+            }
+          }
+        }
+        return count;
+      };
+
+      function isValid(nums, nonZeros, start, direction) {
+        let curr = start;
+        while (nonZeros > 0 && curr >= 0 && curr < nums.length) {
+          if (nums[curr] > 0) {
+            nums[curr]--;
+            direction *= -1;
+            if (nums[curr] === 0) {
+              nonZeros--;
+            }
+          }
+          curr += direction;
+        }
+        return nonZeros === 0;
+      }
+
+      // 方法二：前缀和
+      // 时间复杂度：O(n)
+      // 空间复杂度：O(1)
+      var countValidSelections = function (nums) {
+        let n = nums.length,
+          ans = 0;
+        let sum = nums.reduce((a, b) => a + b, 0);
+        let left = 0,
+          right = sum;
+        for (let i = 0; i < n; i++) {
+          if (nums[i] === 0) {
+            if (left - right >= 0 && left - right <= 1) {
+              ans++;
+            }
+            if (right - left >= 0 && right - left <= 1) {
+              ans++;
+            }
+          } else {
+            left += nums[i];
+            right -= nums[i];
+          }
+        }
+        return ans;
+      };
+
+      // test
+      let nums = [1, 0, 2, 0, 3];
+      console.log(countValidSelections(nums));
+    </script>
+  </body>
+</html>
