@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 大于等于 n 且二进制表示仅包含 1 的 最小 整数 x 。
+
+      // 方法一：找规律
+      // 时间复杂度：O(logn)
+      // 空间复杂度：O(1)
+      var smallestNumber = function (n) {
+        let x = 1;
+        while (x < n) {
+          x = x * 2 + 1;
+        }
+        return x;
+      };
+
+      // test
+      let n = 5;
+      console.log(smallestNumber(n));
+    </script>
+  </body>
+</html>
