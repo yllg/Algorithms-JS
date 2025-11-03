@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：贪心
+      // 时间复杂度：O(n)
+      // 空间复杂度：O(1)
+      var minCost = function (colors, neededTime) {
+        let i = 0,
+          len = colors.length;
+        let ret = 0;
+        while (i < len) {
+          const ch = colors[i];
+          let maxValue = 0;
+          let sum = 0;
+
+          while (i < len && colors[i] === ch) {
+            maxValue = Math.max(maxValue, neededTime[i]);
+            sum += neededTime[i];
+            i++;
+          }
+          ret += sum - maxValue;
+        }
+        return ret;
+      };
+
+      // test
+      let colors = "abaac",
+        neededTime = [1, 2, 3, 4, 5];
+      console.log(minCost(colors, neededTime));
+    </script>
+  </body>
+</html>
