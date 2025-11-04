@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      /**
+       * @param {number[]} nums
+       * @param {number} k
+       * @param {number} x
+       * @return {number[]}
+       */
+      var findXSum = function (nums, k, x) {
+        let arr = [];
+        for (let i = 0; i + k <= nums.length; i++) {
+          const _map = [];
+          const data = nums.slice(i, i + k).reduce((_map, cur) => {
+            if (_map[cur]) {
+              _map[cur]++;
+            } else {
+              _map[cur] = 1;
+            }
+            return _map;
+          }, {});
+
+          for (let item in data) {
+            _map.push([item, data[item]]);
+          }
+          _map.sort((a, b) => b[0] - a[0]).sort((a, b) => b[1] - a[1]);
+          const _data = _map
+            .slice(0, x)
+            .map((item) => Number(item[0]) * Number(item[1]));
+          arr.push(_data.reduce((a, b) => a + b, 0));
+        }
+        return arr;
+      };
+
+      // test
+      let nums = [1, 1, 2, 2, 3, 4, 2, 3],
+        k = 6,
+        x = 2;
+      console.log(findXSum(nums, k, x));
+    </script>
+  </body>
+</html>
