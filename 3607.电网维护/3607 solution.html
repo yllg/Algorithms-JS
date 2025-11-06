@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一 并查集 + 倒序处理查询
+      // 时间复杂度：O((m+c+q)*α(c))
+      // 空间复杂度：O(c)
+      class DSU {
+        constructor(size) {
+          this.size = size;
+          this.parent = Array.from({ length: size }).map((_, i) => i);
+        }
+
+        join(u, v) {
+          this.parent[this.find(v)] = this.find(u);
+        }
+
+        find(x) {
+          return this.parent[x] === x
+            ? x
+            : (this.parent[x] = this.find(this.parent[x]));
+        }
+      }
+
+      var processQueries = function (c, connections, queries) {
+        const dsu = new DSU(c + 1);
+
+        connections.forEach(([u, v]) => {
+          dsu.join(u, v);
+        });
+
+        const online = Array.from({ length: c + 1 }).fill(true);
+        const offlineCounts = Array.from({ length: c + 1 }).fill(0);
+        const minimumOnlineStations = new Map();
+
+        for (const [op, x] of queries) {
+          if (op === 2) {
+            online[x] = false;
+            offlineCounts[x] += 1;
+          }
+        }
+
+        for (let i = 1; i <= c; i++) {
+          const root = dsu.find(i);
+          if (!minimumOnlineStations.has(root)) {
+            minimumOnlineStations.set(root, -1);
+          }
+
+          const station = minimumOnlineStations.get(root);
+          if (online[i] === true) {
+            if (station === -1 || station > i) {
+              minimumOnlineStations.set(root, i);
+            }
+          }
+        }
+
+        const ans = [];
+
+        for (const [op, x] of queries.reverse()) {
+          const root = dsu.find(x);
+          const station = minimumOnlineStations.get(root);
+
+          if (op === 1) {
+            if (online[x]) {
+              ans.push(x);
+            } else {
+              ans.push(station);
+            }
+          }
+
+          if (op === 2) {
+            if (offlineCounts[x] > 1) {
+              offlineCounts[x] -= 1;
+            } else {
+              online[x] = true;
+              if (station === -1 || station > x) {
+                minimumOnlineStations.set(root, x);
+              }
+            }
+          }
+        }
+
+        return ans.reverse();
+      };
+
+      // 方法二 DFS/BFS + 优先队列
+      // 时间复杂度：O(m+clogc+q)
+      // 空间复杂度：O(c+m)
+      var processQueries = function (c, connections, queries) {
+        const graph = Array.from({ length: c + 1 }, () => []);
+        const vertices = Array.from({ length: c + 1 });
+
+        for (let i = 0; i < c; i++) {
+          vertices[i + 1] = {
+            offline: false,
+            powerGridId: -1,
+            vertexId: i + 1,
+          };
+        }
+
+        connections.forEach(([u, v]) => {
+          graph[u].push(v);
+          graph[v].push(u);
+        });
+
+        const powerGrids = new Array();
+
+        for (let i = 1, powerGridId = 0; i <= c; i++) {
+          if (vertices[i].powerGridId === -1) {
+            const powerGrid = new MinPriorityQueue();
+
+            const traverse = (u) => {
+              u.powerGridId = powerGridId;
+
+              powerGrid.enqueue(u.vertexId);
+
+              for (const v of graph[u.vertexId].map((i) => vertices[i])) {
+                if (v.powerGridId === -1) {
+                  traverse(v);
+                }
+              }
+            };
+
+            traverse(vertices[i]);
+            powerGrids.push(powerGrid);
+            powerGridId += 1;
+          }
+        }
+
+        const ans = [];
+
+        for (const [op, x] of queries) {
+          if (op === 1) {
+            if (vertices[x].offline === false) {
+              ans.push(x);
+            } else {
+              const powerGrid = powerGrids[vertices[x].powerGridId];
+              while (
+                powerGrid.front() !== null &&
+                vertices[powerGrid.front()].offline === true
+              ) {
+                powerGrid.dequeue();
+              }
+
+              ans.push(powerGrid.front() !== null ? powerGrid.front() : -1);
+            }
+          } else if (op === 2) {
+            vertices[x].offline = true;
+          }
+        }
+
+        return ans;
+      };
+    </script>
+  </body>
+</html>
