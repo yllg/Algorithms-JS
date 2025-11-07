@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：二分查找 + 差分数组
+      // 时间复杂度：O(n*logD)
+      // 空间复杂度：O(n)
+      var maxPower = function (stations, r, k) {
+        const n = stations.length;
+        const cnt = new Array(n + 1).fill(0);
+
+        for (let i = 0; i < n; i++) {
+          const left = Math.max(0, i - r);
+          const right = Math.min(n, i + r + 1);
+          cnt[left] += stations[i];
+          cnt[right] -= stations[i];
+        }
+
+        const check = (val) => {
+          const diff = [...cnt];
+          let sum = 0;
+          let remaining = k;
+
+          for (let i = 0; i < n; i++) {
+            sum += diff[i];
+            if (sum < val) {
+              const add = val - sum;
+              if (remaining < add) {
+                return false;
+              }
+              remaining -= add;
+              const end = Math.min(n, i + 2 * r + 1);
+              diff[end] -= add;
+              sum += add;
+            }
+          }
+          return true;
+        };
+
+        let lo = Math.min(...stations);
+        let hi = stations.reduce((a, b) => a + b, 0) + k;
+        let res = 0;
+
+        while (lo <= hi) {
+          const mid = Math.floor(lo + (hi - lo) / 2);
+          if (check(mid)) {
+            res = mid;
+            lo = mid + 1;
+          } else {
+            hi = mid - 1;
+          }
+        }
+        return res;
+      };
+
+      // test
+      let stations = [1, 2, 4, 5, 0],
+        r = 1,
+        k = 2;
+      console.log(maxPower(stations, r, k));
+    </script>
+  </body>
+</html>
