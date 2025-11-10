@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：单调栈
+      // 时间复杂度：O(n*logD)
+      // 空间复杂度：O(n)
+      var minOperations = function (nums) {
+        const s = [];
+        let res = 0;
+        for (const a of nums) {
+          while (s.length && s[s.length - 1] > a) {
+            s.pop();
+          }
+          if (a === 0) continue;
+          if (!s.length || s[s.length - 1] < a) {
+            res++;
+            s.push(a);
+          }
+        }
+        return res;
+      };
+
+      // test
+      let nums = [0, 2];
+      console.log(minOperations(nums));
+    </script>
+  </body>
+</html>
