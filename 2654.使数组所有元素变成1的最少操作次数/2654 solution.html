@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：贪心
+      // 时间复杂度：O(n^2*logM),其中 n 是 nums 的长度，M 是 nums 中的最大值
+      // 空间复杂度：O(1)
+      var minOperations = function (nums) {
+        const n = nums.length;
+        let num1 = 0;
+        let g = 0;
+
+        const gcd = (a, b) => {
+          while (b !== 0) {
+            const temp = b;
+            b = a % b;
+            a = temp;
+          }
+          return a;
+        };
+
+        for (const x of nums) {
+          if (x === 1) {
+            num1++;
+          }
+          g = gcd(g, x);
+        }
+
+        if (num1 > 0) {
+          return n - num1;
+        }
+        if (g > 1) {
+          return -1;
+        }
+
+        let minLen = n;
+        for (let i = 0; i < n; i++) {
+          let currentGcd = 0;
+          for (let j = i; j < n; j++) {
+            currentGcd = gcd(currentGcd, nums[j]);
+            if (currentGcd === 1) {
+              minLen = Math.min(minLen, j - i + 1);
+              break;
+            }
+          }
+        }
+        return minLen + n - 2;
+      };
+
+      // test
+      let nums = [2, 6, 3, 4];
+      console.log(minOperations(nums));
+    </script>
+  </body>
+</html>
