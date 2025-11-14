@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：二维差分 + 前缀和
+      // 时间复杂度：O(n^2)
+      // 空间复杂度：O(n^2)
+      var rangeAddQueries = function (n, queries) {
+        let diff = Array.from({ length: n + 1 }, () => Array(n + 1).fill(0));
+        for (let [row1, col1, row2, col2] of queries) {
+          diff[row1][col1] += 1;
+          diff[row2 + 1][col1] -= 1;
+          diff[row1][col2 + 1] -= 1;
+          diff[row2 + 1][col2 + 1] += 1;
+        }
+
+        let mat = Array.from({ length: n }, () => Array(n).fill(0));
+        for (let i = 0; i < n; i++) {
+          for (let j = 0; j < n; j++) {
+            let x1 = i === 0 ? 0 : mat[i - 1][j];
+            let x2 = j === 0 ? 0 : mat[i][j - 1];
+            let x3 = i === 0 || j === 0 ? 0 : mat[i - 1][j - 1];
+            mat[i][j] = diff[i][j] + x1 + x2 - x3;
+          }
+        }
+        return mat;
+      };
+
+      // test
+      let n = 3,
+        queries = [
+          [1, 1, 2, 2],
+          [0, 0, 1, 1],
+        ];
+      console.log(rangeAddQueries(n, queries));
+    </script>
+  </body>
+</html>
