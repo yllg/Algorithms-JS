@@ -1,42 +1,42 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
-</head>
+  </head>
 
-<body>
+  <body>
     <script>
-        // 方法一：正序遍历
-        // 时间复杂度：O(n)
-        // 空间复杂度：O(1)
-        var isOneBitCharacter = function (bits) {
-            let i = 0,
-                n = bits.length;
-            while (i < n - 1) {
-                i += bits[i] + 1;
-            }
-            return i === n - 1;
-        };
+      // 思路很简单：因为1肯定要连着下一个，所以遇见1，走两步，遇见0，走一步
 
-        // 方法二：倒序遍历
-        // 时间复杂度：O(n)
-        // 空间复杂度：O(1)
-        var isOneBitCharacter = function (bits) {
-            const n = bits.length;
-            let i = n - 2;
-            while (i >= 0 && bits[i]) {
-                i--;
-            }
-            return (n - i) % 2 === 0;
-        };
+      // 方法一：正序遍历
+      // 时间复杂度：O(n)
+      // 空间复杂度：O(1)
+      var isOneBitCharacter = function (bits) {
+        let i = 0,
+          n = bits.length;
+        while (i < n - 1) {
+          i += bits[i] + 1;
+        }
+        return i === n - 1;
+      };
 
-        // test
-        let bits = [1, 0, 0];
-        console.log(isOneBitCharacter(bits))
+      // 方法二：倒序遍历
+      // 时间复杂度：O(n)
+      // 空间复杂度：O(1)
+      var isOneBitCharacter = function (bits) {
+        const n = bits.length;
+        let i = n - 2;
+        while (i >= 0 && bits[i]) {
+          i--;
+        }
+        return (n - i) % 2 === 0;
+      };
+
+      // test
+      let bits = [1, 0, 0];
+      console.log(isOneBitCharacter(bits));
     </script>
-</body>
-
+  </body>
 </html>
