@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：排序
+      // 时间复杂度：O(nlogn)
+      // 空间复杂度：O(logn)
+      var findFinalValue = function (nums, original) {
+        nums.sort((a, b) => a - b);
+        for (const num of nums) {
+          if (original === num) {
+            original *= 2;
+          }
+        }
+        return original;
+      };
+
+      // 方法二：哈希表
+      // 时间复杂度：O(n)
+      // 空间复杂度：O(n)
+      var findFinalValue = function (nums, original) {
+        const set = new Set(nums);
+        while (set.has(original)) {
+          original *= 2;
+        }
+        return original;
+      };
+
+      // test
+      let nums = [5, 3, 6, 1, 12],
+        original = 3;
+      console.log(findFinalValue(nums, original));
+    </script>
+  </body>
+</html>
