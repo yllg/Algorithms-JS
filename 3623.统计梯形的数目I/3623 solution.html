@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：哈希表 + 几何数学
+      // 时间复杂度：O(n)
+      // 空间复杂度：O(n)
+      var countTrapezoids = function (points) {
+        const pointNum = new Map();
+        const mod = 1000000007n;
+        let ans = 0n,
+          sum = 0n;
+
+        for (const point of points) {
+          const y = point[1];
+          pointNum.set(y, (pointNum.get(y) || 0) + 1);
+        }
+
+        for (const pNum of pointNum.values()) {
+          const edge = (BigInt(pNum) * BigInt(pNum - 1)) / 2n;
+          ans = (ans + edge * sum) % mod;
+          sum = (sum + edge) % mod;
+        }
+
+        return Number(ans);
+      };
+
+      // test
+      let points = [
+        [1, 0],
+        [2, 0],
+        [3, 0],
+        [2, 2],
+        [3, 2],
+      ];
+      console.log(countTrapezoids(points));
+    </script>
+  </body>
+</html>
