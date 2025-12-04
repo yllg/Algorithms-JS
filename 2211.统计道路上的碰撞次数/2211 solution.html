@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：模拟
+      // 时间复杂度：O(n)
+      // 空间复杂度：O(1)
+      var countCollisions = function (directions) {
+        let res = 0;
+        let flag = -1;
+        for (let i = 0; i < directions.length; i++) {
+          const c = directions[i];
+          if (c === "L") {
+            if (flag >= 0) {
+              res += flag + 1;
+              flag = 0;
+            }
+          } else if (c === "S") {
+            if (flag > 0) {
+              res += flag;
+            }
+            flag = 0;
+          } else {
+            if (flag >= 0) {
+              flag++;
+            } else {
+              flag = 1;
+            }
+          }
+        }
+        return res;
+      };
+
+      // 方法二：计数
+      // 时间复杂度：O(n)
+      // 空间复杂度：O(1)
+      var countCollisions = function (directions) {
+        const n = directions.length;
+        let l = 0,
+          r = n - 1;
+        while (l < n && directions[l] === "L") {
+          l++;
+        }
+        while (r >= l && directions[r] === "R") {
+          r--;
+        }
+        let res = 0;
+        for (let i = l; i <= r; i++) {
+          if (directions[i] !== "S") {
+            res++;
+          }
+        }
+        return res;
+      };
+
+      // test
+      let directions = "RLRSLL";
+      console.log(countCollisions(directions));
+    </script>
+  </body>
+</html>
