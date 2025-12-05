@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：数学
+      // 时间复杂度：O(n)
+      // 空间复杂度：O(1)
+      function countPartitions(nums) {
+        const totalSum = nums.reduce((a, b) => a + b, 0);
+        return totalSum % 2 === 0 ? nums.length - 1 : 0;
+      }
+      // test
+      let nums = [10, 10, 3, 7, 6];
+      console.log(countPartitions(nums));
+    </script>
+  </body>
+</html>
