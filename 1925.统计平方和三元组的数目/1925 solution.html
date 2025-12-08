@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：枚举
+      // 时间复杂度：O(n^2)
+      // 空间复杂度：O(1)
+      var countTriples = function (n) {
+        let res = 0;
+        // 枚举 a 与 b
+        for (let a = 1; a <= n; a++) {
+          for (let b = 1; b <= n; b++) {
+            // 判断是否符合要求
+            let c = Math.floor(Math.sqrt(a * a + b * b + 1));
+            if (c <= n && c * c === a * a + b * b) {
+              res++;
+            }
+          }
+        }
+        return res;
+      };
+
+      // test
+      let n = 5;
+      console.log(countTriples(n));
+    </script>
+  </body>
+</html>
