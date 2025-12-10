@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：脑筋急转弯
+      // 时间复杂度：O(n)
+      // 空间复杂度：O(1)
+      var countPermutations = function (complexity) {
+        const n = complexity.length;
+        for (let i = 1; i < n; i++) {
+          if (complexity[i] <= complexity[0]) {
+            return 0;
+          }
+        }
+
+        let ans = 1;
+        const mod = 1000000007;
+        for (let i = 2; i < n; i++) {
+          ans = (ans * i) % mod;
+        }
+        return ans;
+      };
+
+      // test
+      let complexity = [1, 2, 3];
+      console.log(countPermutations(complexity));
+    </script>
+  </body>
+</html>
