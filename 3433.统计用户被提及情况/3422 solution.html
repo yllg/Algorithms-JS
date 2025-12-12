@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：排序后回放
+      // 时间复杂度：O(nm+mlogmlogt)
+      // 空间复杂度：O(n)
+      var countMentions = function (numberOfUsers, events) {
+        events.sort((a, b) => {
+          const timeA = parseInt(a[1]);
+          const timeB = parseInt(b[1]);
+          if (timeA !== timeB) {
+            return timeA - timeB;
+          }
+          return (b[0] === "MESSAGE" ? 0 : 1) - (a[0] === "MESSAGE" ? 0 : 1);
+        });
+
+        const count = new Array(numberOfUsers).fill(0);
+        const nextOnlineTime = new Array(numberOfUsers).fill(0);
+
+        for (const event of events) {
+          const curTime = parseInt(event[1]);
+          const type = event[0];
+
+          if (type === "MESSAGE") {
+            const target = event[2];
+            if (target === "ALL") {
+              for (let i = 0; i < numberOfUsers; i++) {
+                count[i]++;
+              }
+            } else if (target === "HERE") {
+              for (let i = 0; i < numberOfUsers; i++) {
+                if (nextOnlineTime[i] <= curTime) {
+                  count[i]++;
+                }
+              }
+            } else {
+              const users = target.split(" ");
+              for (const user of users) {
+                const idx = parseInt(user.substring(2));
+                count[idx]++;
+              }
+            }
+          } else {
+            const idx = parseInt(event[2]);
+            nextOnlineTime[idx] = curTime + 60;
+          }
+        }
+
+        return count;
+      };
+
+      // test
+      let numberOfUsers = 2,
+        events = [
+          ["MESSAGE", "10", "id1 id0"],
+          ["OFFLINE", "11", "0"],
+          ["MESSAGE", "71", "HERE"],
+        ];
+      console.log(countMentions(numberOfUsers, events));
+    </script>
+  </body>
+</html>
