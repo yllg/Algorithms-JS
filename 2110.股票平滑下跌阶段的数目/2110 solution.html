@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：动态规划
+      // 时间复杂度：O(n)
+      // 空间复杂度：O(1)
+      var getDescentPeriods = function (prices) {
+        const n = prices.length;
+        let res = 1; // 平滑下降阶段的总数，初值为 dp[0]
+        let prev = 1; // 上一个元素为结尾的平滑下降阶段的总数，初值为 dp[0]
+        // 从 1 开始遍历数组，按照递推式更新 prev 以及总数 res
+        for (let i = 1; i < n; ++i) {
+          if (prices[i] === prices[i - 1] - 1) {
+            ++prev;
+          } else {
+            prev = 1;
+          }
+          res += prev;
+        }
+        return res;
+      };
+
+      // test
+      let prices = [3, 2, 1, 4];
+      console.log(getDescentPeriods(prices));
+    </script>
+  </body>
+</html>
