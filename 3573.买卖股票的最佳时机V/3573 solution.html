@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：记忆化搜索
+      // 时间复杂度：O(nk)
+      // 空间复杂度：O(nk)
+      var maximumProfit = function (prices, k) {
+        const n = prices.length;
+        const memo = Array(n)
+          .fill()
+          .map(() =>
+            Array(k + 1)
+              .fill()
+              .map(() => Array(3).fill(-1))
+          );
+
+        const dfs = (i, j, state) => {
+          if (j == 0) {
+            return 0;
+          }
+          if (i == 0) {
+            return state == 0 ? 0 : state == 1 ? -prices[0] : prices[0];
+          }
+          if (memo[i][j][state] !== -1) {
+            return memo[i][j][state];
+          }
+          const p = prices[i];
+          let res;
+          if (state === 0) {
+            res = Math.max(
+              dfs(i - 1, j, 0),
+              Math.max(dfs(i - 1, j, 1) + p, dfs(i - 1, j, 2) - p)
+            );
+          } else if (state === 1) {
+            res = Math.max(dfs(i - 1, j, 1), dfs(i - 1, j - 1, 0) - p);
+          } else {
+            res = Math.max(dfs(i - 1, j, 2), dfs(i - 1, j - 1, 0) + p);
+          }
+          memo[i][j][state] = res;
+          return res;
+        };
+
+        return dfs(n - 1, k, 0);
+      };
+
+      // 方法二：动态规划
+      // 时间复杂度：O(nk)
+      // 空间复杂度：O(k)
+      var maximumProfit = function (prices, k) {
+        const n = prices.length;
+        const dp = Array(k + 1)
+          .fill()
+          .map(() => [0, 0, 0]);
+        // 初始化第 0 天的状态
+        for (let j = 1; j <= k; j++) {
+          dp[j][1] = -prices[0];
+          dp[j][2] = prices[0];
+        }
+
+        for (let i = 1; i < n; i++) {
+          for (let j = k; j > 0; j--) {
+            dp[j][0] = Math.max(
+              dp[j][0],
+              Math.max(dp[j][1] + prices[i], dp[j][2] - prices[i])
+            );
+            dp[j][1] = Math.max(dp[j][1], dp[j - 1][0] - prices[i]);
+            dp[j][2] = Math.max(dp[j][2], dp[j - 1][0] + prices[i]);
+          }
+        }
+
+        return dp[k][0];
+      };
+
+      // test
+      let prices = [1, 7, 9, 8, 2],
+        k = 2;
+      console.log(maximumProfit(prices, k));
+    </script>
+  </body>
+</html>
