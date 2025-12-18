@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：前缀和
+      // 时间复杂度：O(n)
+      // 空间复杂度：O(n)
+      function maxProfit(prices, strategy, k) {
+        const n = prices.length;
+        const profitSum = new Array(n + 1).fill(0);
+        const priceSum = new Array(n + 1).fill(0);
+        for (let i = 0; i < n; i++) {
+          profitSum[i + 1] = profitSum[i] + prices[i] * strategy[i];
+          priceSum[i + 1] = priceSum[i] + prices[i];
+        }
+        let res = profitSum[n];
+        for (let i = k - 1; i < n; i++) {
+          const leftProfit = profitSum[i - k + 1];
+          const rightProfit = profitSum[n] - profitSum[i + 1];
+          const changeProfit =
+            priceSum[i + 1] - priceSum[i - Math.floor(k / 2) + 1];
+          res = Math.max(res, leftProfit + changeProfit + rightProfit);
+        }
+        return res;
+      }
+
+      // test
+      let prices = [4, 2, 8],
+        strategy = [-1, 0, 1],
+        k = 2;
+      console.log(maxProfit(prices, strategy, k));
+    </script>
+  </body>
+</html>
