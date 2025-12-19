@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：广度优先搜索
+      // 时间复杂度：O(mlogm+n)
+      // 空间复杂度：O(n+m)
+      var findAllPeople = function (n, meetings, firstPerson) {
+        const m = meetings.length;
+        meetings.sort((x, y) => x[2] - y[2]);
+        const secret = new Array(n).fill(false);
+        secret[0] = true;
+        secret[firstPerson] = true;
+        let vertices = new Set();
+        const edges = new Map();
+
+        for (let i = 0; i < m; ) {
+          // meetings[i .. j] 为同一时间
+          let j = i;
+          while (j + 1 < m && meetings[j + 1][2] === meetings[i][2]) {
+            ++j;
+          }
+
+          vertices.clear();
+          edges.clear();
+          for (let k = i; k <= j; ++k) {
+            const x = meetings[k][0],
+              y = meetings[k][1];
+            vertices.add(x);
+            vertices.add(y);
+            if (!edges.has(x)) {
+              edges.set(x, []);
+            }
+            if (!edges.has(y)) {
+              edges.set(y, []);
+            }
+            edges.get(x).push(y);
+            edges.get(y).push(x);
+          }
+
+          const q = new Queue();
+          for (const u of vertices) {
+            if (secret[u]) {
+              q.enqueue(u);
+            }
+          }
+
+          while (!q.isEmpty()) {
+            const u = q.dequeue();
+            if (edges.has(u)) {
+              for (const v of edges.get(u)) {
+                if (!secret[v]) {
+                  secret[v] = true;
+                  q.enqueue(v);
+                }
+              }
+            }
+          }
+
+          i = j + 1;
+        }
+
+        const ans = [];
+        for (let i = 0; i < n; ++i) {
+          if (secret[i]) {
+            ans.push(i);
+          }
+        }
+        return ans;
+      };
+
+      // test
+      let n = 6,
+        meetings = [
+          [1, 2, 5],
+          [2, 3, 8],
+          [1, 5, 10],
+        ],
+        firstPerson = 1;
+      console.log(findAllPeople(n, meetings, firstPerson));
+    </script>
+  </body>
+</html>
