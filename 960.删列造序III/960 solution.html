@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：动态规划
+      // 时间复杂度：O(N*W^2)
+      // 空间复杂度：O(W)
+      var minDeletionSize = function (strs) {
+        const n = strs[0].length;
+        const dp = new Array(n).fill(1);
+
+        for (let i = n - 2; i >= 0; i--) {
+          for (let j = i + 1; j < n; j++) {
+            let valid = true;
+            for (const row of strs) {
+              if (row[i] > row[j]) {
+                valid = false;
+                break;
+              }
+            }
+            if (valid) {
+              dp[i] = Math.max(dp[i], 1 + dp[j]);
+            }
+          }
+        }
+
+        return n - Math.max(...dp);
+      };
+
+      // test
+      let strs = ["babca", "bbazb"];
+      console.log(minDeletionSize(strs));
+    </script>
+  </body>
+</html>
