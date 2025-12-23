@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：时间戳排序
+      // 时间复杂度：O(nlogn)
+      // 空间复杂度：O(n)
+      var maxTwoEvents = function (events) {
+        const evs = [];
+        for (const event of events) {
+          evs.push({ ts: event[0], op: 0, val: event[2] });
+          evs.push({ ts: event[1], op: 1, val: event[2] });
+        }
+
+        evs.sort((a, b) => {
+          if (a.ts !== b.ts) {
+            return a.ts - b.ts;
+          }
+          return a.op - b.op;
+        });
+
+        let ans = 0,
+          bestFirst = 0;
+        for (const ev of evs) {
+          if (ev.op === 0) {
+            ans = Math.max(ans, ev.val + bestFirst);
+          } else {
+            bestFirst = Math.max(bestFirst, ev.val);
+          }
+        }
+        return ans;
+      };
+
+      // test
+      let events = [
+        [1, 3, 2],
+        [4, 5, 2],
+        [2, 4, 3],
+      ];
+      console.log(maxTwoEvents(events));
+    </script>
+  </body>
+</html>
