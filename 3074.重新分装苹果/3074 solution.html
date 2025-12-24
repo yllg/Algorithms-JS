@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：贪心
+      // 时间复杂度：O(n+mlogm)
+      // 空间复杂度：O（1)
+      var minimumBoxes = function (apple, capacity) {
+        let sum = apple.reduce((a, b) => a + b, 0);
+
+        capacity.sort((a, b) => b - a);
+
+        let need = 0;
+        while (sum > 0) {
+          sum -= capacity[need];
+          need += 1;
+        }
+
+        return need;
+      };
+
+      // test
+      let apple = [1, 3, 2],
+        capacity = [4, 3, 1, 5, 2];
+      console.log(minimumBoxes(apple, capacity));
+    </script>
+  </body>
+</html>
