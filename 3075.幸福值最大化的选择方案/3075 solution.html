@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：排序 + 贪心
+      // 时间复杂度：O(nlogn+k)
+      // 空间复杂度：O（logn)
+      var maximumHappinessSum = function (happiness, k) {
+        happiness.sort((a, b) => b - a);
+        let ans = 0;
+        for (let i = 0; i < k; i++) {
+          ans += Math.max(happiness[i] - i, 0);
+        }
+        return ans;
+      };
+
+      // test
+      let happiness = [1, 2, 3],
+        k = 2;
+      console.log(maximumHappinessSum(happiness, k));
+    </script>
+  </body>
+</html>
