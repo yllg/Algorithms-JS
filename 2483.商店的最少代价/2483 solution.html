@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：枚举
+      // 时间复杂度：O(n)
+      // 空间复杂度：O（1)
+      var bestClosingTime = function (customers) {
+        const n = customers.length;
+        let suf = 0;
+        let pre = 0;
+        let minCost = 0;
+        let res = 0;
+
+        for (let i = 0; i <= n; i++) {
+          if (minCost > suf + pre) {
+            minCost = suf + pre;
+            res = i;
+          }
+          if (i < n && customers[i] === "N") {
+            pre++;
+          } else if (i < n) {
+            suf--;
+          }
+        }
+        return res;
+      };
+
+      // test
+      let customers = "YYNY";
+      console.log(bestClosingTime(customers));
+    </script>
+  </body>
+</html>
