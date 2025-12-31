@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：二分查找 + 广度优先搜索
+      // 时间复杂度：O(row×col×log(row×col))
+      // 空间复杂度：O（row×col)
+      var latestDayToCross = function (row, col, cells) {
+        const dirs = [
+          [-1, 0],
+          [1, 0],
+          [0, -1],
+          [0, 1],
+        ];
+
+        let left = 0,
+          right = row * col,
+          ans = 0;
+        while (left <= right) {
+          const mid = Math.floor((left + right) / 2);
+          const grid = Array.from({ length: row }, () =>
+            Array.from({ length: col }, () => 1)
+          );
+          for (let i = 0; i < mid; i++) {
+            grid[cells[i][0] - 1][cells[i][1] - 1] = 0;
+          }
+
+          const queue = [];
+          for (let i = 0; i < col; i++) {
+            if (grid[0][i] === 1) {
+              queue.push([0, i]);
+              grid[0][i] = 0;
+            }
+          }
+
+          let found = false;
+          while (queue.length > 0) {
+            const [x, y] = queue.shift();
+            for (const [dx, dy] of dirs) {
+              const nx = x + dx;
+              const ny = y + dy;
+              if (
+                nx >= 0 &&
+                nx < row &&
+                ny >= 0 &&
+                ny < col &&
+                grid[nx][ny] === 1
+              ) {
+                if (nx === row - 1) {
+                  found = true;
+                  break;
+                }
+                queue.push([nx, ny]);
+                grid[nx][ny] = 0;
+              }
+            }
+            if (found) break;
+          }
+
+          if (found) {
+            ans = mid;
+            left = mid + 1;
+          } else {
+            right = mid - 1;
+          }
+        }
+
+        return ans;
+      };
+
+      // 方法二：时光倒流 + 并查集
+      // 时间复杂度：O(row×col×α(row×col))
+      // 空间复杂度：O（row×col)
+      var latestDayToCross = function (row, col, cells) {
+        // 编号为 n 的节点是超级节点 s
+        // 编号为 n+1 的节点是超级节点 t
+        const n = row * col;
+        const uf = new UnionFind(n + 2);
+        const valid = Array.from({ length: row }, () => new Array(col).fill(0));
+        let ans = 0;
+        for (let i = n - 1; i >= 0; --i) {
+          const x = cells[i][0] - 1,
+            y = cells[i][1] - 1;
+          valid[x][y] = 1;
+          // 并查集是一维的，(x, y) 坐标是二维的，需要进行转换
+          const id = x * col + y;
+          if (x - 1 >= 0 && valid[x - 1][y] === 1) {
+            uf.unite(id, id - col);
+          }
+          if (x + 1 < row && valid[x + 1][y] === 1) {
+            uf.unite(id, id + col);
+          }
+          if (y - 1 >= 0 && valid[x][y - 1] === 1) {
+            uf.unite(id, id - 1);
+          }
+          if (y + 1 < col && valid[x][y + 1] === 1) {
+            uf.unite(id, id + 1);
+          }
+          if (x === 0) {
+            uf.unite(id, n);
+          }
+          if (x === row - 1) {
+            uf.unite(id, n + 1);
+          }
+          if (uf.connected(n, n + 1)) {
+            ans = i;
+            break;
+          }
+        }
+        return ans;
+      };
+
+      // 并查集模板
+      class UnionFind {
+        constructor(n) {
+          this.parent = new Array(n);
+          this.size = new Array(n).fill(1);
+          this.n = n;
+          // 当前连通分量数目
+          this.setCount = n;
+          for (let i = 0; i < n; i++) {
+            this.parent[i] = i;
+          }
+        }
+
+        findset(x) {
+          return this.parent[x] === x
+            ? x
+            : (this.parent[x] = this.findset(this.parent[x]));
+        }
+
+        unite(x, y) {
+          x = this.findset(x);
+          y = this.findset(y);
+          if (x === y) {
+            return false;
+          }
+          if (this.size[x] < this.size[y]) {
+            [x, y] = [y, x];
+          }
+          this.parent[y] = x;
+          this.size[x] += this.size[y];
+          this.setCount--;
+          return true;
+        }
+
+        connected(x, y) {
+          return this.findset(x) === this.findset(y);
+        }
+      }
+    </script>
+  </body>
+</html>
