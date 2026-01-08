@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：动态规划
+      // 时间复杂度：O(m*n)
+      // 空间复杂度：O(m*n)
+      var maxDotProduct = function (nums1, nums2) {
+        const m = nums1.length;
+        const n = nums2.length;
+        const f = Array.from({ length: m }, () => new Array(n).fill(0));
+
+        for (let i = 0; i < m; ++i) {
+          for (let j = 0; j < n; ++j) {
+            const xij = nums1[i] * nums2[j];
+            f[i][j] = xij;
+            if (i > 0) {
+              f[i][j] = Math.max(f[i][j], f[i - 1][j]);
+            }
+            if (j > 0) {
+              f[i][j] = Math.max(f[i][j], f[i][j - 1]);
+            }
+            if (i > 0 && j > 0) {
+              f[i][j] = Math.max(f[i][j], f[i - 1][j - 1] + xij);
+            }
+          }
+        }
+
+        return f[m - 1][n - 1];
+      };
+
+      // test
+      let nums1 = [2, 1, -2, 5],
+        nums2 = [3, 0, -6];
+      console.log(maxDotProduct(nums1, nums2));
+    </script>
+  </body>
+</html>
