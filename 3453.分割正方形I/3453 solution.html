@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：二分查找
+      // 时间复杂度：O(nlog(LU))
+      // 空间复杂度：O(1)
+      var separateSquares = function (squares) {
+        let max_y = 0,
+          total_area = 0;
+        for (const [x, y, l] of squares) {
+          total_area += l * l;
+          max_y = Math.max(max_y, y + l);
+        }
+
+        const check = (limit_y) => {
+          let area = 0;
+          for (const [x, y, l] of squares) {
+            if (y < limit_y) {
+              area += l * Math.min(limit_y - y, l);
+            }
+          }
+          return area >= total_area / 2;
+        };
+
+        let lo = 0,
+          hi = max_y;
+        const eps = 1e-5;
+        while (Math.abs(hi - lo) > eps) {
+          const mid = (hi + lo) / 2;
+          if (check(mid)) {
+            hi = mid;
+          } else {
+            lo = mid;
+          }
+        }
+        return hi;
+      };
+
+      // 方法二：扫描线
+      // 时间复杂度：O(nlogn)
+      // 空间复杂度：O(n)
+      var separateSquares = function (squares) {
+        let totalArea = 0n;
+        const events = [];
+
+        for (const sq of squares) {
+          const y = sq[1],
+            l = sq[2];
+          totalArea += BigInt(l) * BigInt(l);
+          events.push([y, l, 1]);
+          events.push([y + l, l, -1]);
+        }
+
+        // 按y坐标排序
+        events.sort((a, b) => a[0] - b[0]);
+
+        let coveredWidth = 0; // 当前扫描线下所有底边之和
+        let currArea = 0; // 当前累计面积
+        let prevHeight = 0; // 前一个扫描线的高度
+
+        for (const [y, l, delta] of events) {
+          const diff = y - prevHeight;
+          // 两条扫描线之间新增的面积
+          const area = coveredWidth * diff;
+          // 如果加上这部分面积超过总面积的一半
+          if (2n * BigInt(Math.ceil(currArea + area)) >= totalArea) {
+            return (
+              prevHeight +
+              (Number(totalArea) - 2.0 * currArea) / (2.0 * coveredWidth)
+            );
+          }
+          // 更新宽度：开始事件加宽度，结束事件减宽度
+          coveredWidth += delta * l;
+          currArea += area;
+          prevHeight = y;
+        }
+
+        return 0.0;
+      };
+    </script>
+  </body>
+</html>
