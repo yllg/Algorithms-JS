@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：枚举
+      // 时间复杂度：O(h^2+v^2)
+      // 空间复杂度：O(h^2+v^2)
+      var maximizeSquareArea = function (m, n, hFences, vFences) {
+        const MOD = 1000000007;
+
+        const getEdges = (fences, border) => {
+          const set = new Set();
+          const list = [...fences];
+          list.push(1);
+          list.push(border);
+          list.sort((a, b) => a - b);
+
+          for (let i = 0; i < list.length; i++) {
+            for (let j = i + 1; j < list.length; j++) {
+              set.add(list[j] - list[i]);
+            }
+          }
+
+          return set;
+        };
+
+        const hEdges = getEdges(hFences, m);
+        const vEdges = getEdges(vFences, n);
+
+        let res = 0;
+        for (const e of hEdges) {
+          if (vEdges.has(e)) {
+            res = Math.max(res, e);
+          }
+        }
+
+        if (res === 0) {
+          return -1;
+        }
+
+        return Number((BigInt(res) * BigInt(res)) % BigInt(MOD));
+      };
+
+      // test
+      let m = 4,
+        n = 3,
+        hFences = [2, 3],
+        vFences = [2];
+      console.log(maximizeSquareArea(m, n, hFences, vFences));
+    </script>
+  </body>
+</html>
