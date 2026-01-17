@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 方法一：遍历 + 计算几何
+      // 时间复杂度：O(n^2)
+      // 空间复杂度：O(1)
+      var largestSquareArea = function (bottomLeft, topRight) {
+        const n = bottomLeft.length;
+        let maxSide = 0;
+
+        for (let i = 0; i < n; i++) {
+          for (let j = i + 1; j < n; j++) {
+            const w =
+              Math.min(topRight[i][0], topRight[j][0]) -
+              Math.max(bottomLeft[i][0], bottomLeft[j][0]);
+            const h =
+              Math.min(topRight[i][1], topRight[j][1]) -
+              Math.max(bottomLeft[i][1], bottomLeft[j][1]);
+
+            maxSide = Math.max(maxSide, Math.min(w, h));
+          }
+        }
+
+        return maxSide * maxSide;
+      };
+
+      // test
+      let bottomLeft = [
+          [1, 1],
+          [2, 2],
+          [1, 2],
+        ],
+        topRight = [
+          [3, 3],
+          [4, 4],
+          [3, 4],
+        ];
+      console.log(largestSquareArea(bottomLeft, topRight));
+    </script>
+  </body>
+</html>
