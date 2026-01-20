@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法一：位运算
+        // 时间复杂度：O(nlogm)
+        // 空间复杂度：O(1)
+        var minBitwiseArray = function (nums) {
+            for (let i = 0; i < nums.length; i++) {
+                let x = nums[i];
+                let res = -1;
+                let d = 1;
+                while ((x & d) !== 0) {
+                    res = x - d;
+                    d <<= 1;
+                }
+                nums[i] = res;
+            }
+            return nums;
+        };
+
+        // test
+        let nums = [2, 3, 5, 7]
+        console.log(minBitwiseArray(nums));
+    </script>
+</body>
+
+</html>
