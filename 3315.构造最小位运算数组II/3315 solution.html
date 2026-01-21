@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法一：位运算
+        // 时间复杂度：O(n)
+        // 空间复杂度：O(1)
+        var minBitwiseArray = function (nums) {
+            return nums.map(p => {
+                if (p % 2 === 0) return -1;
+                let a = (p & (p + 1)) | ((p & ~(p + 1)) >> 1);
+                if (a < p && ((a | (a + 1)) === p)) return a;
+                return -1;
+            });
+        };
+
+
+    </script>
+</body>
+
+</html>
