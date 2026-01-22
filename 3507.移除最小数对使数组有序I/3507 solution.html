@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法一：模拟
+        // 时间复杂度：O(n^2)
+        // 空间复杂度：O(1)
+        var minimumPairRemoval = function (nums) {
+            let count = 0;
+
+            while (nums.length > 1) {
+                let isAscending = true;
+                let minSum = Infinity;
+                let targetIndex = -1;
+
+                for (let i = 0; i < nums.length - 1; i++) {
+                    const sum = nums[i] + nums[i + 1];
+
+                    if (nums[i] > nums[i + 1]) {
+                        isAscending = false;
+                    }
+
+                    if (sum < minSum) {
+                        minSum = sum;
+                        targetIndex = i;
+                    }
+                }
+
+                if (isAscending) {
+                    break;
+                }
+
+                count++;
+                nums[targetIndex] = minSum;
+                nums.splice(targetIndex + 1, 1);
+            }
+
+            return count;
+        }
+
+
+        // 方法二：模拟 + 数组模拟链表
+        // 时间复杂度：O(n^2)
+        // 空间复杂度：O(n)
+        var minimumPairRemoval = function (nums) {
+            const next = nums.map((_, i) => i + 1);
+            next[nums.length - 1] = null;
+            let count = 0;
+
+            while (nums.length - count > 1) {
+                let curr = 0;
+                let target = 0;
+                let targetAdjSum = nums[target] + nums[next[target]];
+                let isAscending = true;
+
+                while (curr !== null && next[curr] !== null) {
+                    if (nums[curr] > nums[next[curr]]) {
+                        isAscending = false;
+                    }
+
+                    let currAdjSum = nums[curr] + nums[next[curr]];
+                    if (currAdjSum < targetAdjSum) {
+                        target = curr;
+                        targetAdjSum = currAdjSum;
+                    }
+                    curr = next[curr];
+                }
+
+                if (isAscending) {
+                    break;
+                }
+
+                count++;
+                next[target] = next[next[target]];
+                nums[target] = targetAdjSum;
+            }
+
+            return count;
+        }
+
+        // test
+        const nums = [5, 2, 3, 1];
+        console.log(minimumPairRemoval(nums));
+    </script>
+</body>
+
+</html>
