@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法一：排序 + 一次遍历
+        // 时间复杂度 O(nlogn) 
+        // 空间复杂度 O(logn)
+        var minimumAbsDifference = function (arr) {
+            const n = arr.length;
+            arr.sort((a, b) => a - b);
+
+            let best = Number.MAX_VALUE;
+            let ans = [];
+            for (let i = 0; i < n - 1; ++i) {
+                let delta = arr[i + 1] - arr[i];
+                if (delta < best) {
+                    best = delta;
+                    ans = [];
+                    const pair = [];
+                    pair.push(arr[i]);
+                    pair.push(arr[i + 1]);
+                    ans.push(pair);
+                } else if (delta === best) {
+                    const pair = [];
+                    pair.push(arr[i]);
+                    pair.push(arr[i + 1]);
+                    ans.push(pair);
+                }
+            }
+
+            return ans;
+        };
+
+        // test
+        let arr = [4, 2, 1, 3]
+        console.log(minimumAbsDifference(arr));
+    </script>
+</body>
+
+</html>
