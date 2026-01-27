@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法一：Dijkstra
+        // 时间复杂度：O(n+nlogm)
+        // 空间复杂度：O(n+m)
+        var minCost = function (n, edges) {
+            const g = Array.from({ length: n }, () => []);
+            for (const e of edges) {
+                const [x, y, w] = e;
+                g[x].push([y, w]);
+                g[y].push([x, 2 * w]);
+            }
+
+            const dist = Array(n).fill(Infinity);
+            const visited = Array(n).fill(false);
+            dist[0] = 0;
+            const pq = new PriorityQueue((a, b) => {
+                return a[0] < b[0] ? -1 : 1;
+            });
+            pq.enqueue([0, 0]);
+
+            while (!pq.isEmpty()) {
+                const [currentDist, x] = pq.dequeue();
+                if (x === n - 1) {
+                    return currentDist;
+                }
+
+                if (visited[x]) {
+                    continue;
+                }
+                visited[x] = true;
+
+                for (const [y, w] of g[x]) {
+                    if (currentDist + w < dist[y]) {
+                        dist[y] = currentDist + w;
+                        pq.enqueue([dist[y], y]);
+                    }
+                }
+            }
+
+            return -1;
+        };
+
+        // test
+        let n = 4, edges = [[0, 1, 1], [1, 2, 2], [2, 3, 1]], start = 0, end = 3;
+        console.log(minCost(n, edges, start, end));
+    </script>
+</body>
+
+</html>
