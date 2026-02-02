@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法一：有序集合
+        // 时间复杂度：O(nlogn)
+        // 空间复杂度：O(n)
+        const {
+            BinarySearchTree,
+            BinarySearchTreeNode,
+            AvlTree,
+            AvlTreeNode
+        } = require('@datastructures-js/binary-search-tree');
+
+        class Container {
+            constructor(k) {
+                this.k = k;
+                this.st1 = new Map();
+                this.st2 = new Map();
+                this.st1Size = 0;
+                this.st2Size = 0;
+                this.tree1 = new AvlTree((a, b) => a - b);
+                this.tree2 = new AvlTree((a, b) => a - b);
+                this.sm = 0;
+            }
+
+            add(x) {
+                if (this.st2Size > 0 && x >= this.tree2.min().getValue()) {
+                    this.tree2.insert(x);
+                    this.st2.set(x, (this.st2.get(x) || 0) + 1);
+                    this.st2Size++;
+                } else {
+                    this.tree1.insert(x);
+                    this.st1.set(x, (this.st1.get(x) || 0) + 1);
+                    this.sm += x;
+                    this.st1Size++;
+                }
+                this.adjust();
+            }
+
+            erase(x) {
+                if (this.st1.has(x) && this.st1.get(x) > 0) {
+                    this.st1.set(x, this.st1.get(x) - 1);
+                    this.st1Size--;
+                    if (this.st1.get(x) === 0) {
+                        this.st1.delete(x);
+                        this.tree1.remove(x);
+                    }
+                    this.sm -= x;
+                } else if (this.st2.has(x) && this.st2.get(x) > 0) {
+                    this.st2.set(x, this.st2.get(x) - 1);
+                    this.st2Size--;
+                    if (this.st2.get(x) === 0) {
+                        this.st2.delete(x);
+                        this.tree2.remove(x);
+                    }
+                }
+                this.adjust();
+            }
+
+            adjust() {
+                while (this.st1Size < this.k && this.st2Size > 0) {
+                    const x = this.tree2.min().getValue();
+                    this.st1Size++;
+                    this.st2Size--;
+                    this.st2.set(x, this.st2.get(x) - 1);
+                    if (this.st2.get(x) === 0) {
+                        this.tree2.remove(x);
+                        this.st2.delete(x);
+                    }
+                    this.st1.set(x, (this.st1.get(x) || 0) + 1);
+                    this.tree1.insert(x);
+                    this.sm += x;
+                }
+
+                while (this.st1Size > this.k) {
+                    const x = this.tree1.max().getValue();
+                    this.st1Size--;
+                    this.st2Size++;
+                    this.st1.set(x, this.st1.get(x) - 1);
+                    if (this.st1.get(x) === 0) {
+                        this.st1.delete(x);
+                        this.tree1.remove(x);
+                    }
+                    this.st2.set(x, (this.st2.get(x) || 0) + 1);
+                    this.tree2.insert(x);
+                    this.sm -= x;
+                }
+            }
+
+            sum() {
+                return this.sm;
+            }
+        }
+
+        var minimumCost = function (nums, k, dist) {
+            const n = nums.length;
+            const cnt = new Container(k - 2);
+            for (let i = 1; i < k - 1; i++) {
+                cnt.add(nums[i]);
+            }
+
+            let ans = cnt.sum() + nums[k - 1];
+            for (let i = k; i < n; i++) {
+                const j = i - dist - 1;
+                if (j > 0) {
+                    cnt.erase(nums[j]);
+                }
+                cnt.add(nums[i - 1]);
+                ans = Math.min(ans, cnt.sum() + nums[i]);
+            }
+
+            return ans + nums[0];
+        }
+
+        // test
+        let nums = [1, 3, 2, 6, 4, 2], k = 3, dist = 3
+        console.log(minimumCost(nums, k, dist));
+    </script>
+</body>
+
+</html>
