@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法一：遍历
+        // 时间复杂度：O(n)
+        // 空间复杂度：O(1)
+        /**
+         * @param {number[]} nums
+         * @return {boolean}
+         */
+        var isTrionic = function (nums) {
+            let isP = false
+            let isQ = false
+            let isBoth = false
+            for (let i = 1; i < nums.length; i++) {
+                if (nums[i] > nums[i - 1] && !isP) {
+                    isP = true
+                    continue
+                }
+                if (nums[i] < nums[i - 1] && isP && !isQ) {
+                    isQ = true
+                    continue
+                }
+                if (nums[i] > nums[i - 1] && isP && isQ) {
+                    isBoth = true
+                    continue
+                }
+                if (nums[i] < nums[i - 1] && isP && isQ && !isBoth) continue
+                if (nums[i] > nums[i - 1] && isP && !isQ) continue
+
+                return false
+            }
+            return isP && isQ && isBoth
+        };
+
+
+    </script>
+</body>
+
+</html>
