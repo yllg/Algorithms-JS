@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法一：排序 + 双指针
+        // 时间复杂度：O(nlogn)
+        // 空间复杂度：O(logn)
+        var minRemoval = function (nums, k) {
+            const n = nums.length;
+            nums.sort((a, b) => a - b);
+
+            let ans = n;
+            let right = 0;
+
+            for (let left = 0; left < n; left++) {
+                while (right < n && nums[right] <= nums[left] * k) {
+                    right++;
+                }
+                ans = Math.min(ans, n - (right - left));
+            }
+
+            return ans;
+        }
+
+        // test
+        let nums = [2, 1, 5], k = 2
+        console.log(minRemoval(nums, k));
+    </script>
+</body>
+
+</html>
