@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 如果一棵二叉搜索树中，每个节点的两棵子树高度差不超过 1 ，我们就称这棵二叉搜索树是 平衡的 。
+
+        // 方法一：贪心构造
+        // 时间复杂度：O(1)
+        // 空间复杂度：O(n)
+        var balanceBST = function (root) {
+            const inorderSeq = [];
+
+            const getInorder = (o) => {
+                if (o.left) {
+                    getInorder(o.left);
+                }
+                inorderSeq.push(o.val);
+                if (o.right) {
+                    getInorder(o.right);
+                }
+            };
+
+            const build = (l, r) => {
+                const mid = (l + r) >> 1;
+                const o = new TreeNode(inorderSeq[mid]);
+                if (l <= mid - 1) {
+                    o.left = build(l, mid - 1);
+                }
+                if (mid + 1 <= r) {
+                    o.right = build(mid + 1, r);
+                }
+                return o;
+            };
+
+            getInorder(root);
+            return build(0, inorderSeq.length - 1);
+        };
+
+
+    </script>
+</body>
+
+</html>
