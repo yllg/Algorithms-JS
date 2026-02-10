@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 不同偶数 的数量等于 不同奇数 的数量，则称该 子数组 是 平衡的 。
+
+        // 方法一：暴力
+        // 时间复杂度：O(n^2)
+        // 空间复杂度：O(n)
+        var longestBalanced = function (nums) {
+            let len = 0;
+
+            for (let i = 0; i < nums.length; i++) {
+                const odd = new Map();
+                const even = new Map();
+
+                for (let j = i; j < nums.length; j++) {
+                    const c = (nums[j] & 1) ? odd : even;
+
+                    c.set(nums[j], (c.get(nums[j]) ?? 0) + 1);
+
+                    if (odd.size == even.size) {
+                        len = Math.max(len, j - i + 1);
+                    }
+                }
+            }
+
+            return len;
+        }
+
+    </script>
+</body>
+
+</html>
