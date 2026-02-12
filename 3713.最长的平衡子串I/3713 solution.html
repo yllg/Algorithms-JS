@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法一：枚举
+        // 时间复杂度：O(n^2)
+        // 空间复杂度：O(C)
+        var longestBalanced = function (s) {
+            const n = s.length;
+            let res = 0;
+
+            for (let i = 0; i < n; i++) {
+                const cnt = new Array(26).fill(0);
+
+                for (let j = i; j < n; j++) {
+                    let flag = true;
+                    const c = s.charCodeAt(j) - 97;
+                    cnt[c]++;
+                    for (const x of cnt) {
+                        if (x > 0 && x !== cnt[c]) {
+                            flag = false;
+                            break;
+                        }
+                    }
+
+                    if (flag) {
+                        res = Math.max(res, j - i + 1);
+                    }
+                }
+            }
+            return res;
+        };
+
+        // test
+        let s = "abbac"
+        console.log(longestBalanced(s));
+    </script>
+</body>
+
+</html>
