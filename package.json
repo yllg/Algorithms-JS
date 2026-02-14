@@ -17,6 +17,6 @@
   },
   "homepage": "https://github.com/yllg/Algorithms-JS#readme",
   "devDependencies": {
-    "koa": "^2.13.1"
+    "koa": "^2.16.1"
   }
 }
