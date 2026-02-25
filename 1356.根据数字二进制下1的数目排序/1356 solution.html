@@ -25,13 +25,57 @@
                 return countBits(a) - countBits(b) || a - b;
             });
         }
-        
-        // TODO 方法2：暴力法
 
-        // TODO 方法3：递推预处理
+        // 方法2：暴力法
+        // 时间复杂度：O(nlogn)
+        // 空间复杂度：O(n)
+        var sortByBits = function (arr) {
+            const getBitCount = (x) => {
+                let res = 0;
+                while (x) {
+                    res += x & 1;
+                    x >>>= 1;
+                }
+                return res;
+            };
+
+            const bitCounts = new Array(10001).fill(0);
+            for (const x of arr) {
+                bitCounts[x] = getBitCount(x);
+            }
+
+            arr.sort((x, y) => {
+                if (bitCounts[x] !== bitCounts[y]) {
+                    return bitCounts[x] - bitCounts[y];
+                }
+                return x - y;
+            });
+
+            return arr;
+        };
+
+
+        // 方法3：递推预处理
+        // 时间复杂度：O(nlogn)
+        // 空间复杂度：O(n)
+        var sortByBits = function (arr) {
+            const bit = new Array(10001).fill(0);
+            for (let i = 1; i <= 10000; ++i) {
+                bit[i] = bit[i >> 1] + (i & 1);
+            }
+
+            arr.sort((x, y) => {
+                if (bit[x] !== bit[y]) {
+                    return bit[x] - bit[y];
+                }
+                return x - y;
+            });
+
+            return arr;
+        };
 
         // test
-        let arr = [0,1,2,3,4,5,6,7,8];
+        let arr = [0, 1, 2, 3, 4, 5, 6, 7, 8];
         console.log(sortByBits(arr))
     </script>
 </body>
