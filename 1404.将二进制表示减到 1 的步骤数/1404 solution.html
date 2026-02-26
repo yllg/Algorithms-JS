@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法一：模拟
+        // 时间复杂度：O(n)
+        // 空间复杂度：O(1)
+        var numSteps = function (s) {
+            let steps = 0;
+            let str = s.split('');
+
+            while (str.join('') !== '1') {
+                ++steps;
+                if (str[str.length - 1] === '0') {
+                    // 偶数的情况
+                    str.pop();
+                } else {
+                    // 第一步：找出最低位的 0
+                    // 第二步：把这个 0 变成 1，并将后面所有的 1 变成 0，这样就实现了 +1
+                    // 特别地，如果 s 中全是 1，那么会有额外的进位
+                    for (let i = str.length - 1; i >= 0; --i) {
+                        if (str[i] === '1') {
+                            str[i] = '0';
+                            if (i === 0) {
+                                str.unshift('1');
+                                break;
+                            }
+                        } else {
+                            str[i] = '1';
+                            break;
+                        }
+                    }
+                }
+            }
+            return steps;
+        };
+
+        // 方法二：遍历计数
+        // 时间复杂度：O(n)
+        // 空间复杂度：O(1)
+        var numSteps = function (s) {
+            const n = s.length;
+            let ans = 0;
+            // meet1 记录我们有没有遇见过字符 1
+            let meet1 = false;
+            // 从后向前遍历字符
+            for (let i = n - 1; i >= 0; --i) {
+                if (s[i] === '0') {
+                    // 如果当前字符为 0，分为两种情况
+                    // (1) 还没有遇见过字符 1，那么这个 0 是字符串低位的 0，需要一次除二操作
+                    // (2) 遇见过字符 1，那么这个 0 会因为它右侧的某次加一操作变为 1，因此它需要一次加一和一次除二操作
+                    ans += (meet1 ? 2 : 1);
+                } else {
+                    // 如果当前字符为 1，分为两种情况
+                    // (1) 还没有遇见过字符 1，那么这个 1 需要一次加一和一次除二操作
+                    //     这里需要考虑一种特殊情况，就是这个 1 是字符串最左侧的 1，它并不需要任何操作
+                    // (2) 遇见过字符 1，那么这个 1 会因为它右侧的某次加一操作变为 0，因此它只需要一次除二操作
+                    if (!meet1) {
+                        if (i !== 0) {
+                            ans += 2;
+                        }
+                        meet1 = true;
+                    } else {
+                        ++ans;
+                    }
+                }
+            }
+            return ans;
+        };
+
+        // test
+        let s = "1101";
+        console.log(numSteps(s))
+    </script>
+</body>
+
+</html>
