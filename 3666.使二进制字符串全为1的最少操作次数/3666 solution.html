@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 每次选择K个数字，进行翻转
+
+        // 方法一：广度优先搜索
+        // 时间复杂度：O(nlogn)
+        // 空间复杂度：O(n)
+        const { AvlTree } = require('@datastructures-js/binary-search-tree');
+
+        var minOperations = function (s, k) {
+            const n = s.length;
+            let m = 0;
+
+            const dist = new Array(n + 1).fill(Infinity);
+            const nodeTrees = [new AvlTree(), new AvlTree()];
+            for (let i = 0; i <= n; i++) {
+                nodeTrees[i % 2].insert(i);
+                if (i < n && s[i] === '0') {
+                    m++;
+                }
+            }
+
+            const queue = new Array(n + 1);
+            let head = 0, tail = 0;
+            queue[tail++] = m;
+
+            dist[m] = 0;
+            nodeTrees[m % 2].remove(m);
+
+            while (head < tail) {
+                const currentM = queue[head++];
+                const c1 = Math.max(k - n + currentM, 0);
+                const c2 = Math.min(currentM, k);
+                const lnode = currentM + k - 2 * c2;
+                const rnode = currentM + k - 2 * c1;
+                const currentTree = nodeTrees[lnode % 2];
+                let node = currentTree.upperBound(lnode, true);
+
+                while (node !== null) {
+                    const nodeValue = node.getValue();
+                    if (nodeValue > rnode) {
+                        break;
+                    }
+                    dist[nodeValue] = dist[currentM] + 1;
+                    queue[tail++] = nodeValue;
+                    const nextNode = currentTree.upperBound(nodeValue, false);
+                    currentTree.remove(nodeValue);
+                    node = nextNode;
+                }
+            }
+
+            return dist[0] === Infinity ? -1 : dist[0];
+        }
+
+        // test
+        let s = "0101", k = 3
+        console.log(minOperations(s, k));
+
+    </script>
+</body>
+
+</html>
