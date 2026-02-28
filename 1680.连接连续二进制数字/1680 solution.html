@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 位移、一次遍历
+        // 时间复杂度：O(n)
+        // 空间复杂度：O(1)
+        var concatenatedBinary = function (n) {
+            var mod = 1000000007;//模
+            var res = 0;
+            var shift = 0;//记录左移位数
+            for (let i = 1; i <= n; i++) {
+                if (!(i & (i - 1))) { // 当它是2的整次幂时位移数加一
+                    ++shift;
+                }
+                res = ((res * Math.pow(2, shift)) + i) % mod;//将结果数左移shift位并取模（左移相当于将当前数乘以2的shift次幂）。
+            }
+
+            return res;
+        };
+
+        // test
+        let n = 3
+        console.log(concatenatedBinary(n));
+    </script>
+</body>
+
+</html>
