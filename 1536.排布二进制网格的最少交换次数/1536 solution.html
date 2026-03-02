@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 每一次可以选择网格的 相邻两行 进行交换。 最终使得对角线上的元素都是1，返回最少的交换次数。
+
+        // 方法一：贪心
+        // 时间复杂度：O(n^2)
+        // 空间复杂度：O(n)
+        var minSwaps = function (grid) {
+            const n = grid.length;
+            const pos = new Array(n).fill(-1);
+            for (let i = 0; i < n; ++i) {
+                for (let j = n - 1; j >= 0; --j) {
+                    if (grid[i][j] == 1) {
+                        pos[i] = j;
+                        break;
+                    }
+                }
+            }
+            let ans = 0;
+            for (let i = 0; i < n; ++i) {
+                let k = -1;
+                for (let j = i; j < n; ++j) {
+                    if (pos[j] <= i) {
+                        ans += j - i;
+                        k = j;
+                        break;
+                    }
+                }
+                if (~k) {
+                    for (let j = k; j > i; --j) {
+                        const temp = pos[j];
+                        pos[j] = pos[j - 1];
+                        pos[j - 1] = temp;
+                    }
+                } else {
+                    return -1;
+                }
+            }
+            return ans;
+        };
+
+        // test
+        let grid = [[0, 0, 1], [1, 1, 0], [1, 0, 0]]
+        console.log(minSwaps(grid));
+    </script>
+</body>
+
+</html>
