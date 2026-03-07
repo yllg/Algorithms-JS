@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法一：分析 + 前缀和 + 后缀和
+        // 时间复杂度：O(n)
+        // 空间复杂度：O(n)
+        var minFlips = function (s) {
+            // 示性函数
+            const I = (ch, x) => parseInt(ch) === x ? 1 : 0;
+
+            const n = s.length;
+            const pre = new Array(n);
+            for (let i = 0; i < n; i++) {
+                pre[i] = new Array(2);
+            }
+
+            // 注意 i=0 的边界情况
+            for (let i = 0; i < n; ++i) {
+                if (i === 0) {
+                    pre[i][0] = I(s[i], 1);
+                    pre[i][1] = I(s[i], 0);
+                } else {
+                    pre[i][0] = pre[i - 1][1] + I(s[i], 1);
+                    pre[i][1] = pre[i - 1][0] + I(s[i], 0);
+                }
+            }
+
+            let ans = Math.min(pre[n - 1][0], pre[n - 1][1]);
+            if (n % 2 === 1) {
+                // 如果 n 是奇数，还需要求出 suf
+                const suf = new Array(n);
+                for (let i = 0; i < n; i++) {
+                    suf[i] = new Array(2);
+                }
+
+                // 注意 i=n-1 的边界情况
+                for (let i = n - 1; i >= 0; --i) {
+                    if (i === n - 1) {
+                        suf[i][0] = I(s[i], 1);
+                        suf[i][1] = I(s[i], 0);
+                    } else {
+                        suf[i][0] = suf[i + 1][1] + I(s[i], 1);
+                        suf[i][1] = suf[i + 1][0] + I(s[i], 0);
+                    }
+                }
+
+                for (let i = 0; i + 1 < n; ++i) {
+                    ans = Math.min(ans, pre[i][0] + suf[i + 1][0]);
+                    ans = Math.min(ans, pre[i][1] + suf[i + 1][1]);
+                }
+            }
+
+            return ans;
+        };
+
+        // test
+        let s = "111000"
+        console.log(minFlips(s))
+    </script>
+</body>
+
+</html>
