@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法一：枚举所有的菱形
+        // 时间复杂度：O(mnmin(m,n))
+        // 空间复杂度：O(mn)
+        class Answer {
+            constructor() {
+                this.ans = [0, 0, 0];
+            }
+
+            put(x) {
+                if (x > this.ans[0]) {
+                    this.ans[2] = this.ans[1];
+                    this.ans[1] = this.ans[0];
+                    this.ans[0] = x;
+                }
+                else if (x !== this.ans[0] && x > this.ans[1]) {
+                    this.ans[2] = this.ans[1];
+                    this.ans[1] = x;
+                }
+                else if (x !== this.ans[0] && x !== this.ans[1] && x > this.ans[2]) {
+                    this.ans[2] = x;
+                }
+            }
+
+            get() {
+                const ret = [];
+                for (const num of this.ans) {
+                    if (num !== 0) {
+                        ret.push(num);
+                    }
+                }
+                return ret;
+            }
+        }
+
+        var getBiggestThree = function (grid) {
+            const m = grid.length, n = grid[0].length;
+            const sum1 = Array.from({ length: m + 1 }, () => new Array(n + 2).fill(0));
+            const sum2 = Array.from({ length: m + 1 }, () => new Array(n + 2).fill(0));
+
+            for (let i = 1; i <= m; ++i) {
+                for (let j = 1; j <= n; ++j) {
+                    sum1[i][j] = sum1[i - 1][j - 1] + grid[i - 1][j - 1];
+                    sum2[i][j] = sum2[i - 1][j + 1] + grid[i - 1][j - 1];
+                }
+            }
+
+            const ans = new Answer();
+            for (let i = 0; i < m; ++i) {
+                for (let j = 0; j < n; ++j) {
+                    // 单独的一个格子也是菱形
+                    ans.put(grid[i][j]);
+                    for (let k = i + 2; k < m; k += 2) {
+                        const ux = i, uy = j;
+                        const dx = k, dy = j;
+                        const lx = Math.floor((i + k) / 2), ly = j - Math.floor((k - i) / 2);
+                        const rx = Math.floor((i + k) / 2), ry = j + Math.floor((k - i) / 2);
+                        if (ly < 0 || ry >= n) {
+                            break;
+                        }
+                        const sum = (sum2[lx + 1][ly + 1] - sum2[ux][uy + 2]) +
+                            (sum1[rx + 1][ry + 1] - sum1[ux][uy]) +
+                            (sum1[dx + 1][dy + 1] - sum1[lx][ly]) +
+                            (sum2[dx + 1][dy + 1] - sum2[rx][ry + 2]) -
+                            (grid[ux][uy] + grid[dx][dy] + grid[lx][ly] + grid[rx][ry]);
+                        ans.put(sum);
+                    }
+                }
+            }
+
+            return ans.get();
+        };
+
+
+    </script>
+</body>
+
+</html>
