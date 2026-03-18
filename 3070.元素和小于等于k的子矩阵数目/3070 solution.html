@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法一：二维前缀和
+        // 时间复杂度：O(mm)
+        // 空间复杂度：O(n)
+        var countSubmatrices = function (grid, k) {
+            const n = grid.length;
+            const m = grid[0].length;
+            const cols = new Array(m).fill(0);
+            let res = 0;
+
+            for (let i = 0; i < n; i++) {
+                let rows = 0;
+                for (let j = 0; j < m; j++) {
+                    cols[j] += grid[i][j];
+                    rows += cols[j];
+                    if (rows <= k) {
+                        res++;
+                    }
+                }
+            }
+
+            return res;
+        };
+
+        // test
+        let grid = [[7, 6, 3], [6, 6, 1]], k = 18
+        console.log(countSubmatrices(grid, k));
+    </script>
+</body>
+
+</html>
