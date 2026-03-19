@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法一：二维前缀和
+        // 时间复杂度：O(n*m)
+        // 空间复杂度：O(n*m)
+        var numberOfSubmatrices = function (grid) {
+            const n = grid.length, m = grid[0].length;
+            let ans = 0;
+            const sum = new Array(n + 1).fill(0).map(() =>
+                new Array(m + 1).fill(0).map(() => [0, 0])
+            );
+
+            for (let i = 0; i < n; i++) {
+                for (let j = 0; j < m; j++) {
+                    if (grid[i][j] === 'X') {
+                        sum[i + 1][j + 1][0] =
+                            sum[i + 1][j][0] + sum[i][j + 1][0] - sum[i][j][0] + 1;
+                        sum[i + 1][j + 1][1] = 1;
+                    } else if (grid[i][j] === 'Y') {
+                        sum[i + 1][j + 1][0] =
+                            sum[i + 1][j][0] + sum[i][j + 1][0] - sum[i][j][0] - 1;
+                        sum[i + 1][j + 1][1] = sum[i + 1][j][1] | sum[i][j + 1][1];
+                    } else {
+                        sum[i + 1][j + 1][0] =
+                            sum[i + 1][j][0] + sum[i][j + 1][0] - sum[i][j][0];
+                        sum[i + 1][j + 1][1] = sum[i + 1][j][1] | sum[i][j + 1][1];
+                    }
+                    if (sum[i + 1][j + 1][0] === 0 && sum[i + 1][j + 1][1] === 1) {
+                        ans++;
+                    }
+                }
+            }
+            return ans;
+        };
+
+        // test
+        let grid = [["X", "Y", "."], ["Y", ".", "."]]
+        console.log(numberOfSubmatrices(grid));
+    </script>
+</body>
+
+</html>
