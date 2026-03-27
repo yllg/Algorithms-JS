@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法一：遍历
+        // 时间复杂度：O(m*n)
+        // 空间复杂度：O(1)
+        var areSimilar = function (mat, k) {
+            const m = mat.length;
+            const n = mat[0].length;
+            k %= n;
+
+            for (let i = 0; i < m; i++) {
+                for (let j = 0; j < n; j++) {
+                    if (mat[i][j] !== mat[i][(j + k) % n]) {
+                        return false;
+                    }
+                }
+            }
+            return true;
+        };
+
+
+        // test
+        let mat = [[1, 2, 1, 2], [5, 5, 5, 5], [6, 3, 6, 3]], k = 2
+        console.log(areSimilar(mat, k));
+    </script>
+</body>
+
+</html>
