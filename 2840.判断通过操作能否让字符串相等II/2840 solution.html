@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法一：哈希表
+        // 时间复杂度：O(n)
+        // 空间复杂度：O(k)
+        var checkStrings = function (s1, s2) {
+            if (s1.length !== s2.length) {
+                return false;
+            }
+
+            const counts = new Int32Array(256);
+
+            for (let i = 0; i < s1.length; i++) {
+                const offset = (i & 1) << 7;
+                counts[offset + s1.charCodeAt(i)]++;
+                counts[offset + s2.charCodeAt(i)]--;
+            }
+
+            for (let i = 0; i < 256; i++) {
+                if (counts[i] !== 0) {
+                    return false;
+                }
+            }
+
+            return true;
+        };
+
+        // test
+        let s1 = "abcdba", s2 = "cabdab"
+        console.log(checkStrings(s1, s2));
+    </script>
+</body>
+
+</html>
