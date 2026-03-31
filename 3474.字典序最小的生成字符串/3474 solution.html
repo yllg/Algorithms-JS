@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法一：贪心
+        // 时间复杂度：O(n*m)
+        // 空间复杂度：O(n+m)   
+        var generateString = function (str1, str2) {
+            const n = str1.length, m = str2.length;
+            const s = new Array(n + m - 1).fill('a');
+            const fixed = new Array(n + m - 1).fill(0);
+
+            for (let i = 0; i < n; i++) {
+                if (str1[i] === 'T') {
+                    for (let j = i; j < i + m; j++) {
+                        if (fixed[j] === 1 && s[j] !== str2[j - i]) {
+                            return "";
+                        } else {
+                            s[j] = str2[j - i];
+                            fixed[j] = 1;
+                        }
+                    }
+                }
+            }
+
+            for (let i = 0; i < n; i++) {
+                if (str1[i] === 'F') {
+                    let flag = false;
+                    let idx = -1;
+                    for (let j = i + m - 1; j >= i; j--) {
+                        if (str2[j - i] !== s[j]) {
+                            flag = true;
+                        }
+                        if (idx === -1 && fixed[j] === 0) {
+                            idx = j;
+                        }
+                    }
+                    if (flag) {
+                        continue;
+                    } else if (idx !== -1) {
+                        s[idx] = 'b';
+                    } else {
+                        return "";
+                    }
+                }
+            }
+            return s.join('');
+        };
+
+        // test
+        let str1 = "TFTF", str2 = "ab"
+        console.log(generateString(str1, str2));
+    </script>
+</body>
+
+</html>
