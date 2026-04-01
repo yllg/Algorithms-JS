@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法一：排序 + 栈模拟
+        var survivedRobotsHealths = function (positions, healths, directions) {
+            // 创建一个下标数组，对下标数组排序，这样不会打乱输入顺序
+            const idx = Array.from({ length: positions.length }, (_, i) => i)
+                .sort((i, j) => positions[i] - positions[j]);
+
+            const st = [];
+            for (const i of idx) {
+                if (directions[i] === 'R') { // 机器人 i 向右
+                    st.push(i);
+                    continue;
+                }
+                while (st.length > 0) { // 栈顶机器人向右
+                    const j = st[st.length - 1];
+                    if (healths[j] > healths[i]) { // 栈顶机器人的健康度大
+                        healths[i] = 0; // 移除机器人 i
+                        healths[j] -= 1;
+                        break;
+                    }
+                    if (healths[j] === healths[i]) { // 健康度一样大，都移除
+                        healths[i] = 0;
+                        healths[j] = 0;
+                        st.pop();
+                        break;
+                    }
+                    // 机器人 i 的健康度大
+                    healths[i] -= 1;
+                    healths[j] = 0; // 移除机器人 j
+                    st.pop();
+                }
+            }
+
+            // 返回幸存机器人的健康度
+            return healths.filter(h => h > 0);
+        };
+
+
+    </script>
+</body>
+
+</html>
