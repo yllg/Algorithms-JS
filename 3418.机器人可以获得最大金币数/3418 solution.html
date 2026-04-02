@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法一：记忆化搜索
+        // 时间复杂度：O(m*n)
+        // 空间复杂度：O(m*n)
+        var maximumAmount = function (coins) {
+            const m = coins.length, n = coins[0].length;
+            const memo = new Array(m);
+
+            for (let i = 0; i < m; i++) {
+                memo[i] = new Array(n);
+                for (let j = 0; j < n; j++) {
+                    memo[i][j] = new Array(3).fill(-Infinity);
+                }
+            }
+
+            const dfs = (i, j, k) => {
+                if (i < 0 || j < 0) {
+                    return -Infinity;
+                }
+
+                const x = coins[i][j];
+                if (i === 0 && j === 0) {
+                    return k > 0 ? Math.max(0, x) : x;
+                }
+
+                if (memo[i][j][k] !== -Infinity) {
+                    return memo[i][j][k];
+                }
+
+                let res = Math.max(dfs(i - 1, j, k), dfs(i, j - 1, k)) + x;
+                if (k > 0 && x < 0) {
+                    res = Math.max(res, dfs(i - 1, j, k - 1), dfs(i, j - 1, k - 1));
+                }
+
+                memo[i][j][k] = res;
+                return res;
+            };
+
+            return dfs(m - 1, n - 1, 2);
+        };
+
+        // 方法二：动态规划
+        // 时间复杂度：O(m*n)
+        // 空间复杂度：O(m*n)
+        var maximumAmount = function (coins) {
+            const n = coins[0].length;
+            const dp = Array.from({ length: n + 1 }, () => Array(3).fill(-Infinity));
+
+            for (let i = 0; i < 3; i++) {
+                dp[1][i] = 0;
+            }
+            for (const row of coins) {
+                for (let j = 1; j <= n; j++) {
+                    const x = row[j - 1];
+                    dp[j][2] = Math.max(dp[j - 1][2] + x, dp[j][2] + x, dp[j - 1][1], dp[j][1]);
+                    dp[j][1] = Math.max(dp[j - 1][1] + x, dp[j][1] + x, dp[j - 1][0], dp[j][0]);
+                    dp[j][0] = Math.max(dp[j - 1][0], dp[j][0]) + x;
+                }
+            }
+
+            return dp[n][2];
+        };
+    </script>
+</body>
+
+</html>
