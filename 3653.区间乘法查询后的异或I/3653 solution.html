@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法一：模拟
+        // 时间复杂度：O(n*q)
+        // 空间复杂度：O(1)
+        var xorAfterQueries = function (nums, queries) {
+            const MOD = 1e9 + 7;
+
+            for (const q of queries) {
+                const [l, r, k, v] = q;
+                for (let i = l; i <= r; i += k) {
+                    nums[i] = Number((BigInt(nums[i]) * BigInt(v)) % BigInt(MOD));
+                }
+            }
+
+            let res = 0;
+            for (const x of nums) {
+                res ^= x;
+            }
+            return res;
+        };
+
+
+    </script>
+</body>
+
+</html>
