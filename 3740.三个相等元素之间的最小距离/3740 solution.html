@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法一：暴力
+        var minimumDistance = function (nums) {
+            let ans = nums.length + 1;
+
+            for (let i = 0; i < nums.length - 2; i++) {
+                for (let j = i + 1; j < nums.length - 1; j++) {
+                    if (nums[i] !== nums[j]) {
+                        continue;
+                    }
+                    for (let k = j + 1; k < nums.length; k++) {
+                        if (nums[j] === nums[k]) {
+                            ans = Math.min(ans, k - i);
+                            break;
+                        }
+                    }
+                }
+            }
+
+            if (ans === nums.length + 1) {
+                return -1;
+            } else {
+                return ans * 2;
+            }
+        };
+
+        // test
+        let nums = [1, 2, 1, 1, 3]
+        console.log(minimumDistance(nums))
+    </script>
+</body>
+
+</html>
