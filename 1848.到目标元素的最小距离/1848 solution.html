@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法一：模拟遍历
+        // 时间复杂度：O(n)
+        // 空间复杂度：O(1)
+        var getMinDistance = function (nums, target, start) {
+            let ans = nums.length;
+            for (let i = 0; i < nums.length; i++) {
+                if (nums[i] === target) {
+                    ans = Math.min(ans, Math.abs(i - start));
+                }
+            }
+            return ans;
+        };
+
+        // test
+        let nums = [1, 2, 3, 4, 5], target = 5, start = 3
+        console.log(getMinDistance(nums, target, start));
+    </script>
+</body>
+
+</html>
