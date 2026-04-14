@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法一：排序 + 动态规划
+        // 时间复杂度：O(n×m×L+nlogn+mlogm)
+        // 空间复杂度：O(n*m)
+        var minimumTotalDistance = function (robot, factory) {
+            robot.sort((a, b) => a - b);
+            factory.sort((a, b) => a[0] - b[0]);
+            const n = robot.length, m = factory.length;
+            const dp = Array.from({ length: n + 1 }, () => Array(m + 1).fill(Number.MAX_SAFE_INTEGER / 2));
+            for (let j = 0; j <= m; j++) {
+                dp[0][j] = 0;
+            }
+            for (let j = 1; j <= m; j++) {
+                for (let i = 1; i <= n; i++) {
+                    dp[i][j] = dp[i][j - 1];
+                    let cost = 0;
+                    for (let k = 1; k <= Math.min(i, factory[j - 1][1]); k++) {
+                        cost += Math.abs(robot[i - k] - factory[j - 1][0]);
+                        dp[i][j] = Math.min(dp[i][j], dp[i - k][j - 1] + cost);
+                    }
+                }
+            }
+            return dp[n][m];
+        };
+
+        // test
+        let robot = [0, 4, 6], factory = [[2, 2], [6, 2]]
+        console.log(minimumTotalDistance(robot, factory));
+    </script>
+</body>
+
+</html>
