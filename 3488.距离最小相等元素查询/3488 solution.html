@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法一：哈希表 + 二分查找
+        // 时间复杂度：O(n+mlogk)
+        // 空间复杂度：O(n)
+        function solveQueries(nums, queries) {
+            const n = nums.length;
+            const numsPos = new Map();
+
+            for (let i = 0; i < n; i++) {
+                if (!numsPos.has(nums[i])) {
+                    numsPos.set(nums[i], []);
+                }
+                numsPos.get(nums[i]).push(i);
+            }
+
+            for (const [key, pos] of numsPos) {
+                const x = pos[0];
+                pos.unshift(pos[pos.length - 1] - n);
+                pos.push(x + n);
+            }
+
+            for (let i = 0; i < queries.length; i++) {
+                const x = nums[queries[i]];
+                const posList = numsPos.get(x);
+                if (posList.length === 3) {
+                    queries[i] = -1;
+                    continue;
+                }
+                const pos = binarySearch(posList, queries[i]);
+                queries[i] = Math.min(posList[pos + 1] - posList[pos], posList[pos] - posList[pos - 1]);
+            }
+
+            return queries;
+        }
+
+        function binarySearch(arr, target) {
+            let left = 0, right = arr.length;
+            while (left < right) {
+                const mid = Math.floor((left + right) / 2);
+                if (arr[mid] < target) {
+                    left = mid + 1;
+                } else {
+                    right = mid;
+                }
+            }
+            return left;
+        }
+
+
+        // 方法二：预处理左右最近元素位置 + 哈希表
+        // 时间复杂度：O(n+m)
+        // 空间复杂度：O(n)
+        function solveQueries(nums, queries) {
+            const n = nums.length;
+            const left = new Array(n);
+            const right = new Array(n);
+            const pos = new Map();
+
+            for (let i = -n; i < n; i++) {
+                if (i >= 0) {
+                    left[i] = pos.has(nums[i]) ? pos.get(nums[i]) : -n;
+                }
+                pos.set(nums[(i + n) % n], i);
+            }
+
+            pos.clear();
+            for (let i = 2 * n - 1; i >= 0; i--) {
+                if (i < n) {
+                    right[i] = pos.has(nums[i]) ? pos.get(nums[i]) : 2 * n;
+                }
+                pos.set(nums[i % n], i);
+            }
+
+            for (let i = 0; i < queries.length; i++) {
+                const x = queries[i];
+                if (x - left[x] === n) {
+                    queries[i] = -1;
+                } else {
+                    queries[i] = Math.min(x - left[x], right[x] - x);
+                }
+            }
+
+            return queries;
+        }
+
+    </script>
+</body>
+
+</html>
