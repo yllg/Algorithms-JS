@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法一：枚举
+        // 时间复杂度：O(n^2)
+        // 空间复杂度：O(1)
+        var maxDistance = function (colors) {
+            const n = colors.length;
+            let res = 0;   // 两栋颜色不同房子的最远距离
+            // 遍历两栋房子下标并维护最远距离
+            for (let i = 0; i < n; i++) {
+                for (let j = i + 1; j < n; j++) {
+                    if (colors[i] !== colors[j]) {
+                        res = Math.max(res, j - i);
+                    }
+                }
+            }
+            return res;
+        };
+
+        // test
+        let colors = [1, 8, 3, 8, 3];
+        console.log(maxDistance(colors));
+    </script>
+</body>
+
+</html>
