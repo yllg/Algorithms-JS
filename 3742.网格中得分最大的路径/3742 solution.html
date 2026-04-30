@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法一：动态规划
+        // 时间复杂度：O(m*n*k)
+        // 空间复杂度：O(m*n*k)
+        var maxPathScore = function (grid, k) {
+            const m = grid.length, n = grid[0].length;
+
+            const INF = -Infinity;
+            const dp = Array.from({ length: m }, () =>
+                Array.from({ length: n }, () => Array(k + 1).fill(INF))
+            );
+
+            dp[0][0][0] = 0;
+
+            for (let i = 0; i < m; i++) {
+                for (let j = 0; j < n; j++) {
+                    for (let c = 0; c <= k; c++) {
+                        if (dp[i][j][c] === INF) continue;
+
+                        if (i + 1 < m) {
+                            const val = grid[i + 1][j];
+                            const cost = val === 0 ? 0 : 1;
+                            if (c + cost <= k) {
+                                dp[i + 1][j][c + cost] = Math.max(
+                                    dp[i + 1][j][c + cost],
+                                    dp[i][j][c] + val
+                                );
+                            }
+                        }
+
+                        if (j + 1 < n) {
+                            const val = grid[i][j + 1];
+                            const cost = val === 0 ? 0 : 1;
+                            if (c + cost <= k) {
+                                dp[i][j + 1][c + cost] = Math.max(
+                                    dp[i][j + 1][c + cost],
+                                    dp[i][j][c] + val
+                                );
+                            }
+                        }
+                    }
+                }
+            }
+
+            let ans = Math.max(...dp[m - 1][n - 1]);
+            return ans < 0 ? -1 : ans;
+        };
+
+        // test
+        let grid = [[0, 1], [2, 0]], k = 1
+        console.log(maxPathScore(grid, k));
+    </script>
+</body>
+
+</html>
