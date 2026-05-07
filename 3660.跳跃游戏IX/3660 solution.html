@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法一：区间分治
+        // 时间复杂度：O(n)
+        // 空间复杂度：O(n)
+        var maxValue = function (nums) {
+            const n = nums.length;
+            const ans = new Array(n).fill(0);
+
+            const prevMax = new Array(n);
+
+            nums.reduce(
+                (prev, value, index) => {
+                    if (value > prev[0]) {
+                        prev = [value, index];
+                    }
+                    return (prevMax[index] = [...prev]);
+                },
+                [-Infinity, -1],
+            );
+
+            const process = (r, rightMin, rightMax) => {
+                const [pMax, pivotIndex] = prevMax[r];
+                const currMax = pMax <= rightMin ? pMax : rightMax;
+
+                let nextRightMin = Math.min(pMax, rightMin);
+                for (let i = pivotIndex; i <= r; i++) {
+                    ans[i] = currMax;
+                    nextRightMin = Math.min(nextRightMin, nums[i]);
+                }
+
+                if (pivotIndex === 0) {
+                    return;
+                }
+
+                process(pivotIndex - 1, nextRightMin, currMax);
+            };
+
+            process(n - 1, Infinity, 0);
+
+            return ans;
+        };
+
+        // 方法二：单调栈
+        // 时间复杂度：O(n)
+        // 空间复杂度：O(n)
+        var maxValue = function (nums) {
+            const n = nums.length;
+            const ans = new Array(n);
+
+            const stack = [];
+
+            for (let i = 0; i < n; i++) {
+                let curr = {
+                    value: nums[i],
+                    left: i,
+                    right: i,
+                };
+
+                while (stack.length > 0 && stack.at(-1).value > nums[i]) {
+                    const top = stack.pop();
+                    curr = {
+                        value: Math.max(curr.value, top.value),
+                        left: top.left,
+                        right: curr.right,
+                    };
+                }
+
+                stack.push(curr);
+            }
+
+            for (let i = 0; i < stack.length; i++) {
+                for (let j = stack[i].left; j <= stack[i].right; j++) {
+                    ans[j] = stack[i].value;
+                }
+            }
+
+            return ans;
+        }
+
+
+    </script>
+</body>
+
+</html>
