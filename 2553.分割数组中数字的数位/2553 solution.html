@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法一：模拟
+        // 时间复杂度：O(nlogM)
+        // 空间复杂度：O(logM)，其中 M 是数组 nums 中的最大值。
+        var separateDigits = function (nums) {
+            const res = [];
+            for (let num of nums) {
+                let x = num;
+                const tmp = [];
+                while (x > 0) {
+                    tmp.push(x % 10);
+                    x = Math.floor(x / 10);
+                }
+                for (let i = tmp.length - 1; i >= 0; i--) {
+                    res.push(tmp[i]);
+                }
+            }
+            return res;
+        };
+
+        // 方法二：倒序遍历
+        // 时间复杂度：O(nlogM)
+        // 空间复杂度：O(1)
+        var separateDigits = function (nums) {
+            const res = [];
+            for (let i = nums.length - 1; i >= 0; i--) {
+                let x = nums[i];
+                while (x > 0) {
+                    res.push(x % 10);
+                    x = Math.floor(x / 10);
+                }
+            }
+            res.reverse();
+            return res;
+        };
+
+        // test
+        let nums = [13, 25, 83, 77]
+        console.log(separateDigits(nums))
+    </script>
+</body>
+
+</html>
