@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法一：贪心（差值递增）
+        // 时间复杂度：O(nlogn)
+        // 空间复杂度：O(logn)
+        function minimumEffort(tasks) {
+            tasks.sort((a, b) => (a[1] - a[0]) - (b[1] - b[0]));
+            let ans = 0;
+            for (const task of tasks) {
+                ans = Math.max(ans + task[0], task[1]);
+            }
+            return ans;
+        }
+
+        // 方法二：贪心（差值递减）
+        // 时间复杂度：O(nlogn)
+        // 空间复杂度：O(logn)
+        function minimumEffort(tasks) {
+            tasks.sort((a, b) => (b[1] - b[0]) - (a[1] - a[0]));
+            let ans = 0;
+            let remain = 0;
+            for (const task of tasks) {
+                if (remain <= task[1]) {
+                    ans += task[1] - remain;
+                }
+                remain = Math.max(task[1] - task[0], remain - task[0]);
+            }
+            return ans;
+        }
+
+        // test
+        let tasks = [[1, 2], [2, 4], [4, 8]]
+        console.log(minimumEffort(tasks));
+    </script>
+</body>
+
+</html>
