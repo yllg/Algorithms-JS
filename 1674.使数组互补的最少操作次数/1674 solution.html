@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法一：差分
+        // 时间复杂度：O(n+L)
+        // 空间复杂度：O(L)
+        var minMoves = function (nums, limit) {
+            const n = nums.length;
+            const diff = new Array(2 * limit + 2).fill(0);
+
+            for (let i = 0; i < n / 2; i++) {
+                const a = Math.min(nums[i], nums[n - 1 - i]);
+                const b = Math.max(nums[i], nums[n - 1 - i]);
+
+                diff[2] += 2;
+                diff[a + 1] -= 1;
+                diff[a + b] -= 1;
+                diff[a + b + 1] += 1;
+                diff[b + limit + 1] += 1;
+            }
+
+            let minOps = n;
+            let currentOps = 0;
+
+            for (let c = 2; c <= 2 * limit; c++) {
+                currentOps += diff[c];
+                minOps = Math.min(minOps, currentOps);
+            }
+
+            return minOps;
+        };
+
+        // 方法二：二分查找
+        // 时间复杂度：O(nlogn+Llogn)
+        // 空间复杂度：O(n)
+        var minMoves = function (nums, limit) {
+            const n = nums.length;
+            const sumCount = new Map();
+            const minArr = [];
+            const maxArr = [];
+
+            for (let i = 0; i < n / 2; i++) {
+                const a = Math.min(nums[i], nums[n - 1 - i]);
+                const b = Math.max(nums[i], nums[n - 1 - i]);
+
+                const sum = a + b;
+                sumCount.set(sum, (sumCount.get(sum) ?? 0) + 1);
+
+                minArr.push(a);
+                maxArr.push(b);
+            }
+
+            minArr.sort((x, y) => x - y);
+            maxArr.sort((x, y) => x - y);
+
+            const lowerBound = (arr, target) => {
+                let left = 0, right = arr.length;
+                while (left < right) {
+                    const mid = left + ((right - left) >>> 1);
+                    if (arr[mid] >= target) {
+                        right = mid;
+                    } else {
+                        left = mid + 1;
+                    }
+                }
+                return left;
+            };
+
+            let minOps = n;
+
+            for (let c = 2; c <= 2 * limit; c++) {
+                const addLeft = n / 2 - lowerBound(minArr, c);
+                const addRight = lowerBound(maxArr, c - limit);
+
+                const currentOps = n / 2 + addLeft + addRight - (sumCount.get(c) ?? 0);
+                minOps = Math.min(minOps, currentOps);
+            }
+
+            return minOps;
+        };
+
+
+        // test
+        let nums = [1, 2, 4, 3], limit = 4
+        console.log(minMoves(nums, limit));
+    </script>
+</body>
+
+</html>
