@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法一：广度优先搜索
+        // 时间复杂度：O(n)
+        // 空间复杂度：O(n)
+        var canReach = function (arr, start) {
+            if (arr[start] === 0) {
+                return true;
+            }
+
+            const n = arr.length;
+            const used = new Array(n).fill(false);
+            used[start] = true;
+            const q = new Queue([start]);
+
+            while (!q.isEmpty()) {
+                const u = q.dequeue();
+                for (const v of [u + arr[u], u - arr[u]]) {
+                    if (0 <= v && v < n && !used[v]) {
+                        if (arr[v] === 0) {
+                            return true;
+                        }
+                        q.enqueue(v);
+                        used[v] = true;
+                    }
+                }
+            }
+
+            return false;
+        };
+
+        // test
+        let arr = [4, 2, 3, 0, 3, 1, 2],
+            start = 5;
+        console.log(canReach(arr, start));
+    </script>
+</body>
+
+</html>
