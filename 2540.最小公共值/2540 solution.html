@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法一：二分查找
+        // 时间复杂度：O(nlogn)
+        // 空间复杂度：O(1)
+        var getCommon = function (nums1, nums2) {
+            const lowerBound = (arr, target) => {
+                let left = 0, right = arr.length;
+                while (left < right) {
+                    const mid = left + ((right - left) >> 1);
+                    if (arr[mid] < target) {
+                        left = mid + 1;
+                    } else {
+                        right = mid;
+                    }
+                }
+                return left;
+            };
+
+            for (const num of nums1) {
+                const idx = lowerBound(nums2, num);
+                if (idx < nums2.length && nums2[idx] === num) {
+                    return num;
+                }
+            }
+            return -1;
+        };
+
+        // 方法二：哈希集合
+        // 时间复杂度：O(n+m)
+        // 空间复杂度：O(n)
+        var getCommon = function (nums1, nums2) {
+            const set = new Set(nums1);
+            for (const num of nums2) {
+                if (set.has(num)) {
+                    return num;
+                }
+            }
+            return -1;
+        };
+
+        // 方法三：双指针
+        // 时间复杂度：O(n+m)
+        // 空间复杂度：O(1)
+        var getCommon = function (nums1, nums2) {
+            let i = 0, j = 0;
+            while (i < nums1.length && j < nums2.length) {
+                if (nums1[i] === nums2[j]) {
+                    return nums1[i];
+                }
+                if (nums1[i] < nums2[j]) {
+                    i++;
+                } else {
+                    j++;
+                }
+            }
+            return -1;
+        };
+
+        // test
+        let nums1 = [1, 2, 3], nums2 = [2, 4]
+        console.log(getCommon(nums1, nums2));
+    </script>
+</body>
+
+</html>
