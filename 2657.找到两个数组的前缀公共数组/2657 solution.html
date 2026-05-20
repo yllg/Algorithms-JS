@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法一：哈希表
+        // 时间复杂度：O(n)
+        // 空间复杂度：O(n)
+        var findThePrefixCommonArray = function (A, B) {
+            const n = A.length;
+            const cntA = new Set();
+            const cntB = new Set();
+            const cnt = new Set();
+            const ans = [];
+
+            for (let i = 0; i < n; i++) {
+                cntA.add(A[i]);
+                cntB.add(B[i]);
+
+                if (cntB.has(A[i])) {
+                    cnt.add(A[i]);
+                }
+                if (cntA.has(B[i])) {
+                    cnt.add(B[i]);
+                }
+
+                ans.push(cnt.size);
+            }
+
+            return ans;
+        };
+
+        // 方法二：位运算
+        // 时间复杂度：O(n)
+        // 空间复杂度：O(1)
+        var findThePrefixCommonArray = function (A, B) {
+            let p = 0n, q = 0n;
+            for (let i = 0; i < A.length; i++) {
+                p |= 1n << BigInt(A[i]);
+                q |= 1n << BigInt(B[i]);
+                A[i] = (p & q).toString(2).split('1').length - 1;
+            }
+            return A;
+        };
+
+        // test
+        let A = [1, 3, 2, 4], B = [3, 1, 2, 4]
+        console.log(findThePrefixCommonArray(A, B))
+    </script>
+</body>
+
+</html>
