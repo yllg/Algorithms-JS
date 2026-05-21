@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法一：枚举前缀 + 哈希表
+        // 时间复杂度：O((n+m)logC)
+        // 空间复杂度：O(nlogC)
+        var longestCommonPrefix = function (arr1, arr2) {
+            const seen = new Set();
+
+            for (let num of arr1) {
+                while (num > 0) {
+                    seen.add(num);
+                    num = Math.floor(num / 10);
+                }
+            }
+
+            let best = 0;
+            for (let num of arr2) {
+                while (num > 0) {
+                    if (seen.has(num)) {
+                        best = Math.max(best, num);
+                    }
+                    num = Math.floor(num / 10);
+                }
+            }
+
+            return best === 0 ? 0 : String(best).length;
+        };
+
+        // test
+        let arr1 = [1, 10, 100], arr2 = [1000]
+        console.log(longestCommonPrefix(arr1, arr2));
+
+    </script>
+</body>
+
+</html>l
