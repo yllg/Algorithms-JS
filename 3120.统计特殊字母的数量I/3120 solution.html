@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法一：哈希集合
+        // 时间复杂度：O(n+∣Σ∣)
+        // 空间复杂度：O(∣Σ∣)
+        var numberOfSpecialChars = function (word) {
+            const s = new Set(word);
+            let ans = 0;
+            for (let i = 0; i < 26; i++) {
+                const lo = String.fromCharCode(97 + i);
+                const up = String.fromCharCode(65 + i);
+                if (s.has(lo) && s.has(up)) {
+                    ans++;
+                }
+            }
+            return ans;
+        };
+
+        // test
+        let word = "aaAbcBC"
+        console.log(numberOfSpecialChars(word));
+
+    </script>
+</body>
+
+</html>
