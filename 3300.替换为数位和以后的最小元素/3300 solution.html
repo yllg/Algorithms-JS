@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法一：数学
+        // 时间复杂度：O(nlogD)
+        // 空间复杂度：O(1)
+        function minElement(nums) {
+            let ans = 37;
+            for (const num of nums) {
+                let dig = 0;
+                let n = num;
+                while (n > 0) {
+                    dig += n % 10;
+                    n = Math.floor(n / 10);
+                }
+                ans = Math.min(ans, dig);
+            }
+            return ans;
+        }
+
+        // test
+        let nums = [10, 12, 13, 14]
+        console.log(minElement(nums));
+    </script>
+</body>
+
+</html>
