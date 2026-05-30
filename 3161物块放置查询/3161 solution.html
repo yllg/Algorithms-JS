@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法一：线段树
+        // 时间复杂度：O(qlogq+qlogM)
+        // 空间复杂度：O(M+q)
+        const { AvlTree } = require('@datastructures-js/binary-search-tree');
+
+        var getResults = function (queries) {
+            const mx = 50000;
+            const seg = new Array(mx << 2).fill(0);
+
+            const update = (idx, val, p, l, r) => {
+                if (l === r) {
+                    seg[p] = val;
+                    return;
+                }
+                const mid = (l + r) >> 1;
+                if (idx <= mid) {
+                    update(idx, val, p << 1, l, mid);
+                } else {
+                    update(idx, val, p << 1 | 1, mid + 1, r);
+                }
+                seg[p] = Math.max(seg[p << 1], seg[p << 1 | 1]);
+            };
+
+            const query = (L, R, p, l, r) => {
+                if (L <= l && r <= R) {
+                    return seg[p];
+                }
+                const mid = (l + r) >> 1;
+                let res = 0;
+                if (L <= mid) {
+                    res = Math.max(res, query(L, R, p << 1, l, mid));
+                }
+                if (R > mid) {
+                    res = Math.max(res, query(L, R, p << 1 | 1, mid + 1, r));
+                }
+                return res;
+            };
+
+            const tree = new AvlTree((a, b) => a - b);
+            tree.insert(0);
+            tree.insert(mx);
+            update(mx, mx, 1, 0, mx);
+            const ans = [];
+
+            for (const q of queries) {
+                if (q[0] === 1) {
+                    const x = q[1];
+                    const rightNode = tree.ceil(x, false);
+                    const leftNode = tree.floor(x, false);
+                    const r = rightNode ? rightNode.getValue() : mx;
+                    const l = leftNode ? leftNode.getValue() : 0;
+
+                    update(x, x - l, 1, 0, mx);
+                    update(r, r - x, 1, 0, mx);
+                    tree.insert(x);
+                } else {
+                    const x = q[1];
+                    const sz = q[2];
+                    const preNode = tree.floor(x, true);
+                    const pre = preNode ? preNode.getValue() : 0;
+
+                    let maxSpace = query(0, pre, 1, 0, mx);
+                    maxSpace = Math.max(maxSpace, x - pre);
+                    ans.push(maxSpace >= sz);
+                }
+            }
+
+            return ans;
+        };
+
+        // 方法二：树状数组
+        // 时间复杂度：O(qlogq+qlogM)
+        // 空间复杂度：O(M+q)
+        var getResults = function (queries) {
+            const mx = 50000;
+            const st = [0, mx];
+
+            const bisectLeft = (arr, x) => {
+                let lo = 0, hi = arr.length;
+                while (lo < hi) {
+                    const mid = (lo + hi) >>> 1;
+                    if (arr[mid] < x) lo = mid + 1;
+                    else hi = mid;
+                }
+                return lo;
+            };
+
+            const insort = (arr, x) => {
+                const idx = bisectLeft(arr, x);
+                arr.splice(idx, 0, x);
+            };
+
+            for (const q of queries) {
+                if (q[0] === 1) {
+                    insort(st, q[1]);
+                }
+            }
+
+            const bt = new Array(mx + 1).fill(0);
+
+            const update = (x, v) => {
+                while (x <= mx) {
+                    if (v > bt[x]) bt[x] = v;
+                    x += x & -x;
+                }
+            };
+
+            const query = (x) => {
+                let res = 0;
+                while (x > 0) {
+                    if (bt[x] > res) res = bt[x];
+                    x -= x & -x;
+                }
+                return res;
+            };
+
+            let pre = 0;
+            for (const x of st) {
+                if (x === 0) {
+                    continue;
+                }
+                update(x, x - pre);
+                pre = x;
+            }
+
+            const ans = [];
+            for (let i = queries.length - 1; i >= 0; i--) {
+                const q = queries[i];
+                if (q[0] === 2) {
+                    const x = q[1], sz = q[2];
+                    const idx = bisectLeft(st, x);
+                    let preVal;
+
+                    if (idx < st.length && st[idx] === x) {
+                        preVal = x;
+                    } else {
+                        preVal = st[idx - 1];
+                    }
+
+                    let maxSpace = query(preVal);
+                    maxSpace = Math.max(maxSpace, x - preVal);
+                    ans.push(maxSpace >= sz);
+                } else {
+                    const x = q[1];
+                    const idx = bisectLeft(st, x);
+                    const preVal = st[idx - 1];
+                    const nxt = st[idx + 1];
+
+                    update(nxt, nxt - preVal);
+                    st.splice(idx, 1);
+                }
+            }
+
+            return ans.reverse();
+        };
+
+
+    </script>
+</body>
+
+</html>
