@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法一：枚举
+        // 时间复杂度：O(num2⋅lognum2)
+        // 空间复杂度：O(lognum2)
+        var totalWaviness = function (num1, num2) {
+            const getWaviness = (x) => {
+                const s = x.toString();
+                let waviness = 0;
+
+                for (let i = 1; i < s.length - 1; i++) {
+                    const isPeak = s[i] > s[i - 1] && s[i] > s[i + 1];
+                    const isValley = s[i] < s[i - 1] && s[i] < s[i + 1];
+                    if (isPeak || isValley) {
+                        waviness++;
+                    }
+                }
+
+                return waviness;
+            };
+
+            let total = 0;
+            for (let i = num1; i <= num2; i++) {
+                total += getWaviness(i);
+            }
+
+            return total;
+        };
+
+
+        // 方法二：数位动态规划
+        // 时间复杂度：O(D^3lognum2)
+        // 空间复杂度：O(D^2lognum2)
+        var totalWaviness = function (num1, num2) {
+            // 计算 [0, num] 内所有数字的波动值总和
+            const solve = (num) => {
+                // 如果少于 3 的数字波动值 0
+                if (num < 100) {
+                    return 0;
+                }
+                const s = num.toString();
+                const n = s.length;
+
+                // 记忆化搜索使用两个独立的数组
+                // memo_cnt[pos][x][y]：当前位为 pos 位，且前两位为 x, y 的合法填充方案数
+                const memo_cnt = Array(16).fill().map(() => Array(10).fill().map(() => Array(10).fill(-1)));
+                // memo_sum[pos][x][y]：当前位为 pos 位，且左边两位为 x, y 的波动值
+                const memo_sum = Array(16).fill().map(() => Array(10).fill().map(() => Array(10).fill(-1)));
+
+                const dfs = (pos, prev, curr, isLimit, isLeading) => {
+                    // 结束位置
+                    if (pos === n) {
+                        return [1, 0];
+                    }
+                    // 只有在不受上限限制且不包含前导零时才使用记忆化
+                    if (!isLimit && !isLeading && prev >= 0 && curr >= 0) {
+                        if (memo_cnt[pos][prev][curr] !== -1) {
+                            return [memo_cnt[pos][prev][curr], memo_sum[pos][prev][curr]];
+                        }
+                    }
+
+                    // 计算当前条件下的方案数和波动值
+                    let cnt = 0, sum = 0;
+                    const up = isLimit ? parseInt(s[pos]) : 9;
+                    for (let digit = 0; digit <= up; ++digit) {
+                        const newLeading = isLeading && (digit === 0);
+                        // 前一个数字更新为 curr
+                        const newPrev = curr;
+                        // 当前数字更新为 digit
+                        const newCurr = newLeading ? -1 : digit;
+                        const [subCnt, subSum] = dfs(pos + 1, newPrev, newCurr,
+                            isLimit && (digit === up), newLeading);
+                        // 不包含前导零时才计算波动值
+                        if (!newLeading && prev >= 0 && curr >= 0) {
+                            // 数位为峰或为谷时，更新当前的波动值
+                            if ((prev < curr && curr > digit) || (prev > curr && curr < digit)) {
+                                sum += subCnt;
+                            }
+                        }
+
+                        cnt += subCnt;
+                        sum += subSum;
+                    }
+
+                    if (!isLimit && !isLeading && prev >= 0 && curr >= 0) {
+                        // 更新记忆化数组
+                        memo_cnt[pos][prev][curr] = cnt;
+                        memo_sum[pos][prev][curr] = sum;
+                    }
+
+                    return [cnt, sum];
+                };
+
+                const [_, totalSum] = dfs(0, -1, -1, true, true);
+                return totalSum;
+            };
+
+            return solve(num2) - solve(num1 - 1);
+        };
+
+
+    </script>
+</body>
+
+</html>
