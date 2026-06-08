@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法一：双指针
+        // 时间复杂度：O(n)
+        // 空间复杂度：O(1)
+        var pivotArray = function (nums, pivot) {
+            const n = nums.length;
+            const ans = new Array(n).fill(pivot);
+            let left = 0, right = n - 1;
+
+            for (let i = 0; i < n; ++i) {
+                if (nums[i] < pivot) {
+                    ans[left] = nums[i];
+                    ++left;
+                } else if (nums[i] > pivot) {
+                    ans[right] = nums[i];
+                    --right;
+                }
+            }
+
+            reverse(ans, right + 1, n - 1);
+            return ans;
+        };
+
+        function reverse(arr, start, end) {
+            while (start < end) {
+                [arr[start], arr[end]] = [arr[end], arr[start]];
+                start++;
+                end--;
+            }
+        }
+
+        // test
+        let nums = [9, 12, 5, 10, 14, 3, 10], pivot = 10
+        console.log(pivotArray(nums, pivot));
+    </script>
+</body>
+
+</html>
