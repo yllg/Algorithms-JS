@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 每个字母有自己的权重； 权重对 26 取模，并将结果按字母“倒序”映射到一个小写英文字母
+
+        // 方法一：模拟
+        // 时间复杂度：O(n)
+        // 空间复杂度：O(1)
+        var mapWordWeights = function (words, weights) {
+            let ans = '';
+            for (const word of words) {
+                let s = 0;
+                for (const c of word) {
+                    s += weights[c.charCodeAt(0) - 'a'.charCodeAt(0)];
+                }
+                ans += String.fromCharCode('z'.charCodeAt(0) - s % 26);
+            }
+            return ans;
+        };
+
+        // test
+        let words = ["abcd", "def", "xyz"], weights = [5, 3, 12, 14, 1, 2, 3, 2, 10, 6, 6, 9, 7, 8, 7, 10, 8, 9, 6, 9, 9, 8, 3, 7, 7, 2]
+        console.log(mapWordWeights(words, weights));
+    </script>
+</body>
+
+</html>
