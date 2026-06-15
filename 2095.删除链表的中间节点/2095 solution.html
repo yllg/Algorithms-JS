@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法一：快慢指针
+        // 时间复杂度：O(n)
+        // 空间复杂度：O(1)
+        var deleteMiddle = function (head) {
+            if (head.next === null) {
+                return null;
+            }
+
+            let slow = head;
+            let fast = head;
+            let pre = null;
+
+            while (fast !== null && fast.next !== null) {
+                fast = fast.next.next;
+                pre = slow;
+                slow = slow.next;
+            }
+
+            pre.next = pre.next.next;
+            return head;
+        };
+
+    </script>
+</body>
+
+</html>
