@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法一：模拟
+        // 时间复杂度：O(n)
+        // 空间复杂度：O(1)
+        function processStr(s, k) {
+            let len = 0;
+            for (const c of s) {
+                if (c === '*') {
+                    if (len > 0) {
+                        len--;
+                    }
+                } else if (c === '#') {
+                    len *= 2;
+                } else if (c === '%') {
+                    // no change
+                } else {
+                    len++;
+                }
+            }
+            if (k + 1 > len) {
+                return '.';
+            }
+            for (let i = s.length - 1; i >= 0; i--) {
+                const c = s[i];
+                if (c === '*') {
+                    len++;
+                } else if (c === '#') {
+                    if (k + 1 > (len + 1) / 2) {
+                        k -= Math.floor(len / 2);
+                    }
+                    len = Math.floor((len + 1) / 2);
+                } else if (c === '%') {
+                    k = len - k - 1;
+                } else {
+                    if (k + 1 === len) {
+                        return c;
+                    }
+                    len--;
+                }
+            }
+            return '.';
+        }
+
+        // test
+        let s = "a#b%*", k = 1
+        console.log(processStr(s, k));
+    </script>
+</body>
+
+</html>
