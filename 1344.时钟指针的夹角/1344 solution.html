@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法一：数学
+        // 时间复杂度：O(1)
+        // 空间复杂度：O(1)
+        var angleClock = function (hour, minutes) {
+            const oneMinAngle = 6;
+            const oneHourAngle = 30;
+
+            const minutesAngle = oneMinAngle * minutes;
+            const hourAngle = (hour % 12 + minutes / 60.0) * oneHourAngle;
+
+            const diff = Math.abs(hourAngle - minutesAngle);
+            return Math.min(diff, 360 - diff);
+        };
+
+        // test
+        let hour = 12, minutes = 30
+        console.log(angleClock(hour, minutes));
+    </script>
+</body>
+
+</html>
