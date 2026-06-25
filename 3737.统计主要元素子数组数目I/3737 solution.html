@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法一：枚举
+        // 时间复杂度：O(n^2)
+        // 空间复杂度：O(1)
+        var countMajoritySubarrays = function (nums, target) {
+            const n = nums.length;
+            let ans = 0;
+            for (let i = 0; i < n; ++i) {
+                let cnt = 0;
+                for (let j = i; j < n; ++j) {
+                    cnt += (nums[j] === target ? 1 : -1);
+                    if (cnt > 0) {
+                        ++ans;
+                    }
+                }
+            }
+            return ans;
+        };
+
+        // test
+        let nums = [1, 2, 2, 3], target = 2
+        console.log(countMajoritySubarrays(nums, target));
+    </script>
+</body>
+
+</html>
