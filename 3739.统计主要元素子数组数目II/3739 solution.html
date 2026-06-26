@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法一：前缀和
+        // 时间复杂度：O(n)
+        // 空间复杂度：O(n)
+        var countMajoritySubarrays = function (nums, target) {
+            const n = nums.length;
+            // 表示前缀和为 -n, -(n-1), ..., 0, 1, ..., n 的出现次数，下标偏移 n
+            const pre = new Array(n * 2 + 1).fill(0);
+            pre[n] = 1;
+            let cnt = n;
+            let ans = 0, presum = 0;
+            for (let i = 0; i < n; ++i) {
+                if (nums[i] === target) {
+                    presum += pre[cnt];
+                    ++cnt;
+                    ++pre[cnt];
+                } else {
+                    --cnt;
+                    presum -= pre[cnt];
+                    ++pre[cnt];
+                }
+                ans += presum;
+            }
+            return ans;
+        };
+
+        // test
+        let nums = [1, 2, 2, 3], target = 2
+        console.log(countMajoritySubarrays(nums, target));
+    </script>
+</body>
+
+</html>
