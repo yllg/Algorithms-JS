@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法一：哈希表 + 枚举
+        // 时间复杂度：O(nloglogM)
+        // 空间复杂度：O(n)
+        var maximumLength = function (nums) {
+            const cnt = new Map();
+
+            for (const num of nums) {
+                cnt.set(num, (cnt.get(num) || 0) + 1);
+            }
+
+            // ans 至少是 1 的数量，向下取奇数
+            const oneCnt = cnt.get(1) || 0;
+            let ans = oneCnt % 2 ? oneCnt : oneCnt - 1;
+
+            cnt.delete(1);
+
+            for (const num of cnt.keys()) {
+                let res = 0;
+                let x = num;
+
+                while (cnt.has(x) && cnt.get(x) > 1) {
+                    res += 2;
+                    x *= x;
+                }
+
+                ans = Math.max(ans, res + (cnt.has(x) ? 1 : -1));
+            }
+
+            return ans;
+        };
+
+        // test
+        let nums = [5, 4, 1, 2, 2]
+        console.log(maximumLength(nums))
+
+    </script>
+</body>
+
+</html>
