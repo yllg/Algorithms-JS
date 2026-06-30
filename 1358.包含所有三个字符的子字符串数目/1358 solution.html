@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法一：枚举 + 二分
+        // 时间复杂度：O(nlogn)
+        // 空间复杂度：O(n)
+        var numberOfSubstrings = function (s) {
+            const n = s.length;
+            let ans = 0;
+
+            const pre = Array.from({ length: 3 }, () => new Array(n + 1).fill(0));
+            for (let i = 0; i < n; i++) {
+                for (let j = 0; j < 3; j++) {
+                    pre[j][i + 1] = pre[j][i];
+                }
+                pre[s.charCodeAt(i) - 97][i + 1]++;
+            }
+
+            for (let i = 0; i < n; i++) {
+                let left = i + 1, right = n, pos = -1;
+                while (left <= right) {
+                    const mid = left + ((right - left) >> 1);
+
+                    if (pre[0][mid] - pre[0][i] > 0 &&
+                        pre[1][mid] - pre[1][i] > 0 &&
+                        pre[2][mid] - pre[2][i] > 0) {
+                        right = mid - 1;
+                        pos = mid;
+                    } else {
+                        left = mid + 1;
+                    }
+                }
+
+                if (pos !== -1) {
+                    ans += n - pos + 1;
+                }
+            }
+
+            return ans;
+        };
+
+        // 方法二：双指针
+        // 时间复杂度：O(n)
+        // 空间复杂度：O(1)
+        var numberOfSubstrings = function (s) {
+            const n = s.length;
+            let ans = 0;
+            const cnt = [0, 0, 0];
+
+            for (let l = 0, r = -1; l < n;) {
+                while (r < n && !(cnt[0] >= 1 && cnt[1] >= 1 && cnt[2] >= 1)) {
+                    r++;
+                    if (r === n) {
+                        break;
+                    }
+                    cnt[s.charCodeAt(r) - 97]++;
+                }
+                if (r < n) {
+                    ans += n - r;
+                }
+                cnt[s.charCodeAt(l) - 97]--;
+                l++;
+            }
+
+            return ans;
+        };
+
+
+    </script>
+</body>
+
+</html>
