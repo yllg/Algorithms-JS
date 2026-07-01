@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法一：二分查找
+        // 时间复杂度：O(n^2logn)
+        // 空间复杂度：O(n^2)
+        var maximumSafenessFactor = function (grid) {
+            const m = grid.length;
+            const n = grid[0].length;
+            if (grid[0][0] === 1 || grid[m - 1][n - 1] === 1) {
+                return 0;
+            }
+
+            const dis = Array.from({ length: m }, () => Array(n).fill(-1));
+            const dirs = [[-1, 0], [1, 0], [0, 1], [0, -1]];
+            const q = new Queue();
+            for (let i = 0; i < m; i++) {
+                for (let j = 0; j < n; j++) {
+                    if (grid[i][j] === 1) {
+                        q.push([i, j]);
+                        dis[i][j] = 0;
+                    }
+                }
+            }
+
+            while (!q.isEmpty()) {
+                const [cx, cy] = q.dequeue();
+                for (const [dx, dy] of dirs) {
+                    const nx = cx + dx;
+                    const ny = cy + dy;
+                    if (nx >= 0 && nx < m && ny >= 0 && ny < n && dis[nx][ny] === -1) {
+                        dis[nx][ny] = dis[cx][cy] + 1;
+                        q.push([nx, ny]);
+                    }
+                }
+            }
+
+            const check = (limit) => {
+                const visit = Array.from({ length: m }, () => Array(n).fill(false));
+                const q = [[0, 0]];
+                visit[0][0] = true;
+                let head = 0;
+
+                while (head < q.length) {
+                    const [cx, cy] = q[head++];
+                    if (cx === m - 1 && cy === n - 1) {
+                        return true;
+                    }
+                    for (const [dx, dy] of dirs) {
+                        const nx = cx + dx;
+                        const ny = cy + dy;
+                        if (nx >= 0 && nx < m && ny >= 0 && ny < n &&
+                            !visit[nx][ny] && dis[nx][ny] >= limit) {
+                            q.push([nx, ny]);
+                            visit[nx][ny] = true;
+                        }
+                    }
+                }
+                return false;
+            };
+
+            let lo = 0, hi = Math.min(dis[0][0], dis[m - 1][n - 1]);
+            let res = 0;
+            while (lo <= hi) {
+                const mid = Math.floor((lo + hi) / 2);
+                if (check(mid)) {
+                    res = mid;
+                    lo = mid + 1;
+                } else {
+                    hi = mid - 1;
+                }
+            }
+
+            return res;
+        };
+
+        // 方法二：并查集
+        // 时间复杂度：O(n^2α(n^2))
+        // 空间复杂度：O(n^2)
+        class UnionFind {
+            constructor(n) {
+                this.parent = Array.from({ length: n }, (_, i) => i);
+                this.rank = new Array(n).fill(0);
+            }
+
+            find(x) {
+                if (this.parent[x] !== x) {
+                    this.parent[x] = this.find(this.parent[x]);
+                }
+                return this.parent[x];
+            }
+
+            unite(x, y) {
+                const rootX = this.find(x);
+                const rootY = this.find(y);
+                if (rootX !== rootY) {
+                    if (this.rank[rootX] > this.rank[rootY]) {
+                        this.parent[rootY] = rootX;
+                    } else if (this.rank[rootX] < this.rank[rootY]) {
+                        this.parent[rootX] = rootY;
+                    } else {
+                        this.parent[rootY] = rootX;
+                        this.rank[rootX]++;
+                    }
+                }
+            }
+
+            connect(x, y) {
+                return this.find(x) === this.find(y);
+            }
+        }
+
+        var maximumSafenessFactor = function (grid) {
+            const n = grid.length;
+            if (grid[0][0] || grid[n - 1][n - 1]) return 0;
+
+            const dis = Array.from({ length: n }, () => new Array(n).fill(-1));
+            const dirs = [[-1, 0], [1, 0], [0, 1], [0, -1]];
+            const q = [];
+            const cells = [];
+
+            for (let i = 0; i < n; i++) {
+                for (let j = 0; j < n; j++) {
+                    if (grid[i][j]) {
+                        q.push([i, j]);
+                        dis[i][j] = 0;
+                        cells.push([i, j, 0]);
+                    }
+                }
+            }
+
+            let head = 0;
+            while (head < q.length) {
+                const [cx, cy] = q[head++];
+                for (const [dx, dy] of dirs) {
+                    const nx = cx + dx, ny = cy + dy;
+                    if (nx >= 0 && ny >= 0 && nx < n && ny < n && dis[nx][ny] === -1) {
+                        dis[nx][ny] = dis[cx][cy] + 1;
+                        cells.push([nx, ny, dis[nx][ny]]);
+                        q.push([nx, ny]);
+                    }
+                }
+            }
+
+            const uf = new UnionFind(n * n);
+            const visit = Array.from({ length: n }, () => new Array(n).fill(false));
+
+            for (let i = cells.length - 1; i >= 0; i--) {
+                const [cx, cy, dist] = cells[i];
+                visit[cx][cy] = true;
+                for (const [dx, dy] of dirs) {
+                    const nx = cx + dx, ny = cy + dy;
+                    if (nx >= 0 && ny >= 0 && nx < n && ny < n && visit[nx][ny]) {
+                        uf.unite(cx * n + cy, nx * n + ny);
+                    }
+                }
+                if (uf.connect(0, n * n - 1)) {
+                    return dist;
+                }
+            }
+            return 0;
+        };
+
+        // 方法三：优先队列
+        // 时间复杂度：O(n^2logn)
+        // 空间复杂度：O(n^2)
+        var maximumSafenessFactor = function (grid) {
+            const n = grid.length;
+            if (grid[0][0] || grid[n - 1][n - 1]) {
+                return 0;
+            }
+            const dis = Array.from({ length: n }, () => new Array(n).fill(-1));
+            const dirs = [[-1, 0], [1, 0], [0, 1], [0, -1]];
+            const q = [];
+
+            for (let i = 0; i < n; i++) {
+                for (let j = 0; j < n; j++) {
+                    if (grid[i][j] === 1) {
+                        q.push([i, j]);
+                        dis[i][j] = 0;
+                    }
+                }
+            }
+
+            let head = 0;
+            while (head < q.length) {
+                const [cx, cy] = q[head++];
+                for (const [dx, dy] of dirs) {
+                    const nx = cx + dx, ny = cy + dy;
+                    if (nx >= 0 && ny >= 0 && nx < n && ny < n && dis[nx][ny] === -1) {
+                        dis[nx][ny] = dis[cx][cy] + 1;
+                        q.push([nx, ny]);
+                    }
+                }
+            }
+
+            const visit = Array.from({ length: n }, () => new Array(n).fill(false));
+            const pq = new MaxPriorityQueue((item) => item.val);
+            visit[0][0] = true;
+            pq.enqueue({ val: dis[0][0], x: 0, y: 0 });
+            let maxSafeness = Math.min(dis[0][0], dis[n - 1][n - 1]);
+
+            while (!pq.isEmpty()) {
+                const { val, x: cx, y: cy } = pq.dequeue();
+                maxSafeness = Math.min(maxSafeness, val);
+                if (cx === n - 1 && cy === n - 1) {
+                    break;
+                }
+                for (const [dx, dy] of dirs) {
+                    const nx = cx + dx, ny = cy + dy;
+                    if (nx >= 0 && ny >= 0 && nx < n && ny < n && !visit[nx][ny]) {
+                        visit[nx][ny] = true;
+                        pq.enqueue({ val: dis[nx][ny], x: nx, y: ny });
+                    }
+                }
+            }
+
+            return maxSafeness;
+        };
+
+
+    </script>
+</body>
+
+</html>
