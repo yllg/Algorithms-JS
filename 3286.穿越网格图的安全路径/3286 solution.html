@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法一：Dijkstra
+        // 时间复杂度：O(mnlog(mn))
+        // 空间复杂度：O(mn)
+        var findSafeWalk = function (grid, health) {
+            const m = grid.length, n = grid[0].length;
+            const dis = Array.from({ length: m }, () => new Array(n).fill(-1));
+            const dirs = [[0, 1], [1, 0], [-1, 0], [0, -1]];
+
+            const pq = new MinPriorityQueue({
+                compare: (a, b) => a[0] - b[0]
+            });
+            pq.enqueue([grid[0][0], 0, 0]);
+
+            while (!pq.isEmpty()) {
+                const [val, cx, cy] = pq.dequeue();
+                if (dis[cx][cy] >= 0) {
+                    continue;
+                }
+                dis[cx][cy] = val;
+
+                for (const [dx, dy] of dirs) {
+                    const nx = cx + dx;
+                    const ny = cy + dy;
+
+                    if (nx < 0 || ny < 0 || nx >= m || ny >= n || dis[nx][ny] >= 0) {
+                        continue;
+                    }
+
+                    pq.enqueue([val + grid[nx][ny], nx, ny]);
+                }
+            }
+
+            return dis[m - 1][n - 1] < health;
+        };
+
+        // 方法二：0-1 BFS
+        // 时间复杂度：O(mn)
+        // 空间复杂度：O(mn)
+        var findSafeWalk = function (grid, health) {
+            const m = grid.length, n = grid[0].length;
+            const dirs = [[0, 1], [0, -1], [1, 0], [-1, 0]];
+            const dis = Array.from({ length: m }, () => new Array(n).fill(Infinity));
+
+            const q = new Deque();
+            q.pushFront([0, 0]);
+            dis[0][0] = grid[0][0];
+
+            while (!q.isEmpty()) {
+                const [cx, cy] = q.popFront();
+                // 第一次出队时，保证是最短距离
+                if (cx === m - 1 && cy === n - 1) {
+                    return true;
+                }
+
+                for (const [dx, dy] of dirs) {
+                    const nx = cx + dx, ny = cy + dy;
+                    if (nx < 0 || ny < 0 || nx >= m || ny >= n) {
+                        continue;
+                    }
+                    const cost = dis[cx][cy] + grid[nx][ny];
+                    // 剪枝：新距离不满足健康要求
+                    if (cost >= health) {
+                        continue;
+                    }
+
+                    if (cost < dis[nx][ny]) {
+                        dis[nx][ny] = cost;
+                        if (grid[nx][ny] === 0) {
+                            q.pushFront([nx, ny]);
+                        } else {
+                            q.pushBack([nx, ny]);
+                        }
+                    }
+                }
+            }
+
+            return false;
+        };
+
+
+        // test
+        let grid = [[0, 1, 1, 0, 0, 0], [1, 0, 1, 0, 0, 0], [0, 1, 1, 1, 0, 1], [0, 0, 1, 0, 1, 0]], health = 3
+        console.log(findSafeWalk(grid, health));
+    </script>
+</body>
+
+</html>
