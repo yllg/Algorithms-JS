@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法一：二分答案 + 最短路（Dijkstra）
+        // 时间复杂度：O((E+V)logVlogU)
+        // 空间复杂度：O(V+E)
+        var findMaxPathScore = function (edges, online, k) {
+            const n = online.length;
+            const g = Array.from({ length: n }, () => []);
+            let l = Infinity,
+                r = 0;
+
+            for (const [u, v, w] of edges) {
+                if (!online[u] || !online[v]) {
+                    continue;
+                }
+                g[u].push([v, w]);
+                l = Math.min(l, w);
+                r = Math.max(r, w);
+            }
+
+            const check = (mid) => {
+                const dis = new Array(n).fill(Infinity);
+                const pq = new PriorityQueue((a, b) => a[0] - b[0]);
+
+                dis[0] = 0;
+                pq.enqueue([0, 0]);
+
+                while (!pq.isEmpty()) {
+                    const [d, u] = pq.dequeue();
+
+                    if (d > k) {
+                        return false;
+                    }
+                    if (u === n - 1) {
+                        return true;
+                    }
+                    if (d !== dis[u]) {
+                        continue;
+                    }
+
+                    for (const [v, w] of g[u]) {
+                        if (w < mid) {
+                            continue;
+                        }
+                        const nd = d + w;
+                        if (nd < dis[v]) {
+                            dis[v] = nd;
+                            pq.enqueue([nd, v]);
+                        }
+                    }
+                }
+                return false;
+            };
+
+            if (!check(l)) {
+                return -1;
+            }
+
+            while (l <= r) {
+                const mid = (l + r) >> 1;
+                if (check(mid)) {
+                    l = mid + 1;
+                } else {
+                    r = mid - 1;
+                }
+            }
+            return r;
+        };
+
+
+        // 方法二：二分答案 + 记忆化搜索
+        // 时间复杂度：O((E+V)logU)
+        // 空间复杂度：O(V+E)
+        var findMaxPathScore = function (edges, online, k) {
+            const n = online.length;
+            const g = Array.from({ length: n }, () => []);
+            let l = Infinity, r = 0;
+
+            for (const [u, v, w] of edges) {
+                if (!online[u] || !online[v]) {
+                    continue;
+                }
+                g[u].push([v, w]);
+                l = Math.min(l, w);
+                r = Math.max(r, w);
+            }
+
+            const check = (mid) => {
+                const memo = new Array(n).fill(-1);
+
+                const dfs = (u) => {
+                    if (u === n - 1) {
+                        return 0;
+                    }
+                    if (memo[u] !== -1) {
+                        return memo[u];
+                    }
+
+                    let res = Infinity;
+                    for (const [v, w] of g[u]) {
+                        if (w >= mid) {
+                            res = Math.min(res, dfs(v) + w);
+                        }
+                    }
+                    memo[u] = res;
+                    return res;
+                };
+
+                return dfs(0) <= k;
+            };
+
+            if (!check(l)) {
+                return -1;
+            }
+
+            while (l <= r) {
+                const mid = (l + r) >> 1;
+                if (check(mid)) {
+                    l = mid + 1;
+                } else {
+                    r = mid - 1;
+                }
+            }
+            return r;
+        };
+
+
+        // 方法三：二分答案 + 拓扑排序 + 动态规划
+        // 时间复杂度：O((E+V)logU)
+        // 空间复杂度：O(V+E)
+        var findMaxPathScore = function (edges, online, k) {
+            const n = online.length;
+            const g = Array.from({ length: n }, () => []);
+            const deg = new Array(n).fill(0);
+            let l = Infinity, r = 0;
+
+            for (const [u, v, w] of edges) {
+                if (!online[u] || !online[v]) {
+                    continue;
+                }
+                g[u].push([v, w]);
+                deg[v]++;
+                l = Math.min(l, w);
+                r = Math.max(r, w);
+            }
+
+            // 删除不可达节点
+            const q = [];
+            for (let i = 1; i < n; i++) {
+                if (deg[i] === 0) {
+                    q.push(i);
+                }
+            }
+            while (q.length > 0) {
+                const u = q.shift();
+                for (const [v] of g[u]) {
+                    if (--deg[v] === 0 && v !== 0) {
+                        q.push(v);
+                    }
+                }
+            }
+
+            const check = (mid) => {
+                const dp = new Array(n).fill(Infinity);
+                const cdeg = [...deg];
+                dp[0] = 0;
+
+                const q = [0];
+                while (q.length > 0) {
+                    const u = q.shift();
+                    if (u === n - 1) {
+                        return dp[u] <= k;
+                    }
+
+                    for (const [v, w] of g[u]) {
+                        if (w >= mid) {
+                            dp[v] = Math.min(dp[v], dp[u] + w);
+                        }
+                        if (--cdeg[v] === 0) {
+                            q.push(v);
+                        }
+                    }
+                }
+                return false;
+            };
+
+            if (!check(l)) {
+                return -1;
+            }
+
+            while (l <= r) {
+                const mid = (l + r) >> 1;
+                if (check(mid)) {
+                    l = mid + 1;
+                } else {
+                    r = mid - 1;
+                }
+            }
+            return r;
+        };
+
+        // test
+        let edges = [[0, 1, 5], [1, 3, 10], [0, 2, 3], [2, 3, 4]], online = [true, true, true, true], k = 10
+        console.log(findMaxPathScore(edges, online, k));
+    </script>
+</body>
+
+</html>
