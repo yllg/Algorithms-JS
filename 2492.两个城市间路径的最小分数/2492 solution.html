@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 1-n 城市，m条路径，每条路径有一个分数，求1到n的最小分数
+
+        // 方法一：深度优先搜索 / 广度优先搜索
+        // 时间复杂度：O(n+m)
+        // 空间复杂度：O(n+m)
+        var minScore = function (n, roads) {
+            const vis = Array.from({ length: n + 1 }, () => false);
+            const graph = Array.from({ length: n + 1 }, () => []);
+
+            for (const [u, v, dis] of roads) {
+                graph[u].push({ v, dis });
+                graph[v].push({ v: u, dis });
+            }
+
+            let ans = Infinity;
+            const dfs = (u) => {
+                if (vis[u] === false) {
+                    vis[u] = true;
+                }
+
+                for (const { v, dis } of graph[u]) {
+                    ans = Math.min(ans, dis);
+                    if (vis[v] === false) {
+                        dfs(v);
+                    }
+                }
+            };
+
+            dfs(1);
+            return ans;
+        };
+
+        // 方法二：并查集
+        // 时间复杂度：O(n+m*α(n))
+        // 空间复杂度：O(n)
+        class DSU {
+            constructor(size) {
+                this.parent = Array.from({ length: size }, (_, i) => i);
+                this.rank = new Array(size).fill(0);
+            }
+
+            join(x, y) {
+                let rx = this.find(x);
+                let ry = this.find(y);
+
+                if (rx === ry) {
+                    return;
+                }
+
+                if (this.rank[rx] === this.rank[ry]) {
+                    this.rank[rx]++;
+                } else if (this.rank[rx] < this.rank[ry]) {
+                    [rx, ry] = [ry, rx];
+                }
+                this.parent[ry] = rx;
+            }
+
+            find(x) {
+                return this.parent[x] === x ? x : (this.parent[x] = this.find(this.parent[x]));
+            }
+        }
+
+        var minScore = function (n, roads) {
+            let ans = Infinity;
+
+            const dsu = new DSU(n + 1);
+            for (const [u, v] of roads) {
+                dsu.join(u, v);
+            }
+
+            const component = dsu.find(1);
+            for (const [u, v, dis] of roads) {
+                if (dsu.find(u) === component) {
+                    ans = Math.min(ans, dis);
+                }
+            }
+
+            return ans;
+        };
+
+        // 方法三：最小生成树
+        // 时间复杂度：O(n+m*logm)
+        // 空间复杂度：O(n+m)
+        var minScore = function (n, roads) {
+            const graph = Array.from({ length: n + 1 }, () => []);
+            const vis = Array(n + 1).fill(false);
+
+            let ans = Infinity;
+            const pq = new MinPriorityQueue((e) => e.dis);
+
+            for (const [u, v, dis] of roads) {
+                graph[u].push({ v: v, dis });
+                graph[v].push({ v: u, dis });
+
+                if (pq.isEmpty() && (u === 1 || v === 1)) {
+                    pq.enqueue({ v, dis });
+                }
+            }
+
+            while (!pq.isEmpty()) {
+                const { dis, v: u } = pq.dequeue();
+
+                if (vis[u]) {
+                    continue;
+                }
+
+                ans = Math.min(ans, dis);
+                vis[u] = true;
+
+                for (const edge of graph[u]) {
+                    if (!vis[edge.v]) {
+                        pq.enqueue(edge);
+                    }
+                }
+            }
+
+            return ans;
+        };
+
+    </script>
+</body>
+
+</html>
