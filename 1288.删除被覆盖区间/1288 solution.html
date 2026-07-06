@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法一：枚举
+        // 时间复杂度：O(n^2)
+        // 空间复杂度：O(1)
+        var removeCoveredIntervals = function (intervals) {
+            const n = intervals.length;
+            let ans = n;
+            for (let i = 0; i < n; i++) {
+                for (let j = 0; j < n; j++) {
+                    if (i !== j && intervals[j][0] <= intervals[i][0] && intervals[i][1] <= intervals[j][1]) {
+                        ans--;
+                        break;
+                    }
+                }
+            }
+            return ans;
+        };
+
+        // 方法二：排序 + 遍历
+        // 时间复杂度：O(nlogn)
+        // 空间复杂度：O(logn) 
+        var removeCoveredIntervals = function (intervals) {
+            const n = intervals.length;
+            intervals.sort((u, v) => {
+                if (u[0] !== v[0]) {
+                    return u[0] - v[0];
+                }
+                return v[1] - u[1];
+            });
+            let ans = n;
+            let rmax = intervals[0][1];
+            for (let i = 1; i < n; i++) {
+                if (intervals[i][1] <= rmax) {
+                    ans--;
+                } else {
+                    rmax = Math.max(rmax, intervals[i][1]);
+                }
+            }
+            return ans;
+        };
+
+        // test
+        let intervals = [[1, 4], [3, 6], [2, 8]]
+        console.log(removeCoveredIntervals(intervals));
+    </script>
+</body>
+
+</html>
