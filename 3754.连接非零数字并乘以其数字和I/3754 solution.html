@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法一：从左到右遍历
+        // 时间复杂度：O(logn)
+        // 空间复杂度：O(logn)
+        var sumAndMultiply = function (n) {
+            let x = 0;
+            let sum = 0;
+            for (let c of String(n)) {
+                let d = parseInt(c, 10);
+                sum += d;
+                if (d > 0) {
+                    x = x * 10 + d;
+                }
+            }
+            return x * sum;
+        };
+
+        // 方法二：从右到左遍历
+        // 时间复杂度：O(logn)
+        // 空间复杂度：O(1)
+        var sumAndMultiply = function (n) {
+            let x = 0, sum = 0, pow10 = 1;
+            while (n > 0) {
+                let d = n % 10;
+                sum += d;
+                if (d > 0) {
+                    x += d * pow10;
+                    pow10 *= 10;
+                }
+                n = Math.floor(n / 10);
+            }
+            return x * sum;
+        };
+
+        // test
+        let n = 10203004
+        console.log(sumAndMultiply(n));
+    </script>
+</body>
+
+</html>
