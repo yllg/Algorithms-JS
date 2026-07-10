@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法一：双指针 + 倍增
+        // 时间复杂度：O(nlogn + qlogn)
+        // 空间复杂度：O(nlogn)
+        var pathExistenceQueries = function (n, nums, maxDiff, queries) {
+            const idx = Array.from({ length: n }, (_, i) => i);
+            const pos = Array(n);
+            const res = [];
+
+            idx.sort((a, b) => nums[a] - nums[b]);
+
+            for (let i = 0; i < n; i++) {
+                pos[idx[i]] = i;
+            }
+
+            let m = 0;
+            while ((1 << m) <= n) {
+                m++;
+            }
+
+            const f = Array.from({ length: n }, () => Array(m).fill(0));
+            let left = 0;
+
+            for (let i = 0; i < n; i++) {
+                while (nums[idx[i]] - nums[idx[left]] > maxDiff) {
+                    left++;
+                }
+                f[i][0] = left;
+            }
+
+            for (let j = 1; j < m; j++) {
+                for (let i = 0; i < n; i++) {
+                    f[i][j] = f[f[i][j - 1]][j - 1];
+                }
+            }
+
+            for (const q of queries) {
+                let x = pos[q[0]];
+                let y = pos[q[1]];
+
+                if (x > y) [x, y] = [y, x];
+
+                if (x === y) {
+                    res.push(0);
+                    continue;
+                }
+
+                let step = 0;
+
+                for (let i = m - 1; i >= 0; i--) {
+                    if (f[y][i] > x) {
+                        y = f[y][i];
+                        step += 1 << i;
+                    }
+                }
+
+                res.push(f[y][0] <= x ? step + 1 : -1);
+            }
+
+            return res;
+        };
+
+        // test
+        let n = 5, nums = [1, 8, 3, 4, 2], maxDiff = 3, queries = [[0, 3], [2, 4]]
+
+        console.log(pathExistenceQueries(n, nums, maxDiff, queries));
+    </script>
+</body>
+
+</html>
