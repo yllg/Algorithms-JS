@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        /**
+         * 计算 连通分量的数量
+         *  连通分量：如果在子图中任意两个顶点之间都存在路径，并且子图中没有任何一个顶点与子图外部的顶点共享边，则称其为 连通分量 
+         * */
+
+        // 方法一：深度优先搜索
+        // 时间复杂度：O(V+E)
+        // 空间复杂度：O(V+E)
+        function countCompleteComponents(n, edges) {
+            const graph = Array.from({ length: n }, () => []);
+            for (const [u, v] of edges) {
+                graph[u].push(v);
+                graph[v].push(u);
+            }
+
+            const visited = Array(n).fill(false);
+            let ans = 0;
+
+            for (let i = 0; i < n; i++) {
+                if (!visited[i]) {
+                    let V = 0, E = 0;
+                    const stack = [i];
+                    visited[i] = true;
+                    while (stack.length > 0) {
+                        const u = stack.pop();
+                        V++;
+                        E += graph[u].length;
+                        for (const v of graph[u]) {
+                            if (!visited[v]) {
+                                visited[v] = true;
+                                stack.push(v);
+                            }
+                        }
+                    }
+                    if (E === V * (V - 1)) {
+                        ans++;
+                    }
+                }
+            }
+            return ans;
+        }
+
+
+        // 方法二：广度优先搜索
+        // 时间复杂度：O(V+E)
+        // 空间复杂度：O(V+E)
+        function countCompleteComponents(n, edges) {
+            const graph = Array.from({ length: n }, () => []);
+            for (const [u, v] of edges) {
+                graph[u].push(v);
+                graph[v].push(u);
+            }
+
+            const visited = Array(n).fill(false);
+            let ans = 0;
+
+            for (let i = 0; i < n; i++) {
+                if (!visited[i]) {
+                    let V = 0, E = 0;
+                    const queue = [i];
+                    let head = 0;
+                    visited[i] = true;
+                    while (head < queue.length) {
+                        const u = queue[head++];
+                        V++;
+                        E += graph[u].length;
+                        for (const v of graph[u]) {
+                            if (!visited[v]) {
+                                visited[v] = true;
+                                queue.push(v);
+                            }
+                        }
+                    }
+                    if (E === V * (V - 1)) {
+                        ans++;
+                    }
+                }
+            }
+            return ans;
+        }
+
+        // 方法三：并查集
+        // 时间复杂度为 O((V+E)∗α(V))
+        // 空间复杂度为 O(V)
+        class DSU {
+            constructor(n) {
+                this.parent = Array.from({ length: n }, (_, i) => i);
+                this.rank = Array(n).fill(1);
+            }
+
+            find(x) {
+                if (this.parent[x] !== x) {
+                    this.parent[x] = this.find(this.parent[x]);
+                }
+                return this.parent[x];
+            }
+
+            union(x, y) {
+                const rx = this.find(x);
+                const ry = this.find(y);
+                if (rx === ry) {
+                    return;
+                }
+                if (this.rank[rx] > this.rank[ry]) {
+                    this.parent[ry] = rx;
+                } else if (this.rank[ry] > this.rank[rx]) {
+                    this.parent[rx] = ry;
+                } else {
+                    this.parent[rx] = ry;
+                    this.rank[ry]++;
+                }
+            }
+        }
+
+        function countCompleteComponents(n, edges) {
+            const dsu = new DSU(n);
+            for (const [u, v] of edges) {
+                dsu.union(u, v);
+            }
+
+            const numV = Array(n).fill(0);
+            const numE = Array(n).fill(0);
+            for (let i = 0; i < n; i++) {
+                numV[dsu.find(i)]++;
+            }
+            for (const [u] of edges) {
+                numE[dsu.find(u)]++;
+            }
+
+            let ans = 0;
+            for (let i = 0; i < n; i++) {
+                if (dsu.find(i) === i && numE[i] === numV[i] * (numV[i] - 1) / 2) {
+                    ans++;
+                }
+            }
+            return ans;
+        }
+
+
+    </script>
+</body>
+
+</html>
