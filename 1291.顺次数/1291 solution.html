@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 定义「顺次数」为：每一位上的数字都比前一位上的数字大 1 的整数
+
+        // 方法一：枚举
+        // 时间复杂度：O(1)
+        // 空间复杂度：O(1)
+        var sequentialDigits = function (low, high) {
+            const ans = [];
+            for (let i = 1; i <= 9; i++) {
+                let num = i;
+                for (let j = i + 1; j <= 9; j++) {
+                    num = num * 10 + j;
+                    if (num >= low && num <= high) {
+                        ans.push(num);
+                    }
+                }
+            }
+            return ans.sort((a, b) => a - b);
+        };
+
+        // test
+        console.log(sequentialDigits(100, 300));
+    </script>
+</body>
+
+</html>
