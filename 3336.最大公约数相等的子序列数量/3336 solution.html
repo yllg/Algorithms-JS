@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法一：动态规划
+        // 时间复杂度：O(n * m^2 * log(m))
+        // 空间复杂度：O(m^2)
+        var subsequencePairCount = function (nums) {
+            const MOD = 1000000007;
+            const m = Math.max(...nums);
+
+            const gcd = (a, b) => {
+                while (b !== 0) {
+                    [a, b] = [b, a % b];
+                }
+                return a;
+            };
+
+            let dp = Array.from({ length: m + 1 }, () => new Array(m + 1).fill(0));
+            dp[0][0] = 1;
+
+            for (const num of nums) {
+                const ndp = Array.from({ length: m + 1 }, () => new Array(m + 1).fill(0));
+
+                for (let j = 0; j <= m; j++) {
+                    const divisor1 = gcd(j, num);
+                    const dpRow = dp[j];
+                    const ndpRow = ndp[j];
+                    const ndpD1Row = ndp[divisor1];
+
+                    for (let k = 0; k <= m; k++) {
+                        const val = dpRow[k];
+                        if (val === 0) continue;
+
+                        const divisor2 = gcd(k, num);
+                        ndpRow[k] = (ndpRow[k] + val) % MOD;
+                        ndpD1Row[k] = (ndpD1Row[k] + val) % MOD;
+                        ndpRow[divisor2] = (ndpRow[divisor2] + val) % MOD;
+                    }
+                }
+                dp = ndp;
+            }
+
+            let ans = 0;
+            for (let j = 1; j <= m; j++) {
+                ans = (ans + dp[j][j]) % MOD;
+            }
+
+            return ans;
+        };
+
+        // test
+        let nums = [1, 2, 3, 4]
+        console.log(subsequencePairCount(nums));
+    </script>
+</body>
+
+</html>
