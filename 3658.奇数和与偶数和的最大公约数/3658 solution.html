@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法一：辗转相除法
+        // 时间复杂度：O(log n)
+        // 空间复杂度：O(log n)
+        function gcdOfOddEvenSums(n) {
+            const gcd = (x, y) => (y === 0 ? x : gcd(y, x % y));
+            return gcd(n * n, n * (n + 1));
+        }
+
+        // 方法二：数学
+        // 时间复杂度：O(1)
+        // 空间复杂度：O(1)
+        function gcdOfOddEvenSums(n) {
+            return n;
+        }
+
+        // test
+        let n = 4
+        console.log(gcdOfOddEvenSums(n));
+    </script>
+</body>
+
+</html>
