@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <!DOCTYPE html>
+    <html lang="en">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Document</title>
+    </head>
+
+    <body>
+        <script>
+            //方法一：模拟
+            // 时间复杂度：O(nlogn+nlogU)
+            // 空间复杂度：O(n)
+            var gcdSum = function (nums) {
+                const gcd = (a, b) => {
+                    while (b !== 0) {
+                        [a, b] = [b, a % b];
+                    }
+                    return a;
+                };
+
+                const n = nums.length;
+                const mx = new Array(n);
+                let prefixMax = -Infinity;
+                for (let i = 0; i < n; i++) {
+                    prefixMax = Math.max(prefixMax, nums[i]);
+                    mx[i] = prefixMax;
+                }
+
+                const prefixGcd = new Array(n);
+                for (let i = 0; i < n; i++) {
+                    prefixGcd[i] = gcd(nums[i], mx[i]);
+                }
+
+                prefixGcd.sort((a, b) => a - b);
+                let ans = 0;
+                let left = 0, right = n - 1;
+                while (left < right) {
+                    ans += gcd(prefixGcd[left], prefixGcd[right]);
+                    left++;
+                    right--;
+                }
+                return ans;
+            };
+
+
+            // test
+            let nums = [2, 6, 4]
+            console.log(gcdSum(nums));
+        </script>
+    </body>
+
+    </html>
+</body>
+
+</html>
