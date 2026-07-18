@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 返回 数组中最大数和最小数的 最大公约数 。
+
+        // 方法一：按要求计算
+        // 时间复杂度：O(n+logM)
+        // 空间复杂度：O(1)
+        var findGCD = function (nums) {
+            let mx = Math.max(...nums);
+            let mn = Math.min(...nums);
+            return gcd(mx, mn);
+        }
+
+        function gcd(a, b) {
+            while (b !== 0) {
+                [a, b] = [b, a % b];
+            }
+            return a;
+        }
+
+        // test
+        let nums = [2, 5, 6, 9, 10]
+        console.log(findGCD(nums));
+    </script>
+</body>
+
+</html>
