@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法一：贪心
+        // 时间复杂度：O(n)
+        // 空间复杂度：O(k)
+        var maxActiveSectionsAfterTrade = function (s) {
+            const n = s.length;
+            let cnt1 = 0;
+            for (let c of s) {
+                if (c === '1') cnt1++;
+            }
+
+            const zeroBlocks = [];
+            let i = 0;
+            while (i < n) {
+                const start = i;
+                while (i < n && s[i] === s[start]) {
+                    i++;
+                }
+                if (s[start] === '0') {
+                    zeroBlocks.push(i - start);
+                }
+            }
+
+            const m = zeroBlocks.length;
+            if (m < 2) {
+                return cnt1;
+            }
+
+            let bestGain = 0; // 最优增量
+            for (let j = 0; j < m - 1; j++) {
+                bestGain = Math.max(bestGain, zeroBlocks[j] + zeroBlocks[j + 1]);
+            }
+
+            return cnt1 + bestGain;
+        };
+
+        // 方法二：空间优化
+        // 时间复杂度：O(n)
+        // 空间复杂度：O(1)
+        var maxActiveSectionsAfterTrade = function (s) {
+            const n = s.length;
+            let cnt1 = 0;
+            for (let c of s) {
+                if (c === '1') cnt1++;
+            }
+
+            let i = 0;
+            let bestGain = 0;
+            let prev = -Infinity;
+            let cur = 0;
+
+            while (i < n) {
+                const start = i;
+                while (i < n && s[i] === s[start]) {
+                    i++;
+                }
+                if (s[start] === '0') {
+                    cur = i - start;
+                    if (prev !== -Infinity) {
+                        bestGain = Math.max(bestGain, prev + cur);
+                    }
+                    prev = cur;
+                }
+            }
+
+            return cnt1 + bestGain;
+        };
+
+        // test
+        let s = "0100"
+        console.log(maxActiveSectionsAfterTrade(s));
+    </script>
+</body>
+
+</html>
