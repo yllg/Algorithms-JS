@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法一：二分查找 + 线段树
+        // 时间复杂度：O(n+qlogn)
+        // 空间复杂度：O(n)
+        class SegmentTree {
+            constructor(arr) {
+                this.arr = arr;
+                this.n = arr.length;
+                this.seg = new Array(this.n << 2).fill(0);
+                this.build(1, 0, this.n - 1);
+            }
+
+            build(p, l, r) {
+                if (l === r) {
+                    this.seg[p] = this.arr[l];
+                    return;
+                }
+
+                const mid = (l + r) >> 1;
+                this.build(p << 1, l, mid);
+                this.build((p << 1) | 1, mid + 1, r);
+                this.seg[p] = Math.max(this.seg[p << 1], this.seg[(p << 1) | 1]);
+            }
+
+            _query(p, l, r, L, R) {
+                if (L <= l && r <= R) {
+                    return this.seg[p];
+                }
+
+                const mid = (l + r) >> 1;
+                let res = 0;
+                if (L <= mid) {
+                    res = Math.max(res, this._query(p << 1, l, mid, L, R));
+                }
+                if (R > mid) {
+                    res = Math.max(res, this._query((p << 1) | 1, mid + 1, r, L, R));
+                }
+
+                return res;
+            }
+
+            query(L, R) {
+                if (L > R) {
+                    return 0;
+                }
+
+                return this._query(1, 0, this.n - 1, L, R);
+            }
+        }
+
+        function lowerBound(list, target) {
+            let left = 0, right = list.length;
+            while (left < right) {
+                const mid = left + ((right - left) >> 1);
+                if (list[mid] < target) {
+                    left = mid + 1;
+                } else {
+                    right = mid;
+                }
+            }
+            return left;
+        }
+
+        function upperBound(list, target) {
+            let left = 0, right = list.length;
+            while (left < right) {
+                const mid = left + ((right - left) >> 1);
+                if (list[mid] <= target) {
+                    left = mid + 1;
+                } else {
+                    right = mid;
+                }
+            }
+            return left;
+        }
+
+        var maxActiveSectionsAfterTrade = function (s, queries) {
+            const n = s.length;
+            let cnt1 = 0;
+            for (const c of s) {
+                if (c === '1') {
+                    cnt1++;
+                }
+            }
+
+            const zeroBlocks = [];
+            const blockLeft = [];
+            const blockRight = [];
+
+            let i = 0;
+            while (i < n) {
+                const st = i;
+                while (i < n && s[i] === s[st]) {
+                    i += 1;
+                }
+                if (s[st] === '0') {
+                    zeroBlocks.push(i - st);
+                    blockLeft.push(st);
+                    blockRight.push(i - 1);
+                }
+            }
+
+            const m = zeroBlocks.length;
+            if (m < 2) {  // 连续 0 区块少于 2 段，直接返回答案
+                return new Array(queries.length).fill(cnt1);
+            }
+
+            const tmpSum = new Array(m - 1);
+            for (let k = 0; k < m - 1; k++) {
+                tmpSum[k] = zeroBlocks[k] + zeroBlocks[k + 1];
+            }
+            const seg = new SegmentTree(tmpSum);
+            const ans = [];
+
+            for (const q of queries) {
+                const l = q[0], r = q[1];
+                const idx = lowerBound(blockRight, l);
+                const jdx = upperBound(blockLeft, r) - 1;
+
+                // 子字符串内最多有 1 个 连续 0 区块
+                if (idx > m - 1 || jdx < 0 || idx >= jdx) {
+                    ans.push(cnt1);
+                    continue;
+                }
+                const firstLen = blockRight[idx] - Math.max(blockLeft[idx], l) + 1; // 子字符串的第一个连续 0 区块的实际长度
+                const lastLen = Math.min(blockRight[jdx], r) - blockLeft[jdx] + 1; // 子字符串的最后一个连续 0 区块的实际长度
+
+                let bestGain;
+                // 子字符串内恰好有 2 个连续 0 区块
+                if (idx + 1 === jdx) {
+                    bestGain = firstLen + lastLen;
+                } else {
+                    const val1 = firstLen + zeroBlocks[idx + 1];
+                    const val2 = zeroBlocks[jdx - 1] + lastLen;
+                    const val3 = seg.query(idx + 1, jdx - 2);
+                    bestGain = Math.max(val1, val2, val3);
+                }
+                ans.push(cnt1 + bestGain);
+            }
+
+            return ans;
+        };
+
+        // 方法二：二分查找 + ST表
+        // 时间复杂度：O((n+q)logn)
+        // 空间复杂度：O(nlogn) 
+        class SparseTable {
+            constructor(data) {
+                this.st = [[...data]];
+                let i = 1, N = this.st[0].length;
+                while (2 * i <= N + 1) {
+                    const pre = this.st[this.st.length - 1];
+                    const cur = [];
+                    for (let j = 0; j < N - 2 * i + 1; j++) {
+                        cur.push(Math.max(pre[j], pre[j + i]));
+                    }
+                    this.st.push(cur);
+                    i <<= 1;
+                }
+            }
+
+            query(begin, end) {
+                if (begin > end) {
+                    return 0;
+                }
+                const len = end - begin + 1;
+                const lg = Math.floor(Math.log2(len));
+                return Math.max(this.st[lg][begin], this.st[lg][end - (1 << lg) + 1]);
+            }
+        }
+
+        function lowerBound(list, target) {
+            let left = 0, right = list.length;
+            while (left < right) {
+                const mid = left + ((right - left) >> 1);
+                if (list[mid] < target) {
+                    left = mid + 1;
+                } else {
+                    right = mid;
+                }
+            }
+            return left;
+        }
+
+        function upperBound(list, target) {
+            let left = 0, right = list.length;
+            while (left < right) {
+                const mid = left + ((right - left) >> 1);
+                if (list[mid] <= target) {
+                    left = mid + 1;
+                } else {
+                    right = mid;
+                }
+            }
+            return left;
+        }
+
+        var maxActiveSectionsAfterTrade = function (s, queries) {
+            const n = s.length;
+            let cnt1 = 0;
+            for (const c of s) {
+                if (c === '1') {
+                    cnt1++;
+                }
+            }
+
+            const zeroBlocks = [];
+            const blockLeft = [];
+            const blockRight = [];
+
+            let i = 0;
+            while (i < n) {
+                const st = i;
+                while (i < n && s[i] === s[st]) {
+                    i += 1;
+                }
+                if (s[st] === '0') {
+                    zeroBlocks.push(i - st);
+                    blockLeft.push(st);
+                    blockRight.push(i - 1);
+                }
+            }
+
+            const m = zeroBlocks.length;
+            if (m < 2) {  // 连续 0 区块少于 2 段，直接返回答案
+                return new Array(queries.length).fill(cnt1);
+            }
+            const tmpSum = [];
+            for (let k = 0; k < m - 1; k++) {
+                tmpSum.push(zeroBlocks[k] + zeroBlocks[k + 1]);
+            }
+            const st = new SparseTable(tmpSum);
+            const ans = [];
+
+            for (const q of queries) {
+                const l = q[0], r = q[1];
+                const idx = lowerBound(blockRight, l);
+                const jdx = upperBound(blockLeft, r) - 1;
+
+                // 子字符串内最多有 1 个 连续 0 区块
+                if (idx > m - 1 || jdx < 0 || idx >= jdx) {
+                    ans.push(cnt1);
+                    continue;
+                }
+
+                const firstLen = blockRight[idx] - Math.max(blockLeft[idx], l) + 1; // 子字符串的第一个连续 0 区块的实际长度
+                const lastLen = Math.min(blockRight[jdx], r) - blockLeft[jdx] + 1; // 子字符串的最后一个连续 0 区块的实际长度
+                // 子字符串内恰好有 2 个连续 0 区块
+                if (idx + 1 === jdx) {
+                    const bestGain = firstLen + lastLen;
+                    ans.push(cnt1 + bestGain);
+                    continue;
+                }
+
+                const val1 = firstLen + zeroBlocks[idx + 1];
+                const val2 = zeroBlocks[jdx - 1] + lastLen;
+                const val3 = st.query(idx + 1, jdx - 2);
+                const bestGain = Math.max(val1, val2, val3);
+                ans.push(cnt1 + bestGain);
+            }
+
+            return ans;
+        };
+
+
+    </script>
+</body>
+
+</html>
