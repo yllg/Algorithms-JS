@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法一：找规律
+        // 时间复杂度：O(logn)
+        // 空间复杂度：O(1)
+        var uniqueXorTriplets = function (nums) {
+            const n = nums.length;
+            if (n <= 2) {
+                return n;
+            }
+            let ans = 1;
+            while (ans <= n) {
+                ans <<= 1;
+            }
+            return ans;
+        };
+
+        // test
+        let nums = [1, 2]
+        console.log(uniqueXorTriplets(nums));
+    </script>
+</body>
+
+</html>
