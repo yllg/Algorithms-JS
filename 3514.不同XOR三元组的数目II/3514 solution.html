@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法一：枚举
+        // 时间复杂度：O(n^2+nm)
+        // 空间复杂度：O(m)
+        var uniqueXorTriplets = function (nums) {
+            const n = nums.length;
+            let m = 0;
+            for (const v of nums) {
+                m = Math.max(m, v);
+            }
+            let u = 1;
+            while (u <= m) {
+                u <<= 1;
+            }
+            const s = new Array(u).fill(false);
+            for (let i = 0; i < n; i++) {
+                for (let j = i; j < n; j++) {
+                    s[nums[i] ^ nums[j]] = true;
+                }
+            }
+            const t = new Array(u).fill(false);
+            for (let x = 0; x < u; x++) {
+                if (!s[x]) {
+                    continue;
+                }
+                for (const v of nums) {
+                    t[x ^ v] = true;
+                }
+            }
+            let ans = 0;
+            for (const b of t) {
+                if (b) {
+                    ans++;
+                }
+            }
+            return ans;
+        };
+
+        // 方法二：枚举（优化）
+        // 时间复杂度：O(nm)
+        // 空间复杂度：O(m)
+        var uniqueXorTriplets = function (nums) {
+            let m = 0;
+            for (const v of nums) {
+                m = Math.max(m, v);
+            }
+            let u = 1;
+            while (u <= m) {
+                u <<= 1;
+            }
+            const one = new Array(u).fill(false);
+            const two = new Array(u).fill(false);
+            const three = new Array(u).fill(false);
+            for (const v of nums) {
+                one[v] = true;
+                for (let x = 0; x < u; x++) {
+                    if (one[x]) {
+                        two[x ^ v] = true;
+                    }
+                }
+            }
+            for (const v of nums) {
+                for (let x = 0; x < u; x++) {
+                    if (two[x]) {
+                        three[x ^ v] = true;
+                    }
+                }
+            }
+            let ans = 0;
+            for (const b of three) {
+                if (b) {
+                    ans++;
+                }
+            }
+            return ans;
+        };
+
+        // test
+        let nums = [1, 3]
+        console.log(uniqueXorTriplets(nums));
+    </script>
+</body>
+
+</html>
