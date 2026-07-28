@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 求字典序最小的排列
+
+        // 方法一：排序
+        // 时间复杂度：O(nlogn)
+        // 空间复杂度：O(n)
+        var smallestPalindrome = function (s) {
+            const partition = Math.floor(s.length / 2);
+
+            const base = s.substring(0, partition).split("").toSorted();
+            const mid = s.length % 2 === 1 ? s[partition] : "";
+            const reversed = base.toReversed();
+
+            return base.join("") + mid + reversed.join("");
+        };
+
+
+        // 方法二：计数排序
+        // 时间复杂度：O(n+∣Σ∣)
+        // 空间复杂度：O(∣Σ∣)
+        var smallestPalindrome = function (s) {
+            const partition = Math.floor(s.length / 2);
+            const bucket = new Int32Array(26);
+
+            for (let i = 0; i < partition; i++) {
+                bucket[s.charCodeAt(i) - 97] += 1;
+            }
+
+            let left = "";
+            let right = "";
+            for (let i = 0; i < 26; i++) {
+                if (bucket[i] > 0) {
+                    left += String.fromCharCode(i + 97).repeat(bucket[i]);
+                    right = String.fromCharCode(i + 97).repeat(bucket[i]) + right;
+                }
+            }
+
+            const mid = s.length % 2 !== 0 ? s[partition] : "";
+
+            return left + mid + right;
+        };
+
+
+        // test
+        let s = "daccad"
+        console.log(smallestPalindrome(s));
+    </script>
+</body>
+
+</html>
