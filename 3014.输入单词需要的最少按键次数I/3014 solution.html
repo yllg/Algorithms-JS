@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法一：贪心
+        // 时间复杂度：O(n)
+        // 空间复杂度：O(1)
+        var minimumPushes = function (word) {
+            const n = word.length;
+            let ans = 0;
+            for (let i = 0; i < n; i++) {
+                ans += Math.floor(i / 8) + 1;
+            }
+            return ans;
+        };
+
+        // 方法二：数学
+        // 时间复杂度：O(1)
+        // 空间复杂度：O(1)
+        var minimumPushes = function (word) {
+            const n = word.length;
+            const m = Math.floor(n / 8) + 1;
+            return m * (m - 1) * 4 + (n - (m - 1) * 8) * m;
+        };
+
+        // test
+        let word = "xycdefghij"
+        console.log(minimumPushes(word));
+    </script>
+</body>
+
+</html>
