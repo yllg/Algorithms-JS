@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 允许你将编号为 2 到 9 的按键重新映射到 不同 字母集合
+
+        // 方法一：贪心
+        // 时间复杂度：O(n+∣Σ∣log∣Σ∣)
+        // 空间复杂度：O(∣Σ∣)
+        var minimumPushes = function (word) {
+            const freq = new Array(26).fill(0);
+            for (const c of word) {
+                freq[c.charCodeAt(0) - 97]++;
+            }
+            freq.sort((a, b) => b - a);
+            let ans = 0;
+            for (let i = 0; i < 26 && freq[i] > 0; i++) {
+                ans += (Math.floor(i / 8) + 1) * freq[i];
+            }
+            return ans;
+        }
+
+        // test
+        let word = "xyzxyzxyzxyz"
+        console.log(minimumPushes(word));
+    </script>
+</body>
+
+</html>
