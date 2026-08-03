@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法一：动态规划
+        // 时间复杂度：O(n)
+        // 空间复杂度：O(n)
+        var stoneGameIII = function (stoneValue) {
+            const n = stoneValue.length;
+            const suffixSum = new Array(n);
+            suffixSum[n - 1] = stoneValue[n - 1];
+            for (let i = n - 2; i >= 0; --i) {
+                suffixSum[i] = suffixSum[i + 1] + stoneValue[i];
+            }
+            const f = new Array(n + 1);
+            // 边界情况，当没有石子时，分数为 0
+            // 为了代码的可读性，显式声明
+            f[n] = 0;
+            for (let i = n - 1; i >= 0; --i) {
+                let bestj = f[i + 1];
+                for (let j = i + 2; j <= i + 3 && j <= n; ++j) {
+                    bestj = Math.min(bestj, f[j]);
+                }
+                f[i] = suffixSum[i] - bestj;
+            }
+            let total = 0;
+            for (const value of stoneValue) {
+                total += value;
+            }
+            if (f[0] * 2 === total) {
+                return "Tie";
+            } else {
+                return f[0] * 2 > total ? "Alice" : "Bob";
+            }
+        };
+
+        // 方法二：另一种状态的设计思路
+        // 时间复杂度：O(n)
+        // 空间复杂度：O(n)
+        var stoneGameIII = function (stoneValue) {
+            const n = stoneValue.length;
+            const f = new Array(n + 1).fill(-Infinity);
+            // 边界情况，当没有石子时，分数为 0
+            f[n] = 0;
+            for (let i = n - 1; i >= 0; --i) {
+                let pre = 0;
+                for (let j = i + 1; j <= i + 3 && j <= n; ++j) {
+                    pre += stoneValue[j - 1];
+                    f[i] = Math.max(f[i], pre - f[j]);
+                }
+            }
+
+            if (f[0] === 0) {
+                return "Tie";
+            } else {
+                return f[0] > 0 ? "Alice" : "Bob";
+            }
+        };
+
+        // test
+        let values = [1, 2, 3, 7]
+        console.log(stoneGameIII(values));
+    </script>
+</body>
+
+</html>
