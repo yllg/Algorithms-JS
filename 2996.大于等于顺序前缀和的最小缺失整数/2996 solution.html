@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法一：模拟 + 前缀和
+        // 时间复杂度：O(n)
+        // 空间复杂度：O(n)
+        var missingInteger = function (nums) {
+            const n = nums.length;
+            const numSet = new Set(nums);
+            let total = nums[0];
+
+            for (let i = 1; i < n; i++) {
+                if (nums[i] === nums[i - 1] + 1) {
+                    total += nums[i];
+                } else {
+                    break;
+                }
+            }
+
+            while (numSet.has(total)) {
+                total += 1;
+            }
+
+            return total;
+        };
+
+
+        // 方法二：模拟 + 数列求和公式
+        // 时间复杂度：O(n)
+        // 空间复杂度：O(n)
+        var missingInteger = function (nums) {
+            const n = nums.length;
+            const numSet = new Set(nums);
+            let prefixLen = 1;
+
+            for (let i = 1; i < n; i++) {
+                if (nums[i] === nums[i - 1] + 1) {
+                    prefixLen += 1;
+                } else {
+                    break;
+                }
+            }
+
+            let total = (nums[prefixLen - 1] + nums[0]) * prefixLen / 2;
+            while (numSet.has(total)) {
+                total += 1;
+            }
+
+            return total;
+        };
+
+        // test
+        let nums = [3, 4, 5, 1, 12, 14, 13]
+        console.log(missingInteger(nums));
+    </script>
+</body>
+
+</html>
