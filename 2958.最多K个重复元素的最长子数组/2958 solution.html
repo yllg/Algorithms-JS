@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法一: 双指针
+        // 时间复杂度: O(n)
+        // 空间复杂度: O(n)
+        var maxSubarrayLength = function (nums, k) {
+            const n = nums.length;
+            const occ = new Map();
+            let right = -1, ans = 0;
+
+            for (let left = 0; left < n; ++left) {
+                if (left > 0) {
+                    const key = nums[left - 1];
+                    occ.set(key, occ.get(key) - 1);
+                    if (occ.get(key) === 0) {
+                        occ.delete(key);
+                    }
+                }
+
+                while (right + 1 < n && (occ.get(nums[right + 1]) || 0) < k) {
+                    ++right;
+                    occ.set(nums[right], (occ.get(nums[right]) || 0) + 1);
+                }
+
+                ans = Math.max(ans, right - left + 1);
+            }
+
+            return ans;
+        };
+
+        // test
+        let nums = [1, 2, 3, 1, 2, 3, 1, 2], k = 2
+        console.log(maxSubarrayLength(nums, k));
+    </script>
+</body>
+
+</html>
