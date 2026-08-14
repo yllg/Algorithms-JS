@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法一：枚举左端点
+        // 时间复杂度: O(n^2)
+        // 空间复杂度: O(1)
+        var maximumLengthSubstring = function (s) {
+            const n = s.length;
+            let res = 0;
+            for (let left = 0; left < n; left++) {
+                const count = new Array(26).fill(0);
+                for (let right = left; right < n; right++) {
+                    const ch = s.charCodeAt(right) - 97;
+                    count[ch]++;
+                    if (count[ch] > 2) {
+                        break;
+                    }
+                    res = Math.max(res, right - left + 1);
+                }
+            }
+            return res;
+        };
+
+        // 方法二: 滑动窗口
+        // 时间复杂度: O(n)
+        // 空间复杂度: O(1)
+        var maximumLengthSubstring = function (s) {
+            const count = new Array(26).fill(0);
+            let left = 0;
+            let res = 0;
+
+            for (let right = 0; right < s.length; right++) {
+                const ch = s.charCodeAt(right) - 97;
+                count[ch]++;
+
+                while (count[ch] > 2) {
+                    const ch2 = s.charCodeAt(left) - 97;
+                    count[ch2]--;
+                    left++;
+                }
+
+                res = Math.max(res, right - left + 1);
+            }
+            return res;
+        };
+
+        // test
+        let s = "bcbbbcba"
+        console.log(maximumLengthSubstring(s));
+    </script>
+</body>
+
+</html>
