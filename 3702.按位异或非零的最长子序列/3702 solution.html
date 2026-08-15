@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法一：分类讨论
+        // 时间复杂度: O(n)
+        // 空间复杂度: O(1)
+        var longestSubsequence = function (nums) {
+            const n = nums.length;
+            let totalXor = 0;
+            let allZero = true;
+
+            for (const x of nums) {
+                totalXor ^= x;
+                if (x > 0) {
+                    allZero = false;
+                }
+            }
+
+            if (totalXor > 0) {
+                return n;
+            }
+
+            return allZero ? 0 : n - 1;
+        };
+
+        // test
+        let nums = [1, 2, 3]
+        console.log(longestSubsequence(nums));
+    </script>
+</body>
+
+</html>
