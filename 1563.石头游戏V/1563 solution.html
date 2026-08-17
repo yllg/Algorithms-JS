@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 1563. 石子游戏 V
+
+        // 方法一：动态规划
+        // 时间复杂度：O(n^3)
+        // 空间复杂度：O(n^2)
+        var stoneGameV = function (stoneValue) {
+            const n = stoneValue.length;
+            const f = Array(n).fill().map(() => Array(n).fill(0));
+
+            const dfs = (left, right) => {
+                if (left === right) {
+                    return 0;
+                }
+                if (f[left][right] !== 0) {
+                    return f[left][right];
+                }
+
+                let sum = 0;
+                for (let i = left; i <= right; i++) {
+                    sum += stoneValue[i];
+                }
+                let suml = 0;
+                for (let i = left; i < right; ++i) {
+                    suml += stoneValue[i];
+                    const sumr = sum - suml;
+                    if (suml < sumr) {
+                        f[left][right] = Math.max(f[left][right], dfs(left, i) + suml);
+                    } else if (suml > sumr) {
+                        f[left][right] = Math.max(f[left][right], dfs(i + 1, right) + sumr);
+                    } else {
+                        f[left][right] = Math.max(f[left][right], Math.max(dfs(left, i), dfs(i + 1, right)) + suml);
+                    }
+                }
+                return f[left][right];
+            }
+
+            return dfs(0, n - 1);
+        };
+
+
+        // 方法二：动态规划优化
+        // 时间复杂度：O(n^2)
+        // 空间复杂度：O(n^2)
+        var stoneGameV = function (stoneValue) {
+            const n = stoneValue.length;
+            const f = Array(n).fill().map(() => Array(n).fill(0));
+            const maxl = Array(n).fill().map(() => Array(n).fill(0));
+            const maxr = Array(n).fill().map(() => Array(n).fill(0));
+
+            for (let left = n - 1; left >= 0; left--) {
+                maxl[left][left] = maxr[left][left] = stoneValue[left];
+                let total = stoneValue[left];
+                let suml = 0;
+                let i = left - 1;
+                for (let right = left + 1; right < n; right++) {
+                    total += stoneValue[right];
+                    while (i + 1 < right && (suml + stoneValue[i + 1]) * 2 <= total) {
+                        suml += stoneValue[i + 1];
+                        i++;
+                    }
+                    if (left <= i) {
+                        f[left][right] = Math.max(f[left][right], maxl[left][i]);
+                    }
+                    if (i + 1 < right) {
+                        f[left][right] = Math.max(f[left][right], maxr[i + 2][right]);
+                    }
+                    if (suml * 2 === total) {
+                        f[left][right] = Math.max(f[left][right], maxr[i + 1][right]);
+                    }
+                    maxl[left][right] = Math.max(maxl[left][right - 1], total + f[left][right]);
+                    maxr[left][right] = Math.max(maxr[left + 1][right], total + f[left][right]);
+                }
+            }
+
+            return f[0][n - 1];
+        };
+
+        // test
+        let stoneValue = [6, 2, 3, 4, 5, 5]
+        console.log(stoneGameV(stoneValue));
+    </script>
+</body>
+
+</html>
