@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法一：位运算
+        // 时间复杂度：O(r)  其中 r 是数组 reservedSeats 的长度
+        // 空间复杂度：O(r)  其中 r 是数组 reservedSeats 的长度
+        var maxNumberOfFamilies = function (n, reservedSeats) {
+            const left = 0b11110000;
+            const middle = 0b11000011;
+            const right = 0b00001111;
+
+            const occupied = new Map();
+            for (const seat of reservedSeats) {
+                if (seat[1] >= 2 && seat[1] <= 9) {
+                    const row = seat[0];
+                    if (!occupied.has(row)) {
+                        occupied.set(row, 0);
+                    }
+                    occupied.set(row, occupied.get(row) | (1 << (seat[1] - 2)));
+                }
+            }
+
+            let ans = (n - occupied.size) * 2;
+            for (const bitmask of occupied.values()) {
+                if ((bitmask | left) === left ||
+                    (bitmask | middle) === middle ||
+                    (bitmask | right) === right) {
+                    ans++;
+                }
+            }
+            return ans;
+        };
+
+        // test
+        let n = 3, reservedSeats = [[1, 2], [1, 3], [1, 8], [2, 6], [3, 1], [3, 10]]
+        console.log(maxNumberOfFamilies(n, reservedSeats));
+    </script>
+</body>
+
+</html>
