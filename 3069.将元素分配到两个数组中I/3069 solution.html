@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法一：双列表模拟
+        // 时间复杂度：O(n)
+        // 空间复杂度：O(n)
+        var resultArray = function (nums) {
+            const arr1 = [nums[0]];
+            const arr2 = [nums[1]];
+            for (let i = 2; i < nums.length; i++) {
+                if (arr1[arr1.length - 1] > arr2[arr2.length - 1]) {
+                    arr1.push(nums[i]);
+                } else {
+                    arr2.push(nums[i]);
+                }
+            }
+            return arr1.concat(arr2);
+        };
+
+        // 方法二：单数组双指针
+        // 时间复杂度：O(n)
+        // 空间复杂度：O(1)
+        var resultArray = function (nums) {
+            const n = nums.length;
+            const arr = new Array(n);
+            arr[0] = nums[0];
+            arr[n - 1] = nums[1];
+            let idx = 0, revIdx = n - 1;
+            for (let i = 2; i < n; i++) {
+                if (arr[idx] > arr[revIdx]) {
+                    arr[++idx] = nums[i];
+                } else {
+                    arr[--revIdx] = nums[i];
+                }
+            }
+            for (let l = revIdx, r = n - 1; l < r; l++, r--) {
+                [arr[l], arr[r]] = [arr[r], arr[l]];
+            }
+            return arr;
+        };
+
+        // test
+        let nums = [2, 1, 3]
+        console.log(resultArray(nums));
+    </script>
+</body>
+
+</html>
