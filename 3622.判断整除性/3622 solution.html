@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法一：模拟
+        // 时间复杂度：O(logn)
+        // 空间复杂度：O(1)
+        var checkDivisibility = function (n) {
+            let digitSum = 0;
+            let digitProduct = 1;
+            let original = n;
+
+            while (n > 0) {
+                let digit = n % 10;
+                n = Math.floor(n / 10);
+
+                digitSum += digit;
+                digitProduct *= digit;
+            }
+
+            return original % (digitSum + digitProduct) === 0;
+        };
+
+        // test
+        let n = 99
+        console.log(checkDivisibility(n));
+    </script>
+</body>
+
+</html>
