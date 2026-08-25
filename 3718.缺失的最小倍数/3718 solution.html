@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法一：枚举 + 哈希表
+        // 时间复杂度：O(n)
+        // 空间复杂度：O(n)
+        var missingMultiple = function (nums, k) {
+            const seen = new Set(nums);
+            let ans = k;
+            while (seen.has(ans)) {
+                ans += k;
+            }
+            return ans;
+        };
+
+        // test
+        let nums = [8, 2, 3, 4, 6], k = 2
+        console.log(missingMultiple(nums, k));
+    </script>
+</body>
+
+</html>
