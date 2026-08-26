@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        /**
+         * s 的某个子字符串中 1 的个数恰好等于 k ，则称这个子字符串是一个 美丽子字符串 。
+         * 请你返回 s 中 美丽子字符串 的 最短长度 。
+         * */
+
+        // 方法一：枚举
+        // 时间复杂度：O(n^3)
+        // 空间复杂度：O(n)
+        var shortestBeautifulSubstring = function (s, k) {
+            for (let m = k; m <= s.length; m++) {
+                let ans = "";
+                for (let i = m; i <= s.length; i++) {
+                    const t = s.slice(i - m, i);
+                    if ((!ans || t < ans) && [...t].filter(c => c === '1').length === k) {
+                        ans = t;
+                    }
+                }
+                if (ans) return ans;
+            }
+            return "";
+        };
+
+        // 方法二：滑动窗口
+        // 时间复杂度：O(n^2)
+        // 空间复杂度：O(n)
+        var shortestBeautifulSubstring = function (s, k) {
+            if ([...s].filter(c => c === '1').length < k) return "";
+            let ans = s, cnt = 0, left = 0;
+            for (let right = 0; right < s.length; right++) {
+                cnt += s[right] - '0';
+                while (cnt > k || s[left] === '0') {
+                    cnt -= s[left++] - '0';
+                }
+                if (cnt === k) {
+                    const t = s.slice(left, right + 1);
+                    if (t.length < ans.length || t.length === ans.length && t < ans) {
+                        ans = t;
+                    }
+                }
+            }
+            return ans;
+        };
+
+        // test
+        let s = "100011001", k = 3
+        console.log(shortestBeautifulSubstring(s, k));
+    </script>
+</body>
+
+</html>
