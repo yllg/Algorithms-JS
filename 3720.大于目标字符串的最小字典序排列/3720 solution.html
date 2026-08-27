@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法一：方法一：顺序枚举
+        // 时间复杂度：O(n×(n+∣Σ∣))
+        // 空间复杂度：O(∣Σ∣)
+        var lexGreaterPermutation = function (s, target) {
+            const cnt = new Array(26).fill(0);
+            for (const c of s) {
+                cnt[c.charCodeAt(0) - 97]++;
+            }
+
+            let res = '';
+            const n = target.length;
+
+            for (let i = 0; i < n; i++) {
+                const targetChar = target.charCodeAt(i) - 97;
+
+                // 情况1：先尝试在当前位置放置与 target[i] 相同的字符
+                if (cnt[targetChar] > 0) {
+                    cnt[targetChar]--;
+                    // 检查剩余字符能否构成大于 target[i+1:] 的字符串
+                    if (canFormGreater(cnt, target, i + 1)) {
+                        res += target[i];
+                        continue;
+                    }
+                    // 不能构成更大的字符串，回溯
+                    cnt[targetChar]++;
+                }
+
+                // 情况2：在当前位置放置一个大于 target[i] 的字符
+                for (let j = targetChar + 1; j < 26; j++) {
+                    if (cnt[j] > 0) {
+                        cnt[j]--;
+                        res += String.fromCharCode(97 + j);
+                        // 剩余位置按最小字典序填充
+                        res += getMinString(cnt);
+                        return res;
+                    }
+                }
+
+                // 无法找到可行方案, 直接返回
+                return '';
+            }
+
+            return '';
+        };
+
+        // 检查剩余字符是否能构成大于 suffix 的字符串
+        function canFormGreater(cnt, target, start) {
+            const maxStr = getMaxString(cnt);
+            const suffix = target.substring(start);
+            return maxStr > suffix;
+        }
+
+        // 获取最大字典序字符串（降序排列）
+        function getMaxString(cnt) {
+            let res = '';
+            for (let i = 25; i >= 0; i--) {
+                res += String.fromCharCode(97 + i).repeat(cnt[i]);
+            }
+            return res;
+        }
+
+        // 获取最小字典序字符串（升序排列）
+        function getMinString(cnt) {
+            let res = '';
+            for (let i = 0; i < 26; i++) {
+                res += String.fromCharCode(97 + i).repeat(cnt[i]);
+            }
+            return res;
+        }
+
+        // 方法二：倒序贪心
+        // 时间复杂度：O(n∣Σ∣)
+        // 空间复杂度：O(∣Σ∣)
+        var lexGreaterPermutation = function (s, target) {
+            const cnt = new Array(26).fill(0);
+            for (let i = 0; i < s.length; i++) {
+                cnt[s.charCodeAt(i) - 97]++;
+                cnt[target.charCodeAt(i) - 97]--;
+            }
+
+            // 从右往左尝试
+            const t = target.split('');
+            for (let i = s.length - 1; i >= 0; i--) {
+                const b = t[i].charCodeAt(0) - 97;
+                cnt[b]++; // 撤销消耗
+                // 检查前缀能否完全匹配
+                if (Math.min(...cnt) < 0) {
+                    continue;
+                }
+                // 找一个比 b 大的最小可用字符
+                for (let j = b + 1; j < 26; j++) {
+                    if (cnt[j] > 0) {
+                        cnt[j]--;
+                        t[i] = String.fromCharCode(97 + j);
+                        return t.slice(0, i + 1).join('') + getMinString(cnt);
+                    }
+                }
+            }
+
+            return "";
+        };
+
+        // 获取最小字典序字符串（升序排列）
+        function getMinString(cnt) {
+            let res = '';
+            for (let i = 0; i < 26; i++) {
+                res += String.fromCharCode(97 + i).repeat(cnt[i]);
+            }
+            return res;
+        }
+
+        // test
+        let s = "abc", target = "bba"
+        console.log(lexGreaterPermutation(s, target));
+    </script>
+</body>
+
+</html>
