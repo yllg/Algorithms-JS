@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法一：顺序枚举
+        // 时间复杂度：O(n∣Σ∣×(n+∣Σ∣))
+        // 空间复杂度：O(n+∣Σ∣)
+        var lexPalindromicPermutation = function (s, target) {
+            const n = s.length;
+            // 特殊情况：长度为1
+            if (n === 1) {
+                return s > target ? s : "";
+            }
+
+            // 统计每个字符的出现次数
+            const cnt = new Array(26).fill(0);
+            for (const c of s) {
+                cnt[c.charCodeAt(0) - 'a'.charCodeAt(0)]++;
+            }
+
+            // 检查是否能构成回文串，并记录奇数个的字符
+            let oddChar = '';
+            for (let i = 0; i < 26; i++) {
+                if (cnt[i] % 2 === 1) {
+                    // 超过一个字符出现奇数次，无法构成回文
+                    if (oddChar !== '') {
+                        return "";
+                    }
+                    oddChar = String.fromCharCode('a'.charCodeAt(0) + i);
+                }
+                cnt[i] = Math.floor(cnt[i] / 2);  // 只需要一半的字符来构造左半部分
+            }
+
+            let prefix = [];
+
+            const check = (c) => {
+                const left = [...prefix, c];
+                for (let i = 25; i >= 0; i--) {
+                    for (let k = 0; k < cnt[i]; k++) {
+                        left.push(String.fromCharCode('a'.charCodeAt(0) + i));
+                    }
+                }
+
+                const palindrome = [...left, oddChar, ...left.slice().reverse()].join('');
+
+                return palindrome > target;
+            };
+
+            // 贪心构造左半部分的每一位
+            for (let i = 0; i < Math.floor(n / 2); i++) {
+                let found = false;
+                // 尝试放置字典序最小的字符
+                for (let j = 0; j < 26; j++) {
+                    if (cnt[j] === 0) {
+                        continue;
+                    }
+
+                    cnt[j]--;
+                    if (check(String.fromCharCode('a'.charCodeAt(0) + j))) {
+                        // 如果构造的回文串大于target，则选择该字符
+                        prefix.push(String.fromCharCode('a'.charCodeAt(0) + j));
+                        found = true;
+                        break;
+                    } else {
+                        cnt[j]++;  // 不满足条件，恢复计数
+                    }
+                }
+                if (!found) {
+                    return "";  // 无法构造出大于target的回文串
+                }
+
+                if (prefix[i] > target[i]) {  // prefix已经大于target
+                    const left = [...prefix];
+                    for (let j = 0; j < 26; j++) {
+                        for (let k = 0; k < cnt[j]; k++) {
+                            left.push(String.fromCharCode('a'.charCodeAt(0) + j));
+                        }
+                    }
+                    const palindrome = [...left, oddChar, ...left.slice().reverse()].join('');
+                    return palindrome;
+                }
+            }
+
+            // 构造最终的回文串
+            const ans = [...prefix, oddChar, ...prefix.slice().reverse()].join('');
+            return ans;
+        };
+
+        // test
+        let s = "baba", target = "abba"
+        console.log(lexPalindromicPermutation(s, target));
+    </script>
+</body>
+
+</html>
