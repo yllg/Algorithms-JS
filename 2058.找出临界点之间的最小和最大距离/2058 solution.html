@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法一：维护上一个和第一个临界点的位置
+        // 时间复杂度：O(n)
+        // 空间复杂度：O(1)
+        var nodesBetweenCriticalPoints = function (head) {
+            let minDist = -1, maxDist = -1;
+            let first = -1, last = -1, pos = 0;
+            let cur = head;
+            while (cur.next.next) {
+                // 获取连续的三个节点的值
+                const x = cur.val;
+                const y = cur.next.val;
+                const z = cur.next.next.val;
+                // 如果 y 是临界点
+                if (y > Math.max(x, z) || y < Math.min(x, z)) {
+                    if (last !== -1) {
+                        // 用相邻临界点的距离更新最小值
+                        minDist = (minDist === -1 ? pos - last : Math.min(minDist, pos - last));
+                        // 用到第一个临界点的距离更新最大值
+                        maxDist = Math.max(maxDist, pos - first);
+                    }
+                    if (first === -1) {
+                        first = pos;
+                    }
+                    // 更新上一个临界点
+                    last = pos;
+                }
+                cur = cur.next;
+                ++pos;
+            }
+            return [minDist, maxDist];
+        };
+
+    </script>
+</body>
+
+</html>
