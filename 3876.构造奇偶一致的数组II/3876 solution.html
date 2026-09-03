@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法一：分类讨论
+        // 时间复杂度：O(n)
+        // 空间复杂度：O(1)
+        var uniformArray = function (nums1) {
+            let mn = nums1[0];
+            let hasOdd = false;
+            for (const v of nums1) {
+                if (v < mn) {
+                    mn = v;
+                }
+                if (v & 1) {
+                    hasOdd = true;
+                }
+            }
+            if (mn & 1) {
+                return true;
+            }
+            return !hasOdd;
+        };
+
+
+    </script>
+</body>
+
+</html>
