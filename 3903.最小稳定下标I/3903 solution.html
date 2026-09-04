@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法一：枚举
+        // 时间复杂度：O(n^2)
+        // 空间复杂度：O(1)
+        var firstStableIndex = function (nums, k) {
+            const n = nums.length;
+            for (let i = 0; i < n; i++) {
+                let maxValue = nums[i];
+                let minValue = nums[i];
+                for (let j = 0; j < i; j++) {
+                    maxValue = Math.max(maxValue, nums[j]);
+                }
+                for (let j = i + 1; j < n; j++) {
+                    minValue = Math.min(minValue, nums[j]);
+                }
+                if (maxValue - minValue <= k) {
+                    return i;
+                }
+            }
+            return -1;
+        };
+
+        // test
+        let nums = [5, 0, 1, 4], k = 3
+        console.log(firstStableIndex(nums, k));
+    </script>
+</body>
+
+</html>
