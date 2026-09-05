@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法一：前缀最大值 + 后缀最小值
+        // 时间复杂度：O(n)
+        // 空间复杂度：O(n)
+        var firstStableIndex = function (nums, k) {
+            const n = nums.length;
+            if (n === 0) {
+                return -1;
+            }
+            const minValue = new Array(n);
+            minValue[n - 1] = nums[n - 1];
+            for (let i = n - 2; i >= 0; i--) {
+                minValue[i] = Math.min(minValue[i + 1], nums[i]);
+            }
+
+            let maxValue = 0;
+            for (let i = 0; i < n; i++) {
+                maxValue = Math.max(maxValue, nums[i]);
+                if (maxValue - minValue[i] <= k) {
+                    return i;
+                }
+            }
+            return -1;
+        };
+
+        // test
+        let nums = [5, 0, 1, 4], k = 3
+        console.log(firstStableIndex(nums, k));
+
+    </script>
+</body>
+
+</html>
