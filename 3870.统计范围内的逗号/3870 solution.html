@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法一：遍历计数
+        // 时间复杂度：O(n)
+        // 空间复杂度：O(1)
+        var countCommas = function (n) {
+            let res = 0;
+            for (let a = 1; a <= n; ++a) {
+                if (a > 999) {
+                    res += 1;
+                }
+            }
+            return res;
+        };
+
+        // 方法二：直接计算
+        // 时间复杂度：O(1)
+        // 空间复杂度：O(1)
+        var countCommas = function (n) {
+            return Math.max(n - 999, 0);
+        };
+
+        // test
+        let n = 1002
+        console.log(countCommas(n));
+    </script>
+</body>
+
+</html>
