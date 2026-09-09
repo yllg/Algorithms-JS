@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法一：按位贡献法
+        // 时间复杂度：O(logn)
+        // 空间复杂度：O(1)
+        var countCommas = function (n) {
+            let p = 1000, res = 0;
+            while (p <= n) {
+                res += n - p + 1;
+                p *= 1000;
+            }
+            return res;
+        };
+
+        // test
+        let n = 1002
+        console.log(countCommas(n));
+    </script>
+</body>
+
+</html>
