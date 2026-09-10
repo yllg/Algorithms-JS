@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法一：深度优先搜索
+        // 时间复杂度：O(n)
+        // 空间复杂度：O(n)
+        function averageOfSubtree(root) {
+            let ans = 0;
+
+            function dfs(node) {
+                if (node === null) {
+                    return [0, 0];
+                }
+                const [leftSum, leftSize] = dfs(node.left);
+                const [rightSum, rightSize] = dfs(node.right);
+                const Size = leftSize + rightSize + 1;
+                const Sum = leftSum + rightSum + node.val;
+                if (Size > 0 && Math.floor(Sum / Size) === node.val) {
+                    ans++;
+                }
+                return [Sum, Size];
+            }
+
+            dfs(root);
+            return ans;
+        }
+
+    </script>
+</body>
+
+</html>
