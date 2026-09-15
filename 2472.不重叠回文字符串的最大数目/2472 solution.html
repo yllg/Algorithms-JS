@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法一：动态规划
+        // 时间复杂度：O(n^2)
+        // 空间复杂度：O(n^2)
+        var maxPalindromes = function (s, k) {
+            const n = s.length;
+            const isPalindrome = Array.from({ length: n }, () => Array(n).fill(false));
+
+            for (let len = 1; len <= n; ++len) {
+                for (let left = 0; left + len <= n; ++left) {
+                    const right = left + len - 1;
+                    isPalindrome[left][right] = s[left] === s[right] &&
+                        (len <= 2 || isPalindrome[left + 1][right - 1]);
+                }
+            }
+
+            const dp = Array(n + 1).fill(0);
+            for (let i = 1; i <= n; ++i) {
+                dp[i] = dp[i - 1];
+                for (let j = 0; j + k <= i; ++j) {
+                    if (isPalindrome[j][i - 1]) {
+                        dp[i] = Math.max(dp[i], dp[j] + 1);
+                    }
+                }
+            }
+
+            return dp[n];
+        };
+
+        // 方法二：贪心
+        // 时间复杂度：O(nk)
+        // 空间复杂度：O(1)
+        var maxPalindromes = function (s, k) {
+            const n = s.length;
+            let ans = 0, start = 0;
+
+            const check = (l, r) => {
+                while (l < r) {
+                    if (s[l++] !== s[r--]) {
+                        return false;
+                    }
+                }
+                return true;
+            };
+
+            for (let r = k - 1; r < n; ++r) {
+                let l = r - k + 1;
+                if (l >= start && check(l, r)) {
+                    ++ans;
+                    start = r + 1;
+                    continue;
+                }
+
+                l = r - k;
+                if (l >= start && check(l, r)) {
+                    ++ans;
+                    start = r + 1;
+                }
+            }
+
+            return ans;
+        };
+
+        // test
+        let s = "abaccdbbd", k = 3
+        console.log(maxPalindromes(s, k))
+    </script>
+</body>
+
+</html>
