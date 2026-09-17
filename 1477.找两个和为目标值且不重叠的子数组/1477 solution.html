@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法一：前缀和 + 动态规划 + 哈希表
+        // 时间复杂度：O(n)
+        // 空间复杂度：O(n)
+        var minSumOfLengths = function (arr, target) {
+            const pos = new Map([[0, -1]]);
+            const n = arr.length;
+            let s = 0, ans = n + 1, minL = n;
+            for (let i = 0; i < n; i++) {
+                s += arr[i];
+                if (pos.has(s - target)) {
+                    const j = pos.get(s - target), length = i - j;
+                    ans = Math.min(ans, length + (j === -1 ? n : arr[j]));
+                    minL = Math.min(minL, length);
+                }
+                arr[i] = minL;
+                pos.set(s, i);
+            }
+            return ans === n + 1 ? -1 : ans;
+        };
+
+
+        // 方法二：滑动窗口 + 动态规划
+        // 时间复杂度：O(n)
+        // 空间复杂度：O(n)
+        var minSumOfLengths = function (arr, target) {
+            const n = arr.length;
+            let ans = n + 1, sum = 0, left = 0;
+            const dp = Array(n + 1).fill(n);
+            for (let right = 0; right < n; right++) {
+                sum += arr[right];
+                while (sum > target) sum -= arr[left++];
+                dp[right + 1] = dp[right];
+                if (sum === target) {
+                    const length = right - left + 1;
+                    ans = Math.min(ans, length + dp[left]);
+                    dp[right + 1] = Math.min(dp[right], length);
+                }
+            }
+            return ans === n + 1 ? -1 : ans;
+        };
+
+
+    </script>
+</body>
+
+</html>
