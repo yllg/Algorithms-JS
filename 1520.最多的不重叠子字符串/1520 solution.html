@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法一：贪心
+        // 时间复杂度：O(nΣ+ΣlogΣ)
+        // 空间复杂度：O(Σ)
+        var maxNumOfSubstrings = function (s) {
+            // 记录每个字符的第一次和最后一次出现位置
+            const pos = new Map();
+
+            for (let i = 0; i < s.length; i++) {
+                const ch = s[i];
+                if (!pos.has(ch)) {
+                    pos.set(ch, [i, i]);
+                } else {
+                    pos.get(ch)[1] = i;
+                }
+            }
+
+            // 所有合法的区间
+            const valid = [];
+
+            for (const [c, range] of pos) {
+                let l = range[0], r = range[1];
+                let nl = l, nr = l;
+
+                while (nl >= l || nr <= r) {
+                    const i = (nl >= l) ? nl : nr;
+
+                    // 当前处理的是字符 s[i]
+                    const l_t = pos.get(s[i])[0];
+                    const r_t = pos.get(s[i])[1];
+
+                    // 当前区间左侧还有该字符，需要向左扩展
+                    if (l_t < l) {
+                        l = l_t;
+                    }
+
+                    // 当前区间右侧还有该字符，需要向右扩展
+                    if (r_t > r) {
+                        r = r_t;
+                    }
+
+                    // 当前处理的是左指针
+                    if (i === nl) {
+                        nl--;
+                    }
+
+                    // 当前处理的是右指针
+                    if (i === nr) {
+                        nr++;
+                    }
+                }
+
+                valid.push([l, r]);
+            }
+
+            // 按右端点升序排序
+            valid.sort((a, b) => a[1] - b[1]);
+
+            // 贪心选择互不重叠的区间
+            const ans = [];
+            let end = -1;
+
+            for (const [left, right] of valid) {
+                if (left > end) {
+                    ans.push(s.substring(left, right + 1));
+                    end = right;
+                }
+            }
+
+            return ans;
+        };
+
+        // test
+        let s = "adefaddaccc"
+        console.log(maxNumOfSubstrings(s))
+    </script>
+</body>
+
+</html>
