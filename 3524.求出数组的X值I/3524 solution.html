@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 求任意子数组之积的余数并计数
+
+        // 方法一：动态规划
+        // 时间复杂度：O(nk)
+        // 空间复杂度：O(k)
+        var resultArray = function (nums, k) {
+            const n = nums.length;
+            const result = new Array(k).fill(0);
+            let dp = new Array(k).fill(0);  // 初始状态，表示尚未处理任何元素，因此不存在非空子数组
+
+            for (let i = 0; i < n; i++) {
+                const ndp = new Array(k).fill(0);  // 当前层状态（滚动数组）
+
+                ndp[nums[i] % k]++;
+
+                for (let r = 0; r < k; r++) {
+                    ndp[(r * nums[i]) % k] += dp[r];
+                }
+
+                dp = ndp;  // 更新状态
+
+                // 累加答案
+                for (let r = 0; r < k; r++) {
+                    result[r] += dp[r];
+                }
+            }
+
+            return result;
+        };
+
+        // test
+        let nums = [1, 2, 3, 4, 5], k = 3
+        console.log(resultArray(nums, k));
+    </script>
+</body>
+
+</html>
