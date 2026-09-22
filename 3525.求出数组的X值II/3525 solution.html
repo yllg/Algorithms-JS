@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法一：线段树
+        // 时间复杂度：O((n+q)klogn)
+        // 空间复杂度：O(nk)
+        class SegmentTree {
+            constructor(nums, k) {
+                this.k = k;
+                const n = nums.length;
+                const size = 2 << (n.toString(2).length);
+                this.tree = Array.from({ length: size }, () => new Array(k + 1).fill(0));
+                this.build(nums, 1, 0, n - 1);
+            }
+
+            makeLeaf(o, value) {
+                const info = new Array(this.k + 1).fill(0);
+                const r = value % this.k;
+                info[r] = 1;
+                info[this.k] = r;
+                this.tree[o] = info;
+            }
+
+            mergePre(left, right) {
+                const pre = new Array(this.k + 1).fill(0);
+                const mulL = left[this.k];
+                const mulR = right[this.k];
+                pre[this.k] = (mulL * mulR) % this.k;
+
+                for (let x = 0; x < this.k; x++) pre[x] = left[x];
+                for (let x = 0; x < this.k; x++) {
+                    pre[(mulL * x) % this.k] += right[x];
+                }
+                return pre;
+            }
+
+            maintain(o) {
+                this.tree[o] = this.mergePre(this.tree[o * 2], this.tree[o * 2 + 1]);
+            }
+
+            build(nums, o, l, r) {
+                if (l === r) {
+                    this.makeLeaf(o, nums[l]);
+                    return;
+                }
+                const m = Math.floor((l + r) / 2);
+                this.build(nums, o * 2, l, m);
+                this.build(nums, o * 2 + 1, m + 1, r);
+                this.maintain(o);
+            }
+
+            update(o, l, r, index, value) {
+                if (l === r) {
+                    this.makeLeaf(o, value);
+                    return;
+                }
+                const m = Math.floor((l + r) / 2);
+                if (index <= m) this.update(o * 2, l, m, index, value);
+                else this.update(o * 2 + 1, m + 1, r, index, value);
+                this.maintain(o);
+            }
+
+            query(o, l, r, L, R) {
+                if (L <= l && r <= R) return this.tree[o];
+                const m = Math.floor((l + r) / 2);
+                if (R <= m) return this.query(o * 2, l, m, L, R);
+                if (L > m) return this.query(o * 2 + 1, m + 1, r, L, R);
+                const left = this.query(o * 2, l, m, L, R);
+                const right = this.query(o * 2 + 1, m + 1, r, L, R);
+                return this.mergePre(left, right);
+            }
+        }
+
+        var resultArray = function (nums, k, queries) {
+            const n = nums.length;
+            const seg = new SegmentTree(nums, k);
+            const ans = [];
+
+            for (const [index, value, start, x] of queries) {
+                seg.update(1, 0, n - 1, index, value);
+                const pre = seg.query(1, 0, n - 1, start, n - 1);
+                ans.push(pre[x]);
+            }
+            return ans;
+        }
+
+
+    </script>
+</body>
+
+</html>
