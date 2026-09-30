@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法一：用栈进行括号匹配
+        // 时间复杂度：O(n)
+        // 空间复杂度：O(1)
+        var maxDepthAfterSplit = function (seq) {
+            let dep = 0;
+            return seq.split("").map((value, index) => {
+                if (value === '(') {
+                    ++dep;
+                    return dep % 2;
+                } else {
+                    let ans = dep % 2;
+                    --dep;
+                    return ans;
+                }
+            });
+        };
+
+        // 方法二：找规律
+        var maxDepthAfterSplit = function (seq) {
+            return seq.split("").map((value, index) => index & 1 ^ (value === '('));
+        };
+
+    </script>
+</body>
+
+</html>
