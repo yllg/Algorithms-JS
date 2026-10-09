@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 一个左口号，紧挨着两个右括号
+
+        // 方法一：贪心
+        // 时间复杂度：O(n)
+        // 空间复杂度：O(1)
+        var minInsertions = function (s) {
+            let insertions = 0;
+            let leftCount = 0;
+            const length = s.length;
+            let index = 0;
+
+            while (index < length) {
+                const c = s[index];
+                if (c === '(') {
+                    leftCount++;
+                    index++;
+                } else {
+                    if (leftCount > 0) {
+                        leftCount--;
+                    } else {
+                        insertions++;
+                    }
+
+                    if (index < length - 1 && s[index + 1] === ')') {
+                        index += 2;
+                    } else {
+                        insertions++;
+                        index++;
+                    }
+                }
+            }
+
+            insertions += leftCount * 2;
+            return insertions;
+        }
+
+        // test
+        let s = "(()))"
+        console.log(minInsertions(s));
+    </script>
+</body>
+
+</html>
