@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法一：贪心
+        // 时间复杂度：O(nlogn)
+        // 空间复杂度：O(1)
+        var minSumSquareDiff = function (nums1, nums2, k1, k2) {
+            let k = k1 + k2;
+            const n = nums1.length;
+
+            let sum = 0;
+            for (let i = 0; i < n; i++) {
+                nums1[i] = Math.abs(nums1[i] - nums2[i]);
+                sum += nums1[i];
+            }
+            if (sum <= k) {
+                return 0;
+            }
+
+            nums1.sort((a, b) => b - a);
+            nums1.push(0);
+
+            for (let i = 1; i <= n; i++) {
+                const cost = (nums1[i - 1] - nums1[i]) * i;
+                if (cost > k) {
+                    const q = Math.floor(k / i), r = k % i, hi = nums1[i - 1] - q;
+                    let ans = hi * hi * (i - r) + (hi - 1) * (hi - 1) * r;
+                    for (let j = i; j < n; j++) {
+                        ans += nums1[j] * nums1[j];
+                    }
+                    return ans;
+                }
+                k -= cost;
+            }
+            return 0;
+        };
+
+        // 方法二：二分答案
+        // 时间复杂度：O(n(logn+logm))
+        // 空间复杂度：O(1)
+        var minSumSquareDiff = function (nums1, nums2, k1, k2) {
+            let k = k1 + k2;
+            const n = nums1.length;
+            let maxDif = 0;
+            for (let i = 0; i < n; i++) {
+                nums1[i] = Math.abs(nums1[i] - nums2[i]);
+                maxDif = Math.max(maxDif, nums1[i]);
+            }
+
+            let l = 0, r = maxDif, res = 0;
+            while (l <= r) {
+                const mid = (l + r) >> 1;
+                let sum = 0;
+                for (const num of nums1) {
+                    sum += num > mid ? num - mid : 0;
+                }
+                if (sum <= k) {
+                    r = mid - 1;
+                    res = mid;
+                } else {
+                    l = mid + 1;
+                }
+            }
+
+            for (const num of nums1) {
+                if (num > res) {
+                    k -= num - res;
+                }
+            }
+
+            nums1.sort((a, b) => b - a);
+            let ans = 0;
+            for (const num of nums1) {
+                let diff = Math.min(num, res);
+                if (k > 0 && diff > 0) {
+                    diff--;
+                    k--;
+                }
+                ans += diff * diff;
+            }
+            return ans;
+        };
+
+        // test
+        let nums1 = [1, 4, 10, 12], nums2 = [5, 8, 6, 9], k1 = 1, k2 = 1
+        console.log(minSumSquareDiff(nums1, nums2, k1, k2));
+    </script>
+</body>
+
+</html>
