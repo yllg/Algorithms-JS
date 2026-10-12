@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法一：贪心
+        // 时间复杂度：O(nlogm)
+        // 空间复杂度：O(logm)
+        var maxSum = function (nums, k) {
+            const MOD = 1000000007;
+            const cnt = new Array(30).fill(0);
+
+            // 统计每个位上 1 的数量
+            for (const num of nums) {
+                for (let i = 0; i < 30; i++) {
+                    if (num & (1 << i)) {
+                        cnt[i]++;
+                    }
+                }
+            }
+
+            let res = 0;
+            for (let i = 0; i < k; i++) {
+                let cur = 0;
+                // 从高位到低位构造当前数字
+                for (let j = 29; j >= 0; j--) {
+                    if (cnt[j] > 0) {
+                        cur += Math.pow(2, j);
+                        cnt[j]--;
+                    }
+                }
+
+                const curBigInt = BigInt(cur);
+                res = Number((BigInt(res) + curBigInt * curBigInt) % BigInt(MOD));
+            }
+
+            return res;
+        };
+
+    </script>
+</body>
+
+</html>
