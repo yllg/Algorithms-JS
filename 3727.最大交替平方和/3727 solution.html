@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法一：贪心 + 排序
+        // 时间复杂度：O(nlogn)
+        // 空间复杂度：O(n)
+        var maxAlternatingSum = function (nums) {
+            const n = nums.length;
+            for (let i = 0; i < n; i++) {
+                nums[i] *= nums[i];
+            }
+            nums.sort((a, b) => a - b);
+
+            let ans = 0;
+            for (let i = 0; i < Math.floor(n / 2); i++) {
+                ans -= nums[i];
+            }
+            for (let i = Math.floor(n / 2); i < n; i++) {
+                ans += nums[i];
+            }
+            return ans;
+        };
+
+        // test
+        console.log(maxAlternatingSum([1, -1, 2, -2, 3, -3])); // 16
+    </script>
+</body>
+
+</html>
