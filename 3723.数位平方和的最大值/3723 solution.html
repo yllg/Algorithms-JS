@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法一：贪心
+        // 时间复杂度：O(num)
+        // 空间复杂度：O(1)
+        var maxSumOfSquares = function (num, sum) {
+            if (sum > 9 * num) {
+                return "";
+            }
+            let r = sum % 9;
+            let ans = '9'.repeat(Math.floor(sum / 9));
+            if (r > 0) {
+                ans += String.fromCharCode('0'.charCodeAt(0) + r);
+            }
+            ans += '0'.repeat(num - ans.length);
+            return ans;
+        };
+
+    </script>
+</body>
+
+</html>
