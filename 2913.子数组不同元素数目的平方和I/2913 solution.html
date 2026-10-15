@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法一：模拟
+        // 时间复杂度：O(n^2)
+        // 空间复杂度：O(n)
+        var sumCounts = function (nums) {
+            let n = nums.length;
+            let res = 0;
+            for (let i = 0; i < n; i++) {
+                let s = new Set();
+                for (let j = i; j < n; j++) {
+                    s.add(nums[j]);
+                    res += s.size * s.size;
+                }
+            }
+            return res;
+        };
+
+        // 方法二：树状数组
+        // 时间复杂度：O(nlogn)
+        // 空间复杂度：O(n)
+        class BIT {
+            constructor(n) {
+                this.size = n;
+                this._tree1 = new Float64Array(n + 2);
+                this._tree2 = new Float64Array(n + 2);
+            }
+
+            _lowbit(index) {
+                return index & -index;
+            }
+
+            add(left, right, delta) {
+                this._add(left, delta);
+                this._add(right + 1, -delta);
+            }
+
+            query(left, right) {
+                return this._query(right) - this._query(left - 1);
+            }
+
+            _add(index, delta) {
+                index += 1;
+                let rawIndex = index;
+                while (index <= this.size) {
+                    this._tree1[index] += delta;
+                    this._tree2[index] += rawIndex * delta;
+                    index += this._lowbit(index);
+                }
+            }
+
+            _query(index) {
+                index += 1;
+                let rawIndex = index + 1;
+                if (index > this.size) {
+                    index = this.size;
+                }
+                let res = 0;
+                while (index > 0) {
+                    res += rawIndex * this._tree1[index] - this._tree2[index];
+                    index -= this._lowbit(index);
+                }
+                return res;
+            }
+        }
+
+        var sumCounts = function (A) {
+            let n = A.length;
+            let res = 0n, cur = 0n;
+            let bit = new BIT(n + 10);
+            let seen = new Map();
+            let mod = 1000000007n;
+            for (let i = 0; i < n; i++) {
+                let a = A[i];
+                let j = (seen.has(a) ? seen.get(a) : -1) + 1;
+                let q = BigInt(bit.query(j, i));
+                cur = (cur + q * 2n + BigInt(i - j + 1)) % mod;
+                res = (res + cur) % mod;
+                bit.add(j, i, 1);
+                seen.set(a, i);
+            }
+            return Number(res);
+        };
+
+
+    </script>
+</body>
+
+</html>
