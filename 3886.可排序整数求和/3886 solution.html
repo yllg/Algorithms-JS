@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法一：KMP
+        // 时间复杂度：O(n*根号n)
+        // 空间复杂度：O(n)
+        var sortableIntegers = function (nums) {
+            const n = nums.length;
+            const fac = [];
+
+            for (let x = 1; x * x <= n; x++) {
+                if (n % x === 0) {
+                    fac.push(x);
+                    if (n / x !== x) {
+                        fac.push(n / x);
+                    }
+                }
+            }
+
+            const target = [...nums].sort((a, b) => a - b);
+
+            const kmp = (nums1, nums2) => {
+                const n = nums1.length, m = nums2.length;
+                const pi = new Array(m).fill(0);
+                let j = 0;
+
+                for (let i = 1; i < m; i++) {
+                    while (j > 0 && nums2[i] !== nums2[j]) {
+                        j = pi[j - 1];
+                    }
+                    if (nums2[i] === nums2[j]) {
+                        j++;
+                    }
+                    pi[i] = j;
+                }
+
+                j = 0;
+                for (let i = 0; i < n; i++) {
+                    while (j > 0 && nums1[i] !== nums2[j]) {
+                        j = pi[j - 1];
+                    }
+                    if (nums1[i] === nums2[j]) {
+                        j++;
+                    }
+                    if (j === m) {
+                        return true;
+                    }
+                }
+                return false;
+            };
+
+            const check = (nums1, nums2) => {
+                // 检查能否通过对 nums1 进行若干次循环移动操作得到 nums2
+                return kmp([...nums1, ...nums1], nums2);
+            };
+
+            let ans = 0;
+
+            for (const d of fac) {
+                let allGood = true;
+                for (let left = 0; left < n; left += d) {
+                    const right = left + d - 1;
+
+                    if (!check(nums.slice(left, right + 1), target.slice(left, right + 1))) {
+                        allGood = false;
+                        break;
+                    }
+                }
+                if (allGood) {
+                    ans += d;
+                }
+            }
+
+            return ans;
+        };
+
+        // 方法二：分类讨论
+        // 时间复杂度：O(n*根号n)
+        // 空间复杂度：O(n)
+        var sortableIntegers = function (nums) {
+            const n = nums.length;
+            const fac = [];
+
+            for (let x = 1; x * x <= n; x++) {
+                if (n % x === 0) {
+                    fac.push(x);
+                    if (n / x !== x) {
+                        fac.push(n / x);
+                    }
+                }
+            }
+
+            const target = [...nums].sort((a, b) => a - b);
+
+            // 检查能否通过对 nums1 进行若干次循环移动操作得到 nums2
+            const check = (nums1, nums2) => {
+                const L = nums1.length;
+
+                for (let i = 0; i < L - 1; i++) {
+                    if (nums1[i] > nums1[i + 1]) {
+                        const rotated = [...nums1.slice(i + 1), ...nums1.slice(0, i + 1)];
+                        return rotated.every((val, idx) => val === nums2[idx]);
+                    }
+                }
+
+                return nums1.every((val, idx) => val === nums2[idx]);
+            };
+
+            let ans = 0;
+
+            for (const d of fac) {
+                let allGood = true;
+                for (let left = 0; left < n; left += d) {
+                    const right = left + d - 1;
+
+                    if (!check(nums.slice(left, right + 1), target.slice(left, right + 1))) {
+                        allGood = false;
+                        break;
+                    }
+                }
+                if (allGood) {
+                    ans += d;
+                }
+            }
+
+            return ans;
+        };
+
+
+    </script>
+</body>
+
+</html>
