@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法一：遍历按位与
+        // 时间复杂度：O(n)
+        // 空间复杂度：O(1)
+        var sortPermutation = function (nums) {
+            const n = nums.length;
+            let res = 2 ** 31 - 1;
+            for (let i = 0; i < n; ++i) {
+                if (nums[i] === i) {
+                    continue;
+                }
+                res &= nums[i];
+            }
+            return res === 2 ** 31 - 1 ? 0 : res;
+        };
+
+        // test
+        let nums = [0, 3, 2, 1]
+        console.log(sortPermutation(nums));
+    </script>
+</body>
+
+</html>
