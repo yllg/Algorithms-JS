@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法一：深度优先搜索
+        // 时间复杂度：O(m * n)
+        // 空间复杂度：O(m * n)
+        var countIslands = function (grid, k) {
+            const m = grid.length, n = grid[0].length;
+            const dirs = [-1, 0, 1, 0, -1];
+
+            const dfs = (i, j) => {
+                let sum = grid[i][j];
+                grid[i][j] = 0;
+                for (let d = 0; d < 4; ++d) {
+                    const x = i + dirs[d], y = j + dirs[d + 1];
+                    if (x >= 0 && x < m && y >= 0 && y < n && grid[x][y] > 0) {
+                        sum += dfs(x, y);
+                    }
+                }
+                return sum;
+            };
+
+            let ans = 0;
+            for (let i = 0; i < m; ++i) {
+                for (let j = 0; j < n; ++j) {
+                    if (grid[i][j] > 0 && dfs(i, j) % k === 0) {
+                        ++ans;
+                    }
+                }
+            }
+            return ans;
+        };
+
+        // test
+        let grid = [[0, 2, 1, 0, 0], [0, 5, 0, 0, 5], [0, 0, 1, 0, 0], [0, 1, 4, 7, 0], [0, 2, 0, 0, 8]], k = 5
+        console.log(countIslands(grid, k));
+    </script>
+</body>
+
+</html>
