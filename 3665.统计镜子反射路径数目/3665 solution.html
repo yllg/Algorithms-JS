@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法一：动态规划
+        // 时间复杂度：O(mn)
+        // 空间复杂度：O(mn)
+        var uniquePaths = function (grid) {
+            const MOD = 1000000007;
+            const m = grid.length;
+            const n = grid[0].length;
+
+            // f[j][0]：通过向下移动进入当前列
+            // f[j][1]：通过向右移动进入当前列
+            const f = Array.from({ length: n }, () => [0, 0]);
+            f[0][0] = 1;
+
+            for (let i = 0; i < m; i++) {
+                for (let j = 0; j < n; j++) {
+                    if (i > 0) {
+                        if (grid[i - 1][j] === 0) {
+                            f[j][0] = (f[j][0] + f[j][1]) % MOD;
+                        } else {
+                            f[j][0] = f[j][1];
+                        }
+                    }
+
+                    if (j > 0) {
+                        if (grid[i][j - 1] === 0) {
+                            f[j][1] = (f[j - 1][0] + f[j - 1][1]) % MOD;
+                        } else {
+                            f[j][1] = f[j - 1][0];
+                        }
+                    }
+                }
+            }
+
+            return (f[n - 1][0] + f[n - 1][1]) % MOD;
+        };
+
+
+
+    </script>
+</body>
+
+</html>
