@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法一：贪心
+        // 时间复杂度: O(n)
+        // 空间复杂度: O(1)
+        var minMoves = function (nums) {
+            let mx = nums[0];
+            for (const x of nums) {
+                mx = Math.max(mx, x);
+            }
+            let ans = 0;
+            for (const x of nums) {
+                ans += mx - x;
+            }
+            return ans;
+        };
+
+        // test
+        let nums = [2, 1, 3]
+        console.log(minMoves(nums));
+    </script>
+</body>
+
+</html>
