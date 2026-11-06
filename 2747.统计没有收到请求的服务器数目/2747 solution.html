@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法一：排序与滑动窗口
+        // 时间复杂度：O(n+mlogm+qlogq)
+        // 空间复杂度：O(n+q+logm+logq)
+        var countServers = function (n, logs, x, queries) {
+            logs.sort((a, b) => a[1] - b[1]);
+
+            const m = queries.length;
+            const ids = Array.from({ length: m }, (_, i) => i);
+            ids.sort((i, j) => queries[i] - queries[j]);
+
+            const ans = new Array(m).fill(0);
+            const cnt = new Array(n + 1).fill(0);
+            let left = 0, right = 0, active = 0;
+
+            for (const i of ids) {
+                const q = queries[i];
+                while (right < logs.length && logs[right][1] <= q) {
+                    const id = logs[right++][0];
+                    if (cnt[id]++ === 0) {
+                        ++active;
+                    }
+                }
+                while (left < right && logs[left][1] < q - x) {
+                    const id = logs[left++][0];
+                    if (--cnt[id] === 0) {
+                        --active;
+                    }
+                }
+                ans[i] = n - active;
+            }
+            return ans;
+        };
+    </script>
+</body>
+
+</html>
