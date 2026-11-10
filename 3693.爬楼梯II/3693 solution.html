@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法一：动态规划
+        // 时间复杂度：O(n)
+        // 空间复杂度：O(1)
+        var climbStairs = function (n, costs) {
+            let a = 0, b = 0, c = 0;
+            for (let i = 0; i < n; ++i) {
+                const nxt = Math.min(a + 9, b + 4, c + 1) + costs[i];
+                a = b;
+                b = c;
+                c = nxt;
+            }
+            return c;
+        };
+
+    </script>
+</body>
+
+</html>
