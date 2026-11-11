@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法一：贪心
+        // 时间复杂度: O(1)
+        // 空间复杂度: O(1)
+        var minimumCost = function (cost1, cost2, costBoth, need1, need2) {
+            let totalCost = 0;
+
+            // 分别购买更便宜，不需要物品 3
+            if (cost1 + cost2 <= costBoth) {
+                totalCost = cost1 * need1 + cost2 * need2;
+            } else {
+                // 优先购买物品 3，直到一种需求满足
+                let cnt_3 = Math.min(need1, need2);
+                totalCost = cnt_3 * costBoth;
+
+                need1 -= cnt_3;
+                need2 -= cnt_3;
+
+                // 类型 1 的需求还未被满足，选择物品 1 或物品 3 中更便宜的
+                if (need1 > 0) {
+                    totalCost += need1 * Math.min(cost1, costBoth);
+                    // 类型 2 的需求还未被满足，选择物品 2 或物品 3 中更便宜的
+                } else if (need2 > 0) {
+                    totalCost += need2 * Math.min(cost2, costBoth);
+                }
+            }
+
+            return totalCost;
+        };
+
+    </script>
+</body>
+
+</html>
