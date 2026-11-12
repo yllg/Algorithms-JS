@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法一：朴素模拟
+        // 时间复杂度：O(n)
+        // 空间复杂度：O(1)
+        var longestMonotonicSubarray = function (nums) {
+            let cnt1 = 1, cnt2 = 1;
+            let ans = 1;
+            const n = nums.length;
+            for (let i = 1; i < n; i++) {
+                if (nums[i] <= nums[i - 1]) {
+                    ans = Math.max(ans, cnt1);
+                    cnt1 = 1;
+                } else {
+                    cnt1++;
+                }
+                if (nums[i] >= nums[i - 1]) {
+                    ans = Math.max(ans, cnt2);
+                    cnt2 = 1;
+                } else {
+                    cnt2++;
+                }
+            }
+            ans = Math.max(ans, Math.max(cnt1, cnt2));
+            return ans;
+        };
+
+        // 方法二：基调标志 + 模拟
+        // 时间复杂度：O(n)
+        // 空间复杂度：O(1)
+        var longestMonotonicSubarray = function (nums) {
+            let ans = 1;
+            let i = 0;
+            const n = nums.length;
+            while (i < n - 1) {
+                if (nums[i + 1] === nums[i]) {
+                    i++;
+                    continue;
+                }
+                const j = i;
+                const inc = nums[i + 1] > nums[i];
+                i += 2;
+                while (i < n && nums[i] !== nums[i - 1] && (nums[i] > nums[i - 1]) === inc) {
+                    i++;
+                }
+                ans = Math.max(ans, i - j);
+                i--;
+            }
+            return ans;
+        };
+
+        // test
+        let nums = [1, 4, 3, 3, 2]
+        console.log(longestMonotonicSubarray(nums));
+    </script>
+</body>
+
+</html>
