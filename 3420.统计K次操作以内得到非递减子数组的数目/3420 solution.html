@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法一：滑动窗口
+        // 时间复杂度：O(nlogn)
+        // 空间复杂度：O(n)
+        var countNonDecreasingSubarrays = function (nums, k) {
+            const n = nums.length;
+            let ans = 0;
+            let operations = 0;
+            // 优先队列维护窗口最大值，元素为 { val, idx }
+            const q = new MaxPriorityQueue((item) => item.val);
+            // 记录被该下标覆盖的元素集合
+            const cnt = Array.from({ length: n }, () => []);
+            // 右侧第一个大于等于的下标
+            const pos = new Array(n).fill(n);
+            // 递减单调栈
+            const st = [];
+
+            let left = 0;
+            for (let right = 0; right < n; right++) {
+                // 维护单调栈
+                while (st.length > 0 && nums[right] >= nums[st[st.length - 1]]) {
+                    pos[st[st.length - 1]] = right;
+                    st.pop();
+                }
+                // 栈顶即为 nums[right] 的左边最近的更大元素
+                if (st.length > 0) {
+                    cnt[st[st.length - 1]].push(right);
+                }
+                st.push(right);
+
+                // 优先队首元素即为窗口最大值
+                q.enqueue({ val: nums[right], idx: right });
+                // 窗口加入 nums[right] 操作次数需要增加
+                operations += Math.max(0, q.front().val - nums[right]);
+
+                // 最小操作次数超过 k，此时需要缩小窗口
+                while (operations > k) {
+                    // 移除窗口左侧元素 nums[left]，操作次数需要较少
+                    for (const i of cnt[left]) {
+                        // 移除贡献
+                        operations -= (nums[left] - nums[i]) * (Math.min(pos[i], right + 1) - i);
+                    }
+                    left++;
+                }
+
+                // 从优先队列中移除小于下标 left 的元素
+                while (!q.isEmpty() && q.front().idx < left) {
+                    q.dequeue();
+                }
+
+                // 以 right 为结尾的合法连续子数组数目为 right - left + 1
+                ans += right - left + 1;
+            }
+
+            return ans;
+        };
+
+        // test
+        let nums = [6, 3, 1, 2, 4, 4], k = 7
+        console.log(countNonDecreasingSubarrays(nums, k));
+    </script>
+</body>
+
+</html>
