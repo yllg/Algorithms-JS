@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法一：模拟
+        // 时间复杂度：O(n)
+        // 空间复杂度：O(n)
+        var digitSum = function (s, k) {
+            while (s.length > k) {
+                let tmp = "";   // 每次操作结束的字符串
+                const n = s.length;
+                for (let i = 0; i < n; i += k) {
+                    let val = 0;
+                    for (let j = i; j < Math.min(i + k, n); ++j) {
+                        val += parseInt(s[j]);
+                    }
+                    tmp += val.toString();
+                }
+                s = tmp;
+            }
+            return s;
+        };
+
+        // test
+        let s = "11111222223", k = 3
+        console.log(digitSum(s, k));
+    </script>
+</body>
+
+</html>
