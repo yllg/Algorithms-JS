@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法一：预处理单段代价 + 自顶向下求解
+        // 时间复杂度：O(n^3logn)
+        // 空间复杂度：O(n^2)
+        function segmentCost(s, l, m, factors) {
+            let best = m;
+            for (const d of factors[m]) {
+                const groups = Math.floor(m / d); // 每组有 groups 个字符
+                let changes = 0;
+                for (let offset = 0; offset < d; offset++) {
+                    for (let t = 0; t < Math.floor(groups / 2); t++) { // 组内首尾配对
+                        if (s[l + offset + t * d] !== s[l + offset + (groups - 1 - t) * d]) {
+                            changes++;
+                        }
+                    }
+                }
+                best = Math.min(best, changes);
+            }
+            return best;
+        }
+
+        var minimumChanges = function (s, k) {
+            const n = s.length;
+            const factors = Array.from({ length: n + 1 }, () => []);
+            // 预处理每个数的真因子
+            for (let d = 1; d <= Math.floor(n / 2); d++) {
+                for (let m = d * 2; m <= n; m += d) {
+                    factors[m].push(d);
+                }
+            }
+            const cost = Array.from({ length: n }, () => new Array(n).fill(0));
+            for (let l = 0; l + 1 < n; l++) {
+                for (let r = l + 1; r < n; r++) { // 子串长度至少为 2
+                    cost[l][r] = segmentCost(s, l, r - l + 1, factors);
+                }
+            }
+
+            const memo = Array.from({ length: k + 1 }, () => new Array(n).fill(-1));
+            const solve = (seg, start) => {
+                if (seg === 1) { // 只剩一段
+                    return cost[start][n - 1];
+                }
+                if (memo[seg][start] !== -1) { // 之前算过
+                    return memo[seg][start];
+                }
+                let best = n;
+                const limit = n - 1 - 2 * (seg - 1); // 第一段之后还要留出 seg-1 段
+                for (let e = start + 1; e <= limit; e++) {
+                    best = Math.min(best, cost[start][e] + solve(seg - 1, e + 1));
+                }
+                memo[seg][start] = best;
+                return best;
+            };
+            return solve(k, 0);
+        };
+
+        // 方法二：自底向上递推
+        // 时间复杂度：O(n^3logn)
+        // 空间复杂度：O(n^2)
+        function segmentCost(s, l, m, factors) {
+            let best = m;
+            for (const d of factors[m]) {
+                const groups = Math.floor(m / d); // 每组有 groups 个字符
+                let changes = 0;
+                for (let offset = 0; offset < d; offset++) {
+                    for (let t = 0; t < Math.floor(groups / 2); t++) { // 组内首尾配对
+                        if (s[l + offset + t * d] !== s[l + offset + (groups - 1 - t) * d]) {
+                            changes++;
+                        }
+                    }
+                }
+                best = Math.min(best, changes);
+            }
+            return best;
+        }
+
+        var minimumChanges = function (s, k) {
+            const n = s.length;
+            const factors = Array.from({ length: n + 1 }, () => []);
+            // 预处理每个数的真因子
+            for (let d = 1; d <= Math.floor(n / 2); d++) {
+                for (let m = d * 2; m <= n; m += d) {
+                    factors[m].push(d);
+                }
+            }
+            const cost = Array.from({ length: n }, () => new Array(n).fill(0));
+            for (let l = 0; l + 1 < n; l++) {
+                for (let r = l + 1; r < n; r++) { // 子串长度至少为 2
+                    cost[l][r] = segmentCost(s, l, r - l + 1, factors);
+                }
+            }
+
+            let prev = Array.from({ length: n }, (_, start) => cost[start][n - 1]); // seg = 1 的情况
+            for (let seg = 2; seg <= k; seg++) { // 段数从 2 推到 k
+                const cur = new Array(n).fill(n);
+                const limit = n - 1 - 2 * (seg - 1);
+                for (let start = 0; start + 2 * seg <= n; start++) { // 至少留够 2*seg 个字符
+                    for (let e = start + 1; e <= limit; e++) {
+                        cur[start] = Math.min(cur[start], cost[start][e] + prev[e + 1]);
+                    }
+                }
+                prev = cur;
+            }
+            return prev[0];
+        };
+    </script>
+</body>
+
+</html>
