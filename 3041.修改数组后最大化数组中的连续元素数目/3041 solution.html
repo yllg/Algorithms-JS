@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法一：排序 + 动态规划
+        // 时间复杂度: O(nlogn)
+        // 空间复杂度: O(n)
+        var maxSelectedElements = function (nums) {
+            nums.sort((a, b) => a - b);
+            const dp = new Map();
+            let ans = 0;
+            for (const x of nums) {
+                dp.set(x + 1, Math.max(dp.get(x + 1) ?? 0, (dp.get(x) ?? 0) + 1));
+                dp.set(x, Math.max(dp.get(x) ?? 0, (dp.get(x - 1) ?? 0) + 1));
+                ans = Math.max(ans, dp.get(x), dp.get(x + 1));
+            }
+            return ans;
+        };
+
+        // test
+        let nums = [2, 1, 5, 1, 1]
+        console.log(maxSelectedElements(nums));
+    </script>
+</body>
+
+</html>
