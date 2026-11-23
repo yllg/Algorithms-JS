@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法二
+        // 时间复杂度: O(1)
+        // 空间复杂度：O(n)
+        var ProductOfNumbers = function () {
+            this.nums = [];
+            this.zeroCount = [];
+            this.prevNonOne = [];
+            this.n = 0;
+        };
+
+        ProductOfNumbers.prototype.add = function (num) {
+            this.n++;
+            this.nums.push(num);
+
+            this.prevNonOne.push(-1);
+            if (this.n > 1) {
+                if (this.nums[this.n - 2] !== 1 && this.nums[this.n - 2] !== 0) {
+                    this.prevNonOne[this.n - 1] = this.n - 2;
+                } else {
+                    this.prevNonOne[this.n - 1] = this.prevNonOne[this.n - 2];
+                }
+            }
+
+            this.zeroCount.push(num === 0 ? 1 : 0);
+            if (this.n > 1) {
+                this.zeroCount[this.n - 1] += this.zeroCount[this.n - 2];
+            }
+        };
+
+        ProductOfNumbers.prototype.getProduct = function (k) {
+            let totalZeros = this.zeroCount[this.n - 1];
+            if (this.n - k >= 1) {
+                totalZeros -= this.zeroCount[this.n - 1 - k];
+            }
+            if (totalZeros > 0) {
+                return 0;
+            }
+
+            let ans = 1;
+            for (let i = this.n - 1; i >= this.n - k;) {
+                ans *= this.nums[i];
+                i = this.prevNonOne[i];
+            }
+            return ans;
+        };
+
+    </script>
+</body>
+
+</html>
