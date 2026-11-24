@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法一：枚举
+        // 时间复杂度：O(n^2*logM)
+        // 空间复杂度：O(1)
+        var maxLength = function (nums) {
+            let res = 0;
+            const gcd = (a, b) => {
+                while (b !== 0) {
+                    [a, b] = [b, a % b];
+                }
+                return a;
+            };
+
+            for (let i = 0; i < nums.length; i++) {
+                let prodVal = nums[i];
+                let gcdVal = nums[i];
+                let lcmVal = nums[i];
+                for (let j = i + 1; j < nums.length; j++) {
+                    prodVal = prodVal * nums[j];
+                    gcdVal = gcd(gcdVal, nums[j]);
+                    lcmVal = lcmVal * nums[j] / gcd(lcmVal, nums[j]);
+                    if (prodVal > gcdVal * lcmVal) {
+                        break;
+                    }
+                    if (prodVal === gcdVal * lcmVal) {
+                        res = Math.max(res, j - i + 1);
+                    }
+                }
+            }
+            return res;
+        };
+
+        // 方法二：滑动窗口
+        // 时间复杂度：O(n*logM)
+        // 空间复杂度：O(1)
+        var maxLength = function (nums) {
+            let res = 2;
+            let prodVal = 1;
+            const n = nums.length;
+            let start = 0, end = 0;
+
+            const gcd = (a, b) => {
+                while (b !== 0) {
+                    [a, b] = [b, a % b];
+                }
+                return a;
+            };
+
+            while (end < n) {
+                while (gcd(prodVal, nums[end]) > 1) {
+                    prodVal = Math.floor(prodVal / nums[start]);
+                    start++;
+                }
+                prodVal *= nums[end];
+                res = Math.max(res, end - start + 1);
+                end++;
+            }
+            return res;
+        };
+
+    </script>
+</body>
+
+</html>
