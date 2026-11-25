@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法一：二分答案 + 滚动哈希
+        // 时间复杂度：O(nlogn)
+        // 空间复杂度: O(n)
+        var smallestUniqueSubarray = function (nums) {
+            const n = nums.length;
+            const MOD = 1000000007n;
+            const BASE = 911382323n;
+
+            const h = new Array(n + 1).fill(0n);
+            const p = new Array(n + 1).fill(0n);
+            p[0] = 1n;
+
+            // 计算哈希前缀 + BASE 的幂次前缀
+            for (let i = 0; i < n; ++i) {
+                h[i + 1] = (h[i] * BASE + BigInt(nums[i])) % MOD;
+                p[i + 1] = (p[i] * BASE) % MOD;
+            }
+
+            const check = (len) => {
+                const cnt = new Map();
+
+                for (let l = 0; l + len <= n; ++l) {
+                    const r = l + len;
+                    const key = (h[r] - ((h[l] * p[len]) % MOD) + MOD) % MOD;
+                    cnt.set(key, (cnt.get(key) ?? 0) + 1);
+                }
+
+                for (const times of cnt.values()) {
+                    if (times === 1) {
+                        return true;
+                    }
+                }
+                return false;
+            };
+
+            let lo = 1;
+            let hi = n;
+            while (lo < hi) {
+                const mid = lo + Math.floor((hi - lo) / 2);
+
+                if (check(mid)) {
+                    hi = mid;
+                } else {
+                    lo = mid + 1;
+                }
+            }
+
+            return lo;
+        }
+
+        // 方法二：后缀数组
+        // 时间复杂度：O(nlogn)
+        // 空间复杂度: O(n)
+        var smallestUniqueSubarray = function (nums) {
+            const n = nums.length;
+
+            let sa = new Int32Array(n);
+            let rank = Int32Array.from(nums);
+            let nextRank = new Int32Array(n);
+
+            for (let i = 0; i < n; ++i) {
+                sa[i] = i;
+            }
+
+            // 倍增构造排序后的后缀数组
+            let maxRank = 0;
+            for (const num of nums) {
+                maxRank = Math.max(maxRank, num);
+            }
+
+            let temp = new Int32Array(n);
+            const cnt = new Int32Array(Math.max(n + 1, maxRank + 2));
+
+            const countingSort = (getKey) => {
+                cnt.fill(0, 0, maxRank + 2);
+
+                for (const i of sa) {
+                    ++cnt[getKey(i)];
+                }
+
+                for (let i = 1; i <= maxRank + 1; ++i) {
+                    cnt[i] += cnt[i - 1];
+                }
+
+                for (let p = n - 1; p >= 0; --p) {
+                    const i = sa[p];
+                    temp[--cnt[getKey(i)]] = i;
+                }
+
+                [sa, temp] = [temp, sa];
+            };
+
+            for (let k = 1; k < n; k *= 2) {
+                // 先按第二关键字排序，再按第一关键字稳定排序
+                countingSort(i => i + k < n ? rank[i + k] + 1 : 0);
+                countingSort(i => rank[i] + 1);
+
+                nextRank[sa[0]] = 0;
+
+                // 给排序后的新后缀分配排名
+                for (let i = 1; i < n; ++i) {
+                    const x = sa[i - 1], y = sa[i];
+                    const rx = x + k < n ? rank[x + k] : -1;
+                    const ry = y + k < n ? rank[y + k] : -1;
+
+                    nextRank[y] = nextRank[x] + (rank[x] !== rank[y] || rx !== ry ? 1 : 0);
+                }
+
+                [rank, nextRank] = [nextRank, rank];
+                maxRank = rank[sa[n - 1]];
+
+                // n 个后缀有 n 个排名，排名各不相同，说明排序完毕
+                if (maxRank === n - 1) {
+                    break;
+                }
+            }
+
+            // Kasai 算法构造 LCP
+            const pos = new Int32Array(n);
+            const lcp = new Int32Array(n);
+            for (let i = 0; i < n; ++i) {
+                pos[sa[i]] = i;
+            }
+
+            let h = 0;
+            for (let i = 0; i < n; ++i) {
+                if (pos[i] === 0) {
+                    h = 0;
+                    continue;
+                }
+
+                const j = sa[pos[i] - 1];
+                while (i + h < n && j + h < n && nums[i + h] === nums[j + h]) {
+                    ++h;
+                }
+
+                lcp[pos[i]] = h;
+
+                if (h > 0) {
+                    --h;
+                }
+            }
+
+            let answer = n;
+            for (let i = 0; i < n; ++i) {
+                const next = i + 1 < n ? lcp[i + 1] : 0;
+
+                const need = Math.max(lcp[i], next) + 1;
+                if (sa[i] + need <= n) {
+                    answer = Math.min(answer, need);
+                }
+            }
+
+            return answer;
+        };
+
+
+    </script>
+</body>
+
+</html>
