@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 一开始移除10个，然后每次少一次‘
+
+        // 方法一：模拟
+        // 时间复杂度：O(1)
+        // 空间复杂度：O(1)
+        var canAliceWin = function (n) {
+            let take = 10, k = 0;
+            while (n >= take) {
+                n -= take;
+                take--;
+                k++;
+            }
+            return k % 2 === 1;
+        };
+
+        // 方法二：数学
+        // 时间复杂度：O(1)
+        // 空间复杂度：O(1)
+        var canAliceWin = function (n) {
+            const k = Math.floor((21 - Math.sqrt(441 - 8 * n)) / 2);
+            return k % 2 === 1;
+        };
+
+        // test
+        let n = 12
+        console.log(canAliceWin(n));
+    </script>
+</body>
+
+</html>
