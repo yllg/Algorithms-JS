@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 方法一：动态规划（0-1 背包）
+        // 时间复杂度：O(n^2 +n⋅budget)
+        // 空间复杂度：O(budget)
+        var maximumSaleItems = function (items, budget) {
+            const f = new Int32Array(budget + 1);
+            let mn = Infinity;
+            for (const [factor, price] of items) {
+                mn = Math.min(mn, price);
+                let cnt = 0;
+                for (const [otherFactor] of items) {
+                    if (otherFactor % factor === 0) {
+                        cnt++;
+                    }
+                }
+                for (let j = budget; j >= price; j--) {
+                    f[j] = Math.max(f[j], f[j - price] + cnt);
+                }
+            }
+            let ans = 0;
+            for (let j = 0; j <= budget; j++) {
+                ans = Math.max(ans, f[j] + Math.floor((budget - j) / mn));
+            }
+            return ans;
+        };
+
+        // test
+        let items = [[6, 2], [2, 6], [3, 4]], budget = 9
+        console.log(maximumSaleItems(items, budget));
+    </script>
+</body>
+
+</html>
